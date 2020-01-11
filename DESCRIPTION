@@ -1,5 +1,5 @@
 Package: opendapr
-Title: What the Package Does (One Line, Title Case)
+Title: R interface to the OPeNDAP framework
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Paul",
