@@ -2,3 +2,6 @@
 ^\.Rproj\.user$
 ^dev_history\.R$
 ^LICENSE\.md$
+^README\.Rmd$
+^data_collections\.csv$
+^opendapr_functions\.R$
