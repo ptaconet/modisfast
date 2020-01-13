@@ -3,6 +3,8 @@
 #' @title Get information on a collection of interest
 #' @description Opens a browser window with the metadata of the collection
 #'
+#' @inheritParams getUrl
+#'
 #' @return Opens a browser window with the metadata of the collection
 #'
 #' @export

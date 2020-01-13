@@ -6,6 +6,11 @@
 \usage{
 getVariablesInfo(collection, loginCredentials = NULL)
 }
+\arguments{
+\item{collection}{string. Collection of interest.}
+
+\item{loginCredentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
+}
 \value{
 A data.frame with the available variables for the collection, and a set of related information
 }

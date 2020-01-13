@@ -3,6 +3,7 @@
 #' @title Get variables information for a collection of interest
 #' @description Opens a browser window with the metadata of the collection
 #'
+#' @inheritParams getUrl
 #'
 #' @return A data.frame with the available variables for the collection, and a set of related information
 #'

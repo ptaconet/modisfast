@@ -4,7 +4,7 @@
 ## dans l'article, dire qu'il pourrait être intéressant de construire une interface opendap R générique (ie fonctionne pour tous les serveurs opendap) R interface to OPeNDAP
 
 
-#getUrls(collection,variables,roi,timeRange,outputFormat="nc4",singleNetcdf=TRUE,optionalsOpendap=NULL,loginCredentials=NULL)
+#getUrl(collection,variables,roi,timeRange,outputFormat="nc4",singleNetcdf=TRUE,optionalsOpendap=NULL,loginCredentials=NULL)
 
 #OK -> getVariablesInfo<-function(collection,loginCredentials=NULL){  # for a given collection, get the available variables and associated information
 

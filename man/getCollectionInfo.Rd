@@ -6,6 +6,9 @@
 \usage{
 getCollectionInfo(collection)
 }
+\arguments{
+\item{collection}{string. Collection of interest.}
+}
 \value{
 Opens a browser window with the metadata of the collection
 }

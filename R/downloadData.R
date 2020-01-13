@@ -3,9 +3,9 @@
 #' @title Wrapper to download several datasets
 #' @description This function enables to download datasets, enventually parallelizing the download.
 #'
+#' @inheritParams getUrl
 #' @param df_to_dl data.frame. Urls and destination files of dataset to download. See Details for the structure
 #' @param parallelDL boolean. Parallelize the download ? Default to FALSE
-#' @param loginCredentials vector string. In case of data that needs login : string vector of length 2 with username and password
 #' @param data_source String. default to NULL. Additional information is the Details
 #'
 #' @return a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional olumns are :

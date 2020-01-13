@@ -7,7 +7,7 @@
 login_earthdata(loginCredentials)
 }
 \arguments{
-\item{loginCredentials}{vector string of length 2 with username and password}
+\item{loginCredentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
 }
 \value{
 Invisible object with login to earthdata. Login will no longer be needed for the current sessions.

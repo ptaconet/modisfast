@@ -1,7 +1,7 @@
 #' @name login_earthdata
 #' @title Login to earthdata
 #'
-#' @param loginCredentials vector string of length 2 with username and password
+#' @inheritParams getUrl
 #'
 #' @return Invisible object with login to earthdata. Login will no longer be needed for the current sessions.
 #' @export
@@ -17,6 +17,8 @@
 
 login_earthdata<-function(loginCredentials){
 
+  if(!is(loginCredentials,"character") || length(loginCredentials)!=2 ) {stop("loginCredentials must be a vector character string of length 2 (username and password)")}
+
   x <- httr::POST(url = 'https://earthexplorer.usgs.gov/inventory/json/v/1.4.0/login',
                   body = utils::URLencode(paste0('jsonRequest={"username":"', loginCredentials[1], '","password":"', loginCredentials[2], '","authType":"EROS","catalogId":"EE"}')),
                   httr::content_type("application/x-www-form-urlencoded; charset=UTF-8"))
@@ -24,12 +26,12 @@ login_earthdata<-function(loginCredentials){
   httr::warn_for_status(x)
   v <- httr::content(x)$data
   if(is.null(v)){
-    stop("Login to EarthData failed. Check out username and password")
+    stop("Login to EarthData failed. Check out username and password\n")
   } else {
     options(earthdata_user=loginCredentials[1])
     options(earthdata_pass=loginCredentials[2])
     options(earthdata_login=TRUE)
-    cat("\nSuccessfull login to EarthData")
+    cat("Successfull login to EarthData\n")
   }
 }
 
