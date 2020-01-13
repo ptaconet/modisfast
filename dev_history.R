@@ -63,7 +63,22 @@ attachment::att_to_description()
 # Check the package
 devtools::check()
 
+devtools::document()
+
 devtools::install()
+
+
+## Ajouter manuellement dans le description file, la liste des packages dont dépend le package
+opendapMetadata <- read.csv("/home/ptaconet/opendapr/data_collections.csv",stringsAsFactors =F )
+modis_tiles<-sf::read_sf("/home/ptaconet/Téléchargements/modis_sin.kmz") #https://modis.ornl.gov/files/modis_sin.kmz
+
+usethis::use_data(opendapMetadata, internal = FALSE, overwrite = TRUE)
+opendapMetadata_internal=opendapMetadata
+usethis::use_data(opendapMetadata_internal,modis_tiles, internal = TRUE,overwrite = TRUE)
+
+roi_example<-"/home/ptaconet/getRemoteData/inst/extdata/roi_example.gpkg"
+#dir.create("inst/extdata")
+file.copy(roi_example,gsub("getRemoteData","opendapr",roi_example))
 
 
 
@@ -73,12 +88,3 @@ usethis::use_tibble()
 devtools::document()
 pkgdown::build_site()
 ## Manual step : go to the settings of the package on the github page, then under "github page" put "master branch /docs folder"
-
-#sf::read_sf("https://modis.ornl.gov/files/modis_sin.kmz")
-#modis_tile<-sf::read_sf("/home/ptaconet/Téléchargements/extdata/modis_sin.kmz")
-#sf::write_sf(modis_tile,"/inst/extdata/modis_sin.gpkg")
-
-opendapMetadata <- read.csv("/home/ptaconet/opendapr/data_collections.csv",stringsAsFactors =F )
-usethis::use_data(opendapMetadata, internal = FALSE, overwrite = TRUE)
-opendapMetadata_internal=opendapMetadata
-usethis::use_data(opendapMetadata_internal, internal = TRUE,overwrite = TRUE)

@@ -27,7 +27,7 @@ earthdata_password="pass"
 login<-login_earthdata(c(earthdata_username,earthdata_password))
 
 # Get the collections implemented :
-opendapr:::opendapMetadata_internal$collection
+:opendapMetadata_internal$collection
 
 df_varinfo<-getVariablesInfo("MOD11A1.006"))
 View(df_varinfo)

@@ -20,7 +20,7 @@
 #' login<-login_earthdata(c(earthdata_username,earthdata_password))
 #'
 #' # Get the collections implemented :
-#' opendapr:::opendapMetadata_internal$collection
+#' :opendapMetadata_internal$collection
 #'
 #' df_varinfo<-getVariablesInfo("MOD11A1.006"))
 #' View(df_varinfo)
@@ -30,13 +30,13 @@
 
 getVariablesInfo<-function(collection,loginCredentials=NULL){  # for a given collection, get the available variables and associated information
 
-  opendapr::.testIfCollExists(collection)
+  .testIfCollExists(collection)
 
-  opendapr::.testLogin(loginCredentials)
+  .testLogin(loginCredentials)
 
   httr::set_config(httr::authenticate(user=getOption("earthdata_user"), password=getOption("earthdata_pass"), type = "basic"))
 
-  URL<-opendapr:::opendapMetadata_internal$url_opendapexample[which(opendapr:::opendapMetadata_internal$collection==collection)]
+  URL<-opendapMetadata_internal$url_opendapexample[which(opendapMetadata_internal$collection==collection)]
 
   InfoURL<-paste0(URL,".info")
   vector_response<-httr::GET(InfoURL)

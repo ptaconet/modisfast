@@ -17,7 +17,7 @@
 
 login_earthdata<-function(loginCredentials){
 
-  if(!is(loginCredentials,"character") || length(loginCredentials)!=2 ) {stop("loginCredentials must be a vector character string of length 2 (username and password)")}
+  if(!methods::is(loginCredentials,"character") || length(loginCredentials)!=2 ) {stop("loginCredentials must be a vector character string of length 2 (username and password)")}
 
   x <- httr::POST(url = 'https://earthexplorer.usgs.gov/inventory/json/v/1.4.0/login',
                   body = utils::URLencode(paste0('jsonRequest={"username":"', loginCredentials[1], '","password":"', loginCredentials[2], '","authType":"EROS","catalogId":"EE"}')),

@@ -18,7 +18,7 @@ Opens a browser window with the metadata of the collection
 \examples{
 
 # Get the collections implemented :
-opendapr:::opendapMetadata_internal$collection
+opendapMetadata$collection
 
 getCollectionInfo("MOD11A1.006")
 

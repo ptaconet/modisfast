@@ -4,7 +4,7 @@
 #' @description
 #'
 #' @param collection string. Collection of interest.
-#' @param variables  string vector. Variables to retrieve for the collection of interest
+#' @param variables string vector. Variables to retrieve for the collection of interest
 #' @param roi sf POINT or POLYGON. Region of interest
 #' @param timeRange date(s) / POSIXlt of interest (single date/datetime or time frame) (see details)
 #' @param outputFormat string. Output format. Available choices : "nc4" (default), "ascii", "",
@@ -46,13 +46,13 @@ getUrl<-function(collection,
                  loginCredentials=NULL,
                  verbose=FALSE){
 
-  existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- dim_proj$dim_proj <- NULL
+  existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName  <- NULL
 
   ## tests :
   # roi
-  opendapr::.testRoi(roi)
+  .testRoi(roi)
   # timeRange
-  opendapr::.testTimeRange(roi)
+  .testTimeRange(timeRange)
   # outputFormat
   if(!outputFormat %in% c("nc4","ascii")){stop("Specified output format is not valid. Please specify a valid output format \n")}
   # singleNetcdf
@@ -61,41 +61,31 @@ getUrl<-function(collection,
   if(!methods::is(verbose,"logical")){stop("verbose argument must be boolean\n")}
   # collection
   if(verbose){cat("Checking if specified collection exist and is implemented in the package...\n")}
-  opendapr::.testIfCollExists(collection)
+  .testIfCollExists(collection)
   # loginCredentials
-  opendapr::.testLogin(loginCredentials)
-
-  ## Retrieve opendap information for the collection of interest
-  #odap_coll_info <- opendapr:::opendapMetadata_internal[which(opendapr:::opendapMetadata_internal$collection==collection),]
-  ##source <- opendap_coll_info$source
-  #odap_server <- odap_coll_info$url_opendapserver
-  #odap_timeDimName <- odap_coll_info$time
-  #odap_lonDimName <- odap_coll_info$dim_lon
-  #odap_latDimName <- odap_coll_info$dim_lat
-  #odap_gridDimName <- odap_coll_info$dim_proj
-
+  .testLogin(loginCredentials)
 
   if(is.null(optionalsOpendap)){
-    optionalsOpendap <- opendapr::.getOdapOptArguments(collection,roi)
+    if(verbose){cat("Retrieving opendap arguments for the collection specified...\n")}
+    optionalsOpendap <- .getOdapOptArguments(collection,roi)
   }
-
-  available_variables <- optionals_opendap$availableVariables
 
   # test variables
   if(verbose){cat("Checking if specified variables exist for the collection specified...\n")}
-  opendapr::.testIfVarExists2(variables,available_variables)
+  available_variables <- optionalsOpendap$availableVariables
+  .testIfVarExists2(variables,available_variables)
 
   # build URLs
   if(verbose){cat("Building the opendap URLs...\n")}
-  urls <- opendapr::.buildUrls(collection,roi,timeRange,optionals_opendap,singleNetcdf=singleNetcdf)
+  table_urls <- .buildUrls(collection,variables,roi,timeRange,outputFormat,singleNetcdf,optionalsOpendap,loginCredentials)
 
+  table_urls$name <- gsub(".*/","",table_urls$name)
+  table_urls$destfile <- paste0(file.path(collection,table_urls$name),".",outputFormat)
 
+  table_urls <- table_urls[order(table_urls$date),]
 
+  table_urls<-data.frame(time_start=table_urls$date,name=table_urls$name,url=table_urls$url,destfile=table_urls$destfile,stringsAsFactors = F)
 
-
-
-
-
-
+  return(table_urls)
 
 }

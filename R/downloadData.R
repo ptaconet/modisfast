@@ -26,6 +26,8 @@
 #' Parameter \code{data_source} takes NULL as default value (i.e. when no login is required to download the data). Other possible values are :
 #' - "earthdata" : to download data requiring a login to Earthdata
 #'
+#' @import dplyr parallel
+#'
 #' @export
 #'
 
@@ -57,7 +59,7 @@ downloadData<-function(df_to_dl,parallelDL=FALSE,loginCredentials=NULL,data_sour
     # }
     if(!is.null(data_source)){
       if(data_source=="earthdata"){
-        opendapr::.testLogin(loginCredentials)
+        .testLogin(loginCredentials)
         username<-getOption("earthdata_user")
         password<-getOption("earthdata_pass")
       }

@@ -9,21 +9,21 @@
 #'
 #' @export
 #'
-#'
+#' @importFrom utils browseURL
 #'
 #' @examples
 #'
 #' # Get the collections implemented :
-#' opendapr:::opendapMetadata_internal$collection
+#' opendapMetadata$collection
 #'
 #' getCollectionInfo("MOD11A1.006")
 #'
 
 getCollectionInfo<-function(collection){
 
-  opendapr::.testIfCollExists(collection)
+  .testIfCollExists(collection)
 
-  URL<-opendapr:::opendapMetadata_internal$url_metadata[which(opendapr:::opendapMetadata_internal$collection==collection)]
+  URL<-opendapMetadata_internal$url_metadata[which(opendapMetadata_internal$collection==collection)]
 
   utils::browseURL(URL)
 

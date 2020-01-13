@@ -3,19 +3,23 @@
 #' @name .getMODIStileNames
 #' @title get MODIS time name
 #'
+#' @importFrom magrittr %>%
+#' @import dplyr
+#' @import sf
+#'
 #' @export
 #' @noRd
 
 
 .getMODIStileNames<-function(roi){
 
-  modis_tile <- NULL
+  Name <- NULL
 
-  opendapr::.testRoi(roi)
+  .testRoi(roi)
   roi<-sf::st_transform(roi,4326)
   options(warn=-1)
   #modis_tile = sf::read_sf("https://modis.ornl.gov/files/modis_sin.kmz") %>%
-  modis_tile = opendapr:::modis_tile %>%
+  modis_tile <- modis_tiles %>%
     sf::st_intersection(roi) %>%
     as.data.frame() %>%
     dplyr::select(Name) %>%
@@ -42,6 +46,7 @@
 #' @name .getSRTMtileNames
 #' @title get SRTM time name
 #'
+#' @importFrom geojsonsf geojson_sf
 #' @export
 #' @noRd
 
@@ -49,7 +54,7 @@
 
   srtm_tiles <- NULL
 
-  opendapr::.testRoi(roi)
+  .testRoi(roi)
   roi<-sf::st_transform(roi,4326)
 
   srtm_tiles <- geojsonsf::geojson_sf("http://dwtkns.com/srtm30m/srtm30m_bounding_boxes.json")  %>%
