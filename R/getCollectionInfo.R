@@ -23,7 +23,7 @@ getCollectionInfo<-function(collection){
 
   .testIfCollExists(collection)
 
-  URL<-opendapMetadata_internal$url_metadata[which(opendapMetadata_internal$collection==collection)]
+  URL<-opendapMetadata_internal$DOI[which(opendapMetadata_internal$collection==collection)]
 
   utils::browseURL(URL)
 

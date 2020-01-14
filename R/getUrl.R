@@ -5,7 +5,7 @@
 #'
 #' @param collection string. Collection of interest.
 #' @param variables string vector. Variables to retrieve for the collection of interest
-#' @param roi sf POINT or POLYGON. Region of interest
+#' @param roi object of class \code{sf} or \code{sfc}. Region of interest
 #' @param timeRange date(s) / POSIXlt of interest (single date/datetime or time frame) (see details)
 #' @param outputFormat string. Output format. Available choices : "nc4" (default), "ascii", "",
 #' @param singleNetcdf boolean. Get the URL either as a single netcdf file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE
@@ -30,8 +30,8 @@
 #'
 #' @examples
 #'
-#'
-#'
+#' @importFrom stringr str_replace
+#' @import dplyr
 #'
 #'
 
@@ -56,9 +56,9 @@ getUrl<-function(collection,
   # outputFormat
   if(!outputFormat %in% c("nc4","ascii")){stop("Specified output format is not valid. Please specify a valid output format \n")}
   # singleNetcdf
-  if(!methods::is(singleNetcdf,"logical")){stop("singleNetcdf argument must be boolean\n")}
+  if(!inherits(singleNetcdf,"logical")){stop("singleNetcdf argument must be boolean\n")}
   # verbose
-  if(!methods::is(verbose,"logical")){stop("verbose argument must be boolean\n")}
+  if(!inherits(verbose,"logical")){stop("verbose argument must be boolean\n")}
   # collection
   if(verbose){cat("Checking if specified collection exist and is implemented in the package...\n")}
   .testIfCollExists(collection)
@@ -67,7 +67,7 @@ getUrl<-function(collection,
 
   if(is.null(optionalsOpendap)){
     if(verbose){cat("Retrieving opendap arguments for the collection specified...\n")}
-    optionalsOpendap <- .getOdapOptArguments(collection,roi)
+    optionalsOpendap <- getOdapOptParam2(collection,roi)
   }
 
   # test variables
@@ -77,14 +77,18 @@ getUrl<-function(collection,
 
   # build URLs
   if(verbose){cat("Building the opendap URLs...\n")}
-  table_urls <- .buildUrls(collection,variables,roi,timeRange,outputFormat,singleNetcdf,optionalsOpendap,loginCredentials)
+  table_urls <- .buildUrls2(collection,variables,roi,timeRange,outputFormat,singleNetcdf,optionalsOpendap,loginCredentials)
 
-  table_urls$name <- gsub(".*/","",table_urls$name)
-  table_urls$destfile <- paste0(file.path(collection,table_urls$name),".",outputFormat)
-
-  table_urls <- table_urls[order(table_urls$date),]
-
-  table_urls<-data.frame(time_start=table_urls$date,name=table_urls$name,url=table_urls$url,destfile=table_urls$destfile,stringsAsFactors = F)
+  table_urls <- table_urls %>%
+    dplyr::mutate(name=stringr::str_replace(name,".*/","")) %>%
+    dplyr::arrange(name) %>%
+    transform(name = ifelse(duplicated(name) | duplicated(name, fromLast=TRUE),
+                            paste(name, ave(name, name, FUN=seq_along), sep='_'),
+                            name)) %>%
+    dplyr::mutate(destfile=paste0(file.path(collection,.$name),".",outputFormat)) %>%
+    dplyr::arrange(date) %>%
+    dplyr::select(date,name,url,destfile) %>%
+    dplyr::rename(time_start = date)
 
   return(table_urls)
 

@@ -9,7 +9,11 @@
 #'
 #' @export
 #'
-#'
+#' @importFrom rvest html_table
+#' @importFrom xml2 read_html
+#' @importFrom stringr str_match word
+#' @import purrr dplyr httr
+
 #' @examples
 #'
 #' \dontrun{

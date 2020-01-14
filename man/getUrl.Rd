@@ -13,7 +13,7 @@ getUrl(collection, variables, roi, timeRange, outputFormat = "nc4",
 
 \item{variables}{string vector. Variables to retrieve for the collection of interest}
 
-\item{roi}{sf POINT or POLYGON. Region of interest}
+\item{roi}{object of class \code{sf} or \code{sfc}. Region of interest}
 
 \item{timeRange}{date(s) / POSIXlt of interest (single date/datetime or time frame) (see details)}
 
@@ -46,9 +46,5 @@ a data.frame with one row for each dataset and 3 columns  :
 
 }
 \examples{
-
-
-
-
 
 }

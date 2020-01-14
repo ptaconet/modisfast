@@ -24,8 +24,7 @@ Imports:
   xml2,
   stringr,
   rvest,
-  methods,
   geojsonsf,
   utils,
-  parallel
-    
+  parallel,
+  curl

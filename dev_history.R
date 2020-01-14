@@ -32,20 +32,6 @@ devtools::install()
 usethis::use_readme_rmd()
 
 
-# insert description of data as package data
-path_to_description_dataset<-"/home/ptaconet/opendapr/data_collections.csv"
-opendapMetadata <- read.csv(path_to_description_dataset,stringsAsFactors = F)
-usethis::use_data(opendapMetadata)
-
-
-
-
-
-
-
-
-
-
 
 
 ## Manual step : Commit and push
@@ -80,6 +66,8 @@ roi_example<-"/home/ptaconet/getRemoteData/inst/extdata/roi_example.gpkg"
 #dir.create("inst/extdata")
 file.copy(roi_example,gsub("getRemoteData","opendapr",roi_example))
 
+roi_modis2tiles<-"/home/ptaconet/Documents/modis2tiles.gpkg"
+file.copy(roi_modis2tiles,gsub("Documents","opendapr/inst/extdata",roi_modis2tiles))
 
 
 ## To build a website with home and vignettes

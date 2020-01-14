@@ -2,7 +2,7 @@
 % Please edit documentation in R/login.R
 \name{login_earthdata}
 \alias{login_earthdata}
-\title{Login to earthdata}
+\title{Login to Earthdata}
 \usage{
 login_earthdata(loginCredentials)
 }
@@ -10,17 +10,20 @@ login_earthdata(loginCredentials)
 \item{loginCredentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
 }
 \value{
-Invisible object with login to earthdata. Login will no longer be needed for the current sessions.
+Invisible object with login to earthdata. Login will no longer be needed for the current session.
 }
 \description{
-Login to earthdata
+Login to Earthdata with usual credentials
+}
+\details{
+To open an Earthdata account go to : https://urs.earthdata.nasa.gov/profile
 }
 \examples{
 
 \dontrun{
 earthdata_username="user"
 earthdata_password="pass"
-login<-login_earthdata(c(earthdata_username,earthdata_password))
+login_earthdata(c(earthdata_username,earthdata_password))
 }
 
 }

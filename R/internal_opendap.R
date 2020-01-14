@@ -1,7 +1,7 @@
 
 #' @name .getTimeIndex_modisVnp
 #' @title get MODIS/VNP time index closest to actual provided date
-#'
+#' @export
 #' @noRd
 
 .getTimeIndex_modisVnp<-function(date,timeVector){
@@ -24,7 +24,7 @@
 #' @title get opendap url dimensions
 #'
 #' @import purrr
-#'
+#' @export
 #' @noRd
 
 .getOpenDapURL_dimensions<-function(variables,timeIndex,minLat,maxLat,minLon,maxLon,odap_timeDimName,odap_lonDimName,odap_latDimName){
@@ -43,7 +43,7 @@
 
 #' @name .getVarVector
 #' @title get SRTM time name
-#'
+#' @export
 #' @import httr
 #' @noRd
 
@@ -66,12 +66,42 @@
 
 }
 
-#' @name .getOdapOptArguments
-#' @title get opendap optional arguments
+#' @name getOdapOptParam
+#' @aliases getOdapOptParam
 #'
-#' @noRd
+#' @title Get OPeNDAP optional parameters
+#' @description  Get the OPeNDAP optional parameters to further provide as input \code{optionalsOpendap} parameter of the \code{getUrl} function
+#'
+#' @inheritParams getUrl
+#'
+#' @return a list with the following named objects :
+#' \itemize{
+#'  \item{*roiSpatialIndexBound*: }{OPeNDAP indices for the spatial coordinates of the bounding box of the ROI (minLat, maxLat, minLon, maxLon)}
+#'  \item{*availableVariables*: }{Variables available for the collection of interest}
+#'  \item{*roiSpatialBound*: }{The spatial coordinates of the bounding box of the ROI expressed in the CRS of the collection}
+#'  \item{*OpenDAPtimeVector*: }{The time vector, or NULL if the collection does not have a time vector}
+#' }
+#'
+#' @details
+#'
+#' When it is needed to loop the function \code{getUrl} over several time frames, it is advised to previously run the function \code{getOdapOptParam} and provide the output as input \code{optionalsOpendap} parameter of the \code{getUrl} function.
+#' This will save much time, as internal parameters will be calculated only once.
+#'
+#' @export
+#'
+#' @examples
+#'
+#' \dontrun{
+#' require(sf)
+#' roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
+#' earthdata_username="user"
+#' earthdata_password="pass"
+#' login_earthdata(c(earthdata_username,earthdata_password))
+#'
+#' optOdap_mod11a1 <- getOdapOptParam("MOD11A1.006",roi)
+#'}
 
-.getOdapOptArguments<-function(collection,roi,loginCredentials=NULL){
+getOdapOptParam<-function(collection,roi,loginCredentials=NULL){
 
   odap_coll_info <- odap_source <- odap_server <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- odap_crs <- odap_urlExample <- modis_tile <- OpendapURL <- OpenDAPtimeVector <- OpenDAPXVector <- OpenDAPYVector <- roi_bbox <- Opendap_minLat <- Opendap_maxLat <- Opendap_minLon <- Opendap_maxLon <- roiSpatialIndexBound <- minLat <- maxLat <- minLon <- maxLon <- roiSpatialBound <- availableDimensions <- NULL
 
@@ -94,17 +124,19 @@
 
   if(odap_source %in% c("MODIS","VNP")){
 
-    modis_tile <- .getMODIStileNames(roi)
+    modis_tile <- getMODIStileNames(roi)
+    if(length(modis_tile)>1){stop("Your ROI is covering multiple MODIS tiles. Consider splitting the ROI into multiple parts and loop over each piece. Check out the vignettes for some tips on how to proceed.")}
+
     OpendapURL <- paste0(odap_server,"/",collection,"/",modis_tile,".ncml")
     OpenDAPtimeVector<-.getVarVector(OpendapURL,variableName=odap_timeDimName)
 
     OpenDAPXVector <- .getVarVector(OpendapURL,odap_lonDimName)
     OpenDAPYVector <- .getVarVector(OpendapURL,odap_latDimName)
 
-    Opendap_minLat <- which.min(abs(OpenDAPYVector-roi_bbox$ymax))-4
-    Opendap_maxLat <- which.min(abs(OpenDAPYVector-roi_bbox$ymin))+4
-    Opendap_minLon <- which.min(abs(OpenDAPXVector-roi_bbox$xmin))-4
-    Opendap_maxLon <- which.min(abs(OpenDAPXVector-roi_bbox$xmax))+4
+    Opendap_minLat <- which.min(abs(OpenDAPYVector-roi_bbox$ymax))
+    Opendap_maxLat <- which.min(abs(OpenDAPYVector-roi_bbox$ymin))
+    Opendap_minLon <- which.min(abs(OpenDAPXVector-roi_bbox$xmin))
+    Opendap_maxLon <- which.min(abs(OpenDAPXVector-roi_bbox$xmax))
 
   } else if (odap_source=="GPM"){
 
@@ -149,7 +181,7 @@
 
   availableVariables <- getVariablesInfo(collection)$name
 
-  return(list(roiSpatialIndexBound = roiSpatialIndexBound, availableVariables = availableVariables, roiSpatialBound = roiSpatialBound, OpenDAPtimeVector = OpenDAPtimeVector))
+  return(list(roiSpatialIndexBound = roiSpatialIndexBound, availableVariables = availableVariables, roiSpatialBound = roiSpatialBound, OpenDAPXVector = OpenDAPXVector, OpenDAPYVector = OpenDAPYVector, OpenDAPtimeVector = OpenDAPtimeVector))
 
 }
 
@@ -178,7 +210,7 @@
   odap_projDimName <- odap_coll_info$dim_proj
 
   if(is.null(optionalsOpendap)){
-    optionalsOpendap <- .getOdapOptArguments(collection,roi)
+    optionalsOpendap <- getOdapOptParam(collection,roi)
   }
 
   OpenDAPtimeVector <- optionalsOpendap$OpenDAPtimeVector
@@ -191,7 +223,8 @@
 
   if(odap_source %in% c("MODIS","VNP")){
 
-    modis_tile <- .getMODIStileNames(roi)
+    modis_tile <- getMODIStileNames(roi)
+    if(length(modis_tile)>1){stop("Your ROI is covering multiple MODIS tiles. Consider splitting the ROI into multiple parts and loop over each piece. Check out the vignettes for some tips on how to proceed.")}
 
     timeRange <- as.Date(timeRange,origin="1970-01-01")
     if (length(timeRange)==1){

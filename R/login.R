@@ -1,23 +1,28 @@
 #' @name login_earthdata
-#' @title Login to earthdata
+#' @title Login to Earthdata
+#' @description Login to Earthdata with usual credentials
 #'
 #' @inheritParams getUrl
 #'
-#' @return Invisible object with login to earthdata. Login will no longer be needed for the current sessions.
+#' @return Invisible object with login to earthdata. Login will no longer be needed for the current session.
 #' @export
+#'
+#' @details To open an Earthdata account go to : https://urs.earthdata.nasa.gov/profile
+#' @importFrom curl has_internet
 #'
 #' @examples
 #'
 #' \dontrun{
 #' earthdata_username="user"
 #' earthdata_password="pass"
-#' login<-login_earthdata(c(earthdata_username,earthdata_password))
+#' login_earthdata(c(earthdata_username,earthdata_password))
 #' }
 #'
 
 login_earthdata<-function(loginCredentials){
 
-  if(!methods::is(loginCredentials,"character") || length(loginCredentials)!=2 ) {stop("loginCredentials must be a vector character string of length 2 (username and password)")}
+  if(!inherits(loginCredentials,"character") || length(loginCredentials)!=2 ) {stop("loginCredentials must be a vector character string of length 2 (username and password)\n")}
+  if(!curl::has_internet()){stop("Internet connection is required. Are you connected to the Internet ?\n")}
 
   x <- httr::POST(url = 'https://earthexplorer.usgs.gov/inventory/json/v/1.4.0/login',
                   body = utils::URLencode(paste0('jsonRequest={"username":"', loginCredentials[1], '","password":"', loginCredentials[2], '","authType":"EROS","catalogId":"EE"}')),
