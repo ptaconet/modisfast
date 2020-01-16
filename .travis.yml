@@ -1,13 +1,17 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+# Soyons green ! Il est possible d’effectuer des pushes sans faire appel à Travis. Pour ceci, il faut que les commits contenus dans le push possèdent la chaine de caractère [ci skip] dans leur message de commit. Par exemple
+#commit -m 'Ceci est un message [ci skip]'
+
 
 language: R
 cache: packages
 warnings_are_errors: false
 
-r:
-  - oldrel
-  - release
-  - devel
+#, which version of your R package to test
+#r:
+#  - oldrel
+#  - release
+#  - devel
 
 notifications:
   email:

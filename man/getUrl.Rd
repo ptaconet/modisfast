@@ -52,7 +52,7 @@ some note
 login_earthdata(c("my.earthdata.username","my.earthdata.password"))
 
 ############################################################
-### Retrieve the URLs to download the following datasets :
+### Retrieve the URLs (OPeNDAP) to download the following datasets :
 # MODIS Terra LST Daily (MOD11A1.006) (collection)
 # Day + Night bands (LST_Day_1km,LST_Night_1km) (variables)
 # over a 50km x 70km region of interest located in Northern Ivory Coast (roi)

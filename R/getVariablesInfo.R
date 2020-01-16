@@ -16,6 +16,7 @@
 #' @import purrr dplyr httr
 #' @examples
 #'
+#' \dontrun{
 #' # login to earthdata
 #' earthdata_credentials<-readLines("/home/ptaconet/opendapr/.earthdata_credentials.txt")
 #' earthdata_username=strsplit(earthdata_credentials,"=")[[1]][2]
@@ -27,7 +28,7 @@
 #'
 #' # Get the variables available for the collection MOD11A1.006
 #' (df_varinfo<-getVariablesInfo("MOD11A1.006"))
-#'
+#'}
 #'
 
 getVariablesInfo<-function(collection,loginCredentials=NULL){  # for a given collection, get the available variables and associated information

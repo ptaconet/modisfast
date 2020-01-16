@@ -20,6 +20,7 @@ Outputs a data frame with the variables available for a given collection
 }
 \examples{
 
+\dontrun{
 # login to earthdata
 earthdata_credentials<-readLines("/home/ptaconet/opendapr/.earthdata_credentials.txt")
 earthdata_username=strsplit(earthdata_credentials,"=")[[1]][2]
@@ -31,6 +32,6 @@ collections_available <- getCollections()
 
 # Get the variables available for the collection MOD11A1.006
 (df_varinfo<-getVariablesInfo("MOD11A1.006"))
-
+}
 
 }

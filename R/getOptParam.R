@@ -26,6 +26,7 @@
 #'
 #' @examples
 #'
+#' \dontrun{
 #' require(sf)
 #'
 #' # Login to Earthdata
@@ -38,6 +39,7 @@
 #' roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
 #' (optParam_mod11a1 <- getOptParam("MOD11A1.006",roi) )
 #'
+#'}
 
 
 getOptParam<-function(collection,roi,loginCredentials=NULL){

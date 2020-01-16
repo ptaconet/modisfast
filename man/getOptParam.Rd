@@ -34,6 +34,7 @@ This will save much time, as internal parameters will be calculated only once.
 }
 \examples{
 
+\dontrun{
 require(sf)
 
 # Login to Earthdata
@@ -46,4 +47,5 @@ login<-login_earthdata(c(earthdata_username,earthdata_password))
 roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
 (optParam_mod11a1 <- getOptParam("MOD11A1.006",roi) )
 
+}
 }
