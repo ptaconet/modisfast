@@ -7,6 +7,11 @@ language: R
 cache: packages
 warnings_are_errors: false
 
+os:
+  - linux
+  - osx
+
+
 #, which version of your R package to test
 #r:
 #  - oldrel
@@ -19,10 +24,10 @@ notifications:
     on_failure: change
 
 ## dependencies that need to be installed beforehand if any
-sudo: true
+# a priori pas besoin de ca : sudo: true
 before_install:
-  - sudo apt-get install libudunits2-dev libgdal-dev
-
+ - if [ "$TRAVIS_OS_NAME" = "linux" ]; sudo apt-get install libudunits2-dev libgdal-dev ;fi
+ - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install udunits ; fi
 #addons:
 #  apt:
 #    packages:
