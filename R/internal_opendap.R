@@ -1,7 +1,6 @@
 
 #' @name .getTimeIndex_modisVnp
 #' @title get MODIS/VNP time index closest to actual provided date
-#' @export
 #' @noRd
 
 .getTimeIndex_modisVnp<-function(date,timeVector){
@@ -24,7 +23,6 @@
 #' @title get opendap url dimensions
 #'
 #' @import purrr
-#' @export
 #' @noRd
 
 .getOpenDapURL_dimensions<-function(variables,timeIndex,minLat,maxLat,minLon,maxLon,odap_timeDimName,odap_lonDimName,odap_latDimName){
@@ -43,7 +41,6 @@
 
 #' @name .getVarVector
 #' @title get SRTM time name
-#' @export
 #' @import httr
 #' @noRd
 
@@ -66,125 +63,6 @@
 
 }
 
-#' @name getOdapOptParam
-#' @aliases getOdapOptParam
-#'
-#' @title Get OPeNDAP optional parameters
-#' @description  Get the OPeNDAP optional parameters to further provide as input \code{optionalsOpendap} parameter of the \code{getUrl} function
-#'
-#' @inheritParams getUrl
-#'
-#' @return a list with the following named objects :
-#' \itemize{
-#'  \item{*roiSpatialIndexBound*: }{OPeNDAP indices for the spatial coordinates of the bounding box of the ROI (minLat, maxLat, minLon, maxLon)}
-#'  \item{*availableVariables*: }{Variables available for the collection of interest}
-#'  \item{*roiSpatialBound*: }{The spatial coordinates of the bounding box of the ROI expressed in the CRS of the collection}
-#'  \item{*OpenDAPtimeVector*: }{The time vector, or NULL if the collection does not have a time vector}
-#' }
-#'
-#' @details
-#'
-#' When it is needed to loop the function \code{getUrl} over several time frames, it is advised to previously run the function \code{getOdapOptParam} and provide the output as input \code{optionalsOpendap} parameter of the \code{getUrl} function.
-#' This will save much time, as internal parameters will be calculated only once.
-#'
-#' @export
-#'
-#' @examples
-#'
-#' \dontrun{
-#' require(sf)
-#' roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
-#' earthdata_username="user"
-#' earthdata_password="pass"
-#' login_earthdata(c(earthdata_username,earthdata_password))
-#'
-#' optOdap_mod11a1 <- getOdapOptParam("MOD11A1.006",roi)
-#'}
-
-getOdapOptParam<-function(collection,roi,loginCredentials=NULL){
-
-  odap_coll_info <- odap_source <- odap_server <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- odap_crs <- odap_urlExample <- modis_tile <- OpendapURL <- OpenDAPtimeVector <- OpenDAPXVector <- OpenDAPYVector <- roi_bbox <- Opendap_minLat <- Opendap_maxLat <- Opendap_minLon <- Opendap_maxLon <- roiSpatialIndexBound <- minLat <- maxLat <- minLon <- maxLon <- roiSpatialBound <- availableDimensions <- NULL
-
-  ## tests :
-  .testIfCollExists(collection)
-  .testRoi(roi)
-  .testLogin(loginCredentials)
-
-  ## Retrieve opendap information for the collection of interest
-  odap_coll_info <- opendapMetadata_internal[which(opendapMetadata_internal$collection==collection),]
-  odap_source <- odap_coll_info$source
-  odap_server <- odap_coll_info$url_opendapserver
-  odap_timeDimName <- odap_coll_info$dim_time
-  odap_lonDimName <- odap_coll_info$dim_lon
-  odap_latDimName <- odap_coll_info$dim_lat
-  odap_crs <- odap_coll_info$crs
-  odap_urlExample <- odap_coll_info$url_opendapexample
-
-  roi_bbox <- sf::st_bbox(sf::st_transform(roi,odap_crs))
-
-  if(odap_source %in% c("MODIS","VNP")){
-
-    modis_tile <- getMODIStileNames(roi)
-    if(length(modis_tile)>1){stop("Your ROI is covering multiple MODIS tiles. Consider splitting the ROI into multiple parts and loop over each piece. Check out the vignettes for some tips on how to proceed.")}
-
-    OpendapURL <- paste0(odap_server,"/",collection,"/",modis_tile,".ncml")
-    OpenDAPtimeVector<-.getVarVector(OpendapURL,variableName=odap_timeDimName)
-
-    OpenDAPXVector <- .getVarVector(OpendapURL,odap_lonDimName)
-    OpenDAPYVector <- .getVarVector(OpendapURL,odap_latDimName)
-
-    Opendap_minLat <- which.min(abs(OpenDAPYVector-roi_bbox$ymax))
-    Opendap_maxLat <- which.min(abs(OpenDAPYVector-roi_bbox$ymin))
-    Opendap_minLon <- which.min(abs(OpenDAPXVector-roi_bbox$xmin))
-    Opendap_maxLon <- which.min(abs(OpenDAPXVector-roi_bbox$xmax))
-
-  } else if (odap_source=="GPM"){
-
-    OpendapURL <- odap_urlExample
-    OpenDAPtimeVector <- NULL
-
-    OpenDAPXVector <- .getVarVector(OpendapURL,odap_lonDimName)
-    OpenDAPYVector <- .getVarVector(OpendapURL,odap_latDimName)
-
-    Opendap_minLon<-which.min(abs(OpenDAPXVector-roi_bbox$xmin))-4
-    Opendap_maxLon<-which.min(abs(OpenDAPXVector-roi_bbox$xmax))+4
-    Opendap_minLat<-which.min(abs(OpenDAPYVector-roi_bbox$ymin))-4
-    Opendap_maxLat<-which.min(abs(OpenDAPYVector-roi_bbox$ymax))+4
-
-  } else if (odap_source=="SMAP"){
-
-    OpendapURL <- "https://n5eil02u.ecs.nsidc.org/opendap/hyrax/SMAP/SPL4CMDL.004/2016.01.06/SMAP_L4_C_mdl_20160106T000000_Vv4040_001.h5"
-    odap_lonDimName <- "x"
-    odap_latDimName <- "y"
-    OpenDAPtimeVector <- NULL
-
-    OpenDAPXVector <- .getVarVector(OpendapURL,odap_lonDimName)
-    OpenDAPYVector <- .getVarVector(OpendapURL,odap_latDimName)
-
-    Opendap_minLon<-which.min(abs(OpenDAPXVector-roi_bbox$xmin))-4
-    Opendap_maxLon<-which.min(abs(OpenDAPXVector-roi_bbox$xmax))+4
-    Opendap_minLat<-which.min(abs(OpenDAPYVector-roi_bbox$ymin))+4
-    Opendap_maxLat<-which.min(abs(OpenDAPYVector-roi_bbox$ymax))-4
-
-  } else if (source=="SRTM"){
-
-    OpenDAPtimeVector <- NULL
-
-  }
-
-  roiSpatialIndexBound <- c(Opendap_minLat,Opendap_maxLat,Opendap_minLon,Opendap_maxLon)
-  minLat <- OpenDAPYVector[Opendap_minLat]
-  maxLat <- OpenDAPYVector[Opendap_maxLat]
-  minLon <- OpenDAPXVector[Opendap_minLon]
-  maxLon <- OpenDAPXVector[Opendap_maxLon]
-  roiSpatialBound <- c(minLat,maxLat,minLon,maxLon)
-
-  availableVariables <- getVariablesInfo(collection)$name
-
-  return(list(roiSpatialIndexBound = roiSpatialIndexBound, availableVariables = availableVariables, roiSpatialBound = roiSpatialBound, OpenDAPXVector = OpenDAPXVector, OpenDAPYVector = OpenDAPYVector, OpenDAPtimeVector = OpenDAPtimeVector))
-
-}
-
 
 #' @name .buildUrls
 #' @title build opendap URLs in function of the collection, time frame and roi of interest
@@ -200,6 +78,7 @@ getOdapOptParam<-function(collection,roi,loginCredentials=NULL){
   .testRoi(roi)
   .testTimeRange(timeRange)
   .testLogin(loginCredentials)
+  .testFormat(outputFormat)
 
   odap_coll_info <- opendapMetadata_internal[which(opendapMetadata_internal$collection==collection),]
   odap_source <- odap_coll_info$source
@@ -210,12 +89,14 @@ getOdapOptParam<-function(collection,roi,loginCredentials=NULL){
   odap_projDimName <- odap_coll_info$dim_proj
 
   if(is.null(optionalsOpendap)){
-    optionalsOpendap <- getOdapOptParam(collection,roi)
+    optionalsOpendap <- getOptParam(collection,roi)
   }
+
 
   OpenDAPtimeVector <- optionalsOpendap$OpenDAPtimeVector
   roiSpatialIndexBound <- optionalsOpendap$roiSpatialIndexBound
   roiSpatialBound <- optionalsOpendap$roiSpatialBound
+  modis_tile <- optionalsOpendap$modis_tile
 
   ############################################
   ##############  MODIS/VNP   ######################
@@ -223,39 +104,44 @@ getOdapOptParam<-function(collection,roi,loginCredentials=NULL){
 
   if(odap_source %in% c("MODIS","VNP")){
 
-    modis_tile <- getMODIStileNames(roi)
-    if(length(modis_tile)>1){stop("Your ROI is covering multiple MODIS tiles. Consider splitting the ROI into multiple parts and loop over each piece. Check out the vignettes for some tips on how to proceed.")}
+    .workflow_getUrl_modisvnp <- function(timeRange,OpenDAPtimeVector,modis_tile,roiSpatialIndexBound){
+      timeRange <- as.Date(timeRange,origin="1970-01-01")
+      if (length(timeRange)==1){
+        timeRange <- c(timeRange,timeRange)
+      }
 
-    timeRange <- as.Date(timeRange,origin="1970-01-01")
-    if (length(timeRange)==1){
-      timeRange <- c(timeRange,timeRange)
+      revisit_time <- OpenDAPtimeVector[2]-OpenDAPtimeVector[1]
+
+      timeIndices_of_interest <- seq(timeRange[2],timeRange[1],-revisit_time) %>%
+        purrr::map(~.getTimeIndex_modisVnp(.,OpenDAPtimeVector)) %>%
+        do.call(rbind.data.frame,.) %>%
+        purrr::set_names("ideal_date","date_closest_to_ideal_date","days_sep_from_ideal_date","index_opendap_closest_to_date") %>%
+        dplyr::mutate(ideal_date=as.Date(ideal_date,origin="1970-01-01")) %>%
+        dplyr::mutate(date_closest_to_ideal_date=as.Date(date_closest_to_ideal_date,origin="1970-01-01"))  %>%
+        dplyr::mutate(name=paste0(collection,".",lubridate::year(date_closest_to_ideal_date),sprintf("%03d",lubridate::yday(date_closest_to_ideal_date)),".",modis_tile))
+
+      if(singleNetcdf){ # download data in a single netcdf file
+        timeIndex<-c(min(timeIndices_of_interest$index_opendap_closest_to_date),max(timeIndices_of_interest$index_opendap_closest_to_date))
+        url<-.getOpenDapURL_dimensions(variables,timeIndex,roiSpatialIndexBound[1],roiSpatialIndexBound[2],roiSpatialIndexBound[3],roiSpatialIndexBound[4],odap_timeDimName,odap_lonDimName,odap_latDimName)
+        url<-paste0(odap_server,collection,"/",modis_tile,".ncml.",outputFormat,"?",odap_projDimName,",",url)
+
+        name=paste0(collection,".",lubridate::year(min(timeIndices_of_interest$date_closest_to_ideal_date)),sprintf("%03d",lubridate::yday(min(timeIndices_of_interest$date_closest_to_ideal_date))),"_",lubridate::year(max(timeIndices_of_interest$date_closest_to_ideal_date)),sprintf("%03d",lubridate::yday(max(timeIndices_of_interest$date_closest_to_ideal_date))),".",modis_tile)
+
+        table_urls<-data.frame(date=min(timeIndices_of_interest$date_closest_to_ideal_date),name=name,url=url,stringsAsFactors = F)
+      } else { # download data in multiple netcdf files (1/each time frame)
+        table_urls<-timeIndices_of_interest %>%
+          dplyr::mutate(dimensions_url=purrr::map(.x=index_opendap_closest_to_date,.f=~.getOpenDapURL_dimensions(variables,c(.x,.x),roiSpatialIndexBound[1],roiSpatialIndexBound[2],roiSpatialIndexBound[3],roiSpatialIndexBound[4],odap_timeDimName,odap_lonDimName,odap_latDimName))) %>%
+          dplyr::mutate(url=paste0(odap_server,collection,"/",modis_tile,".ncml.",outputFormat,"?",odap_projDimName,",",dimensions_url))
+
+        table_urls<-data.frame(date=table_urls$date_closest_to_ideal_date,name=table_urls$name,url=table_urls$url,stringsAsFactors = F)
+      }
+
+      return(table_urls)
     }
 
-    revisit_time <- OpenDAPtimeVector[2]-OpenDAPtimeVector[1]
+    table_urls <- purrr::pmap_dfr(list(OpenDAPtimeVector,modis_tile,roiSpatialIndexBound),
+                                  ~.workflow_getUrl_modisvnp(timeRange,..1,..2,..3))
 
-    timeIndices_of_interest <- seq(timeRange[2],timeRange[1],-revisit_time) %>%
-      purrr::map(~.getTimeIndex_modisVnp(.,OpenDAPtimeVector)) %>%
-      do.call(rbind.data.frame,.) %>%
-      purrr::set_names("ideal_date","date_closest_to_ideal_date","days_sep_from_ideal_date","index_opendap_closest_to_date") %>%
-      dplyr::mutate(ideal_date=as.Date(ideal_date,origin="1970-01-01")) %>%
-      dplyr::mutate(date_closest_to_ideal_date=as.Date(date_closest_to_ideal_date,origin="1970-01-01"))  %>%
-      dplyr::mutate(name=paste0(collection,".",lubridate::year(date_closest_to_ideal_date),sprintf("%03d",lubridate::yday(date_closest_to_ideal_date)),".",modis_tile))
-
-     if(singleNetcdf){ # download data in a single netcdf file
-       timeIndex<-c(min(timeIndices_of_interest$index_opendap_closest_to_date),max(timeIndices_of_interest$index_opendap_closest_to_date))
-       url<-.getOpenDapURL_dimensions(variables,timeIndex,roiSpatialIndexBound[1],roiSpatialIndexBound[2],roiSpatialIndexBound[3],roiSpatialIndexBound[4],odap_timeDimName,odap_lonDimName,odap_latDimName)
-       url<-paste0(odap_server,collection,"/",modis_tile,".ncml.",outputFormat,"?",odap_projDimName,",",url)
-
-       name=paste0(collection,".",lubridate::year(min(timeIndices_of_interest$date_closest_to_ideal_date)),sprintf("%03d",lubridate::yday(min(timeIndices_of_interest$date_closest_to_ideal_date))),"_",lubridate::year(max(timeIndices_of_interest$date_closest_to_ideal_date)),sprintf("%03d",lubridate::yday(max(timeIndices_of_interest$date_closest_to_ideal_date))),".",modis_tile)
-
-       table_urls<-data.frame(date=min(timeIndices_of_interest$date_closest_to_ideal_date),name=name,url=url,stringsAsFactors = F)
-     } else { # download data in multiple netcdf files (1/each time frame)
-       table_urls<-timeIndices_of_interest %>%
-         dplyr::mutate(dimensions_url=purrr::map(.x=index_opendap_closest_to_date,.f=~.getOpenDapURL_dimensions(variables,c(.x,.x),roiSpatialIndexBound[1],roiSpatialIndexBound[2],roiSpatialIndexBound[3],roiSpatialIndexBound[4],odap_timeDimName,odap_lonDimName,odap_latDimName))) %>%
-         dplyr::mutate(url=paste0(odap_server,collection,"/",modis_tile,".ncml.",outputFormat,"?",odap_projDimName,",",dimensions_url))
-
-       table_urls<-data.frame(date=table_urls$date_closest_to_ideal_date,name=table_urls$name,url=table_urls$url,stringsAsFactors = F)
-     }
 
     ############################################
     ##############  GPM   ######################
@@ -338,17 +224,20 @@ getOdapOptParam<-function(collection,roi,loginCredentials=NULL){
 
     }
 
-    dim<-.getOpenDapURL_dimensions(variables,c(0,0),roiSpatialIndexBound[3],roiSpatialIndexBound[4],roiSpatialIndexBound[1],roiSpatialIndexBound[2],odap_timeDimName,odap_latDimName,odap_lonDimName)
+    dim<-purrr::map_chr(roiSpatialIndexBound,~.getOpenDapURL_dimensions(variables,c(0,0),.[3],.[4],.[2],.[1],odap_timeDimName,odap_latDimName,odap_lonDimName))
 
-    table_urls<-urls %>%
-      dplyr::mutate(url=paste0(url_product,"?",dim)) %>%
-      dplyr::mutate(name=product_name)
+    table_urls<-NULL
+    for(i in 1:length(dim)){
+      th_table_urls<-urls %>%
+        dplyr::mutate(url=paste0(url_product,"?",dim[i])) %>%
+        dplyr::mutate(name=product_name)
+      table_urls <- rbind(table_urls,th_table_urls)
+    }
 
-    ############################################
-    ##############  SMAP   ######################
-    ############################################
-
-  } else if (odap_source=="SMAP"){
+  }  ############################################
+  ##############  SMAP   ######################
+  ############################################
+  else if (odap_source=="SMAP"){
 
     timeRange=as.Date(timeRange,origin="1970-01-01")
 
@@ -366,22 +255,29 @@ getOdapOptParam<-function(collection,roi,loginCredentials=NULL){
         dplyr::mutate(url_product=paste0(odap_server,collection,"/",gsub("-",".",date_character),"/",product_name,".h5.",outputFormat))
     }
 
-    dim <- c(variables,"Soil_Moisture_Retrieval_Data_AM_longitude","Soil_Moisture_Retrieval_Data_AM_latitude","Soil_Moisture_Retrieval_Data_PM_longitude_pm","Soil_Moisture_Retrieval_Data_PM_latitude_pm") %>%
-      purrr::map(~paste0(.x,"[",roiSpatialIndexBound[2],":1:",roiSpatialIndexBound[1],"][",roiSpatialIndexBound[3],":1:",roiSpatialIndexBound[4],"]")) %>%
-      unlist() %>%
-      paste(collapse=",")
+    getdim <- function (roiSpatialIndexBound){
+      dim <- c(variables,"Soil_Moisture_Retrieval_Data_AM_longitude","Soil_Moisture_Retrieval_Data_AM_latitude","Soil_Moisture_Retrieval_Data_PM_longitude_pm","Soil_Moisture_Retrieval_Data_PM_latitude_pm") %>%
+        purrr::map(~paste0(.x,"[",roiSpatialIndexBound[1],":1:",roiSpatialIndexBound[2],"][",roiSpatialIndexBound[3],":1:",roiSpatialIndexBound[4],"]")) %>%
+        unlist() %>%
+        paste(collapse=",")
+      return(dim)
+    }
 
-    table_urls<-urls %>%
-      dplyr::mutate(url=paste0(url_product,"?",dim)) %>%
-      dplyr::mutate(name=product_name)
+    dim <- roiSpatialIndexBound %>%
+      purrr::map(.,~getdim(.))
 
-
-  } else if (odap_source=="SRTM"){
-
+    table_urls<-NULL
+    for(i in 1:length(dim)){
+      th_table_urls<-urls %>%
+        dplyr::mutate(url=paste0(url_product,"?",dim[i])) %>%
+        dplyr::mutate(name=product_name)
+      table_urls <- rbind(table_urls,th_table_urls)
+    }
 
 
   }
 
-
   return(table_urls)
+
 }
+

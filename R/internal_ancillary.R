@@ -1,5 +1,5 @@
-#' @name getMODIStileNames
-#' @aliases getMODIStileNames
+#' @name .getMODIStileNames
+#' @aliases .getMODIStileNames
 #' @title Get MODIS tile(s) intersecting a given ROI
 #' @description Get MODIS tile(s) intersecting a given ROI
 #'
@@ -17,46 +17,13 @@
 #'
 #' @importFrom magrittr %>%
 #' @import sf dplyr
-#'
-#' @export
-#'
-#' @examples
-#'
-#' require(sf)
-#' require(purrr)
-#'
-#' ## ROI intersecting one MODIS tile
-#' roi <- st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
-#' (modis_tiles <- getMODIStileNames(roi))
-#'
-#' ## ROI intersecting 2 MODIS tiles (works for n MODIS tiles)
-#' roi <- st_read(system.file("extdata/modis2tiles.gpkg", package = "opendapr"),quiet=TRUE)
-#' (modis_tiles <- getMODIStileNames(roi))
-#'
-#' # Split the ROI into the various MODIS tiles
-#' roi_div <- roi %>%
-#' st_intersection(opendapr:::modis_tiles) %>%
-#' split(f = seq(nrow(.)))
-#'
-#' # Login to earthdata
-#' path_to_earthdata_credentials <- "/home/ptaconet/react/datasets/credentials_earthdata.txt"
-#' earthdata_credentials<-readLines(path_to_earthdata_credentials)
-#' earthdata_username<-strsplit(earthdata_credentials,"=")[[1]][2]
-#' earthdata_password<-strsplit(earthdata_credentials,"=")[[2]][2]
-#' login_earthdata(c(earthdata_username,earthdata_password))
-#'
-#' # Get the URLs
-#' odap_urls_mod11a1 <- purrr::map_dfr(roi_div,~getUrl(
-#' collection = "MOD11A1.006",
-#' variables = c("LST_Day_1km","LST_Night_1km"),
-#' roi = .,
-#' timeRange = as.Date(c("2017-01-01","2017-01-30"))
-#' ))
-#'
+#' @noRd
 
 
 
-getMODIStileNames<-function(roi){
+
+
+.getMODIStileNames<-function(roi){
 
   Name <- NULL
 
@@ -94,20 +61,19 @@ getMODIStileNames<-function(roi){
   return(all_modis_tiles)
 }
 
-#' @name getSRTMtileNames
-#' @aliases getSRTMtileNames
+#' @name .getSRTMtileNames
+#' @aliases .getSRTMtileNames
 #' @title Get SRTM tile(s) intersecting a given ROI
 #' @description Get SRTM tile(s) intersecting a given ROI
 #'
 #' @inheritParams getUrl
 #'
 #' @return a character string vector with the SRTM tiles intersecting the ROI
-
 #' @importFrom geojsonsf geojson_sf
-#' @export
+#' @noRd
 
 
-getSRTMtileNames<-function(roi){
+.getSRTMtileNames<-function(roi){
 
   srtm_tiles <- NULL
 

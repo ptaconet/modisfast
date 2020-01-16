@@ -2,10 +2,10 @@
 % Please edit documentation in R/downloadData.R
 \name{downloadData}
 \alias{downloadData}
-\title{Wrapper to download several datasets}
+\title{Download several datasets given their URLs and a destination files}
 \usage{
 downloadData(df_to_dl, parallelDL = FALSE, loginCredentials = NULL,
-  data_source = NULL)
+  data_source = "earthdata")
 }
 \arguments{
 \item{df_to_dl}{data.frame. Urls and destination files of dataset to download. See Details for the structure}
@@ -14,7 +14,7 @@ downloadData(df_to_dl, parallelDL = FALSE, loginCredentials = NULL,
 
 \item{loginCredentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
 
-\item{data_source}{String. default to NULL. Additional information is the Details}
+\item{data_source}{String. default to "earthdata". Additional information is the Details}
 }
 \value{
 a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional olumns are :
@@ -34,6 +34,12 @@ Parameter \code{df_to_dl} is a data.frame with the following minimal structure :
 \item{"destfile": }{Destination file}
 }
 
-Parameter \code{data_source} takes NULL as default value (i.e. when no login is required to download the data). Other possible values are :
-- "earthdata" : to download data requiring a login to Earthdata
+Parameter \code{data_source} takes "earthdata" as default value. Options are :
+\itemize{
+\item{ \code{NULL} : } {when no login is required to download the data). }
+\item{ \code{"earthdata"} : } {to download data requiring a login to Earthdata }
+}
+}
+\note{
+In a data import workflow, this function is typically used after a call to the \link{getUrl} function. The output value of \code{getUrl} can be used as input of parameter \code{df_to_dl} of the \code{downloadData} function.
 }

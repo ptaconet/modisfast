@@ -1,7 +1,6 @@
 
 #' @name .testIfCollExists
 #' @title Test if collection specified exists
-#' @export
 #' @noRd
 #'
 
@@ -20,7 +19,6 @@
 
 #' @name .testIfVarExists
 #' @title Test if variables exists in specified collection
-#' @export
 #' @noRd
 #'
 
@@ -39,7 +37,6 @@
 
 #' @name .testIfVarExists2
 #' @title Test if variable exists given other variables
-#' @export
 #' @noRd
 #'
 
@@ -53,7 +50,6 @@
 
 #' @name .testLogin
 #' @title Test login, else log
-#' @export
 #' @noRd
 
 .testLogin<-function(loginCredentials=NULL){
@@ -69,18 +65,25 @@
 
 #' @name .testRoi
 #' @title Test roi
-#' @export
 #' @noRd
 
 .testRoi<-function(roi){
-  if(!inherits(roi,c("sf","sfc"))){stop("Argument roi must be of class sf or sfc")}
+  if(!inherits(roi,c("sf","sfc")) || unique(sf::st_geometry_type(roi))!="POLYGON"){stop("Argument roi must be a object of class sf or sfc with only POLYGON-type geometries")}
 }
 
 #' @name .testTimeRange
 #' @title Test time range
-#' @export
 #' @noRd
 
 .testTimeRange<-function(timeRange){
   if(!inherits(timeRange,"Date") && !inherits(timeRange,"POSIXlt") || length(timeRange)>2){stop("Argument timeRange is not of class Date or POSIXlt or is not of length 1 or 2 \n")}
 }
+
+#' @name .testFormat
+#' @title Test format
+#' @noRd
+
+.testFormat<-function(outputFormat){
+  if(!(outputFormat %in% c("nc4","ascii","json"))){stop("Specified output format is not valid. Please specify a valid output format \n")}
+}
+

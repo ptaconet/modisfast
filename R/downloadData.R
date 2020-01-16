@@ -1,12 +1,12 @@
 #' @name downloadData
 #' @aliases downloadData
-#' @title Wrapper to download several datasets
+#' @title  Download several datasets given their URLs and a destination files
 #' @description This function enables to download datasets, enventually parallelizing the download.
 #'
 #' @inheritParams getUrl
 #' @param df_to_dl data.frame. Urls and destination files of dataset to download. See Details for the structure
 #' @param parallelDL boolean. Parallelize the download ? Default to FALSE
-#' @param data_source String. default to NULL. Additional information is the Details
+#' @param data_source String. default to "earthdata". Additional information is the Details
 #'
 #' @return a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional olumns are :
 #' \itemize{
@@ -23,15 +23,19 @@
 #' \item{"destfile": }{Destination file}
 #' }
 #'
-#' Parameter \code{data_source} takes NULL as default value (i.e. when no login is required to download the data). Other possible values are :
-#' - "earthdata" : to download data requiring a login to Earthdata
+#' Parameter \code{data_source} takes "earthdata" as default value. Options are :
+#' \itemize{
+#' \item{ \code{NULL} : } {when no login is required to download the data). }
+#' \item{ \code{"earthdata"} : } {to download data requiring a login to Earthdata }
+#'}
 #'
+#' @note In a data import workflow, this function is typically used after a call to the \link{getUrl} function. The output value of \code{getUrl} can be used as input of parameter \code{df_to_dl} of the \code{downloadData} function.
 #' @import dplyr parallel
 #'
 #' @export
 #'
 
-downloadData<-function(df_to_dl,parallelDL=FALSE,loginCredentials=NULL,data_source=NULL){
+downloadData<-function(df_to_dl,parallelDL=FALSE,loginCredentials=NULL,data_source="earthdata"){
 
   destfile <- fileDl <- NULL
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/getVariablesInfo.R
 \name{getVariablesInfo}
 \alias{getVariablesInfo}
-\title{Get variables information for a collection of interest}
+\title{Get variables/dimensions information for a collection of interest}
 \usage{
 getVariablesInfo(collection, loginCredentials = NULL)
 }
@@ -12,26 +12,25 @@ getVariablesInfo(collection, loginCredentials = NULL)
 \item{loginCredentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
 }
 \value{
-A data.frame with the available variables for the collection, and a set of related information
+A data.frame with the available variables for the collection, and a set of related information for each variable.
+These variables can be provided as input parameter \code{variables} of the function \link{getUrl}
 }
 \description{
-Opens a browser window with the metadata of the collection
+Outputs a data frame with the variables available for a given collection
 }
 \examples{
 
-\dontrun{
-
-# login
-earthdata_username="user"
-earthdata_password="pass"
+# login to earthdata
+earthdata_credentials<-readLines("/home/ptaconet/opendapr/.earthdata_credentials.txt")
+earthdata_username=strsplit(earthdata_credentials,"=")[[1]][2]
+earthdata_password=strsplit(earthdata_credentials,"=")[[2]][2]
 login<-login_earthdata(c(earthdata_username,earthdata_password))
 
-# Get the collections implemented :
-:opendapMetadata_internal$collection
+# Get the collections implemented in the package :
+collections_available <- getCollections()
 
-df_varinfo<-getVariablesInfo("MOD11A1.006"))
-View(df_varinfo)
+# Get the variables available for the collection MOD11A1.006
+(df_varinfo<-getVariablesInfo("MOD11A1.006"))
 
-}
 
 }

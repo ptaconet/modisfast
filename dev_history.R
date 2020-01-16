@@ -3,7 +3,7 @@ require(devtools)
 require(attachment)
 require(pkgdown)
 require(dplyr)
-## See tutorials here : https://rtask.thinkr.fr/blog/rmd-first-when-development-starts-with-documentation/
+## See tutorials here : https://rtask.thinkr.fr/blog/rmd-first-when-development-starts-with-documentation/ and here : https://stateofther.github.io/finistR2019/d-mypkg.html
 ## and https://usethis.r-lib.org/articles/articles/usethis-setup.html
 ## and video here : http://www.user2019.fr/static/pres/t257651.zip
 
@@ -13,8 +13,14 @@ usethis::create_package("/home/ptaconet/getRemoteData")
 ## Then proceed :
 usethis::use_build_ignore("dev_history.R")
 usethis::use_build_ignore("data_collections.csv")
-usethis::use_build_ignore("opendapr_functions.R")
+usethis::use_build_ignore(".earthdata_credentials.txt")
+usethis::use_build_ignore(".notes_articles.txt")
 usethis::use_git()
+use_git_ignore(dev_history.R)
+usethis::use_git_ignore("dev_history.R")
+usethis::use_git_ignore("data_collections.csv")
+usethis::use_git_ignore(".earthdata_credentials.txt")
+usethis::use_git_ignore(".notes_articles.txt")
 usethis::use_gpl3_license()
 devtools::check()
 usethis::proj_get()
@@ -30,9 +36,10 @@ usethis::proj_get()
 usethis::use_github()
 devtools::install()
 usethis::use_readme_rmd()
+usethis::use_package("magrittr","dplyr","httr","sf","purrr","lubridate","xml2","stringr","rvest","geojsonsf","utils","parallel","curl")
 
-
-
+# Intégration continue avec Travis-CI
+usethis::use_travis()
 
 ## Manual step : Commit and push
 
@@ -55,15 +62,18 @@ devtools::install()
 
 
 ## Ajouter manuellement dans le description file, la liste des packages dont dépend le package
-opendapMetadata <- read.csv("/home/ptaconet/opendapr/data_collections.csv",stringsAsFactors =F )
-modis_tiles<-sf::read_sf("/home/ptaconet/Téléchargements/modis_sin.kmz") #https://modis.ornl.gov/files/modis_sin.kmz
 
-usethis::use_data(opendapMetadata, internal = FALSE, overwrite = TRUE)
-opendapMetadata_internal=opendapMetadata
+## ci dessous, pour ajouter des données internes au package (ie non visibles par les utilisateurs)
+opendapMetadata_internal <- read.csv("/home/ptaconet/opendapr/data_collections.csv",stringsAsFactors =F )
+modis_tiles<-sf::read_sf("/home/ptaconet/Téléchargements/modis_sin.kmz")  %>% #https://modis.ornl.gov/files/modis_sin.kmz
+  sf::st_zm(modis_tiles) %>%
+  dplyr::select(Name,geometry)
 usethis::use_data(opendapMetadata_internal,modis_tiles, internal = TRUE,overwrite = TRUE)
 
+
+
 roi_example<-"/home/ptaconet/getRemoteData/inst/extdata/roi_example.gpkg"
-#dir.create("inst/extdata")
+dir.create("inst/extdata")
 file.copy(roi_example,gsub("getRemoteData","opendapr",roi_example))
 
 roi_modis2tiles<-"/home/ptaconet/Documents/modis2tiles.gpkg"

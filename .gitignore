@@ -1,3 +1,7 @@
 .Rproj.user
 .Rhistory
 .RData
+dev_history.R
+data_collections.csv
+.earthdata_credentials.txt
+.notes_articles.txt

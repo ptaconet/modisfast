@@ -1,11 +1,12 @@
 #' @name getVariablesInfo
 #' @aliases getVariablesInfo
-#' @title Get variables information for a collection of interest
-#' @description Opens a browser window with the metadata of the collection
+#' @title Get variables/dimensions information for a collection of interest
+#' @description Outputs a data frame with the variables available for a given collection
 #'
 #' @inheritParams getUrl
 #'
-#' @return A data.frame with the available variables for the collection, and a set of related information
+#' @return A data.frame with the available variables for the collection, and a set of related information for each variable.
+#' These variables can be provided as input parameter \code{variables} of the function \link{getUrl}
 #'
 #' @export
 #'
@@ -13,23 +14,20 @@
 #' @importFrom xml2 read_html
 #' @importFrom stringr str_match word
 #' @import purrr dplyr httr
-
 #' @examples
 #'
-#' \dontrun{
-#'
-#' # login
-#' earthdata_username="user"
-#' earthdata_password="pass"
+#' # login to earthdata
+#' earthdata_credentials<-readLines("/home/ptaconet/opendapr/.earthdata_credentials.txt")
+#' earthdata_username=strsplit(earthdata_credentials,"=")[[1]][2]
+#' earthdata_password=strsplit(earthdata_credentials,"=")[[2]][2]
 #' login<-login_earthdata(c(earthdata_username,earthdata_password))
 #'
-#' # Get the collections implemented :
-#' :opendapMetadata_internal$collection
+#' # Get the collections implemented in the package :
+#' collections_available <- getCollections()
 #'
-#' df_varinfo<-getVariablesInfo("MOD11A1.006"))
-#' View(df_varinfo)
+#' # Get the variables available for the collection MOD11A1.006
+#' (df_varinfo<-getVariablesInfo("MOD11A1.006"))
 #'
-#' }
 #'
 
 getVariablesInfo<-function(collection,loginCredentials=NULL){  # for a given collection, get the available variables and associated information
@@ -47,6 +45,7 @@ getVariablesInfo<-function(collection,loginCredentials=NULL){  # for a given col
   vector_content<-httr::content(vector_response,"text")
   vector_html<-xml2::read_html(vector_content)
   tab<-rvest::html_table(vector_html)
+  if(purrr::is_empty(tab)){ stop("The server might be temporarily unavailable. Try again later. Paste ",InfoURL," to check the error message in your brower\n")}
   tab<-tab[[length(tab)]]
   colnames(tab)<-c("name","all_info")
   tab$name<-gsub(":","",tab$name)

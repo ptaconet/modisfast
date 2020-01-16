@@ -5,7 +5,7 @@
 #'
 #' @inheritParams getUrl
 #'
-#' @return Opens a browser window with the metadata of the collection
+#' @return Opens a browser window with the metadata of the collection (points to the DOI of the collection)
 #'
 #' @export
 #'
@@ -14,9 +14,8 @@
 #' @examples
 #'
 #' # Get the collections implemented :
-#' opendapMetadata$collection
 #'
-#' getCollectionInfo("MOD11A1.006")
+#' (getCollectionInfo("MOD11A1.006"))
 #'
 
 getCollectionInfo<-function(collection){
