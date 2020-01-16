@@ -3,7 +3,7 @@ require(devtools)
 require(attachment)
 require(pkgdown)
 require(dplyr)
-## See tutorials here : https://rtask.thinkr.fr/blog/rmd-first-when-development-starts-with-documentation/ and here : https://stateofther.github.io/finistR2019/d-mypkg.html
+## See tutorials here : https://rtask.thinkr.fr/blog/rmd-first-when-development-starts-with-documentation/ and here : https://stateofther.github.io/finistR2019/d-mypkg.html and here https://jef.works/blog/2019/02/17/automate-testing-of-your-R-package/
 ## and https://usethis.r-lib.org/articles/articles/usethis-setup.html
 ## and video here : http://www.user2019.fr/static/pres/t257651.zip
 
