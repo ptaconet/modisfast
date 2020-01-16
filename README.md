@@ -1,10 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# opendapr
+# opendapr <img src="man/figures/logo.png" align="right" />
 
 <!-- badges: start -->
 
+[![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3)
 [![Travis build
 status](https://travis-ci.org/ptaconet/opendapr.svg?branch=master)](https://travis-ci.org/ptaconet/opendapr)
 <!-- badges: end -->
