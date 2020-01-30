@@ -1,8 +1,8 @@
-#' @name getCollections
+#' @name get_collections_available
 #' @title Get the collections implemented in the package
 #' @description Get the collections implemented in the package and a set of related information
 #'
-#' @inheritParams getUrl
+#' @inheritParams get_url
 #'
 #' @return A data.frame with the available collections, and a set of related information. Columns are :
 #' \itemize{
@@ -22,12 +22,12 @@
 #'
 #' @examples
 #'
-#' (collections <- getCollections())
+#' (collections <- get_collections_available())
 #'
 #'
 
 
-getCollections <- function(collection){
+get_collections_available <- function(collection){
 
   opendapMetadata <- opendapMetadata_internal %>%
     dplyr::select(collection,source,long_name,url_metadata,DOI,url_programmatic_access,crs,status) %>%

@@ -1,9 +1,9 @@
-#' @name downloadData
-#' @aliases downloadData
+#' @name download_data
+#' @aliases download_data
 #' @title  Download several datasets given their URLs and a destination files
 #' @description This function enables to download datasets, enventually parallelizing the download.
 #'
-#' @inheritParams getUrl
+#' @inheritParams get_url
 #' @param df_to_dl data.frame. Urls and destination files of dataset to download. See Details for the structure
 #' @param parallelDL boolean. Parallelize the download ? Default to FALSE
 #' @param data_source String. default to "earthdata". Additional information is the Details
@@ -29,13 +29,13 @@
 #' \item{ \code{"earthdata"} : } {to download data requiring a login to Earthdata }
 #'}
 #'
-#' @note In a data import workflow, this function is typically used after a call to the \link{getUrl} function. The output value of \code{getUrl} can be used as input of parameter \code{df_to_dl} of the \code{downloadData} function.
+#' @note In a data import workflow, this function is typically used after a call to the \link{get_url} function. The output value of \code{get_url} can be used as input of parameter \code{df_to_dl} of the \code{download_data} function.
 #' @import dplyr parallel
 #'
 #' @export
 #'
 
-downloadData<-function(df_to_dl,parallelDL=FALSE,loginCredentials=NULL,data_source="earthdata"){
+download_data<-function(df_to_dl,parallelDL=FALSE,loginCredentials=NULL,data_source="earthdata"){
 
   destfile <- fileDl <- NULL
 

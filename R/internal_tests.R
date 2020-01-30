@@ -29,7 +29,7 @@
   .testIfCollExists(collection)
   .testLogin(loginCredentials)
 
-  variables <- getVariablesInfo(collection,loginCredentials)
+  variables <- get_variables_info(collection,loginCredentials)
   variables <- variables$name
   .testIfVarExists2(variables,specified_variables)
 
@@ -44,7 +44,7 @@
 
  diff_vars <- NULL
  diff_vars <- setdiff(specified_variables,existing_variables)
- if(length(diff_vars)>0){stop("Specified variables do not exist for the specified collection. Use the function getVariablesInfo to check which variables are available for the collection\n")}
+ if(length(diff_vars)>0){stop("Specified variables do not exist for the specified collection. Use the function get_variables_info to check which variables are available for the collection\n")}
 
 }
 

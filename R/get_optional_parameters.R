@@ -1,10 +1,10 @@
-#' @name getOptParam
-#' @aliases getOptParam
+#' @name get_optional_parameters
+#' @aliases get_optional_parameters
 #'
-#' @title Precompute the parameter \code{optParam} of the function \link{getUrl}
-#' @description  Precompute the parameter \code{optParam} to further provide as input of the \link{getUrl} function. Useful to speed-up the overall processing time.
+#' @title Precompute the parameter \code{optParam} of the function \link{get_url}
+#' @description  Precompute the parameter \code{optParam} to further provide as input of the \link{get_url} function. Useful to speed-up the overall processing time.
 #'
-#' @inheritParams getUrl
+#' @inheritParams get_url
 #'
 #' @return a list with the following named objects :
 #' \itemize{
@@ -19,7 +19,7 @@
 #'
 #' @details
 #'
-#' When it is needed to loop the function \link{getUrl} over several time frames, it is advised to previously run the function \code{getOptParam} and provide the output as input \code{optParam} parameter of the \link{getUrl} function.
+#' When it is needed to loop the function \link{get_url} over several time frames, it is advised to previously run the function \code{get_optional_parameters} and provide the output as input \code{optParam} parameter of the \link{get_url} function.
 #' This will save much time, as internal parameters will be calculated only once.
 #'
 #' @export
@@ -37,12 +37,12 @@
 #'
 #' # Get the optional parameters for the collection MOD11A1.006 and the roi :
 #' roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
-#' (optParam_mod11a1 <- getOptParam("MOD11A1.006",roi) )
+#' (optParam_mod11a1 <- get_optional_parameters("MOD11A1.006",roi) )
 #'
 #'}
 
 
-getOptParam<-function(collection,roi,loginCredentials=NULL){
+get_optional_parameters<-function(collection,roi,loginCredentials=NULL){
 
   odap_coll_info <- odap_source <- odap_server <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- odap_crs <- odap_urlExample <- modis_tile <- OpendapURL <- OpenDAPtimeVector <- OpenDAPXVector <- OpenDAPYVector <- roi_bbox <- Opendap_minLat <- Opendap_maxLat <- Opendap_minLon <- Opendap_maxLon <- roiSpatialIndexBound <- minLat <- maxLat <- minLon <- maxLon <- roiSpatialBound <- availableDimensions <- NULL
 
@@ -50,7 +50,7 @@ getOptParam<-function(collection,roi,loginCredentials=NULL){
 
 
   ## define useful function
-  .getOptParam_singleROIfeature <- function(OpenDAPYVector,OpenDAPXVector,roi_bbox){
+  .get_optional_parameters_singleROIfeature <- function(OpenDAPYVector,OpenDAPXVector,roi_bbox){
 
     Opendap_minLat <- which.min(abs(OpenDAPYVector-roi_bbox$ymax))
     Opendap_maxLat <- which.min(abs(OpenDAPYVector-roi_bbox$ymin))
@@ -91,7 +91,7 @@ getOptParam<-function(collection,roi,loginCredentials=NULL){
     OpenDAPYVector <- .getVarVector(OpendapURL,odap_coll_info$dim_lat)
 
     roi_div_bboxes <- purrr::map(roi_div,~sf::st_bbox(.))
-    list_roiSpatialIndexBound <- purrr::map(roi_div_bboxes,~.getOptParam_singleROIfeature(OpenDAPYVector,OpenDAPXVector,.))
+    list_roiSpatialIndexBound <- purrr::map(roi_div_bboxes,~.get_optional_parameters_singleROIfeature(OpenDAPYVector,OpenDAPXVector,.))
 
     ### MODIS
   } else if (odap_coll_info$source %in% c("MODIS","VNP")){
@@ -119,14 +119,14 @@ getOptParam<-function(collection,roi,loginCredentials=NULL){
     modis_tile <- purrr::flatten(modis_tile)
 
     list_roiSpatialIndexBound <- purrr::pmap(list(OpenDAPYVector,OpenDAPXVector,roi_div_bboxes),
-                                             ~.getOptParam_singleROIfeature(..1,..2,..3)
+                                             ~.get_optional_parameters_singleROIfeature(..1,..2,..3)
     )
 
 
   }
 
 
-  availableVariables <- getVariablesInfo(collection)$name
+  availableVariables <- get_variables_info(collection)$name
 
   return(list(roiSpatialIndexBound = list_roiSpatialIndexBound, availableVariables = availableVariables, roiSpatialBound = roiSpatialBound, OpenDAPXVector = OpenDAPXVector, OpenDAPYVector = OpenDAPYVector, OpenDAPtimeVector = OpenDAPtimeVector, modis_tile = modis_tile))
 

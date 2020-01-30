@@ -1,12 +1,12 @@
-#' @name getVariablesInfo
-#' @aliases getVariablesInfo
+#' @name get_variables_info
+#' @aliases get_variables_info
 #' @title Get variables/dimensions information for a collection of interest
 #' @description Outputs a data frame with the variables available for a given collection
 #'
-#' @inheritParams getUrl
+#' @inheritParams get_url
 #'
 #' @return A data.frame with the available variables for the collection, and a set of related information for each variable.
-#' These variables can be provided as input parameter \code{variables} of the function \link{getUrl}
+#' These variables can be provided as input parameter \code{variables} of the function \link{get_url}
 #'
 #' @export
 #'
@@ -24,14 +24,14 @@
 #' login<-login_earthdata(c(earthdata_username,earthdata_password))
 #'
 #' # Get the collections implemented in the package :
-#' collections_available <- getCollections()
+#' collections_available <- get_collections_available()
 #'
 #' # Get the variables available for the collection MOD11A1.006
-#' (df_varinfo<-getVariablesInfo("MOD11A1.006"))
+#' (df_varinfo<-get_variables_info("MOD11A1.006"))
 #'}
 #'
 
-getVariablesInfo<-function(collection,loginCredentials=NULL){  # for a given collection, get the available variables and associated information
+get_variables_info<-function(collection,loginCredentials=NULL){  # for a given collection, get the available variables and associated information
 
   .testIfCollExists(collection)
 

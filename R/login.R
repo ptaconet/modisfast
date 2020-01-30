@@ -2,7 +2,7 @@
 #' @title Login to Earthdata
 #' @description Login to Earthdata with usual credentials
 #'
-#' @inheritParams getUrl
+#' @inheritParams get_url
 #'
 #' @return Invisible object with login to earthdata. Login will no longer be needed for the current session.
 #' @export

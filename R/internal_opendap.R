@@ -89,7 +89,7 @@
   odap_projDimName <- odap_coll_info$dim_proj
 
   if(is.null(optionalsOpendap)){
-    optionalsOpendap <- getOptParam(collection,roi)
+    optionalsOpendap <- get_optional_parameters(collection,roi)
   }
 
 
@@ -104,7 +104,7 @@
 
   if(odap_source %in% c("MODIS","VNP")){
 
-    .workflow_getUrl_modisvnp <- function(timeRange,OpenDAPtimeVector,modis_tile,roiSpatialIndexBound){
+    .workflow_get_url_modisvnp <- function(timeRange,OpenDAPtimeVector,modis_tile,roiSpatialIndexBound){
       timeRange <- as.Date(timeRange,origin="1970-01-01")
       if (length(timeRange)==1){
         timeRange <- c(timeRange,timeRange)
@@ -140,7 +140,7 @@
     }
 
     table_urls <- purrr::pmap_dfr(list(OpenDAPtimeVector,modis_tile,roiSpatialIndexBound),
-                                  ~.workflow_getUrl_modisvnp(timeRange,..1,..2,..3))
+                                  ~.workflow_get_url_modisvnp(timeRange,..1,..2,..3))
 
 
     ############################################

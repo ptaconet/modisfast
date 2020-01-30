@@ -1,9 +1,9 @@
-#' @name getCollectionInfo
-#' @aliases getCollectionInfo
+#' @name get_collection_info
+#' @aliases get_collection_info
 #' @title Get information on a collection of interest
 #' @description Opens a browser window with the metadata of the collection
 #'
-#' @inheritParams getUrl
+#' @inheritParams get_url
 #'
 #' @return Opens a browser window with the metadata of the collection (points to the DOI of the collection)
 #'
@@ -15,10 +15,10 @@
 #'
 #' # Get the collections implemented :
 #'
-#' (getCollectionInfo("MOD11A1.006"))
+#' (get_collection_info("MOD11A1.006"))
 #'
 
-getCollectionInfo<-function(collection){
+get_collection_info<-function(collection){
 
   .testIfCollExists(collection)
 

@@ -1,5 +1,5 @@
-#' @name getUrl
-#' @aliases getUrl
+#' @name get_url
+#' @aliases get_url
 #' @title Get the URL of
 #' @description some descirption
 #'
@@ -9,7 +9,7 @@
 #' @param timeRange date(s) / POSIXlt of interest (single date/datetime or time frame : vector with start and end dates/times) (see details)
 #' @param outputFormat string. Output format. Available options are : "nc4" (default), "ascii", "json"
 #' @param singleNetcdf boolean. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VNP collections.
-#' @param optParam list of optional arguments (see details). Can be retrieved with the function \link{getOptParam}.
+#' @param optParam list of optional arguments (see details). Can be retrieved with the function \link{get_optional_parameters}.
 #' @param loginCredentials vector string. In case of data that needs login : string vector of length 2 with username and password
 #' @param verbose boolean. Verbose (default FALSE)
 #'
@@ -48,7 +48,7 @@
 #' # over a 50km x 70km region of interest located in Northern Ivory Coast (roi)
 #' # for the time frame 2017-01-01 to 2017-01-30 (30 days) (timeRange)
 #'
-#' (opendap_urls_mod11a1 <- getUrl(collection = "MOD11A1.006",
+#' (opendap_urls_mod11a1 <- get_url(collection = "MOD11A1.006",
 #' variables = c("LST_Day_1km","LST_Night_1km"),
 #' roi = sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE),
 #' timeRange = as.Date(c("2017-01-01","2017-01-30"))
@@ -57,7 +57,7 @@
 #'
 #' ### Download the data :
 #'
-#' res_dl <- downloadData(opendap_urls_mod11a1)
+#' res_dl <- download_data(opendap_urls_mod11a1)
 #'
 #' ### Open the data :
 #' # When opening the data, do not forget to reset the CRS
@@ -79,12 +79,12 @@
 #' (getZ(mod11a1_rast_day))
 #'}
 #'
-#' # Check out the vignette for additional examples and exhaustive data import workflows
+#' # Check out the vignettes for additional examples and exhaustive data import workflows
 #'
 #'
 
 
-getUrl<-function(collection,
+get_url<-function(collection,
                  variables,
                  roi,
                  timeRange,
@@ -115,7 +115,7 @@ getUrl<-function(collection,
 
   if(is.null(optParam)){
     if(verbose){cat("Retrieving opendap arguments for the collection specified...\n")}
-    optParam <- getOptParam(collection,roi)
+    optParam <- get_optional_parameters(collection,roi)
   }
 
   # test variables
