@@ -1,5 +1,5 @@
 ---
-title: "Get started"
+title: "Get started !"
 author: "Paul Taconet"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -133,7 +133,7 @@ head(urls_gpm,3)
 head(urls_smap,3)
 ```
 
-Note that for each collection, we have specified our variables (i.e. dimensions) of interest (argument `variables`). To get the full list available variables for each collection along with their metadata, we can use the function `get_variables_info()`. As an example :
+Note that for each collection, we have specified our variables (i.e. dimensions) of interest (argument `variables`). To get the full list of available variables for each collection along with their metadata, we can use the function `get_variables_info()`. As an example :
 
 ```{r get_variables_info, eval=F }
 var_info_mod11a1 <- get_variables_info("MOD11A1.006")
