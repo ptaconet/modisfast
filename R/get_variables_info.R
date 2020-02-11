@@ -1,6 +1,6 @@
 #' @name get_variables_info
 #' @aliases get_variables_info
-#' @title Get variables/dimensions information for a collection of interest
+#' @title Get informations related to the variables available for a given collection
 #' @description Outputs a data frame with the variables available for a given collection
 #'
 #' @inheritParams get_url
@@ -17,11 +17,11 @@
 #' @examples
 #'
 #' \dontrun{
-#' # login to earthdata
-#' earthdata_credentials<-readLines("/home/ptaconet/opendapr/.earthdata_credentials.txt")
-#' earthdata_username=strsplit(earthdata_credentials,"=")[[1]][2]
-#' earthdata_password=strsplit(earthdata_credentials,"=")[[2]][2]
-#' login<-login_earthdata(c(earthdata_username,earthdata_password))
+#' # login to usgs
+#' usgs_credentials<-readLines("/home/ptaconet/opendapr/.usgs_credentials.txt")
+#' username=strsplit(usgs_credentials,"=")[[1]][2]
+#' password=strsplit(usgs_credentials,"=")[[2]][2]
+#' login<-login_usgs(c(username,password))
 #'
 #' # Get the collections implemented in the package :
 #' collections_available <- get_collections_available()
@@ -31,13 +31,13 @@
 #'}
 #'
 
-get_variables_info<-function(collection,loginCredentials=NULL){  # for a given collection, get the available variables and associated information
+get_variables_info<-function(collection,login_credentials=NULL){  # for a given collection, get the available variables and associated information
 
   .testIfCollExists(collection)
 
-  .testLogin(loginCredentials)
+  .testLogin(login_credentials)
 
-  httr::set_config(httr::authenticate(user=getOption("earthdata_user"), password=getOption("earthdata_pass"), type = "basic"))
+  httr::set_config(httr::authenticate(user=getOption("usgs_user"), password=getOption("usgs_pass"), type = "basic"))
 
   URL<-opendapMetadata_internal$url_opendapexample[which(opendapMetadata_internal$collection==collection)]
 

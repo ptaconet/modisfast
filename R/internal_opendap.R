@@ -44,13 +44,13 @@
 #' @import httr
 #' @noRd
 
-.getVarVector<-function(OpenDAPUrl,variableName,loginCredentials=NULL){
+.getVarVector<-function(OpenDAPUrl,variableName,login_credentials=NULL){
 
   vector_response <- vector <- NULL
 
-  .testLogin(loginCredentials)
+  .testLogin(login_credentials)
 
-  httr::set_config(httr::authenticate(user=getOption("earthdata_user"), password=getOption("earthdata_pass"), type = "basic"))
+  httr::set_config(httr::authenticate(user=getOption("usgs_user"), password=getOption("usgs_pass"), type = "basic"))
   vector_response<-httr::GET(paste0(OpenDAPUrl,".ascii?",variableName))
   vector<-httr::content(vector_response,"text",encoding="UTF-8")
   vector<-strsplit(vector,",")
@@ -70,15 +70,15 @@
 #' @importFrom lubridate year yday hour minute second floor_date
 #' @noRd
 
-.buildUrls<-function(collection,variables,roi,timeRange,outputFormat="nc4",singleNetcdf=TRUE,optionalsOpendap=NULL,loginCredentials=NULL){
+.buildUrls<-function(collection,variables,roi,time_range,output_format="nc4",single_netcdf=TRUE,optionalsOpendap=NULL,login_credentials=NULL){
 
   ideal_date <- date_closest_to_ideal_date <- index_opendap_closest_to_date <- dimensions_url <- hour_end <- date_character <- hour_start <- number_minutes_from_start_day <- year <- day <- product_name <- month <- x <- . <- url_product <- NULL
 
   .testIfCollExists(collection)
   .testRoi(roi)
-  .testTimeRange(timeRange)
-  .testLogin(loginCredentials)
-  .testFormat(outputFormat)
+  .testTimeRange(time_range)
+  .testLogin(login_credentials)
+  .testFormat(output_format)
 
   odap_coll_info <- opendapMetadata_internal[which(opendapMetadata_internal$collection==collection),]
   odap_source <- odap_coll_info$source
@@ -104,15 +104,15 @@
 
   if(odap_source %in% c("MODIS","VNP")){
 
-    .workflow_get_url_modisvnp <- function(timeRange,OpenDAPtimeVector,modis_tile,roiSpatialIndexBound){
-      timeRange <- as.Date(timeRange,origin="1970-01-01")
-      if (length(timeRange)==1){
-        timeRange <- c(timeRange,timeRange)
+    .workflow_get_url_modisvnp <- function(time_range,OpenDAPtimeVector,modis_tile,roiSpatialIndexBound){
+      time_range <- as.Date(time_range,origin="1970-01-01")
+      if (length(time_range)==1){
+        time_range <- c(time_range,time_range)
       }
 
       revisit_time <- OpenDAPtimeVector[2]-OpenDAPtimeVector[1]
 
-      timeIndices_of_interest <- seq(timeRange[2],timeRange[1],-revisit_time) %>%
+      timeIndices_of_interest <- seq(time_range[2],time_range[1],-revisit_time) %>%
         purrr::map(~.getTimeIndex_modisVnp(.,OpenDAPtimeVector)) %>%
         do.call(rbind.data.frame,.) %>%
         purrr::set_names("ideal_date","date_closest_to_ideal_date","days_sep_from_ideal_date","index_opendap_closest_to_date") %>%
@@ -120,10 +120,10 @@
         dplyr::mutate(date_closest_to_ideal_date=as.Date(date_closest_to_ideal_date,origin="1970-01-01"))  %>%
         dplyr::mutate(name=paste0(collection,".",lubridate::year(date_closest_to_ideal_date),sprintf("%03d",lubridate::yday(date_closest_to_ideal_date)),".",modis_tile))
 
-      if(singleNetcdf){ # download data in a single netcdf file
+      if(single_netcdf){ # download data in a single netcdf file
         timeIndex<-c(min(timeIndices_of_interest$index_opendap_closest_to_date),max(timeIndices_of_interest$index_opendap_closest_to_date))
         url<-.getOpenDapURL_dimensions(variables,timeIndex,roiSpatialIndexBound[1],roiSpatialIndexBound[2],roiSpatialIndexBound[3],roiSpatialIndexBound[4],odap_timeDimName,odap_lonDimName,odap_latDimName)
-        url<-paste0(odap_server,collection,"/",modis_tile,".ncml.",outputFormat,"?",odap_projDimName,",",url)
+        url<-paste0(odap_server,collection,"/",modis_tile,".ncml.",output_format,"?",odap_projDimName,",",url)
 
         name=paste0(collection,".",lubridate::year(min(timeIndices_of_interest$date_closest_to_ideal_date)),sprintf("%03d",lubridate::yday(min(timeIndices_of_interest$date_closest_to_ideal_date))),"_",lubridate::year(max(timeIndices_of_interest$date_closest_to_ideal_date)),sprintf("%03d",lubridate::yday(max(timeIndices_of_interest$date_closest_to_ideal_date))),".",modis_tile)
 
@@ -131,7 +131,7 @@
       } else { # download data in multiple netcdf files (1/each time frame)
         table_urls<-timeIndices_of_interest %>%
           dplyr::mutate(dimensions_url=purrr::map(.x=index_opendap_closest_to_date,.f=~.getOpenDapURL_dimensions(variables,c(.x,.x),roiSpatialIndexBound[1],roiSpatialIndexBound[2],roiSpatialIndexBound[3],roiSpatialIndexBound[4],odap_timeDimName,odap_lonDimName,odap_latDimName))) %>%
-          dplyr::mutate(url=paste0(odap_server,collection,"/",modis_tile,".ncml.",outputFormat,"?",odap_projDimName,",",dimensions_url))
+          dplyr::mutate(url=paste0(odap_server,collection,"/",modis_tile,".ncml.",output_format,"?",odap_projDimName,",",dimensions_url))
 
         table_urls<-data.frame(date=table_urls$date_closest_to_ideal_date,name=table_urls$name,url=table_urls$url,stringsAsFactors = F)
       }
@@ -140,7 +140,7 @@
     }
 
     table_urls <- purrr::pmap_dfr(list(OpenDAPtimeVector,modis_tile,roiSpatialIndexBound),
-                                  ~.workflow_get_url_modisvnp(timeRange,..1,..2,..3))
+                                  ~.workflow_get_url_modisvnp(time_range,..1,..2,..3))
 
 
     ############################################
@@ -161,9 +161,9 @@
       }
 
       #times_gpm_hhourly<-seq(from=as.POSIXlt(paste0(this_date_hlc," ",hh_rainfall_hour_begin,":00:00")),to=as.POSIXlt(as.POSIXlt(paste0(this_date_hlc+1," ",hh_rainfall_hour_end,":00:00"))),by="30 min")
-      timeRange=as.POSIXlt(timeRange,tz="GMT")
+      time_range=as.POSIXlt(time_range,tz="GMT")
 
-      datesToRetrieve<-seq(from=timeRange[2],to=timeRange[1],by="-30 min") %>%
+      datesToRetrieve<-seq(from=time_range[2],to=time_range[1],by="-30 min") %>%
         data.frame(stringsAsFactors = F) %>%
         purrr::set_names("date") %>%
         dplyr::mutate(date_character=as.character(as.Date(date))) %>%
@@ -177,7 +177,7 @@
 
       urls<-datesToRetrieve %>%
         dplyr::mutate(product_name=paste0("3B-HHR",indicatif,".MS.MRG.3IMERG.",gsub("-","",date_character),"-S",hour_start,"-E",hour_end,".",number_minutes_from_start_day,".V06B")) %>%
-        dplyr::mutate(url_product=paste0(odap_server,collection,"/",year,"/",day,"/",product_name,".HDF5.",outputFormat))
+        dplyr::mutate(url_product=paste0(odap_server,collection,"/",year,"/",day,"/",product_name,".HDF5.",output_format))
 
       ##############  GPM_3IMERGDF.06,GPM_3IMERGDL.06   ######################
     } else if(collection %in% c("GPM_L3/GPM_3IMERGDF.06","GPM_L3/GPM_3IMERGDL.06","GPM_L3/GPM_3IMERGDE.06")){
@@ -190,9 +190,9 @@
         indicatif<-NULL
       }
 
-      timeRange=as.Date(timeRange,origin="1970-01-01")
+      time_range=as.Date(time_range,origin="1970-01-01")
 
-      datesToRetrieve<-seq(timeRange[2],timeRange[1],-1) %>%
+      datesToRetrieve<-seq(time_range[2],time_range[1],-1) %>%
         data.frame(stringsAsFactors = F) %>%
         purrr::set_names("date") %>%
         dplyr::mutate(date_character=substr(date,1,10)) %>%
@@ -201,15 +201,15 @@
 
       urls<-datesToRetrieve %>%
         dplyr::mutate(product_name=paste0("3B-DAY",indicatif,".MS.MRG.3IMERG.",gsub("-","",date_character),"-S000000-E235959.V06")) %>%
-        dplyr::mutate(url_product=paste0(odap_server,collection,"/",year,"/",month,"/",product_name,".nc4.",outputFormat))
+        dplyr::mutate(url_product=paste0(odap_server,collection,"/",year,"/",month,"/",product_name,".nc4.",output_format))
 
       ##############  GPM_3IMERGM.06   ######################
 
     } else if(collection=="GPM_L3/GPM_3IMERGM.06"){
 
-      timeRange=as.Date(timeRange,origin="1970-01-01")
+      time_range=as.Date(time_range,origin="1970-01-01")
 
-      datesToRetrieve<-seq(timeRange[2],timeRange[1],-1) %>%
+      datesToRetrieve<-seq(time_range[2],time_range[1],-1) %>%
         lubridate::floor_date(x, unit = "month") %>%
         unique() %>%
         data.frame(stringsAsFactors = F) %>%
@@ -220,7 +220,7 @@
 
       urls<-datesToRetrieve %>%
         dplyr::mutate(product_name=paste0("3B-MO.MS.MRG.3IMERG.",year,month,"01-S000000-E235959.",month,".V06B")) %>%
-        dplyr::mutate(url_product=paste0(odap_server,collection,"/",year,"/",product_name,".HDF5.",outputFormat))
+        dplyr::mutate(url_product=paste0(odap_server,collection,"/",year,"/",product_name,".HDF5.",output_format))
 
     }
 
@@ -239,9 +239,9 @@
   ############################################
   else if (odap_source=="SMAP"){
 
-    timeRange=as.Date(timeRange,origin="1970-01-01")
+    time_range=as.Date(time_range,origin="1970-01-01")
 
-    datesToRetrieve<-seq(timeRange[2],timeRange[1],-1) %>%
+    datesToRetrieve<-seq(time_range[2],time_range[1],-1) %>%
       data.frame(stringsAsFactors = F) %>%
       purrr::set_names("date") %>%
       dplyr::mutate(date_character=substr(date,1,10)) %>%
@@ -252,7 +252,7 @@
     if(collection=="SMAP/SPL3SMP_E.003"){
       urls<-datesToRetrieve %>%
         dplyr::mutate(product_name=paste0("SMAP_L3_SM_P_E_",gsub("-","",date_character),"_R16510_001")) %>%
-        dplyr::mutate(url_product=paste0(odap_server,collection,"/",gsub("-",".",date_character),"/",product_name,".h5.",outputFormat))
+        dplyr::mutate(url_product=paste0(odap_server,collection,"/",gsub("-",".",date_character),"/",product_name,".h5.",output_format))
     }
 
     getdim <- function (roiSpatialIndexBound){

@@ -1,8 +1,8 @@
 #' @name get_optional_parameters
 #' @aliases get_optional_parameters
 #'
-#' @title Precompute the parameter \code{optParam} of the function \link{get_url}
-#' @description  Precompute the parameter \code{optParam} to further provide as input of the \link{get_url} function. Useful to speed-up the overall processing time.
+#' @title Precompute the parameter \code{opt_param} of the function \link{get_url}
+#' @description  Precompute the parameter \code{opt_param} to further provide as input of the \link{get_url} function. Useful to speed-up the overall processing time.
 #'
 #' @inheritParams get_url
 #'
@@ -19,7 +19,7 @@
 #'
 #' @details
 #'
-#' When it is needed to loop the function \link{get_url} over several time frames, it is advised to previously run the function \code{get_optional_parameters} and provide the output as input \code{optParam} parameter of the \link{get_url} function.
+#' When it is needed to loop the function \link{get_url} over several time frames, it is advised to previously run the function \code{get_optional_parameters} and provide the output as input \code{opt_param} parameter of the \link{get_url} function.
 #' This will save much time, as internal parameters will be calculated only once.
 #'
 #' @export
@@ -31,18 +31,18 @@
 #'
 #' # Login to Earthdata
 #' earthdata_credentials<-readLines("/home/ptaconet/opendapr/.earthdata_credentials.txt")
-#' earthdata_username=strsplit(earthdata_credentials,"=")[[1]][2]
-#' earthdata_password=strsplit(earthdata_credentials,"=")[[2]][2]
-#' login<-login_earthdata(c(earthdata_username,earthdata_password))
+#' username=strsplit(earthdata_credentials,"=")[[1]][2]
+#' password=strsplit(earthdata_credentials,"=")[[2]][2]
+#' login<-login_usgs(c(username,password))
 #'
 #' # Get the optional parameters for the collection MOD11A1.006 and the roi :
 #' roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
-#' (optParam_mod11a1 <- get_optional_parameters("MOD11A1.006",roi) )
+#' (opt_param_mod11a1 <- get_optional_parameters("MOD11A1.006",roi) )
 #'
 #'}
 
 
-get_optional_parameters<-function(collection,roi,loginCredentials=NULL){
+get_optional_parameters<-function(collection,roi,login_credentials=NULL){
 
   odap_coll_info <- odap_source <- odap_server <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- odap_crs <- odap_urlExample <- modis_tile <- OpendapURL <- OpenDAPtimeVector <- OpenDAPXVector <- OpenDAPYVector <- roi_bbox <- Opendap_minLat <- Opendap_maxLat <- Opendap_minLon <- Opendap_maxLon <- roiSpatialIndexBound <- minLat <- maxLat <- minLon <- maxLon <- roiSpatialBound <- availableDimensions <- NULL
 
@@ -58,13 +58,19 @@ get_optional_parameters<-function(collection,roi,loginCredentials=NULL){
     Opendap_maxLon <- which.min(abs(OpenDAPXVector-roi_bbox$xmax))
     roiSpatialIndexBound <- c(Opendap_minLat,Opendap_maxLat,Opendap_minLon,Opendap_maxLon)
 
-    return(roiSpatialIndexBound)
+    minLon<-OpenDAPXVector[Opendap_minLon]
+    maxLon<-OpenDAPXVector[Opendap_maxLon]
+    minLat<-OpenDAPYVector[Opendap_minLat]
+    maxLat<-OpenDAPYVector[Opendap_maxLat]
+    roiSpatialBound<-c(maxLat,minLat,minLon,maxLon)
+
+    return(list(roiSpatialIndexBound=roiSpatialIndexBound,roiSpatialBound=roiSpatialBound))
   }
 
   ## tests :
   .testIfCollExists(collection)
   .testRoi(roi)
-  .testLogin(loginCredentials)
+  .testLogin(login_credentials)
 
   ## Retrieve opendap information for the collection of interest
   odap_coll_info <- opendapMetadata_internal[which(opendapMetadata_internal$collection==collection),]
@@ -91,7 +97,8 @@ get_optional_parameters<-function(collection,roi,loginCredentials=NULL){
     OpenDAPYVector <- .getVarVector(OpendapURL,odap_coll_info$dim_lat)
 
     roi_div_bboxes <- purrr::map(roi_div,~sf::st_bbox(.))
-    list_roiSpatialIndexBound <- purrr::map(roi_div_bboxes,~.get_optional_parameters_singleROIfeature(OpenDAPYVector,OpenDAPXVector,.))
+    list_roiSpatialIndexBound <- purrr::map(roi_div_bboxes,~.get_optional_parameters_singleROIfeature(OpenDAPYVector,OpenDAPXVector,.)$roiSpatialIndexBound)
+    list_roiSpatialBound <- purrr::map(roi_div_bboxes,~.get_optional_parameters_singleROIfeature(OpenDAPYVector,OpenDAPXVector,.)$roiSpatialBound)
 
     ### MODIS
   } else if (odap_coll_info$source %in% c("MODIS","VNP")){
@@ -119,16 +126,16 @@ get_optional_parameters<-function(collection,roi,loginCredentials=NULL){
     modis_tile <- purrr::flatten(modis_tile)
 
     list_roiSpatialIndexBound <- purrr::pmap(list(OpenDAPYVector,OpenDAPXVector,roi_div_bboxes),
-                                             ~.get_optional_parameters_singleROIfeature(..1,..2,..3)
+                                             ~.get_optional_parameters_singleROIfeature(..1,..2,..3)$roiSpatialIndexBound
     )
 
-
+    list_roiSpatialBound <- NULL
   }
 
 
   availableVariables <- get_variables_info(collection)$name
 
-  return(list(roiSpatialIndexBound = list_roiSpatialIndexBound, availableVariables = availableVariables, roiSpatialBound = roiSpatialBound, OpenDAPXVector = OpenDAPXVector, OpenDAPYVector = OpenDAPYVector, OpenDAPtimeVector = OpenDAPtimeVector, modis_tile = modis_tile))
+  return(list(roiSpatialIndexBound = list_roiSpatialIndexBound, availableVariables = availableVariables, roiSpatialBound = list_roiSpatialBound, OpenDAPXVector = OpenDAPXVector, OpenDAPYVector = OpenDAPYVector, OpenDAPtimeVector = OpenDAPtimeVector, modis_tile = modis_tile))
 
 }
 

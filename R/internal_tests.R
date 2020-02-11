@@ -1,4 +1,3 @@
-
 #' @name .testIfCollExists
 #' @title Test if collection specified exists
 #' @noRd
@@ -11,7 +10,7 @@
   collection<-opendapMetadata_internal$collection[which(opendapMetadata_internal$collection==collection)]
 
   if(length(collection)==0){
-    stop("The collection that you specified does not exist or is not implemented yet in opendapr. Check opendapMetadata$collection to see which collections are implemented\n")
+    stop("The collection that you specified does not exist or is not implemented yet in opendapr. Check get_collections_available()$collection to see which collections are implemented\n")
   }
 
 }
@@ -22,14 +21,14 @@
 #' @noRd
 #'
 
-.testIfVarExists<-function(collection,specified_variables,loginCredentials=NULL){
+.testIfVarExists<-function(collection,specified_variables,login_credentials=NULL){
 
   variables <- NULL
 
   .testIfCollExists(collection)
-  .testLogin(loginCredentials)
+  .testLogin(login_credentials)
 
-  variables <- get_variables_info(collection,loginCredentials)
+  variables <- get_variables_info(collection,login_credentials)
   variables <- variables$name
   .testIfVarExists2(variables,specified_variables)
 
@@ -52,12 +51,12 @@
 #' @title Test login, else log
 #' @noRd
 
-.testLogin<-function(loginCredentials=NULL){
+.testLogin<-function(login_credentials=NULL){
 
   login <- NULL
 
-  if(!is.null(loginCredentials) || is.null(getOption("earthdata_login"))){
-    login <- login_earthdata(loginCredentials)
+  if(!is.null(login_credentials) || is.null(getOption("usgs_login"))){
+    login <- login_usgs(login_credentials)
     return(login)
   }
 
@@ -75,15 +74,15 @@
 #' @title Test time range
 #' @noRd
 
-.testTimeRange<-function(timeRange){
-  if(!inherits(timeRange,"Date") && !inherits(timeRange,"POSIXlt") || length(timeRange)>2){stop("Argument timeRange is not of class Date or POSIXlt or is not of length 1 or 2 \n")}
+.testTimeRange<-function(time_range){
+  if(!inherits(time_range,"Date") && !inherits(time_range,"POSIXlt") || length(time_range)>2){stop("Argument time_range is not of class Date or POSIXlt or is not of length 1 or 2 \n")}
 }
 
 #' @name .testFormat
 #' @title Test format
 #' @noRd
 
-.testFormat<-function(outputFormat){
-  if(!(outputFormat %in% c("nc4","ascii","json"))){stop("Specified output format is not valid. Please specify a valid output format \n")}
+.testFormat<-function(output_format){
+  if(!(output_format %in% c("nc4","ascii","json"))){stop("Specified output format is not valid. Please specify a valid output format \n")}
 }
 

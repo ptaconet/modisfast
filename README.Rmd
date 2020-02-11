@@ -19,6 +19,8 @@ knitr::opts_chunk$set(
 [![Travis build status](https://travis-ci.org/ptaconet/opendapr.svg?branch=master)](https://travis-ci.org/ptaconet/opendapr)
 <!-- badges: end -->
 
+**[ Caution : Package still in development ... ]**
+
 The goal of opendapr is to ...
 
 ## Installation
@@ -37,25 +39,63 @@ devtools::install_github("ptaconet/opendapr")
 ```
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+We want to download over the 3500 km^2^ wide region of interest (mapped below) :
 
-```{r example}
-library(opendapr)
-## basic example code
+- a 40 days time series of [MODIS Terra Land Surface Temperature (LST)](https://dx.doi.org/10.5067/MODIS/MOD11A1.006) (spatial resolution : 1 km ; temporal resolution : 1 day),
+- the same 40 days times series of [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERGDF/DAY/06) (spatial resolution : 1° ; temporal resolution : 1 day)
+
+```{r, echo=F, eval=T, message=FALSE}
+require(mapview)
+roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
+mapview::mapview(roi,legend=F)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+First prepare the script : set-up ROI, time frame and connect to USGS
 
-```{r cars}
-summary(cars)
+```{r example_prepare, eval = FALSE}
+### Prepare script
+# Packages
+require(opendapr)
+require(sf)
+
+# Set ROI and time range of interest
+roi <- st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
+time_range <- as.Date(c("2017-01-01","2017-01-30"))
+
+# Login to USGS servers with username and password. To create an account : https://ers.cr.usgs.gov/register/
+usgs_credentials <- readLines(".usgs_credentials.txt")
+username <- strsplit(usgs_credentials,"=")[[1]][2]
+password <- strsplit(usgs_credentials,"=")[[2]][2]
+log <- login_usgs(c(username,password))
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
+Retrieve MODIS and GPM data : get the OPeNDAP URLs and download the data 
 
-You can also embed plots, for example:
+```{r example_modis, eval = FALSE}
+## Get the URLs of MODIS Terra LST daily
+urls_mod11a1 <- get_url(
+  collection = "MOD11A1.006",
+  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
+  roi = roi,
+  time_range = time_range
+ )
 
-```{r pressure, echo = FALSE}
-plot(pressure)
+## Get the URLs of GPM daily
+urls_gpm <- get_url(
+  collection = "GPM_L3/GPM_3IMERGDF.06",
+  variables = c("precipitationCal","precipitationCal_cnt"),
+  roi = roi,
+  time_range = time_range
+ )
+
+## Download the data. Destination file for each dataset is specified in the column "destfile" of the dataframe urls_mod11a1 and urls_gpm
+df_to_dl <- rbind(urls_mod11a1,urls_gpm)
+res_dl <- download_data(df_to_dl,data_source="usgs",parallel = TRUE)
+
+## Check that data have been properly downloaded :
+list.files(res_dl_modis$destile)
+list.files(res_dl_gpm$destile)
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
+Other examples, including import of downloaded data in R, are provided in the [vignettes](https://ptaconet.github.io/opendapr/articles/get_started.html) !
+

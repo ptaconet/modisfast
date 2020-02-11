@@ -16,7 +16,7 @@ A data.frame with the available collections, and a set of related information. C
   \item{source :}{source}
   \item{long_name :}{Collection long name}
   \item{url_metadata :}{URL pointing to metadata about the collection}
-  \item{DOI of the dataset :}{DOI}
+  \item{DOI :}{DOI of the dataset}
   \item{url_opendapserver :}{URL of the OPeNDAP server from which the data is extracted }
   \item{status :}{Implemented status in s\code{opendapr} }
   \item{crs :}{Coordinates reference system of the collection }
@@ -24,9 +24,6 @@ A data.frame with the available collections, and a set of related information. C
 }
 \description{
 Get the collections implemented in the package and a set of related information
-}
-\details{
-To open an Earthdata account go to : (https://urs.earthdata.nasa.gov/profile)
 }
 \examples{
 

@@ -21,8 +21,6 @@
 
 
 
-
-
 .getMODIStileNames<-function(roi){
 
   Name <- NULL

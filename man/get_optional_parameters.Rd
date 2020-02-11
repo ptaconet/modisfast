@@ -2,16 +2,16 @@
 % Please edit documentation in R/get_optional_parameters.R
 \name{get_optional_parameters}
 \alias{get_optional_parameters}
-\title{Precompute the parameter \code{optParam} of the function \link{get_url}}
+\title{Precompute the parameter \code{opt_param} of the function \link{get_url}}
 \usage{
-get_optional_parameters(collection, roi, loginCredentials = NULL)
+get_optional_parameters(collection, roi, login_credentials = NULL)
 }
 \arguments{
 \item{collection}{string. Collection of interest.}
 
 \item{roi}{object of class \code{sf} or \code{sfc} Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details)}
 
-\item{loginCredentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
+\item{login_credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
 }
 \value{
 a list with the following named objects :
@@ -26,10 +26,10 @@ a list with the following named objects :
 }
 }
 \description{
-Precompute the parameter \code{optParam} to further provide as input of the \link{get_url} function. Useful to speed-up the overall processing time.
+Precompute the parameter \code{opt_param} to further provide as input of the \link{get_url} function. Useful to speed-up the overall processing time.
 }
 \details{
-When it is needed to loop the function \link{get_url} over several time frames, it is advised to previously run the function \code{get_optional_parameters} and provide the output as input \code{optParam} parameter of the \link{get_url} function.
+When it is needed to loop the function \link{get_url} over several time frames, it is advised to previously run the function \code{get_optional_parameters} and provide the output as input \code{opt_param} parameter of the \link{get_url} function.
 This will save much time, as internal parameters will be calculated only once.
 }
 \examples{
@@ -39,13 +39,13 @@ require(sf)
 
 # Login to Earthdata
 earthdata_credentials<-readLines("/home/ptaconet/opendapr/.earthdata_credentials.txt")
-earthdata_username=strsplit(earthdata_credentials,"=")[[1]][2]
-earthdata_password=strsplit(earthdata_credentials,"=")[[2]][2]
-login<-login_earthdata(c(earthdata_username,earthdata_password))
+username=strsplit(earthdata_credentials,"=")[[1]][2]
+password=strsplit(earthdata_credentials,"=")[[2]][2]
+login<-login_usgs(c(username,password))
 
 # Get the optional parameters for the collection MOD11A1.006 and the roi :
 roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
-(optParam_mod11a1 <- get_optional_parameters("MOD11A1.006",roi) )
+(opt_param_mod11a1 <- get_optional_parameters("MOD11A1.006",roi) )
 
 }
 }

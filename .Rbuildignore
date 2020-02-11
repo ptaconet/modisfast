@@ -5,6 +5,6 @@
 ^README\.Rmd$
 ^data_collections\.csv$
 ^opendapr_functions\.R$
-^\.earthdata_credentials\.txt$
+^\.usgs_credentials\.txt$
 ^\.travis\.yml$
 ^\.notes_articles\.txt$

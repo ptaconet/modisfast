@@ -4,8 +4,8 @@
 \alias{get_url}
 \title{Get the URL of}
 \usage{
-get_url(collection, variables, roi, timeRange, outputFormat = "nc4",
-  singleNetcdf = TRUE, optParam = NULL, loginCredentials = NULL,
+get_url(collection, variables, roi, time_range, output_format = "nc4",
+  single_netcdf = TRUE, opt_param = NULL, login_credentials = NULL,
   verbose = FALSE)
 }
 \arguments{
@@ -15,20 +15,20 @@ get_url(collection, variables, roi, timeRange, outputFormat = "nc4",
 
 \item{roi}{object of class \code{sf} or \code{sfc} Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details)}
 
-\item{timeRange}{date(s) / POSIXlt of interest (single date/datetime or time frame : vector with start and end dates/times) (see details)}
+\item{time_range}{date(s) / POSIXlt of interest (single date/datetime or time frame : vector with start and end dates/times) (see details)}
 
-\item{outputFormat}{string. Output format. Available options are : "nc4" (default), "ascii", "json"}
+\item{output_format}{string. Output format. Available options are : "nc4" (default), "ascii", "json"}
 
-\item{singleNetcdf}{boolean. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VNP collections.}
+\item{single_netcdf}{boolean. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VNP collections.}
 
-\item{optParam}{list of optional arguments (see details). Can be retrieved with the function \link{get_optional_parameters}.}
+\item{opt_param}{list of optional arguments (see details). This parameter is the output of the function \link{get_optional_parameters}.}
 
-\item{loginCredentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
+\item{login_credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
 
 \item{verbose}{boolean. Verbose (default FALSE)}
 }
 \value{
-a data.frame with one row for each dataset and 3 columns  :
+a data.frame with one row for each dataset to download and 4 columns  :
  \itemize{
  \item{*time_start* : }{Start Date/time for the dataset}
  \item{*name* : }{An indicative name for the dataset}
@@ -48,20 +48,20 @@ some note
 \examples{
 
 \dontrun{
-### First login to Earthdata
-login_earthdata(c("my.earthdata.username","my.earthdata.password"))
+### First login to USGS
+login_usgs(c("my.usgs.username","my.usgs.password"))
 
 ############################################################
 ### Retrieve the URLs (OPeNDAP) to download the following datasets :
 # MODIS Terra LST Daily (MOD11A1.006) (collection)
 # Day + Night bands (LST_Day_1km,LST_Night_1km) (variables)
 # over a 50km x 70km region of interest located in Northern Ivory Coast (roi)
-# for the time frame 2017-01-01 to 2017-01-30 (30 days) (timeRange)
+# for the time frame 2017-01-01 to 2017-01-30 (30 days) (time_range)
 
 (opendap_urls_mod11a1 <- get_url(collection = "MOD11A1.006",
 variables = c("LST_Day_1km","LST_Night_1km"),
 roi = sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE),
-timeRange = as.Date(c("2017-01-01","2017-01-30"))
+time_range = as.Date(c("2017-01-01","2017-01-30"))
 ))
 ############################################################
 
@@ -77,7 +77,10 @@ modis_crs <- "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +u
 ## open as a stars object (deals with multiple dimensions and time)
 
 require(stars)
+require(magrittr)
 (mod11a1_stars <- read_stars(res_dl$destfile) \%>\% st_set_crs(modis_crs))
+
+plot(mod11a1_stars)
 
 ## or open as a rasterBrick object (1 rasterBrick for each dimension)
 
@@ -85,11 +88,12 @@ require(raster)
 (mod11a1_rast_day <- brick(res_dl$destfile,varname="LST_Day_1km",crs=modis_crs))
 (mod11a1_rast_night <- brick(res_dl$destfile,varname="LST_Night_1km",crs=modis_crs))
 
-# Here the time dimension is set as the z dimension :s
+plot(mod11a1_rast_day[[1]])
+# Here the time dimension is set as the z dimension :
 (getZ(mod11a1_rast_day))
 }
 
-# Check out the vignettes for additional examples and exhaustive data import workflows
+# Check out the vignettes for additional examples and more complex data import workflows
 
 
 }

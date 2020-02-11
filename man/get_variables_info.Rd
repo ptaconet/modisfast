@@ -2,14 +2,14 @@
 % Please edit documentation in R/get_variables_info.R
 \name{get_variables_info}
 \alias{get_variables_info}
-\title{Get variables/dimensions information for a collection of interest}
+\title{Get informations related to the variables available for a given collection}
 \usage{
-get_variables_info(collection, loginCredentials = NULL)
+get_variables_info(collection, login_credentials = NULL)
 }
 \arguments{
 \item{collection}{string. Collection of interest.}
 
-\item{loginCredentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
+\item{login_credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
 }
 \value{
 A data.frame with the available variables for the collection, and a set of related information for each variable.
@@ -21,11 +21,11 @@ Outputs a data frame with the variables available for a given collection
 \examples{
 
 \dontrun{
-# login to earthdata
-earthdata_credentials<-readLines("/home/ptaconet/opendapr/.earthdata_credentials.txt")
-earthdata_username=strsplit(earthdata_credentials,"=")[[1]][2]
-earthdata_password=strsplit(earthdata_credentials,"=")[[2]][2]
-login<-login_earthdata(c(earthdata_username,earthdata_password))
+# login to usgs
+usgs_credentials<-readLines("/home/ptaconet/opendapr/.usgs_credentials.txt")
+username=strsplit(usgs_credentials,"=")[[1]][2]
+password=strsplit(usgs_credentials,"=")[[2]][2]
+login<-login_usgs(c(username,password))
 
 # Get the collections implemented in the package :
 collections_available <- get_collections_available()

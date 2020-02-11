@@ -3,5 +3,5 @@
 .RData
 dev_history.R
 data_collections.csv
-.earthdata_credentials.txt
+.usgs_credentials.txt
 .notes_articles.txt

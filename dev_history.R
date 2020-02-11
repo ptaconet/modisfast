@@ -12,13 +12,13 @@ usethis::create_package("/home/ptaconet/getRemoteData")
 ## Manual step : Create a dev_history.R file that archives all the package history steps. Then copy it to the package folder.
 ## Then proceed :
 usethis::use_build_ignore("dev_history.R")
-usethis::use_build_ignore("data_collections.csv")
+usethis::use_build_ignore(".data_collections.csv")
 usethis::use_build_ignore(".earthdata_credentials.txt")
 usethis::use_build_ignore(".notes_articles.txt")
 usethis::use_git()
 use_git_ignore(dev_history.R)
 usethis::use_git_ignore("dev_history.R")
-usethis::use_git_ignore("data_collections.csv")
+usethis::use_git_ignore(".data_collections.csv")
 usethis::use_git_ignore(".earthdata_credentials.txt")
 usethis::use_git_ignore(".notes_articles.txt")
 usethis::use_gpl3_license()
@@ -48,6 +48,8 @@ attachment::att_to_description()
 ## Check the package
 devtools::check()
 
+usethis::use_testthat()
+
 ## Manual step : Add example dataset in inst/example-data
 
 #usethis::use_vignette("aa-exploration")
@@ -64,7 +66,7 @@ devtools::install()
 ## Ajouter manuellement dans le description file, la liste des packages dont dépend le package
 
 ## ci dessous, pour ajouter des données internes au package (ie non visibles par les utilisateurs)
-opendapMetadata_internal <- read.csv("/home/ptaconet/opendapr/data_collections.csv",stringsAsFactors =F )
+opendapMetadata_internal <- read.csv("/home/ptaconet/opendapr/.data_collections.csv",stringsAsFactors =F )
 modis_tiles<-sf::read_sf("/home/ptaconet/Téléchargements/modis_sin.kmz")  %>% #https://modis.ornl.gov/files/modis_sin.kmz
   sf::st_zm(modis_tiles) %>%
   dplyr::select(Name,geometry)

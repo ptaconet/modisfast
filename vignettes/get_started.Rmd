@@ -1,0 +1,250 @@
+---
+title: "Get started"
+author: "Paul Taconet"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.fullwidth = TRUE, 
+  fig.height = 10, 
+  fig.width = 9,
+  fig.align = 'center',
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r setup, message=F}
+require(opendapr)
+require(sf)
+require(stars)
+require(raster)
+require(ncdf4)
+require(magrittr)
+require(purrr)
+```
+
+## Which data are available through the package ? 
+
+The function `get_collections_available()` provides the collections that are available for download through the `opendapr` package
+
+```{r get_collections_available, eval=F}
+(collections_available <- get_collections_available())
+
+# to get additional information for each collection : 
+# opendapr:::opendapMetadata_internal
+
+```
+
+The collections currently implemented are listed in the following table : 
+
+```{r tab_collections_available, echo=F}
+rmarkdown::paged_table(get_collections_available())
+```
+
+If we want to get detailed information on a specific collection, we use the function `get_collection_info()`. The function takes as input a single character string argument, the collection identifier, which is the column "collection" of the output data.frame of the function `get_collections_available()`. 
+
+The function `get_collection_info()` will simply open a new browser tab with the metadata of the collection. 
+
+As an example, for the collection MOD11A1.006 : 
+
+```{r get_collection_info, include = TRUE, eval=F}
+get_collection_info("MOD11A1.006")
+```
+
+## Typical workflow : Download some data over a given region of interest and time range and import the data
+
+Now that we know which collections are available, time to import the data !
+
+Here we take back the example of the readme file, and we import the data in R afterwards.
+
+We want to download over the 3500 km^2^ wide region of interest (mapped below) :
+
+- a 40 days time series of land surface temperature from [MODIS Terra LST](https://dx.doi.org/10.5067/MODIS/MOD11A1.006) (collection *MOD11A1.006*) (spatial resolution : 1 km ; temporal resolution : 1 day),
+- the same 40 days times series of precipitations from [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERGDF/DAY/06) (collection *GPM_L3/GPM_3IMERGDF.06*) (spatial resolution : 1° ; temporal resolution : 1 day)
+- the same 40 days times series of soil moisture from [SMAP Daily](https://doi.org/10.5067/T90W6VRLCBHI) (collection *SMAP/SPL3SMP_E.003*) (spatial resolution : 9 km ; temporal resolution : 3 days)
+
+```{r, echo=F, fig.height=5, fig.width=3 }
+require(mapview)
+roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
+mapview::mapview(roi,legend=F)
+```
+
+### Prepare the script
+
+First we prepare the script : set-up ROI, time frame and connect to USGS with our credentials
+
+```{r example_prepare}
+# Set ROI and time range of interest
+roi <- st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
+time_range <- as.Date(c("2017-01-01","2017-01-30"))
+
+# Login to USGS servers with username and password. To create an account go to : https://ers.cr.usgs.gov/register/
+usgs_credentials <- readLines(".usgs_credentials.txt")
+username <- strsplit(usgs_credentials,"=")[[1]][2]
+password <- strsplit(usgs_credentials,"=")[[2]][2]
+log <- login_usgs(c(username,password))
+```
+
+### Get the OPeNDAP URLs {#get-url}
+
+With the function `get_url()`, we get the OPeNDAP URLs for our collections of interest (*MOD11A1.006*, *GPM_L3/GPM_3IMERGDF.06* and *SMAP/SPL3SMP_E.003*) given our ROI and time frame.
+
+```{r get_url}
+## Get the URLs of MODIS Terra LST daily
+urls_mod11a1 <- get_url(
+  collection = "MOD11A1.006",
+  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
+  roi = roi,
+  time_range = time_range
+ )
+
+## Get the URLs of GPM daily
+urls_gpm <- get_url(
+  collection = "GPM_L3/GPM_3IMERGDF.06",
+  variables = c("precipitationCal","precipitationCal_cnt"),
+  roi = roi,
+  time_range = time_range
+ )
+
+## Get the URLs of SMAP 3-days
+urls_smap <- get_url(
+  collection = "SMAP/SPL3SMP_E.003",
+  variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture",
+  "Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag",
+  "Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm",
+  "Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),
+  roi = roi,
+  time_range = time_range
+ )
+
+head(urls_mod11a1,3)
+
+head(urls_gpm,3)
+
+head(urls_smap,3)
+```
+
+Note that for each collection, we have specified our variables (i.e. dimensions) of interest (argument `variables`). To get the full list available variables for each collection along with their metadata, we can use the function `get_variables_info()`. As an example :
+
+```{r get_variables_info, eval=F }
+var_info_mod11a1 <- get_variables_info("MOD11A1.006")
+```
+
+### Download the data {#download}
+
+Now we download the data with the function `download_data()`.
+
+Destination file for each dataset is specified in the column "destfile" of the dataframes *urls_mod11a1* and *urls_gpm*. 
+
+Setting the argument `parallel` to `TRUE` will fasten the download in case their are multiple data to download, because downloading will be parallelized
+
+```{r download_data, eval = FALSE }
+df_to_dl <- rbind(urls_mod11a1,urls_gpm,urls_smap)
+res_dl <- download_data(df_to_dl,data_source="usgs",parallel = TRUE)
+```
+
+### Import the data in R {#import}
+
+We finally import the data in R. Various classes can be used, depending on the collection. For instance, MODIS or VNP products can be imported as `stars` objects, to further use the excellent [`stars`](https://cran.r-project.org/package=stars) package for data cubes manipulation. All the data can also be imported as netcdf datasets using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4) package, or `RasterLayer` / `RasterStackBrick` of the [`raster`](https://cran.r-project.org/package=raster) package.
+
+In any case, care must be taken when importing data that was downloaded through OPeNDAP. Depending on the collection, some "issues" were raised. These issues are independant from `opendapr` : they result most of time of a kind of lack of full implementation of the OPeNDAP framework by the data providers. These issues are :
+
+- for MODIS and VNP collections : CRS is not included
+- for GPM collections : data are flipped
+- for SMAP collections : data miss information on the bounding coordinates
+
+These issues can easily be dealt at the import phase in R. The script below includes the manipulations that have to be done at the data import phase.
+
+#### Import MODIS / VNP {#import-modis-vnp}
+
+We set-up the modis CRS when we import MODIS or VNP data
+
+```{r import_modis_vnp }
+modis_crs <- "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
+
+####################################
+# Import the MODIS time series as a rasterBrick object (1 rasterBrick for each dimension) :
+mod11a1_rast_day <- urls_mod11a1$destfile %>%
+  brick(varname="LST_Day_1km",crs=modis_crs)
+####################################
+
+# The same can be done with the other variables (LST_Night_1km, etc.)
+```
+
+We can also import the same MODIS time series as a `stars` object. Here the interesting point is that all the dimensions are imported at once.
+
+```{r import_modis_vnp_stars }
+(mod11a1_stars <- stars::read_stars(urls_mod11a1$destfile) %>% st_set_crs(modis_crs))
+# plot(mod11a1_stars)
+```
+
+#### Import GPM {#import-gpm}
+
+We flip the raster when we import GPM data 
+
+```{r import_gpm, message=F}
+gpm_crs <- "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 "
+
+####################################
+## Import the GPM time series as a rasterBrick object (1 rasterBrick for each dimension) :
+gpm_rast_precipitationcal <- urls_gpm$destfile %>%
+  purrr::map(~raster(.,varname="precipitationCal",crs=gpm_crs)) %>%
+  brick() %>%
+  t() %>%
+  flip("y") %>%
+  flip("x")
+####################################
+
+names(gpm_rast_precipitationcal) <- urls_gpm$time_start
+
+# The same can be done with the other variables ("precipitationCal_cnt", etc.)
+```
+
+#### Import SMAP {#import-smap}
+
+We set-up the missing bounding coordinates. For this we use the function `get_optional_parameters()` of the `opendapr` package.
+
+```{r import_smap, message=F}
+smap_crs <- "+init=epsg:6933 +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 "
+
+####################################
+## Import the SMAP time series as a rasterBrick object (1 rasterBrick for each dimension) :
+smap_sp_bound <- opendapr::get_optional_parameters(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
+  
+smap_rast_sm_am <- urls_smap$destfile %>%
+  purrr::map(~ncdf4::nc_open(.)) %>%
+  purrr::map(~ncdf4::ncvar_get(., "Soil_Moisture_Retrieval_Data_AM_soil_moisture")) %>%
+  purrr::map(~raster(t(.), ymn=smap_sp_bound[1], ymx=smap_sp_bound[2], xmn=smap_sp_bound[3], xmx=smap_sp_bound[4], crs=smap_crs)) %>%
+  brick()
+####################################
+
+names(smap_rast_sm_am) <- urls_smap$time_start
+
+# The same can be done with the other variables (Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag, etc.)
+```
+
+### Plot 
+
+Let's plot everything !
+
+Only the first 16 dates are plotted here-under
+
+```{r plot}
+# Land surface temperature
+mod11a1_rast_day <- projectRaster(mod11a1_rast_day,crs = "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 ")
+plot(mod11a1_rast_day)
+# Precipitation
+plot(gpm_rast_precipitationcal)
+# Soil moisture
+smap_rast_sm_am <- projectRaster(smap_rast_sm_am,crs = "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 ")
+plot(smap_rast_sm_am)
+```

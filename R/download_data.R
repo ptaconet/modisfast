@@ -5,8 +5,8 @@
 #'
 #' @inheritParams get_url
 #' @param df_to_dl data.frame. Urls and destination files of dataset to download. See Details for the structure
-#' @param parallelDL boolean. Parallelize the download ? Default to FALSE
-#' @param data_source String. default to "earthdata". Additional information is the Details
+#' @param parallel boolean. Parallelize the download ? Default to FALSE
+#' @param data_source String. default to "usgs". Additional information is the Details
 #'
 #' @return a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional olumns are :
 #' \itemize{
@@ -19,14 +19,14 @@
 #'
 #' Parameter \code{df_to_dl} is a data.frame with the following minimal structure :
 #' \itemize{
-#' \item{"url": }{URL of the source file}
-#' \item{"destfile": }{Destination file}
+#' \item{"url": }{URL of the source file (character string)}
+#' \item{"destfile": }{Destination file (character string)}
 #' }
 #'
-#' Parameter \code{data_source} takes "earthdata" as default value. Options are :
+#' Parameter \code{data_source} takes "usgs" as default value. Options are :
 #' \itemize{
 #' \item{ \code{NULL} : } {when no login is required to download the data). }
-#' \item{ \code{"earthdata"} : } {to download data requiring a login to Earthdata }
+#' \item{ \code{"usgs"} : } {to download data requiring a login to Earthdata }
 #'}
 #'
 #' @note In a data import workflow, this function is typically used after a call to the \link{get_url} function. The output value of \code{get_url} can be used as input of parameter \code{df_to_dl} of the \code{download_data} function.
@@ -35,7 +35,7 @@
 #' @export
 #'
 
-download_data<-function(df_to_dl,parallelDL=FALSE,loginCredentials=NULL,data_source="earthdata"){
+download_data<-function(df_to_dl,parallel=FALSE,login_credentials=NULL,data_source="usgs"){
 
   destfile <- fileDl <- NULL
 
@@ -62,10 +62,10 @@ download_data<-function(df_to_dl,parallelDL=FALSE,loginCredentials=NULL,data_sou
     #    httr::GET(data_to_download$url[i],httr::authenticate(username,password),write_disk(data_to_download$destfile[i]))
     # }
     if(!is.null(data_source)){
-      if(data_source=="earthdata"){
-        .testLogin(loginCredentials)
-        username<-getOption("earthdata_user")
-        password<-getOption("earthdata_pass")
+      if(data_source=="usgs"){
+        .testLogin(login_credentials)
+        username<-getOption("usgs_user")
+        password<-getOption("usgs_pass")
       }
     } else {
       username <- password <- "no_auth"
@@ -74,7 +74,7 @@ download_data<-function(df_to_dl,parallelDL=FALSE,loginCredentials=NULL,data_sou
     dl_func<-function(url,output,username,password) {httr::GET(url,httr::authenticate(username,password),httr::write_disk(output),httr::progress())}
 
     cat("\nDownloading the data...")
-    if (parallelDL){
+    if (parallel){
       cl <- parallel::makeCluster(parallel::detectCores())
       parallel::clusterMap(cl, dl_func, url=data_to_download$url,output=data_to_download$destfile,username=username,password=password,
                            .scheduling = 'dynamic')

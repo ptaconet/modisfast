@@ -27,4 +27,7 @@ Imports:
     geojsonsf,
     utils,
     parallel,
-    curl
+    curl,
+    tibble
+Suggests: 
+    testthat
