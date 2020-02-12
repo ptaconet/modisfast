@@ -4,7 +4,7 @@
 #' @description some descirption
 #'
 #' @param collection string. Collection of interest.
-#' @param variables string vector. Variables to retrieve for the collection of interest
+#' @param variables string vector. Variables to retrieve for the collection of interest. If not specified, all available variables will be extracted.
 #' @param roi object of class \code{sf} or \code{sfc} Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details)
 #' @param time_range date(s) / POSIXlt of interest (single date/datetime or time frame : vector with start and end dates/times) (see details)
 #' @param output_format string. Output format. Available options are : "nc4" (default), "ascii", "json"
@@ -89,7 +89,7 @@
 
 
 get_url<-function(collection,
-                 variables,
+                 variables=NULL,
                  roi,
                  time_range,
                  output_format="nc4",
@@ -124,7 +124,10 @@ get_url<-function(collection,
 
   # test variables
   if(verbose){cat("Checking if specified variables exist for the collection specified...\n")}
-  available_variables <- opt_param$availableVariables
+  available_variables <- opt_param$availableVariables$name
+  if(is.null(variables)){
+    variables <- opt_param$availableVariables$name[which(opt_param$availableVariables$extractable_w_opendapr=="extractable")]
+  }
   .testIfVarExists2(variables,available_variables)
 
   # build URLs

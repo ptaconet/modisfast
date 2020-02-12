@@ -13,7 +13,7 @@ get_variables_info(collection, login_credentials = NULL)
 }
 \value{
 A data.frame with the available variables for the collection, and a set of related information for each variable.
-These variables can be provided as input parameter \code{variables} of the function \link{get_url}
+The variables marked as "extractable" in the column *extractable_w_opendapr* can be provided as input parameter \code{variables} of the function \link{get_url}
 }
 \description{
 Outputs a data frame with the variables available for a given collection
@@ -22,7 +22,7 @@ Outputs a data frame with the variables available for a given collection
 
 \dontrun{
 # login to usgs
-usgs_credentials<-readLines("/home/ptaconet/opendapr/.usgs_credentials.txt")
+usgs_credentials<-readLines(".usgs_credentials.txt")
 username=strsplit(usgs_credentials,"=")[[1]][2]
 password=strsplit(usgs_credentials,"=")[[2]][2]
 login<-login_usgs(c(username,password))

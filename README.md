@@ -30,10 +30,14 @@ And the development version from [GitHub](https://github.com/) with:
 devtools::install_github("ptaconet/opendapr")
 ```
 
+`opendapr` is not a generic wrapper around the OPeNDAP framework. Its
+objective is more to provide an entry point to some specific OPeNDAP
+servers (e.g. MODIS, VNP, GPM, SMAP)
+
 ## Example
 
-We want to download over the 3500 km<sup>2</sup> wide region of interest
-(mapped below) :
+We want to download over the 50 km x 50 km (3500 km<sup>2</sup>) wide
+region of interest :
 
   - a 40 days time series of [MODIS Terra Land Surface Temperature
     (LST)](https://dx.doi.org/10.5067/MODIS/MOD11A1.006) (spatial
@@ -41,8 +45,6 @@ We want to download over the 3500 km<sup>2</sup> wide region of interest
   - the same 40 days times series of [Global Precipitation Measurement
     (GPM)](https://doi.org/10.5067/GPM/IMERGDF/DAY/06) (spatial
     resolution : 1° ; temporal resolution : 1 day)
-
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 First prepare the script : set-up ROI, time frame and connect to USGS
 
@@ -69,7 +71,6 @@ Retrieve MODIS and GPM data : get the OPeNDAP URLs and download the data
 ## Get the URLs of MODIS Terra LST daily
 urls_mod11a1 <- get_url(
   collection = "MOD11A1.006",
-  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
   roi = roi,
   time_range = time_range
  )
@@ -77,7 +78,6 @@ urls_mod11a1 <- get_url(
 ## Get the URLs of GPM daily
 urls_gpm <- get_url(
   collection = "GPM_L3/GPM_3IMERGDF.06",
-  variables = c("precipitationCal","precipitationCal_cnt"),
   roi = roi,
   time_range = time_range
  )
@@ -91,7 +91,7 @@ list.files(res_dl_modis$destile)
 list.files(res_dl_gpm$destile)
 ```
 
-Other examples, including import of downloaded data in R, are provided
+Other examples, including data download + import workflows, are provided
 in the
 [vignettes](https://ptaconet.github.io/opendapr/articles/get_started.html)
 \!

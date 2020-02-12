@@ -133,7 +133,7 @@ get_optional_parameters<-function(collection,roi,login_credentials=NULL){
   }
 
 
-  availableVariables <- get_variables_info(collection)$name
+  availableVariables <- get_variables_info(collection)
 
   return(list(roiSpatialIndexBound = list_roiSpatialIndexBound, availableVariables = availableVariables, roiSpatialBound = list_roiSpatialBound, OpenDAPXVector = OpenDAPXVector, OpenDAPYVector = OpenDAPYVector, OpenDAPtimeVector = OpenDAPtimeVector, modis_tile = modis_tile))
 

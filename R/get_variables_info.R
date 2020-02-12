@@ -6,7 +6,7 @@
 #' @inheritParams get_url
 #'
 #' @return A data.frame with the available variables for the collection, and a set of related information for each variable.
-#' These variables can be provided as input parameter \code{variables} of the function \link{get_url}
+#' The variables marked as "extractable" in the column *extractable_w_opendapr* can be provided as input parameter \code{variables} of the function \link{get_url}
 #'
 #' @export
 #'
@@ -18,7 +18,7 @@
 #'
 #' \dontrun{
 #' # login to usgs
-#' usgs_credentials<-readLines("/home/ptaconet/opendapr/.usgs_credentials.txt")
+#' usgs_credentials<-readLines(".usgs_credentials.txt")
 #' username=strsplit(usgs_credentials,"=")[[1]][2]
 #' password=strsplit(usgs_credentials,"=")[[2]][2]
 #' login<-login_usgs(c(username,password))
@@ -39,7 +39,9 @@ get_variables_info<-function(collection,login_credentials=NULL){  # for a given 
 
   httr::set_config(httr::authenticate(user=getOption("usgs_user"), password=getOption("usgs_pass"), type = "basic"))
 
-  URL<-opendapMetadata_internal$url_opendapexample[which(opendapMetadata_internal$collection==collection)]
+  opendapMetadata <- opendapMetadata_internal[which(opendapMetadata_internal$collection==collection),]
+
+  URL<-opendapMetadata$url_opendapexample
 
   InfoURL<-paste0(URL,".info")
   vector_response<-httr::GET(InfoURL)
@@ -74,7 +76,25 @@ get_variables_info<-function(collection,login_credentials=NULL){  # for a given 
 
   tab<-dplyr::left_join(tab,variables_indices,by="name")
 
-  tab <- tab[c("name", "long_name", "units","indices", "all_info")]
+  # add a column to specify whether the variable is extractable or not with opendapr
+
+  dim_lon<-opendapMetadata$dim_lon
+  dim_lat<-opendapMetadata$dim_lat
+  dim_time<-opendapMetadata$dim_time
+  dim_proj<-opendapMetadata$dim_proj
+
+  tab <- tab %>%
+    dplyr::mutate(extractable_w_opendapr=case_when(name %in% c(dim_lon,dim_lat,dim_time,dim_proj) ~ "automatically extracted",
+                                                   grepl(dim_lon,tab$indices) & grepl(dim_lat,tab$indices) & grepl(dim_time,tab$indices) ~ "extractable")
+                  )
+  tab$extractable_w_opendapr[which(is.na(tab$extractable_w_opendapr))] <- "not extractable"
+
+  if(opendapMetadata$source=="SMAP"){
+    tab$extractable_w_opendapr[which(tab$extractable_w_opendapr=="not extractable")] <- "extractable"
+  }
+
+
+  tab <- tab[c("name", "long_name", "units","indices", "all_info","extractable_w_opendapr")]
 
   return(tab)
 }

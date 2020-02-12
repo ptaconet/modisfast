@@ -4,14 +4,14 @@
 \alias{get_url}
 \title{Get the URL of}
 \usage{
-get_url(collection, variables, roi, time_range, output_format = "nc4",
-  single_netcdf = TRUE, opt_param = NULL, login_credentials = NULL,
-  verbose = FALSE)
+get_url(collection, variables = NULL, roi, time_range,
+  output_format = "nc4", single_netcdf = TRUE, opt_param = NULL,
+  login_credentials = NULL, verbose = FALSE)
 }
 \arguments{
 \item{collection}{string. Collection of interest.}
 
-\item{variables}{string vector. Variables to retrieve for the collection of interest}
+\item{variables}{string vector. Variables to retrieve for the collection of interest. If not specified, all available variables will be extracted.}
 
 \item{roi}{object of class \code{sf} or \code{sfc} Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details)}
 
