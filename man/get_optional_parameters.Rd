@@ -9,7 +9,7 @@ get_optional_parameters(collection, roi, login_credentials = NULL)
 \arguments{
 \item{collection}{string. Collection of interest.}
 
-\item{roi}{object of class \code{sf} or \code{sfc} Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details)}
+\item{roi}{object of class \code{sf} or \code{sfc} Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details).}
 
 \item{login_credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
 }

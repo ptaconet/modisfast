@@ -8,18 +8,16 @@ require(dplyr)
 ## and video here : http://www.user2019.fr/static/pres/t257651.zip
 
 ## create the package
-usethis::create_package("/home/ptaconet/getRemoteData")
+usethis::create_package("/home/ptaconet/opendapr")
 ## Manual step : Create a dev_history.R file that archives all the package history steps. Then copy it to the package folder.
 ## Then proceed :
 usethis::use_build_ignore("dev_history.R")
 usethis::use_build_ignore(".data_collections.csv")
-usethis::use_build_ignore(".earthdata_credentials.txt")
 usethis::use_build_ignore(".notes_articles.txt")
 usethis::use_git()
 use_git_ignore(dev_history.R)
-usethis::use_git_ignore("dev_history.R")
+#usethis::use_git_ignore("dev_history.R")
 usethis::use_git_ignore(".data_collections.csv")
-usethis::use_git_ignore(".earthdata_credentials.txt")
 usethis::use_git_ignore(".notes_articles.txt")
 usethis::use_gpl3_license()
 devtools::check()
@@ -36,7 +34,7 @@ usethis::proj_get()
 usethis::use_github()
 devtools::install()
 usethis::use_readme_rmd()
-usethis::use_package("magrittr","dplyr","httr","sf","purrr","lubridate","xml2","stringr","rvest","geojsonsf","utils","parallel","curl")
+usethis::use_package("magrittr","dplyr","httr","sf","purrr","lubridate","xml2","stringr","rvest","utils","parallel","curl")
 
 # Intégration continue avec Travis-CI
 usethis::use_travis()
@@ -81,6 +79,10 @@ file.copy(roi_example,gsub("getRemoteData","opendapr",roi_example))
 roi_modis2tiles<-"/home/ptaconet/Documents/modis2tiles.gpkg"
 file.copy(roi_modis2tiles,gsub("Documents","opendapr/inst/extdata",roi_modis2tiles))
 
+### add a config file with username and password to usgs. More info : https://db.rstudio.com/best-practices/managing-credentials/
+file.create("config.yml")
+usethis::use_build_ignore("config.yml")
+usethis::use_git_ignore("config.yml")
 
 ## To build a website with home and vignettes
 usethis::use_package_doc()

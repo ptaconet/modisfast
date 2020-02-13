@@ -22,10 +22,7 @@ Outputs a data frame with the variables available for a given collection
 
 \dontrun{
 # login to usgs
-usgs_credentials<-readLines(".usgs_credentials.txt")
-username=strsplit(usgs_credentials,"=")[[1]][2]
-password=strsplit(usgs_credentials,"=")[[2]][2]
-login<-login_usgs(c(username,password))
+login_usgs(c("my.usgs.username","my.usgs.password"))
 
 # Get the collections implemented in the package :
 collections_available <- get_collections_available()

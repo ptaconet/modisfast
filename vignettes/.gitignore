@@ -1,6 +1,5 @@
 *.html
 *.R
-*.txt
 /GPM_L3/*
 /SMAP/*
 /MOD11A1.006/*

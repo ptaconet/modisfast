@@ -5,7 +5,7 @@
 \title{Download several datasets given their URLs and a destination files}
 \usage{
 download_data(df_to_dl, parallel = FALSE, login_credentials = NULL,
-  data_source = "usgs")
+  data_source = "usgs", verbose = FALSE)
 }
 \arguments{
 \item{df_to_dl}{data.frame. Urls and destination files of dataset to download. See Details for the structure}
@@ -15,6 +15,8 @@ download_data(df_to_dl, parallel = FALSE, login_credentials = NULL,
 \item{login_credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
 
 \item{data_source}{String. default to "usgs". Additional information is the Details}
+
+\item{verbose}{boolean. Verbose ?}
 }
 \value{
 a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional olumns are :

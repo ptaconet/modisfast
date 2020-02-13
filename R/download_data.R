@@ -7,6 +7,7 @@
 #' @param df_to_dl data.frame. Urls and destination files of dataset to download. See Details for the structure
 #' @param parallel boolean. Parallelize the download ? Default to FALSE
 #' @param data_source String. default to "usgs". Additional information is the Details
+#' @param verbose boolean. Verbose ?
 #'
 #' @return a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional olumns are :
 #' \itemize{
@@ -35,14 +36,18 @@
 #' @export
 #'
 
-download_data<-function(df_to_dl,parallel=FALSE,login_credentials=NULL,data_source="usgs"){
+download_data<-function(df_to_dl,parallel=FALSE,login_credentials=NULL,data_source="usgs",verbose=FALSE){
 
   destfile <- fileDl <- NULL
 
   # check which data is already downloaded
   data_dl<-df_to_dl %>%
-    dplyr::mutate(fileDl=purrr::map_lgl(destfile,file.exists)) %>%
+    dplyr::mutate(fileDl=file.exists(destfile)) %>%
+    dplyr::mutate(fileSize=ifelse(fileDl==TRUE,file.size(destfile),NA)) %>%
+    dplyr::mutate(fileDl=ifelse(fileDl==TRUE & fileSize>=5000,TRUE,FALSE)) %>%
     dplyr::mutate(dlStatus=ifelse(fileDl==TRUE,3,NA))
+
+  file.remove(data_dl$destfile[which(data_dl$fileSize<=5000)])
 
   # data already downloaded
   data_already_exist<-data_dl %>%
@@ -52,7 +57,10 @@ download_data<-function(df_to_dl,parallel=FALSE,login_credentials=NULL,data_sour
   data_to_download<-data_dl %>%
     dplyr::filter(fileDl==FALSE)
 
+  if(verbose){cat(nrow(df_to_dl)," datasets in total : ", nrow(data_already_exist)," already downloaded and ",nrow(data_to_download)," datasets to download\n")}
+
   if (nrow(data_to_download)>0){
+
     # Create directories if they do not exist
     unique(dirname(data_to_download$destfile)) %>%
       lapply(dir.create,recursive = TRUE, mode = "0777", showWarnings = FALSE)
@@ -73,7 +81,7 @@ download_data<-function(df_to_dl,parallel=FALSE,login_credentials=NULL,data_sour
 
     dl_func<-function(url,output,username,password) {httr::GET(url,httr::authenticate(username,password),httr::write_disk(output),httr::progress())}
 
-    cat("\nDownloading the data...")
+    if(verbose){cat("Downloading the data...\n")}
     if (parallel){
       cl <- parallel::makeCluster(parallel::detectCores())
       parallel::clusterMap(cl, dl_func, url=data_to_download$url,output=data_to_download$destfile,username=username,password=password,
@@ -81,6 +89,7 @@ download_data<-function(df_to_dl,parallel=FALSE,login_credentials=NULL,data_sour
       parallel::stopCluster(cl)
     } else {
       for (i in 1:nrow(data_to_download)){
+        if(verbose){cat(i," over ", nrow(data_to_download),"\n")}
         dl_func(url=data_to_download$url[i],output=data_to_download$destfile[i],username=username,password=password)
       }
     }
@@ -91,6 +100,12 @@ download_data<-function(df_to_dl,parallel=FALSE,login_credentials=NULL,data_sour
     dplyr::mutate(fileSize=file.size(destfile)) %>%
     rbind(data_already_exist)
 
+  # to deal with pb when not all the data are downloaded
+  data_not_downloaded <- dplyr::filter(data_dl,fileSize>=5000)
+
+  if(!(identical(data_dl,data_not_downloaded))){
+    download_data(df_to_dl=df_to_dl,parallel=FALSE,login_credentials=login_credentials,data_source=data_source)
+  }
 
   # 1 : download ok
   # 2 : download error

@@ -88,10 +88,9 @@ roi <- st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),qui
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
 # Login to USGS servers with username and password. To create an account go to : https://ers.cr.usgs.gov/register/
-usgs_credentials <- readLines(".usgs_credentials.txt")
-username <- strsplit(usgs_credentials,"=")[[1]][2]
-password <- strsplit(usgs_credentials,"=")[[2]][2]
-log <- login_usgs(c(username,password))
+credentials_usgs <- config::get("usgs")
+log <- login_usgs(c(credentials_usgs$usr,credentials_usgs$pwd))
+
 ```
 
 ### Get the OPeNDAP URLs {#get-url}
@@ -214,7 +213,7 @@ names(gpm_rast_precipitationcal) <- urls_gpm$time_start
 We set-up the missing bounding coordinates. For this we use the function `get_optional_parameters()` of the `opendapr` package.
 
 ```{r import_smap, message=F}
-smap_crs <- "+init=epsg:6933 +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 "
+smap_crs <- "+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0" # EPSG : 6933
 
 ####################################
 ## Import the SMAP time series as a rasterBrick object (1 rasterBrick for each dimension) :

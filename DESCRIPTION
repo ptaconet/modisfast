@@ -1,5 +1,5 @@
 Package: opendapr
-Title: R tools to efficiently download various kinds of spatio-temporal environmental/climatic data using the OPeNDAP framework
+Title: Fast and efficient download of various kinds of spatio-temporal environmental / climatic data in R using the OPeNDAP framework
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Paul",
@@ -24,7 +24,6 @@ Imports:
     xml2,
     stringr,
     rvest,
-    geojsonsf,
     utils,
     parallel,
     curl,

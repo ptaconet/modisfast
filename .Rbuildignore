@@ -3,8 +3,7 @@
 ^dev_history\.R$
 ^LICENSE\.md$
 ^README\.Rmd$
-^data_collections\.csv$
-^opendapr_functions\.R$
-^\.usgs_credentials\.txt$
+^.data_collections\.csv$
 ^\.travis\.yml$
 ^\.notes_articles\.txt$
+^config\.yml$

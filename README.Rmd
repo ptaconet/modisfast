@@ -60,10 +60,8 @@ roi <- st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),qui
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
 # Login to USGS servers with username and password. To create an account : https://ers.cr.usgs.gov/register/
-usgs_credentials <- readLines(".usgs_credentials.txt")
-username <- strsplit(usgs_credentials,"=")[[1]][2]
-password <- strsplit(usgs_credentials,"=")[[2]][2]
-log <- login_usgs(c(username,password))
+credentials_usgs <- config::get("usgs")
+log <- login_usgs(c(credentials_usgs$usr,credentials_usgs$pwd))
 ```
 
 Retrieve MODIS and GPM data : get the OPeNDAP URLs and download the data 

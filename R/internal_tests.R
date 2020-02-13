@@ -15,37 +15,27 @@
 
 }
 
-
 #' @name .testIfVarExists
-#' @title Test if variables exists in specified collection
-#' @noRd
-#'
-
-.testIfVarExists<-function(collection,specified_variables,login_credentials=NULL){
-
-  variables <- NULL
-
-  .testIfCollExists(collection)
-  .testLogin(login_credentials)
-
-  variables <- get_variables_info(collection,login_credentials)
-  variables <- variables$name
-  .testIfVarExists2(variables,specified_variables)
-
-}
-
-#' @name .testIfVarExists2
 #' @title Test if variable exists given other variables
 #' @noRd
 #'
 
-.testIfVarExists2<-function(specified_variables,existing_variables){
+.testIfVarExists<-function(specified_variables,existing_variables){
 
  diff_vars <- NULL
  diff_vars <- setdiff(specified_variables,existing_variables)
  if(length(diff_vars)>0){stop("Specified variables do not exist for the specified collection. Use the function get_variables_info to check which variables are available for the collection\n")}
 
 }
+
+#.testIfVarExists2<-function(collection,specified_variables,login_credentials=NULL){
+#  variables <- NULL
+#  .testIfCollExists(collection)
+#  .testLogin(login_credentials)
+#  variables <- get_variables_info(collection,login_credentials)
+#  variables <- variables$name
+#  .testIfVarExists2(variables,specified_variables)
+#}
 
 #' @name .testLogin
 #' @title Test login, else log

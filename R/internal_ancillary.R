@@ -58,32 +58,3 @@
 
   return(all_modis_tiles)
 }
-
-#' @name .getSRTMtileNames
-#' @aliases .getSRTMtileNames
-#' @title Get SRTM tile(s) intersecting a given ROI
-#' @description Get SRTM tile(s) intersecting a given ROI
-#'
-#' @inheritParams get_url
-#'
-#' @return a character string vector with the SRTM tiles intersecting the ROI
-#' @importFrom geojsonsf geojson_sf
-#' @noRd
-
-
-.getSRTMtileNames<-function(roi){
-
-  srtm_tiles <- NULL
-
-  .testRoi(roi)
-  roi<-sf::st_transform(roi,4326)
-
-  srtm_tiles <- geojsonsf::geojson_sf("http://dwtkns.com/srtm30m/srtm30m_bounding_boxes.json")  %>%
-    sf::st_intersection(roi) %>%
-    as.data.frame()
-
-  srtm_tiles<-substr(srtm_tiles$dataFile,1,7)
-
-  return(srtm_tiles)
-}
-

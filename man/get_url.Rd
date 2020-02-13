@@ -11,9 +11,9 @@ get_url(collection, variables = NULL, roi, time_range,
 \arguments{
 \item{collection}{string. Collection of interest.}
 
-\item{variables}{string vector. Variables to retrieve for the collection of interest. If not specified, all available variables will be extracted.}
+\item{variables}{string vector. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted.}
 
-\item{roi}{object of class \code{sf} or \code{sfc} Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details)}
+\item{roi}{object of class \code{sf} or \code{sfc} Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details).}
 
 \item{time_range}{date(s) / POSIXlt of interest (single date/datetime or time frame : vector with start and end dates/times) (see details)}
 
@@ -55,7 +55,7 @@ login_usgs(c("my.usgs.username","my.usgs.password"))
 ### Retrieve the URLs (OPeNDAP) to download the following datasets :
 # MODIS Terra LST Daily (MOD11A1.006) (collection)
 # Day + Night bands (LST_Day_1km,LST_Night_1km) (variables)
-# over a 50km x 70km region of interest located in Northern Ivory Coast (roi)
+# over a 50km x 70km region of interest (roi)
 # for the time frame 2017-01-01 to 2017-01-30 (30 days) (time_range)
 
 (opendap_urls_mod11a1 <- get_url(collection = "MOD11A1.006",
