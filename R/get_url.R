@@ -25,6 +25,12 @@
 #'
 #' This is the main function of the package. It enables to retrieve
 #'
+#'#' Argument \code{time_range} can be provided either as a single date (e.g. \code{as.Date("2017-01-01"))} or time frame provided as two bounding dates ( e.g. \code{as.Date(c("2010-01-01","2010-01-30"))}) or as a POSIXlt single time or time range (e.g. "2010-01-01 18:00:00") for the half-hourly collection (GPM_3IMERGHH.06). If POSIXlt, times must be in UTC.
+#'
+#' Argument \code{optionals_opendap} is optional. This parameter is automatically calculated within the function if it is not provided. However, providing it optimizes the performances of the function (i.e. fasten the processing time).
+#' It might be particularly useful to provide it if looping over the same ROI or dates is planned.
+#' The parameter can be retrieved outside the function with the function \code{\link{get_optional_parameters}}.
+#'
 #' @note
 #'
 #' some note
@@ -101,19 +107,21 @@ get_url<-function(collection,
   existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName  <- NULL
 
   ## tests :
+  # collection
+  if(verbose){cat("Checking if specified collection exist and is implemented in the package...\n")}
+  .testIfCollExists(collection)
   # roi
   .testRoi(roi)
-  # time_range
+  # time_range_format
   .testTimeRange(time_range)
+  # time_range_available_dates
+  .testTimeRangeAvDates(time_range,collection)
   # output_format
   .testFormat(output_format)
   # single_netcdf
   if(!inherits(single_netcdf,"logical")){stop("single_netcdf argument must be boolean\n")}
   # verbose
   if(!inherits(verbose,"logical")){stop("verbose argument must be boolean\n")}
-  # collection
-  if(verbose){cat("Checking if specified collection exist and is implemented in the package...\n")}
-  .testIfCollExists(collection)
   # login_credentials
   .testLogin(login_credentials)
 

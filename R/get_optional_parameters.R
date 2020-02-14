@@ -10,6 +10,7 @@
 #' \itemize{
 #'  \item{*roiSpatialIndexBound*: }{OPeNDAP indices for the spatial coordinates of the bounding box of the ROI (minLat, maxLat, minLon, maxLon)}
 #'  \item{*availableVariables*: }{Variables available for the collection of interest}
+#'  \item{*roiSpatialBound*: }{}
 #'  \item{*roiSpatialBound*: }{The spatial coordinates of the bounding box of the ROI expressed in the CRS of the collection}
 #'  \item{*OpenDAPXVector*: }{The X (longitude) vector}
 #'  \item{*OpenDAPYVector*: }{The Y (longitude) vector}
@@ -29,15 +30,14 @@
 #' \dontrun{
 #' require(sf)
 #'
-#' # Login to Earthdata
-#' earthdata_credentials<-readLines("/home/ptaconet/opendapr/.earthdata_credentials.txt")
-#' username=strsplit(earthdata_credentials,"=")[[1]][2]
-#' password=strsplit(earthdata_credentials,"=")[[2]][2]
+#' # Login to USGS
 #' login<-login_usgs(c(username,password))
 #'
 #' # Get the optional parameters for the collection MOD11A1.006 and the roi :
 #' roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
 #' (opt_param_mod11a1 <- get_optional_parameters("MOD11A1.006",roi) )
+#'
+#' # Now we can
 #'
 #'}
 
@@ -101,7 +101,7 @@ get_optional_parameters<-function(collection,roi,login_credentials=NULL){
     list_roiSpatialBound <- purrr::map(roi_div_bboxes,~.get_optional_parameters_singleROIfeature(OpenDAPYVector,OpenDAPXVector,.)$roiSpatialBound)
 
     ### MODIS
-  } else if (odap_coll_info$source %in% c("MODIS","VNP")){
+  } else if (odap_coll_info$source %in% c("MODIS","VIIRS")){
 
     modis_tile <- purrr::map(roi_div,~.getMODIStileNames(.))
     OpendapURL <- purrr::map(modis_tile,~purrr::map_chr(.,~paste0(odap_coll_info$url_opendapserver,collection,"/",.,".ncml")))

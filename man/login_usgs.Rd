@@ -16,10 +16,10 @@ None.
 Login to USGS EROS Registration System (ERS) with usual credentials
 }
 \details{
-Register on \url{https://ers.cr.usgs.gov/register/}.
+Open an account here : \url{https://ers.cr.usgs.gov/register/}.
 }
 \note{
-The function is inspired from : https://github.com/16EAGLE/getSpatialData/blob/master/R/gSD_login.R
+The function is inspired from : \url{https://github.com/16EAGLE/getSpatialData/blob/master/R/gSD_login.R}
 }
 \examples{
 

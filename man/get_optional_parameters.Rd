@@ -18,6 +18,7 @@ a list with the following named objects :
 \itemize{
  \item{*roiSpatialIndexBound*: }{OPeNDAP indices for the spatial coordinates of the bounding box of the ROI (minLat, maxLat, minLon, maxLon)}
  \item{*availableVariables*: }{Variables available for the collection of interest}
+ \item{*roiSpatialBound*: }{}
  \item{*roiSpatialBound*: }{The spatial coordinates of the bounding box of the ROI expressed in the CRS of the collection}
  \item{*OpenDAPXVector*: }{The X (longitude) vector}
  \item{*OpenDAPYVector*: }{The Y (longitude) vector}
@@ -37,15 +38,14 @@ This will save much time, as internal parameters will be calculated only once.
 \dontrun{
 require(sf)
 
-# Login to Earthdata
-earthdata_credentials<-readLines("/home/ptaconet/opendapr/.earthdata_credentials.txt")
-username=strsplit(earthdata_credentials,"=")[[1]][2]
-password=strsplit(earthdata_credentials,"=")[[2]][2]
+# Login to USGS
 login<-login_usgs(c(username,password))
 
 # Get the optional parameters for the collection MOD11A1.006 and the roi :
 roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
 (opt_param_mod11a1 <- get_optional_parameters("MOD11A1.006",roi) )
+
+# Now we can
 
 }
 }

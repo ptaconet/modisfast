@@ -28,7 +28,7 @@
 get_collections_available <- function(collection){
 
   opendapMetadata <- opendapMetadata_internal %>%
-    dplyr::select(collection,source,long_name,url_metadata,DOI,url_programmatic_access,crs,status) %>%
+    dplyr::select(collection,long_name,source,url_metadata,DOI,url_programmatic_access,crs,status) %>%
     dplyr::rename(url_opendapserver = url_programmatic_access)
 
   return(opendapMetadata)

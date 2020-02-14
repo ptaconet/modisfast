@@ -64,7 +64,7 @@ devtools::install()
 ## Ajouter manuellement dans le description file, la liste des packages dont dépend le package
 
 ## ci dessous, pour ajouter des données internes au package (ie non visibles par les utilisateurs)
-opendapMetadata_internal <- read.csv("/home/ptaconet/opendapr/.data_collections.csv",stringsAsFactors =F )
+opendapMetadata_internal <- read.csv("/home/ptaconet/opendapr/.data_collections.csv",stringsAsFactors =F ) %>% arrange(collection)
 modis_tiles<-sf::read_sf("/home/ptaconet/Téléchargements/modis_sin.kmz")  %>% #https://modis.ornl.gov/files/modis_sin.kmz
   sf::st_zm(modis_tiles) %>%
   dplyr::select(Name,geometry)

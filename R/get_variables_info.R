@@ -42,6 +42,7 @@ get_variables_info<-function(collection,login_credentials=NULL){  # for a given 
 
   InfoURL<-paste0(URL,".info")
   vector_response<-httr::GET(InfoURL)
+  if(vector_response$status_code==400){ stop("Bad request\n")}
   vector_content<-httr::content(vector_response,"text")
   vector_html<-xml2::read_html(vector_content)
   tab<-rvest::html_table(vector_html)

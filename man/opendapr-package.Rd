@@ -4,7 +4,7 @@
 \name{opendapr-package}
 \alias{opendapr}
 \alias{opendapr-package}
-\title{opendapr: Fast and efficient download of various kinds of spatio-temporal environmental / climatic data in R using the OPeNDAP framework}
+\title{opendapr: Fast download of various kinds of spatio-temporal environmental / climatic data in R using the OPeNDAP framework}
 \description{
 \if{html}{\figure{logo.png}{options: align='right'}}
 

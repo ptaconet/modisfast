@@ -32,7 +32,7 @@
 #'
 #' @note In a data import workflow, this function is typically used after a call to the \link{get_url} function. The output value of \code{get_url} can be used as input of parameter \code{df_to_dl} of the \code{download_data} function.
 #' @import dplyr parallel
-#'
+#' @importFrom utils txtProgressBar
 #' @export
 #'
 
@@ -101,9 +101,9 @@ download_data<-function(df_to_dl,parallel=FALSE,login_credentials=NULL,data_sour
     rbind(data_already_exist)
 
   # to deal with pb when not all the data are downloaded
-  data_not_downloaded <- dplyr::filter(data_dl,fileSize>=5000)
+  data_downloaded <- dplyr::filter(data_dl,fileSize>=5000)
 
-  if(!(identical(data_dl,data_not_downloaded))){
+  if(!(identical(data_dl,data_downloaded))){
     download_data(df_to_dl=df_to_dl,parallel=FALSE,login_credentials=login_credentials,data_source=data_source)
   }
 

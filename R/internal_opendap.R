@@ -1,6 +1,6 @@
 
 #' @name .getTimeIndex_modisVnp
-#' @title get MODIS/VNP time index closest to actual provided date
+#' @title get MODIS/VIIRS time index closest to actual provided date
 #' @noRd
 
 .getTimeIndex_modisVnp<-function(date,timeVector){
@@ -99,10 +99,10 @@
   modis_tile <- optionalsOpendap$modis_tile
 
   ############################################
-  ##############  MODIS/VNP   ######################
+  ##############  MODIS/VIIRS   ######################
   ############################################
 
-  if(odap_source %in% c("MODIS","VNP")){
+  if(odap_source %in% c("MODIS","VIIRS")){
 
     .workflow_get_url_modisvnp <- function(time_range,OpenDAPtimeVector,modis_tile,roiSpatialIndexBound){
       time_range <- as.Date(time_range,origin="1970-01-01")

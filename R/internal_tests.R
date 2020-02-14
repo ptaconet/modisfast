@@ -10,7 +10,7 @@
   collection<-opendapMetadata_internal$collection[which(opendapMetadata_internal$collection==collection)]
 
   if(length(collection)==0){
-    stop("The collection that you specified does not exist or is not implemented yet in opendapr. Check get_collections_available()$collection to see which collections are implemented\n")
+    stop("The collection that you specified does not exist or is not implemented yet in opendapr. Check get_collections_available() to see which collections are implemented\n")
   }
 
 }
@@ -57,7 +57,7 @@
 #' @noRd
 
 .testRoi<-function(roi){
-  if(!inherits(roi,c("sf","sfc")) || unique(sf::st_geometry_type(roi))!="POLYGON"){stop("Argument roi must be a object of class sf or sfc with only POLYGON-type geometries")}
+  if(!inherits(roi,c("sf","sfc")) || unique(sf::st_geometry_type(roi))!="POLYGON" || is.na(roi) ){stop("Argument roi must be a object of class sf or sfc with only POLYGON-type geometries")}
 }
 
 #' @name .testTimeRange
@@ -65,7 +65,17 @@
 #' @noRd
 
 .testTimeRange<-function(time_range){
-  if(!inherits(time_range,"Date") && !inherits(time_range,"POSIXlt") || length(time_range)>2){stop("Argument time_range is not of class Date or POSIXlt or is not of length 1 or 2 \n")}
+  if(!inherits(time_range,"Date") && !inherits(time_range,"POSIXlt") || length(time_range)>2 || is.na(time_range)){stop("Argument time_range is not of class Date or POSIXlt or is not of length 1 or 2 \n")}
+  if(length(time_range)==2 && time_range[1] > time_range[2]){stop("Time end is superior to time start in time_range argument \n")}
+  }
+
+#' @name .testTimeRangeAvDates
+#' @title Test that time range provided is ok with the collection
+#' @noRd
+
+.testTimeRangeAvDates<-function(time_range,collection){
+  start_date<-opendapMetadata_internal$start_date[which(opendapMetadata_internal$collection==collection)]
+  if(time_range[1] < as.Date(start_date)){stop("First time frame in time_range argument is before the beginning of the mission\n")}
 }
 
 #' @name .testFormat
