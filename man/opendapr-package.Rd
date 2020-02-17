@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right'}}
 
-Provides functions to download various kinds of spatial-temporal environmental/climatic data in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) using the OPeNDAP framework.
+Provides functions to download various kinds of spatial-temporal Earth science data in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) using the OPeNDAP framework.
 }
 \seealso{
 Useful links:

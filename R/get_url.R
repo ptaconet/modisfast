@@ -8,7 +8,7 @@
 #' @param roi object of class \code{sf} or \code{sfc} Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details).
 #' @param time_range date(s) / POSIXlt of interest (single date/datetime or time frame : vector with start and end dates/times) (see details)
 #' @param output_format string. Output format. Available options are : "nc4" (default), "ascii", "json"
-#' @param single_netcdf boolean. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VNP collections.
+#' @param single_netcdf boolean. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.
 #' @param opt_param list of optional arguments (see details). This parameter is the output of the function \link{get_optional_parameters}.
 #' @param login_credentials vector string. In case of data that needs login : string vector of length 2 with username and password
 #' @param verbose boolean. Verbose (default FALSE)
@@ -17,7 +17,7 @@
 #'  \itemize{
 #'  \item{*time_start* : }{Start Date/time for the dataset}
 #'  \item{*name* : }{An indicative name for the dataset}
-#'  \item{*url* : }{http URL of the dataset}
+#'  \item{*url* : }{http URL (OPeNDAP) of the dataset}
 #'  \item{*destfile* : }{An indicative destination file for the dataset}
 #'  }
 #'
@@ -104,7 +104,7 @@ get_url<-function(collection,
                  login_credentials=NULL,
                  verbose=FALSE){
 
-  existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName  <- NULL
+  existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName  <- . <- name <- destfile <- NULL
 
   ## tests :
   # collection
@@ -122,6 +122,8 @@ get_url<-function(collection,
   if(!inherits(single_netcdf,"logical")){stop("single_netcdf argument must be boolean\n")}
   # verbose
   if(!inherits(verbose,"logical")){stop("verbose argument must be boolean\n")}
+  # Internet connection
+  .testInternetConnection()
   # login_credentials
   .testLogin(login_credentials)
 

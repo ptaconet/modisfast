@@ -88,7 +88,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/get_started.html">Get started</a>
+      <a href="../articles/simple_workflow.html">Simple workflow : Download data for a given region of interest and time frame</a>
     </li>
   </ul>
 </li>
@@ -135,7 +135,7 @@
     </tr>
     <tr>
       <th>roi</th>
-      <td><p>object of class <code>sf</code> or <code>sfc</code> Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details)</p></td>
+      <td><p>object of class <code>sf</code> or <code>sfc</code> Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details).</p></td>
     </tr>
     <tr>
       <th>login_credentials</th>
@@ -148,6 +148,7 @@
     <p>a list with the following named objects :</p><ul>
 <li><p>*roiSpatialIndexBound*: OPeNDAP indices for the spatial coordinates of the bounding box of the ROI (minLat, maxLat, minLon, maxLon)</p></li>
 <li><p>*availableVariables*: Variables available for the collection of interest</p></li>
+<li><p>*roiSpatialBound*:</p></li>
 <li><p>*roiSpatialBound*: The spatial coordinates of the bounding box of the ROI expressed in the CRS of the collection</p></li>
 <li><p>*OpenDAPXVector*: The X (longitude) vector</p></li>
 <li><p>*OpenDAPYVector*: The Y (longitude) vector</p></li>
@@ -167,15 +168,14 @@ This will save much time, as internal parameters will be calculated only once.</
 </div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>sf</span>)
 
-<span class='co'># Login to Earthdata</span>
-<span class='no'>earthdata_credentials</span><span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/readLines'>readLines</a></span>(<span class='st'>"/home/ptaconet/opendapr/.earthdata_credentials.txt"</span>)
-<span class='no'>username</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/strsplit'>strsplit</a></span>(<span class='no'>earthdata_credentials</span>,<span class='st'>"="</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>2</span>]
-<span class='no'>password</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/strsplit'>strsplit</a></span>(<span class='no'>earthdata_credentials</span>,<span class='st'>"="</span>)<span class='kw'>[[</span><span class='fl'>2</span>]][<span class='fl'>2</span>]
+<span class='co'># Login to USGS</span>
 <span class='no'>login</span><span class='kw'>&lt;-</span><span class='fu'><a href='login_usgs.html'>login_usgs</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>username</span>,<span class='no'>password</span>))
 
 <span class='co'># Get the optional parameters for the collection MOD11A1.006 and the roi :</span>
 <span class='no'>roi</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sf/topics/st_read'>st_read</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/roi_example.gpkg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"opendapr"</span>),<span class='kw'>quiet</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 (<span class='no'>opt_param_mod11a1</span> <span class='kw'>&lt;-</span> <span class='fu'>get_optional_parameters</span>(<span class='st'>"MOD11A1.006"</span>,<span class='no'>roi</span>) )
+
+<span class='co'># Now we can</span>
 
 <span class='co'># }</span></pre>
   </div>

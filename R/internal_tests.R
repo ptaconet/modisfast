@@ -10,7 +10,7 @@
   collection<-opendapMetadata_internal$collection[which(opendapMetadata_internal$collection==collection)]
 
   if(length(collection)==0){
-    stop("The collection that you specified does not exist or is not implemented yet in opendapr. Check get_collections_available() to see which collections are implemented\n")
+    stop("The collection that you specified does not exist. Check get_collections_available() to see which collections are implemented\n")
   }
 
 }
@@ -86,3 +86,11 @@
   if(!(output_format %in% c("nc4","ascii","json"))){stop("Specified output format is not valid. Please specify a valid output format \n")}
 }
 
+#' @name .testInternetConnection
+#' @title Test internet connection
+#' @importFrom curl has_internet
+#' @noRd
+
+.testInternetConnection<-function(){
+  if(!curl::has_internet()){stop("Internet connection is required. Are you connected to the Internet ?\n")}
+}

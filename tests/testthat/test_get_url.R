@@ -25,18 +25,16 @@ test_that("test if errors are sent back", {
   # wrong type for singleNetcdf
   expect_error(get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01")), single_netcdf = "TRUE"),"single_netcdf argument must be boolean\n")
   # Collection does not exist
-  expect_error(get_url(collection = "MOD11A1v006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01"))),"The collection that you specified does not exist or is not implemented yet in opendapr. Check get_collections_available() to see which collections are implemented\n")
+  expect_error(get_url(collection = "MOD11A1v006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01"))),"The collection that you specified does not exist. Check get_collections_available() to see which collections are implemented\n")
   # output format is not specified
   expect_error(get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01")), output_format = NA),"Specified output format is not valid. Please specify a valid output format \n")
-
-
 
 })
 
 
 
 
-## test that it is working
+## test that the function get_url is working
 for (i in 1:nrow(opendapr:::opendapMetadata_internal)){
 
   collection_tested <- opendapr:::opendapMetadata_internal$collection[i]

@@ -7,13 +7,15 @@ Authors@R:
            role = c("aut", "cre"),
            email = "paul.taconet@ird.fr",
            comment = c(ORCID = "0000-0001-7429-7204"))
-Description: Provides functions to download various kinds of spatial-temporal environmental/climatic data in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) using the OPeNDAP framework.
+Description: Provides functions to download various kinds of spatial-temporal Earth science data in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) using the OPeNDAP framework.
 License: GPL-3
 URL: https://github.com/ptaconet/opendapr
 BugReports: https://github.com/ptaconet/opendapr/issues
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
+VignetteBuilder: knitr
+Depends: R (>= 2.10)
 Imports: 
     magrittr,
     dplyr,
@@ -29,4 +31,10 @@ Imports:
     curl,
     tibble
 Suggests: 
-    testthat
+    testthat,
+    knitr,
+    ncdf4,
+    raster,
+    stars,
+    mapview,
+    config

@@ -12,8 +12,6 @@
 #' @note
 #' The function is inspired from : \url{https://github.com/16EAGLE/getSpatialData/blob/master/R/gSD_login.R}
 #'
-#' @importFrom curl has_internet
-#'
 #' @examples
 #'
 #' \dontrun{
@@ -26,7 +24,7 @@
 login_usgs<-function(login_credentials){
 
   if(!inherits(login_credentials,"character") || length(login_credentials)!=2 ) {stop("login_credentials must be a vector character string of length 2 (username and password)\n")}
-  if(!curl::has_internet()){stop("Internet connection is required. Are you connected to the Internet ?\n")}
+  .testInternetConnection()
 
   x <- httr::POST(url = 'https://earthexplorer.usgs.gov/inventory/json/v/1.4.0/login',
                   body = utils::URLencode(paste0('jsonRequest={"username":"', login_credentials[1], '","password":"', login_credentials[2], '","authType":"EROS","catalogId":"EE"}')),

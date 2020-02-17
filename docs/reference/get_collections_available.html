@@ -88,7 +88,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/get_started.html">Get started</a>
+      <a href="../articles/simple_workflow.html">Simple workflow : Download data for a given region of interest and time frame</a>
     </li>
   </ul>
 </li>
@@ -124,25 +124,16 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_collections_available</span>(<span class='no'>collection</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>collection</th>
-      <td><p>string. Collection of interest.</p></td>
-    </tr>
-    </table>
-    
+    <pre class="usage"><span class='fu'>get_collections_available</span>()</pre>
+        
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data.frame with the available collections, and a set of related information. Columns are :</p><ul>
+    <p>A data.frame with the available collections, and a set of related information. Main columns are :</p><ul>
 <li><p>collection :Collections available through <code>opendapr</code></p></li>
 <li><p>source :source</p></li>
 <li><p>long_name :Collection long name</p></li>
 <li><p>url_metadata :URL pointing to metadata about the collection</p></li>
-<li><p>DOI :DOI of the dataset</p></li>
+<li><p>doi :DOI of the dataset</p></li>
 <li><p>url_opendapserver :URL of the OPeNDAP server from which the data is extracted</p></li>
 <li><p>status :Implemented status in s<code>opendapr</code></p></li>
 <li><p>crs :Coordinates reference system of the collection</p></li>
@@ -153,166 +144,1166 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 (<span class='no'>collections</span> <span class='kw'>&lt;-</span> <span class='fu'>get_collections_available</span>())</div><div class='output co'>#&gt;                 collection source
-#&gt; 1              MOD11A1.006  MODIS
-#&gt; 2              MYD11A1.006  MODIS
-#&gt; 3              MOD11A2.006  MODIS
-#&gt; 4              MYD11A2.006  MODIS
-#&gt; 5              MOD13Q1.006  MODIS
-#&gt; 6              MYD13Q1.006  MODIS
-#&gt; 7              MOD16A2.006  MODIS
-#&gt; 8              MYD16A2.006  MODIS
-#&gt; 9             VNP21A1D.001    VNP
-#&gt; 10            VNP21A1N.001    VNP
-#&gt; 11             VNP21A2.001    VNP
-#&gt; 12             VNP13A1.001    VNP
-#&gt; 13  GPM_L3/GPM_3IMERGDE.06    GPM
-#&gt; 14 GPM_L3/GPM_3IMERGHHE.06    GPM
-#&gt; 15 GPM_L3/GPM_3IMERGHHL.06    GPM
-#&gt; 16  GPM_L3/GPM_3IMERGDF.06    GPM
-#&gt; 17  GPM_L3/GPM_3IMERGHH.06    GPM
-#&gt; 18   GPM_L3/GPM_3IMERGM.06    GPM
-#&gt; 19  GPM_L3/GPM_3IMERGDL.06    GPM
-#&gt; 20      SMAP/SPL3SMP_E.003   SMAP
-#&gt; 21             SRTMGL1.003   SRTM
-#&gt;                                                                                     long_name
-#&gt; 1           MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid V006
-#&gt; 2            MODIS/Aqua Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid V006
-#&gt; 3          MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 Global 1 km SIN Grid V006
-#&gt; 4           MODIS/Aqua Land Surface Temperature/Emissivity 8-Day L3 Global 1 km SIN Grid V006
-#&gt; 5                          MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V006
-#&gt; 6                           MODIS/Aqua Vegetation Indices 16-Day L3 Global 250m SIN Grid V006
-#&gt; 7                       MODIS/Terra Net Evapotranspiration 8-Day L4 Global 500m SIN Grid V006
-#&gt; 8                        MODIS/Aqua Net Evapotranspiration 8-Day L4 Global 500m SIN Grid V006
-#&gt; 9        VIIRS/NPP Land Surface Temperature and Emissivity Daily L3 Global 1 km SIN Grid Day 
-#&gt; 10     VIIRS/NPP Land Surface Temperature and Emissivity Daily L3 Global 1 km SIN Grid Night 
-#&gt; 11            VIIRS/NPP Land Surface Temperature and Emissivity 8-Day L3 Global 1 km SIN Grid
-#&gt; 12                               VIIRS/NPP Vegetation Indices 16-Day L3 Global 500 m SIN Grid
-#&gt; 13           GPM_3IMERGDE: GPM IMERG Early Precipitation L3 1 day 0.1 degree x 0.1 degree V06
-#&gt; 14    GPM_3IMERGHHE: GPM IMERG Early Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
-#&gt; 15     GPM_3IMERGHHE: GPM IMERG Late Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
-#&gt; 16                         GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V06
-#&gt; 17                   GPM IMERG Final Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
-#&gt; 18                       GPM IMERG Final Precipitation L3 1 month 0.1 degree x 0.1 degree V06
-#&gt; 19                          GPM IMERG Late Precipitation L3 1 day 0.1 degree x 0.1 degree V06
-#&gt; 20           SMAP Enhanced L3 Radiometer Global Daily 9 km EASE-Grid Soil Moisture, Version 3
-#&gt; 21 Digital Elevation Model from the NASA Shuttle Radar Topography Mission Global 1 arc second
+#&gt; 1   GPM_L3/GPM_3IMERGDE.06    GPM
+#&gt; 2   GPM_L3/GPM_3IMERGDF.06    GPM
+#&gt; 3   GPM_L3/GPM_3IMERGDL.06    GPM
+#&gt; 4   GPM_L3/GPM_3IMERGHH.06    GPM
+#&gt; 5  GPM_L3/GPM_3IMERGHHE.06    GPM
+#&gt; 6  GPM_L3/GPM_3IMERGHHL.06    GPM
+#&gt; 7    GPM_L3/GPM_3IMERGM.06    GPM
+#&gt; 8              MCD12Q1.006  MODIS
+#&gt; 9             MCD15A2H.006  MODIS
+#&gt; 10            MCD15A3H.006  MODIS
+#&gt; 11             MCD43A1.006  MODIS
+#&gt; 12             MCD43A2.006  MODIS
+#&gt; 13             MCD43A3.006  MODIS
+#&gt; 14             MCD43A4.006  MODIS
+#&gt; 15             MCD64A1.006  MODIS
+#&gt; 16             MOD09A1.006  MODIS
+#&gt; 17             MOD09GA.006  MODIS
+#&gt; 18             MOD09GQ.006  MODIS
+#&gt; 19             MOD09Q1.006  MODIS
+#&gt; 20             MOD11A1.006  MODIS
+#&gt; 21             MOD11A2.006  MODIS
+#&gt; 22             MOD11B2.006  MODIS
+#&gt; 23             MOD11B3.006  MODIS
+#&gt; 24             MOD13A1.006  MODIS
+#&gt; 25             MOD13A2.006  MODIS
+#&gt; 26             MOD13A3.006  MODIS
+#&gt; 27             MOD13Q1.006  MODIS
+#&gt; 28            MOD15A2H.006  MODIS
+#&gt; 29             MOD16A2.006  MODIS
+#&gt; 30           MOD16A2GF.006  MODIS
+#&gt; 31           MOD16A3GF.006  MODIS
+#&gt; 32            MOD17A2H.006  MODIS
+#&gt; 33          MOD17A2HGF.006  MODIS
+#&gt; 34             MOD17A3.055  MODIS
+#&gt; 35          MOD17A3HGF.006  MODIS
+#&gt; 36             MODOCGA.006  MODIS
+#&gt; 37             MODTBGA.006  MODIS
+#&gt; 38             MYD09A1.006  MODIS
+#&gt; 39             MYD09GA.006  MODIS
+#&gt; 40             MYD09GQ.006  MODIS
+#&gt; 41             MYD09Q1.006  MODIS
+#&gt; 42             MYD11A1.006  MODIS
+#&gt; 43             MYD11A2.006  MODIS
+#&gt; 44             MYD11B2.006  MODIS
+#&gt; 45             MYD11B3.006  MODIS
+#&gt; 46             MYD13A1.006  MODIS
+#&gt; 47             MYD13A2.006  MODIS
+#&gt; 48             MYD13A3.006  MODIS
+#&gt; 49             MYD13Q1.006  MODIS
+#&gt; 50            MYD15A2H.006  MODIS
+#&gt; 51             MYD16A2.006  MODIS
+#&gt; 52           MYD16A2GF.006  MODIS
+#&gt; 53           MYD16A3GF.006  MODIS
+#&gt; 54            MYD17A2H.006  MODIS
+#&gt; 55          MYD17A2HGF.006  MODIS
+#&gt; 56          MYD17A3HGF.006  MODIS
+#&gt; 57             MYDOCGA.006  MODIS
+#&gt; 58             MYDTBGA.006  MODIS
+#&gt; 59      SMAP/SPL3SMP_E.003   SMAP
+#&gt; 60             VNP09A1.001  VIIRS
+#&gt; 61             VNP09H1.001  VIIRS
+#&gt; 62             VNP13A1.001  VIIRS
+#&gt; 63             VNP13A2.001  VIIRS
+#&gt; 64             VNP13A3.001  VIIRS
+#&gt; 65             VNP14A1.001  VIIRS
+#&gt; 66            VNP15A2H.001  VIIRS
+#&gt; 67            VNP21A1D.001  VIIRS
+#&gt; 68            VNP21A1N.001  VIIRS
+#&gt; 69             VNP21A2.001  VIIRS
+#&gt; 70            VNP43IA2.001  VIIRS
+#&gt; 71            VNP43IA3.001  VIIRS
+#&gt; 72            VNP43IA4.001  VIIRS
+#&gt; 73            VNP43MA1.001  VIIRS
+#&gt; 74            VNP43MA2.001  VIIRS
+#&gt; 75            VNP43MA3.001  VIIRS
+#&gt; 76            VNP43MA4.001  VIIRS
+#&gt;                                                                                 long_name
+#&gt; 1                      GPM IMERG Early Precipitation L3 1 day 0.1 degree x 0.1 degree V06
+#&gt; 2                      GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V06
+#&gt; 3                       GPM IMERG Late Precipitation L3 1 day 0.1 degree x 0.1 degree V06
+#&gt; 4                GPM IMERG Final Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
+#&gt; 5                GPM IMERG Early Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
+#&gt; 6                 GPM IMERG Late Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
+#&gt; 7                    GPM IMERG Final Precipitation L3 1 month 0.1 degree x 0.1 degree V06
+#&gt; 8                        MODIS/Terra+Aqua Land Cover Type Yearly L3 Global 500 m SIN Grid
+#&gt; 9                    MODIS/Terra+Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+#&gt; 10                   MODIS/Terra+Aqua Leaf Area Index/FPAR 4-Day L4 Global 500 m SIN Grid
+#&gt; 11       MODIS/Terra and Aqua BRDF/Albedo Model Parameters Daily L3 Global 500 m SIN Grid
+#&gt; 12                MODIS/Terra and Aqua BRDF/Albedo Quality Daily L3 Global 500 m SIN Grid
+#&gt; 13                             MODIS/Terra and Aqua Albedo Daily L3 Global 500 m SIN Grid
+#&gt; 14    MODIS/Terra and Aqua Nadir BRDF-Adjusted Reflectance Daily L3 Global 500 m SIN Grid
+#&gt; 15                          MODIS/Terra+Aqua Burned Area Monthly L3 Global 500 m SIN Grid
+#&gt; 16                         MODIS/Terra Surface Reflectance 8-Day L3 Global 500 m SIN Grid
+#&gt; 17               MODIS/Terra Surface Reflectance Daily L2G Global 1 km and 500 m SIN Grid
+#&gt; 18                        MODIS/Terra Surface Reflectance Daily L2G Global 250 m SIN Grid
+#&gt; 19                         MODIS/Terra Surface Reflectance 8-Day L3 Global 250 m SIN Grid
+#&gt; 20      MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid V006
+#&gt; 21     MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 Global 1 km SIN Grid V006
+#&gt; 22          MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 Global 6 km SIN Grid
+#&gt; 23        MODIS/Terra Land Surface Temperature/Emissivity Monthly L3 Global 6 km SIN Grid
+#&gt; 24                         MODIS/Terra Vegetation Indices 16-Day L3 Global 500 m SIN Grid
+#&gt; 25                          MODIS/Terra Vegetation Indices 16-Day L3 Global 1 km SIN Grid
+#&gt; 26                         MODIS/Terra Vegetation Indices Monthly L3 Global 1 km SIN Grid
+#&gt; 27                     MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V006
+#&gt; 28                        MODIS/Terra Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+#&gt; 29                  MODIS/Terra Net Evapotranspiration 8-Day L4 Global 500m SIN Grid V006
+#&gt; 30           MODIS/Terra Net Evapotranspiration Gap-Filled 8-Day L4 Global 500 m SIN Grid
+#&gt; 31          MODIS/Terra Net Evapotranspiration Gap-Filled Yearly L4 Global 500 m SIN Grid
+#&gt; 32                   MODIS/Aqua Gross Primary Productivity 8-Day L4 Global 500 m SIN Grid
+#&gt; 33       MODIS/Terra Gross Primary Productivity Gap-Filled 8-Day L4 Global 500 m SIN Grid
+#&gt; 34                      MODIS/Terra Net Primary Production Yearly L4 Global 1 km SIN Grid
+#&gt; 35          MODIS/Terra Net Primary Production Gap-Filled Yearly L4 Global 500 m SIN Grid
+#&gt; 36                     MODIS/Terra Ocean Reflectance Daily L2G-Lite Global 1 km SIN Grid 
+#&gt; 37                          MODIS/Terra Thermal Bands Daily L2G-Lite Global 1 km SIN Grid
+#&gt; 38                          MODIS/Aqua Surface Reflectance 8-Day L3 Global 500 m SIN Grid
+#&gt; 39                MODIS/Aqua Surface Reflectance Daily L2G Global 1 km and 500 m SIN Grid
+#&gt; 40                         MODIS/Aqua Surface Reflectance Daily L2G Global 250 m SIN Grid
+#&gt; 41                          MODIS/Aqua Surface Reflectance 8-Day L3 Global 250 m SIN Grid
+#&gt; 42       MODIS/Aqua Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid V006
+#&gt; 43      MODIS/Aqua Land Surface Temperature/Emissivity 8-Day L3 Global 1 km SIN Grid V006
+#&gt; 44           MODIS/Aqua Land Surface Temperature/Emissivity 8-Day L3 Global 6 km SIN Grid
+#&gt; 45         MODIS/Aqua Land Surface Temperature/Emissivity Monthly L3 Global 6 km SIN Grid
+#&gt; 46                          MODIS/Aqua Vegetation Indices 16-Day L3 Global 500 m SIN Grid
+#&gt; 47                           MODIS/Aqua Vegetation Indices 16-Day L3 Global 1 km SIN Grid
+#&gt; 48                          MODIS/Aqua Vegetation Indices Monthly L3 Global 1 km SIN Grid
+#&gt; 49                      MODIS/Aqua Vegetation Indices 16-Day L3 Global 250m SIN Grid V006
+#&gt; 50                         MODIS/Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+#&gt; 51                   MODIS/Aqua Net Evapotranspiration 8-Day L4 Global 500m SIN Grid V006
+#&gt; 52            MODIS/Aqua Net Evapotranspiration Gap-Filled 8-Day L4 Global 500 m SIN Grid
+#&gt; 53           MODIS/Aqua Net Evapotranspiration Gap-Filled Yearly L4 Global 500 m SIN Grid
+#&gt; 54                  MODIS/Terra Gross Primary Productivity 8-Day L4 Global 500 m SIN Grid
+#&gt; 55        MODIS/Aqua Gross Primary Productivity Gap-Filled 8-Day L4 Global 500 m SIN Grid
+#&gt; 56           MODIS/Aqua Net Primary Production Gap-Filled Yearly L4 Global 500 m SIN Grid
+#&gt; 57                      MODIS/Aqua Ocean Reflectance Daily L2G-Lite Global 1 km SIN Grid 
+#&gt; 58                           MODIS/Aqua Thermal Bands Daily L2G-Lite Global 1 km SIN Grid
+#&gt; 59       SMAP Enhanced L3 Radiometer Global Daily 9 km EASE-Grid Soil Moisture, Version 3
+#&gt; 60                            VIIRS/NPP Surface Reflectance 8-Day L3 Global 1 km SIN Grid
+#&gt; 61                           VIIRS/NPP Surface Reflectance 8-Day L3 Global 500 m SIN Grid
+#&gt; 62                           VIIRS/NPP Vegetation Indices 16-Day L3 Global 500 m SIN Grid
+#&gt; 63                            VIIRS/NPP Vegetation Indices 16-Day L3 Global 1 km SIN Grid
+#&gt; 64                           VIIRS/NPP Vegetation Indices Monthly L3 Global 1 km SIN Grid
+#&gt; 65                         VIIRS/NPP Thermal Anomalies/Fire Daily L3 Global 1 km SIN Grid
+#&gt; 66                          VIIRS/NPP Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+#&gt; 67   VIIRS/NPP Land Surface Temperature and Emissivity Daily L3 Global 1 km SIN Grid Day 
+#&gt; 68 VIIRS/NPP Land Surface Temperature and Emissivity Daily L3 Global 1 km SIN Grid Night 
+#&gt; 69        VIIRS/NPP Land Surface Temperature and Emissivity 8-Day L3 Global 1 km SIN Grid
+#&gt; 70                           VIIRS/NPP BRDF/Albedo Quality Daily L3 Global 500 m SIN Grid
+#&gt; 71                                        VIIRS/NPP Albedo Daily L3 Global 500 m SIN Grid
+#&gt; 72               VIIRS/NPP Nadir BRDF-Adjusted Reflectance Daily L3 Global 500 m SIN Grid
+#&gt; 73                        VIIRS/NPP BRDF/Albedo Model Parameters Daily L3 Global 1 km SIN
+#&gt; 74                            VIIRS/NPP BRDF/Albedo Quality Daily L3 Global 1 km SIN Grid
+#&gt; 75                                         VIIRS/NPP Albedo Daily L3 Global 1 km SIN Grid
+#&gt; 76                    VIIRS/NPP Nadir BRDF-Adjusted Reflectance Daily L3 Global 1 km SIN 
+#&gt;                      nature provider
+#&gt; 1                  Rainfall     NASA
+#&gt; 2                  Rainfall     NASA
+#&gt; 3                  Rainfall     NASA
+#&gt; 4                  Rainfall     NASA
+#&gt; 5                  Rainfall     NASA
+#&gt; 6                  Rainfall     NASA
+#&gt; 7                  Rainfall     NASA
+#&gt; 8                Land cover     NASA
+#&gt; 9           Leaf area index     NASA
+#&gt; 10          Leaf area index     NASA
+#&gt; 11                   Albedo     NASA
+#&gt; 12                   Albedo     NASA
+#&gt; 13                   Albedo     NASA
+#&gt; 14      Surface reflectance     NASA
+#&gt; 15             Burned areas     NASA
+#&gt; 16      Surface reflectance     NASA
+#&gt; 17      Surface reflectance     NASA
+#&gt; 18      Surface reflectance     NASA
+#&gt; 19      Surface reflectance     NASA
+#&gt; 20 Land surface temperature     NASA
+#&gt; 21 Land surface temperature     NASA
+#&gt; 22 Land surface temperature     NASA
+#&gt; 23 Land surface temperature     NASA
+#&gt; 24       Vegetation indices     NASA
+#&gt; 25       Vegetation indices     NASA
+#&gt; 26       Vegetation indices     NASA
+#&gt; 27       Vegetation indices     NASA
+#&gt; 28          Leaf area index     NASA
+#&gt; 29       Evapotranspiration     NASA
+#&gt; 30       Evapotranspiration     NASA
+#&gt; 31       Evapotranspiration     NASA
+#&gt; 32     Primary Productivity     NASA
+#&gt; 33     Primary Productivity     NASA
+#&gt; 34     Primary Productivity     NASA
+#&gt; 35     Primary Productivity     NASA
+#&gt; 36        Ocean Reflectance     NASA
+#&gt; 37            Thermal Bands     NASA
+#&gt; 38      Surface reflectance     NASA
+#&gt; 39      Surface reflectance     NASA
+#&gt; 40      Surface reflectance     NASA
+#&gt; 41      Surface reflectance     NASA
+#&gt; 42 Land surface temperature     NASA
+#&gt; 43 Land surface temperature     NASA
+#&gt; 44 Land surface temperature     NASA
+#&gt; 45 Land surface temperature     NASA
+#&gt; 46       Vegetation indices     NASA
+#&gt; 47       Vegetation indices     NASA
+#&gt; 48       Vegetation indices     NASA
+#&gt; 49       Vegetation indices     NASA
+#&gt; 50          Leaf area index     NASA
+#&gt; 51       Evapotranspiration     NASA
+#&gt; 52       Evapotranspiration     NASA
+#&gt; 53       Evapotranspiration     NASA
+#&gt; 54     Primary Productivity     NASA
+#&gt; 55     Primary Productivity     NASA
+#&gt; 56     Primary Productivity     NASA
+#&gt; 57        Ocean Reflectance     NASA
+#&gt; 58            Thermal Bands     NASA
+#&gt; 59            Soil Moisture     NASA
+#&gt; 60      Surface reflectance     NASA
+#&gt; 61      Surface reflectance     NASA
+#&gt; 62       Vegetation indices     NASA
+#&gt; 63       Vegetation indices     NASA
+#&gt; 64       Vegetation indices     NASA
+#&gt; 65   Thermal Anomalies/Fire     NASA
+#&gt; 66          Leaf area index     NASA
+#&gt; 67 Land surface temperature     NASA
+#&gt; 68 Land surface temperature     NASA
+#&gt; 69 Land surface temperature     NASA
+#&gt; 70                   Albedo     NASA
+#&gt; 71                   Albedo     NASA
+#&gt; 72      Surface reflectance     NASA
+#&gt; 73                   Albedo     NASA
+#&gt; 74                   Albedo     NASA
+#&gt; 75                   Albedo     NASA
+#&gt; 76      Surface reflectance     NASA
 #&gt;                                                     url_metadata
-#&gt; 1                  https://lpdaac.usgs.gov/products/mod11a1v006/
-#&gt; 2                  https://lpdaac.usgs.gov/products/myd11a1v006/
-#&gt; 3                  https://lpdaac.usgs.gov/products/mod11a2v006/
-#&gt; 4                  https://lpdaac.usgs.gov/products/myd11a2v006/
-#&gt; 5                  https://lpdaac.usgs.gov/products/mod13q1v006/
-#&gt; 6                  https://lpdaac.usgs.gov/products/myd13q1v006/
-#&gt; 7                  https://lpdaac.usgs.gov/products/mod16a2v006/
-#&gt; 8                  https://lpdaac.usgs.gov/products/myd16a2v006/
-#&gt; 9                 https://lpdaac.usgs.gov/products/vnp21a1dv001/
-#&gt; 10                https://lpdaac.usgs.gov/products/vnp21a1nv001/
-#&gt; 11                 https://lpdaac.usgs.gov/products/vnp21a2v001/
-#&gt; 12                 https://lpdaac.usgs.gov/products/vnp13a1v001/
-#&gt; 13   https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDE_06/summary
-#&gt; 14 https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDHHE_06/summary
-#&gt; 15  https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGHHL_06/summary
-#&gt; 16   https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDF_06/summary
-#&gt; 17   https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGHH_06/summary
-#&gt; 18    https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGM_06/summary
-#&gt; 19   https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDL_06/summary
-#&gt; 20                           https://nsidc.org/data/spl3smp_e#sm
-#&gt; 21                 https://lpdaac.usgs.gov/products/srtmgl1v003/
-#&gt;                                                     DOI
-#&gt; 1          https://dx.doi.org/10.5067/MODIS/MOD11A1.006
-#&gt; 2          https://dx.doi.org/10.5067/MODIS/MYD11A1.006
-#&gt; 3          https://dx.doi.org/10.5067/MODIS/MOD11A2.006
-#&gt; 4          https://dx.doi.org/10.5067/MODIS/MYD11A2.006
-#&gt; 5          https://dx.doi.org/10.5067/MODIS/MOD13Q1.006
-#&gt; 6          https://dx.doi.org/10.5067/MODIS/MYD13Q1.006
-#&gt; 7          https://dx.doi.org/10.5067/MODIS/MOD16A2.006
-#&gt; 8          https://dx.doi.org/10.5067/MODIS/MYD16A2.006
-#&gt; 9            https://doi.org/10.5067/VIIRS/VNP21A1D.001
-#&gt; 10           https://doi.org/10.5067/VIIRS/VNP21A1N.001
-#&gt; 11            https://doi.org/10.5067/VIIRS/VNP21A2.001
-#&gt; 12            https://doi.org/10.5067/VIIRS/VNP13A1.001
-#&gt; 13           https://doi.org/10.5067/GPM/IMERGDE/DAY/06
-#&gt; 14         https://doi.org/10.5067/GPM/IMERG/3B-HH-E/06
-#&gt; 15        https://doi.org/10.5067/GPM/IMERG/3B-HH-L/06 
-#&gt; 16           https://doi.org/10.5067/GPM/IMERGDF/DAY/06
-#&gt; 17           https://doi.org/10.5067/GPM/IMERG/3B-HH/06
-#&gt; 18        https://doi.org/10.5067/GPM/IMERG/3B-MONTH/06
-#&gt; 19           https://doi.org/10.5067/GPM/IMERGDL/DAY/06
-#&gt; 20                 https://doi.org/10.5067/T90W6VRLCBHI
-#&gt; 21 https://dx.doi.org/10.5067/MEASURES/SRTM/SRTMGL1.003
-#&gt;                                                        url_opendapserver
-#&gt; 1    https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/contents.html
-#&gt; 2    https://opendap.cr.usgs.gov/opendap/hyrax/MYD11A1.006/contents.html
-#&gt; 3    https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.006/contents.html
-#&gt; 4    https://opendap.cr.usgs.gov/opendap/hyrax/MYD11A2.006/contents.html
-#&gt; 5    https://opendap.cr.usgs.gov/opendap/hyrax/MOD13Q1.006/contents.html
-#&gt; 6    https://opendap.cr.usgs.gov/opendap/hyrax/MYD13Q1.006/contents.html
-#&gt; 7    https://opendap.cr.usgs.gov/opendap/hyrax/MOD16A2.006/contents.html
-#&gt; 8    https://opendap.cr.usgs.gov/opendap/hyrax/MYD16A2.006/contents.html
-#&gt; 9   https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A1D.001/contents.html
-#&gt; 10  https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A1N.001/contents.html
-#&gt; 11   https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A2.001/contents.html
-#&gt; 12   https://opendap.cr.usgs.gov/opendap/hyrax/VNP13A1.001/contents.html
-#&gt; 13  https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDE.06/
-#&gt; 14 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHE.06/
-#&gt; 15 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHL.06/
-#&gt; 16  https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/
-#&gt; 17  https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.06/
-#&gt; 18   https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.06/
-#&gt; 19  https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDL.06/
-#&gt; 20            https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/
-#&gt; 21   https://opendap.cr.usgs.gov/opendap/hyrax/SRTMGL1.003/contents.html
-#&gt;                                                                                                                        crs
-#&gt; 1                                        +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
-#&gt; 2                                        +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
-#&gt; 3                                        +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
-#&gt; 4                                        +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
-#&gt; 5                                        +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
-#&gt; 6                                        +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
-#&gt; 7                                        +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
-#&gt; 8                                        +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
-#&gt; 9                                        +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
-#&gt; 10                                       +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
-#&gt; 11                                       +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
-#&gt; 12                                       +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
-#&gt; 13                                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0
-#&gt; 14                                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,1
-#&gt; 15                                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,2
-#&gt; 16                                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,3
-#&gt; 17                                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,4
-#&gt; 18                                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,5
-#&gt; 19                                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0
-#&gt; 20 +init=epsg:6933 +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
-#&gt; 21                                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0
-#&gt;         status
-#&gt; 1  Implemented
-#&gt; 2  Implemented
-#&gt; 3  Implemented
-#&gt; 4  Implemented
-#&gt; 5  Implemented
-#&gt; 6  Implemented
-#&gt; 7  Implemented
-#&gt; 8  Implemented
-#&gt; 9  Implemented
-#&gt; 10 Implemented
-#&gt; 11 Implemented
-#&gt; 12 Implemented
-#&gt; 13 Implemented
-#&gt; 14 Implemented
-#&gt; 15 Implemented
-#&gt; 16 Implemented
-#&gt; 17 Implemented
-#&gt; 18 Implemented
-#&gt; 19 Implemented
-#&gt; 20 Implemented
-#&gt; 21 Implemented</div><div class='input'>
+#&gt; 1    https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDE_06/summary
+#&gt; 2    https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDF_06/summary
+#&gt; 3    https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDL_06/summary
+#&gt; 4    https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGHH_06/summary
+#&gt; 5  https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDHHE_06/summary
+#&gt; 6   https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGHHL_06/summary
+#&gt; 7     https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGM_06/summary
+#&gt; 8                   https://lpdaac.usgs.gov/products/mcd12q1v006
+#&gt; 9                  https://lpdaac.usgs.gov/products/mcd15a2hv006
+#&gt; 10                 https://lpdaac.usgs.gov/products/mcd15a3hv006
+#&gt; 11                  https://lpdaac.usgs.gov/products/mcd43a1v006
+#&gt; 12                  https://lpdaac.usgs.gov/products/mcd43a2v006
+#&gt; 13                  https://lpdaac.usgs.gov/products/mcd43a3v006
+#&gt; 14                  https://lpdaac.usgs.gov/products/mcd43a4v006
+#&gt; 15                  https://lpdaac.usgs.gov/products/mcd64a1v006
+#&gt; 16                  https://lpdaac.usgs.gov/products/mod09a1v006
+#&gt; 17                  https://lpdaac.usgs.gov/products/mod09gav006
+#&gt; 18                  https://lpdaac.usgs.gov/products/mod09gqv006
+#&gt; 19                  https://lpdaac.usgs.gov/products/mod09q1v006
+#&gt; 20                  https://lpdaac.usgs.gov/products/mod11a1v006
+#&gt; 21                  https://lpdaac.usgs.gov/products/mod11a2v006
+#&gt; 22                  https://lpdaac.usgs.gov/products/mod11b2v006
+#&gt; 23                  https://lpdaac.usgs.gov/products/mod11b3v006
+#&gt; 24                  https://lpdaac.usgs.gov/products/mod13a1v006
+#&gt; 25                  https://lpdaac.usgs.gov/products/mod13a2v006
+#&gt; 26                  https://lpdaac.usgs.gov/products/mod13a3v006
+#&gt; 27                  https://lpdaac.usgs.gov/products/mod13q1v006
+#&gt; 28                 https://lpdaac.usgs.gov/products/mod15a2hv006
+#&gt; 29                  https://lpdaac.usgs.gov/products/mod16a2v006
+#&gt; 30                https://lpdaac.usgs.gov/products/mod16a2gfv006
+#&gt; 31                https://lpdaac.usgs.gov/products/mod16a3gfv006
+#&gt; 32                 https://lpdaac.usgs.gov/products/mod17a2hv006
+#&gt; 33               https://lpdaac.usgs.gov/products/mod17a2hgfv006
+#&gt; 34                                                              
+#&gt; 35               https://lpdaac.usgs.gov/products/mod17a3hgfv006
+#&gt; 36                  https://lpdaac.usgs.gov/products/modocgav006
+#&gt; 37                  https://lpdaac.usgs.gov/products/modtbgav006
+#&gt; 38                  https://lpdaac.usgs.gov/products/myd09a1v006
+#&gt; 39                  https://lpdaac.usgs.gov/products/myd09gav006
+#&gt; 40                  https://lpdaac.usgs.gov/products/myd09gqv006
+#&gt; 41                  https://lpdaac.usgs.gov/products/myd09q1v006
+#&gt; 42                  https://lpdaac.usgs.gov/products/myd11a1v006
+#&gt; 43                  https://lpdaac.usgs.gov/products/myd11a2v006
+#&gt; 44                  https://lpdaac.usgs.gov/products/myd11b2v006
+#&gt; 45                  https://lpdaac.usgs.gov/products/myd11b3v006
+#&gt; 46                  https://lpdaac.usgs.gov/products/myd13a1v006
+#&gt; 47                  https://lpdaac.usgs.gov/products/myd13a2v006
+#&gt; 48                  https://lpdaac.usgs.gov/products/myd13a3v006
+#&gt; 49                  https://lpdaac.usgs.gov/products/myd13q1v006
+#&gt; 50                 https://lpdaac.usgs.gov/products/myd15a2hv006
+#&gt; 51                  https://lpdaac.usgs.gov/products/myd16a2v006
+#&gt; 52                https://lpdaac.usgs.gov/products/myd16a2gfv006
+#&gt; 53                https://lpdaac.usgs.gov/products/myd16a3gfv006
+#&gt; 54                 https://lpdaac.usgs.gov/products/myd17a2hv006
+#&gt; 55               https://lpdaac.usgs.gov/products/myd17a2hgfv006
+#&gt; 56               https://lpdaac.usgs.gov/products/myd17a3hgfv006
+#&gt; 57                  https://lpdaac.usgs.gov/products/mydocgav006
+#&gt; 58                  https://lpdaac.usgs.gov/products/mydtbgav006
+#&gt; 59                           https://nsidc.org/data/spl3smp_e#sm
+#&gt; 60                  https://lpdaac.usgs.gov/products/vnp09a1v001
+#&gt; 61                  https://lpdaac.usgs.gov/products/vnp09h1v001
+#&gt; 62                  https://lpdaac.usgs.gov/products/vnp13a1v001
+#&gt; 63                  https://lpdaac.usgs.gov/products/vnp13a2v001
+#&gt; 64                  https://lpdaac.usgs.gov/products/vnp13a3v001
+#&gt; 65                  https://lpdaac.usgs.gov/products/vnp14a1v001
+#&gt; 66                 https://lpdaac.usgs.gov/products/vnp15a2hv001
+#&gt; 67                 https://lpdaac.usgs.gov/products/vnp21a1dv001
+#&gt; 68                 https://lpdaac.usgs.gov/products/vnp21a1nv001
+#&gt; 69                  https://lpdaac.usgs.gov/products/vnp21a2v001
+#&gt; 70                 https://lpdaac.usgs.gov/products/vnp43ia2v001
+#&gt; 71                 https://lpdaac.usgs.gov/products/vnp43ia3v001
+#&gt; 72                 https://lpdaac.usgs.gov/products/vnp43ia4v001
+#&gt; 73                 https://lpdaac.usgs.gov/products/vnp43ma1v001
+#&gt; 74                 https://lpdaac.usgs.gov/products/vnp43ma2v001
+#&gt; 75                 https://lpdaac.usgs.gov/products/vnp43ma3v001
+#&gt; 76                 https://lpdaac.usgs.gov/products/vnp43ma4v001
+#&gt;                                                doi version spatial_resolution_m
+#&gt; 1       https://doi.org/10.5067/GPM/IMERGDE/DAY/06     6.0                10000
+#&gt; 2       https://doi.org/10.5067/GPM/IMERGDF/DAY/06     6.0                10000
+#&gt; 3       https://doi.org/10.5067/GPM/IMERGDL/DAY/06     6.0                10000
+#&gt; 4       https://doi.org/10.5067/GPM/IMERG/3B-HH/06     6.0                10000
+#&gt; 5     https://doi.org/10.5067/GPM/IMERG/3B-HH-E/06     6.0                10000
+#&gt; 6    https://doi.org/10.5067/GPM/IMERG/3B-HH-L/06      6.0                10000
+#&gt; 7    https://doi.org/10.5067/GPM/IMERG/3B-MONTH/06     6.0                10000
+#&gt; 8     https://dx.doi.org/10.5067/MODIS/MCD12Q1.006     6.0                  500
+#&gt; 9    https://dx.doi.org/10.5067/MODIS/MCD15A2H.006     6.0                  500
+#&gt; 10   https://dx.doi.org/10.5067/MODIS/MCD15A3H.006     6.0                  500
+#&gt; 11    https://dx.doi.org/10.5067/MODIS/MCD43A1.006     6.0                  500
+#&gt; 12    https://dx.doi.org/10.5067/MODIS/MCD43A2.006     6.0                  500
+#&gt; 13    https://dx.doi.org/10.5067/MODIS/MCD43A3.006     6.0                  500
+#&gt; 14    https://dx.doi.org/10.5067/MODIS/MCD43A4.006     6.0                  500
+#&gt; 15    https://dx.doi.org/10.5067/MODIS/MCD64A1.006     6.0                  500
+#&gt; 16    https://dx.doi.org/10.5067/MODIS/MOD09A1.006     6.0                  500
+#&gt; 17    https://dx.doi.org/10.5067/MODIS/MOD09GA.006     6.0                 1000
+#&gt; 18    https://dx.doi.org/10.5067/MODIS/MOD09GQ.006     6.0                  250
+#&gt; 19    https://dx.doi.org/10.5067/MODIS/MOD09Q1.006     6.0                  250
+#&gt; 20    https://dx.doi.org/10.5067/MODIS/MOD11A1.006     6.0                 1000
+#&gt; 21    https://dx.doi.org/10.5067/MODIS/MOD11A2.006     6.0                 1000
+#&gt; 22    https://dx.doi.org/10.5067/MODIS/MOD11B2.006     6.0                 6000
+#&gt; 23    https://dx.doi.org/10.5067/MODIS/MOD11B3.006     6.0                 6000
+#&gt; 24    https://dx.doi.org/10.5067/MODIS/MOD13A1.006     6.0                  500
+#&gt; 25    https://dx.doi.org/10.5067/MODIS/MOD13A2.006     6.0                 1000
+#&gt; 26    https://dx.doi.org/10.5067/MODIS/MOD13A3.006     6.0                 1000
+#&gt; 27    https://dx.doi.org/10.5067/MODIS/MOD13Q1.006     6.0                  250
+#&gt; 28   https://dx.doi.org/10.5067/MODIS/MOD15A2H.006     6.0                  500
+#&gt; 29    https://dx.doi.org/10.5067/MODIS/MOD16A2.006     6.0                  500
+#&gt; 30  https://dx.doi.org/10.5067/MODIS/MOD16A2GF.006     6.0                  500
+#&gt; 31  https://dx.doi.org/10.5067/MODIS/MOD16A3GF.006     6.0                  500
+#&gt; 32   https://dx.doi.org/10.5067/MODIS/MOD17A2H.006     6.0                  500
+#&gt; 33 https://dx.doi.org/10.5067/MODIS/MOD17A2HGF.006     6.0                  500
+#&gt; 34    https://dx.doi.org/10.5067/MODIS/MOD17A3.055     5.5                  500
+#&gt; 35 https://dx.doi.org/10.5067/MODIS/MOD17A3HGF.006     6.0                  500
+#&gt; 36    https://dx.doi.org/10.5067/MODIS/MODOCGA.006     6.0                 1000
+#&gt; 37    https://dx.doi.org/10.5067/MODIS/MODTBGA.006     6.0                 1000
+#&gt; 38    https://dx.doi.org/10.5067/MODIS/MYD09A1.006     6.0                  500
+#&gt; 39    https://dx.doi.org/10.5067/MODIS/MYD09GA.006     6.0                 1000
+#&gt; 40    https://dx.doi.org/10.5067/MODIS/MYD09GQ.006     6.0                  250
+#&gt; 41    https://dx.doi.org/10.5067/MODIS/MYD09Q1.006     6.0                  250
+#&gt; 42    https://dx.doi.org/10.5067/MODIS/MYD11A1.006     6.0                 1000
+#&gt; 43    https://dx.doi.org/10.5067/MODIS/MYD11A2.006     6.0                 1000
+#&gt; 44    https://dx.doi.org/10.5067/MODIS/MYD11B2.006     6.0                 6000
+#&gt; 45    https://dx.doi.org/10.5067/MODIS/MYD11B3.006     6.0                 6000
+#&gt; 46    https://dx.doi.org/10.5067/MODIS/MYD13A1.006     6.0                  500
+#&gt; 47    https://dx.doi.org/10.5067/MODIS/MYD13A2.006     6.0                 1000
+#&gt; 48    https://dx.doi.org/10.5067/MODIS/MYD13A3.006     6.0                 1000
+#&gt; 49    https://dx.doi.org/10.5067/MODIS/MYD13Q1.006     6.0                  250
+#&gt; 50   https://dx.doi.org/10.5067/MODIS/MYD15A2H.006     6.0                  500
+#&gt; 51    https://dx.doi.org/10.5067/MODIS/MYD16A2.006     6.0                  500
+#&gt; 52  https://dx.doi.org/10.5067/MODIS/MYD16A2GF.006     6.0                  500
+#&gt; 53  https://dx.doi.org/10.5067/MODIS/MYD16A3GF.006     6.0                  500
+#&gt; 54   https://dx.doi.org/10.5067/MODIS/MYD17A2H.006     6.0                  500
+#&gt; 55 https://dx.doi.org/10.5067/MODIS/MYD17A2HGF.006     6.0                  500
+#&gt; 56 https://dx.doi.org/10.5067/MODIS/MYD17A3HGF.006     6.0                  500
+#&gt; 57    https://dx.doi.org/10.5067/MODIS/MYDOCGA.006     6.0                 1000
+#&gt; 58    https://dx.doi.org/10.5067/MODIS/MYDTBGA.006     6.0                 1000
+#&gt; 59            https://doi.org/10.5067/T90W6VRLCBHI     3.0                 9000
+#&gt; 60       https://doi.org/10.5067/VIIRS/VNP09A1.001     1.0                 1000
+#&gt; 61       https://doi.org/10.5067/VIIRS/VNP09H1.001     1.0                  500
+#&gt; 62       https://doi.org/10.5067/VIIRS/VNP13A1.001     1.0                  500
+#&gt; 63       https://doi.org/10.5067/VIIRS/VNP13A2.001     1.0                 1000
+#&gt; 64       https://doi.org/10.5067/VIIRS/VNP13A3.001     1.0                 1000
+#&gt; 65       https://doi.org/10.5067/VIIRS/VNP14A1.001     1.0                 1000
+#&gt; 66      https://doi.org/10.5067/VIIRS/VNP15A2H.001     1.0                  500
+#&gt; 67      https://doi.org/10.5067/VIIRS/VNP21A1D.001     1.0                 1000
+#&gt; 68      https://doi.org/10.5067/VIIRS/VNP21A1N.001     1.0                 1000
+#&gt; 69       https://doi.org/10.5067/VIIRS/VNP21A2.001     1.0                 1000
+#&gt; 70      https://doi.org/10.5067/VIIRS/VNP43IA2.001     1.0                  500
+#&gt; 71      https://doi.org/10.5067/VIIRS/VNP43IA3.001     1.0                  500
+#&gt; 72      https://doi.org/10.5067/VIIRS/VNP43IA4.001     1.0                  500
+#&gt; 73      https://doi.org/10.5067/VIIRS/VNP43MA1.001     1.0                 1000
+#&gt; 74      https://doi.org/10.5067/VIIRS/VNP43MA2.001     1.0                 1000
+#&gt; 75      https://doi.org/10.5067/VIIRS/VNP43MA3.001     1.0                 1000
+#&gt; 76      https://doi.org/10.5067/VIIRS/VNP43MA4.001     1.0                 1000
+#&gt;    temporal_resolution temporal_resolution_unit spatial_coverage start_date
+#&gt; 1                    1                      day           Global 2000-06-01
+#&gt; 2                    1                      day           Global 2000-06-01
+#&gt; 3                    1                      day           Global 2000-06-01
+#&gt; 4                   30                   minute           Global 2000-06-01
+#&gt; 5                   30                   minute           Global 2000-06-01
+#&gt; 6                   30                   minute           Global 2000-06-01
+#&gt; 7                    1                    month           Global 2000-06-01
+#&gt; 8                  365                      day           Global 2001-01-01
+#&gt; 9                    8                      day           Global 2002-07-04
+#&gt; 10                   4                      day           Global 2002-07-04
+#&gt; 11                   1                      day           Global 2000-02-24
+#&gt; 12                   1                      day           Global 2000-02-24
+#&gt; 13                   1                      day           Global 2000-02-24
+#&gt; 14                   1                      day           Global 2000-02-24
+#&gt; 15                  30                      day           Global 2000-11-01
+#&gt; 16                   8                      day           Global 2000-02-18
+#&gt; 17                   1                      day           Global 2000-02-24
+#&gt; 18                   1                      day           Global 2000-02-24
+#&gt; 19                   8                      day           Global 2000-02-18
+#&gt; 20                   1                      day           Global 2000-02-24
+#&gt; 21                   8                      day           Global 2000-02-18
+#&gt; 22                   8                      day           Global 2000-02-18
+#&gt; 23                  30                      day           Global 2000-02-01
+#&gt; 24                  16                      day           Global 2000-02-18
+#&gt; 25                  16                      day           Global 2000-02-18
+#&gt; 26                  30                      day           Global 2000-02-01
+#&gt; 27                  16                      day           Global 2000-02-18
+#&gt; 28                   8                      day           Global 2000-02-18
+#&gt; 29                   8                      day           Global 2001-01-01
+#&gt; 30                   8                      day           Global 2000-01-01
+#&gt; 31                 365                      day           Global 2000-02-18
+#&gt; 32                   8                      day           Global 2000-02-18
+#&gt; 33                   8                      day           Global 2000-01-01
+#&gt; 34                 365                      day           Global 2000-01-01
+#&gt; 35                 365                      day           Global 2000-02-18
+#&gt; 36                   1                      day           Global 2000-02-24
+#&gt; 37                   1                      day           Global 2000-02-24
+#&gt; 38                   8                      day           Global 2002-07-04
+#&gt; 39                   1                      day           Global 2002-07-04
+#&gt; 40                   1                      day           Global 2002-07-04
+#&gt; 41                   8                      day           Global 2002-07-04
+#&gt; 42                   1                      day           Global 2002-07-05
+#&gt; 43                   8                      day           Global 2002-07-04
+#&gt; 44                   8                      day           Global 2002-07-04
+#&gt; 45                  30                      day           Global 2002-07-01
+#&gt; 46                  16                      day           Global 2002-07-04
+#&gt; 47                  16                      day           Global 2002-07-04
+#&gt; 48                  30                      day           Global 2002-07-01
+#&gt; 49                  16                      day           Global 2002-07-04
+#&gt; 50                   8                      day           Global 2002-07-04
+#&gt; 51                   8                      day           Global 2002-07-04
+#&gt; 52                   8                      day           Global 2002-01-01
+#&gt; 53                 365                      day           Global 2002-07-04
+#&gt; 54                   8                      day           Global 2002-07-04
+#&gt; 55                   8                      day           Global 2002-01-01
+#&gt; 56                 365                      day           Global 2002-07-04
+#&gt; 57                   1                      day           Global 2002-07-04
+#&gt; 58                   1                      day           Global 2002-07-04
+#&gt; 59                   1                      day           Global 2015-03-31
+#&gt; 60                   8                      day           Global 2012-01-17
+#&gt; 61                   8                      day           Global 2012-01-17
+#&gt; 62                  16                      day           Global 2012-01-17
+#&gt; 63                  16                      day           Global 2012-01-17
+#&gt; 64                  30                      day           Global 2012-01-01
+#&gt; 65                   1                      day           Global 2012-01-19
+#&gt; 66                   8                      day           Global 2012-01-17
+#&gt; 67                   1                      day           Global 2012-01-19
+#&gt; 68                   1                      day           Global 2012-01-19
+#&gt; 69                   8                      day           Global 2012-01-25
+#&gt; 70                   1                      day           Global 2012-01-17
+#&gt; 71                   1                      day           Global 2012-01-17
+#&gt; 72                   1                      day           Global 2012-01-17
+#&gt; 73                   1                      day           Global 2012-01-17
+#&gt; 74                   1                      day           Global 2012-01-17
+#&gt; 75                   1                      day           Global 2012-01-17
+#&gt; 76                   1                      day           Global 2012-01-17
+#&gt;    end_date indicative_latency_days
+#&gt; 1   ongoing                       1
+#&gt; 2   ongoing                     100
+#&gt; 3   ongoing                       1
+#&gt; 4   ongoing                     100
+#&gt; 5   ongoing                       0
+#&gt; 6   ongoing                       1
+#&gt; 7   ongoing                     100
+#&gt; 8   ongoing                     774
+#&gt; 9   ongoing                      12
+#&gt; 10  ongoing                       8
+#&gt; 11  ongoing                      10
+#&gt; 12  ongoing                      10
+#&gt; 13  ongoing                      10
+#&gt; 14  ongoing                      10
+#&gt; 15  ongoing                      75
+#&gt; 16  ongoing                      12
+#&gt; 17  ongoing                       3
+#&gt; 18  ongoing                       3
+#&gt; 19  ongoing                      12
+#&gt; 20  ongoing                       3
+#&gt; 21  ongoing                      12
+#&gt; 22  ongoing                      12
+#&gt; 23  ongoing                      44
+#&gt; 24  ongoing                      28
+#&gt; 25  ongoing                      28
+#&gt; 26  ongoing                      44
+#&gt; 27  ongoing                      28
+#&gt; 28  ongoing                      12
+#&gt; 29  ongoing                      20
+#&gt; 30  ongoing                      49
+#&gt; 31  ongoing                     409
+#&gt; 32  ongoing                      12
+#&gt; 33  ongoing                      49
+#&gt; 34  ongoing                    2235
+#&gt; 35  ongoing                     409
+#&gt; 36  ongoing                       3
+#&gt; 37  ongoing                       3
+#&gt; 38  ongoing                      12
+#&gt; 39  ongoing                       2
+#&gt; 40  ongoing                       2
+#&gt; 41  ongoing                      12
+#&gt; 42  ongoing                       2
+#&gt; 43  ongoing                      12
+#&gt; 44  ongoing                      12
+#&gt; 45  ongoing                      44
+#&gt; 46  ongoing                      20
+#&gt; 47  ongoing                      20
+#&gt; 48  ongoing                      44
+#&gt; 49  ongoing                      20
+#&gt; 50  ongoing                      12
+#&gt; 51  ongoing                      20
+#&gt; 52  ongoing                      49
+#&gt; 53  ongoing                     409
+#&gt; 54  ongoing                      12
+#&gt; 55  ongoing                      49
+#&gt; 56  ongoing                     409
+#&gt; 57  ongoing                       2
+#&gt; 58  ongoing                       2
+#&gt; 59  ongoing                       2
+#&gt; 60  ongoing                      12
+#&gt; 61  ongoing                      12
+#&gt; 62  ongoing                      20
+#&gt; 63  ongoing                      20
+#&gt; 64  ongoing                      44
+#&gt; 65  ongoing                       2
+#&gt; 66  ongoing                      12
+#&gt; 67  ongoing                      45
+#&gt; 68  ongoing                      45
+#&gt; 69  ongoing                      57
+#&gt; 70  ongoing                       9
+#&gt; 71  ongoing                       9
+#&gt; 72  ongoing                       9
+#&gt; 73  ongoing                       9
+#&gt; 74  ongoing                       9
+#&gt; 75  ongoing                       9
+#&gt; 76  ongoing                       9
+#&gt;                                                              url_manual_access
+#&gt; 1                   https://search.earthdata.nasa.gov/search?q=GPM_3IMERGDE_06
+#&gt; 2                   https://search.earthdata.nasa.gov/search?q=GPM_3IMERGDF_06
+#&gt; 3                   https://search.earthdata.nasa.gov/search?q=GPM_3IMERGDL_06
+#&gt; 4                   https://search.earthdata.nasa.gov/search?q=GPM_3IMERGHH_06
+#&gt; 5                  https://search.earthdata.nasa.gov/search?q=GPM_3IMERGHHE_06
+#&gt; 6                  https://search.earthdata.nasa.gov/search?q=GPM_3IMERGHHL_06
+#&gt; 7                    https://search.earthdata.nasa.gov/search?q=GPM_3IMERGM_06
+#&gt; 8        https://search.earthdata.nasa.gov/search?q=MCD12Q1.006&amp;ok=MCD12Q1.006
+#&gt; 9      https://search.earthdata.nasa.gov/search?q=MCD15A2H.006&amp;ok=MCD15A2H.006
+#&gt; 10     https://search.earthdata.nasa.gov/search?q=MCD15A3H.006&amp;ok=MCD15A3H.006
+#&gt; 11       https://search.earthdata.nasa.gov/search?q=MCD43A1.006&amp;ok=MCD43A1.006
+#&gt; 12       https://search.earthdata.nasa.gov/search?q=MCD43A2.006&amp;ok=MCD43A2.006
+#&gt; 13       https://search.earthdata.nasa.gov/search?q=MCD43A3.006&amp;ok=MCD43A3.006
+#&gt; 14       https://search.earthdata.nasa.gov/search?q=MCD43A4.006&amp;ok=MCD43A4.006
+#&gt; 15       https://search.earthdata.nasa.gov/search?q=MCD64A1.006&amp;ok=MCD64A1.006
+#&gt; 16       https://search.earthdata.nasa.gov/search?q=MOD09A1.006&amp;ok=MOD09A1.006
+#&gt; 17       https://search.earthdata.nasa.gov/search?q=MOD09GA.006&amp;ok=MOD09GA.006
+#&gt; 18       https://search.earthdata.nasa.gov/search?q=MOD09GQ.006&amp;ok=MOD09GQ.006
+#&gt; 19       https://search.earthdata.nasa.gov/search?q=MOD09Q1.006&amp;ok=MOD09Q1.006
+#&gt; 20       https://search.earthdata.nasa.gov/search?q=MOD11A1.006&amp;ok=MOD11A1.006
+#&gt; 21       https://search.earthdata.nasa.gov/search?q=MOD11A2.006&amp;ok=MOD11A2.006
+#&gt; 22       https://search.earthdata.nasa.gov/search?q=MOD11B2.006&amp;ok=MOD11B2.006
+#&gt; 23       https://search.earthdata.nasa.gov/search?q=MOD11B3.006&amp;ok=MOD11B3.006
+#&gt; 24       https://search.earthdata.nasa.gov/search?q=MOD13A1.006&amp;ok=MOD13A1.006
+#&gt; 25       https://search.earthdata.nasa.gov/search?q=MOD13A2.006&amp;ok=MOD13A2.006
+#&gt; 26       https://search.earthdata.nasa.gov/search?q=MOD13A3.006&amp;ok=MOD13A3.006
+#&gt; 27       https://search.earthdata.nasa.gov/search?q=MOD13Q1.006&amp;ok=MOD13Q1.006
+#&gt; 28     https://search.earthdata.nasa.gov/search?q=MOD15A2H.006&amp;ok=MOD15A2H.006
+#&gt; 29       https://search.earthdata.nasa.gov/search?q=MOD16A2.006&amp;ok=MOD16A2.006
+#&gt; 30   https://search.earthdata.nasa.gov/search?q=MOD16A2GF.006&amp;ok=MOD16A2GF.006
+#&gt; 31   https://search.earthdata.nasa.gov/search?q=MOD16A3GF.006&amp;ok=MOD16A3GF.006
+#&gt; 32     https://search.earthdata.nasa.gov/search?q=MOD17A2H.006&amp;ok=MOD17A2H.006
+#&gt; 33 https://search.earthdata.nasa.gov/search?q=MOD17A2HGF.006&amp;ok=MOD17A2HGF.006
+#&gt; 34       https://search.earthdata.nasa.gov/search?q=MOD17A3.055&amp;ok=MOD17A3.055
+#&gt; 35 https://search.earthdata.nasa.gov/search?q=MOD17A3HGF.006&amp;ok=MOD17A3HGF.006
+#&gt; 36       https://search.earthdata.nasa.gov/search?q=MODOCGA.006&amp;ok=MODOCGA.006
+#&gt; 37       https://search.earthdata.nasa.gov/search?q=MODTBGA.006&amp;ok=MODTBGA.006
+#&gt; 38       https://search.earthdata.nasa.gov/search?q=MYD09A1.006&amp;ok=MYD09A1.006
+#&gt; 39       https://search.earthdata.nasa.gov/search?q=MYD09GA.006&amp;ok=MYD09GA.006
+#&gt; 40       https://search.earthdata.nasa.gov/search?q=MYD09GQ.006&amp;ok=MYD09GQ.006
+#&gt; 41       https://search.earthdata.nasa.gov/search?q=MYD09Q1.006&amp;ok=MYD09Q1.006
+#&gt; 42       https://search.earthdata.nasa.gov/search?q=MYD11A1.006&amp;ok=MYD11A1.006
+#&gt; 43       https://search.earthdata.nasa.gov/search?q=MYD11A2.006&amp;ok=MYD11A2.006
+#&gt; 44       https://search.earthdata.nasa.gov/search?q=MYD11B2.006&amp;ok=MYD11B2.006
+#&gt; 45       https://search.earthdata.nasa.gov/search?q=MYD11B3.006&amp;ok=MYD11B3.006
+#&gt; 46       https://search.earthdata.nasa.gov/search?q=MYD13A1.006&amp;ok=MYD13A1.006
+#&gt; 47       https://search.earthdata.nasa.gov/search?q=MYD13A2.006&amp;ok=MYD13A2.006
+#&gt; 48       https://search.earthdata.nasa.gov/search?q=MYD13A3.006&amp;ok=MYD13A3.006
+#&gt; 49       https://search.earthdata.nasa.gov/search?q=MYD13Q1.006&amp;ok=MYD13Q1.006
+#&gt; 50     https://search.earthdata.nasa.gov/search?q=MYD15A2H.006&amp;ok=MYD15A2H.006
+#&gt; 51       https://search.earthdata.nasa.gov/search?q=MYD16A2.006&amp;ok=MYD16A2.006
+#&gt; 52   https://search.earthdata.nasa.gov/search?q=MYD16A2GF.006&amp;ok=MYD16A2GF.006
+#&gt; 53   https://search.earthdata.nasa.gov/search?q=MYD16A3GF.006&amp;ok=MYD16A3GF.006
+#&gt; 54     https://search.earthdata.nasa.gov/search?q=MYD17A2H.006&amp;ok=MYD17A2H.006
+#&gt; 55 https://search.earthdata.nasa.gov/search?q=MYD17A2HGF.006&amp;ok=MYD17A2HGF.006
+#&gt; 56 https://search.earthdata.nasa.gov/search?q=MYD17A3HGF.006&amp;ok=MYD17A3HGF.006
+#&gt; 57       https://search.earthdata.nasa.gov/search?q=MYDOCGA.006&amp;ok=MYDOCGA.006
+#&gt; 58       https://search.earthdata.nasa.gov/search?q=MYDTBGA.006&amp;ok=MYDTBGA.006
+#&gt; 59        https://nsidc.org/data/spl3smp_e?qt-data_set_tabs=1#qt-data_set_tabs
+#&gt; 60       https://search.earthdata.nasa.gov/search?q=VNP09A1.001&amp;ok=VNP09A1.001
+#&gt; 61       https://search.earthdata.nasa.gov/search?q=VNP09H1.001&amp;ok=VNP09H1.001
+#&gt; 62       https://search.earthdata.nasa.gov/search?q=VNP13A1.001&amp;ok=VNP13A1.001
+#&gt; 63       https://search.earthdata.nasa.gov/search?q=VNP13A2.001&amp;ok=VNP13A2.001
+#&gt; 64       https://search.earthdata.nasa.gov/search?q=VNP13A3.001&amp;ok=VNP13A3.001
+#&gt; 65       https://search.earthdata.nasa.gov/search?q=VNP14A1.001&amp;ok=VNP14A1.001
+#&gt; 66     https://search.earthdata.nasa.gov/search?q=VNP15A2H.001&amp;ok=VNP15A2H.001
+#&gt; 67     https://search.earthdata.nasa.gov/search?q=VNP21A1D.001&amp;ok=VNP21A1D.001
+#&gt; 68     https://search.earthdata.nasa.gov/search?q=VNP21A1N.001&amp;ok=VNP21A1N.001
+#&gt; 69       https://search.earthdata.nasa.gov/search?q=VNP21A2.001&amp;ok=VNP21A2.001
+#&gt; 70     https://search.earthdata.nasa.gov/search?q=VNP43IA2.001&amp;ok=VNP43IA2.001
+#&gt; 71     https://search.earthdata.nasa.gov/search?q=VNP43IA3.001&amp;ok=VNP43IA3.001
+#&gt; 72     https://search.earthdata.nasa.gov/search?q=VNP43IA4.001&amp;ok=VNP43IA4.001
+#&gt; 73     https://search.earthdata.nasa.gov/search?q=VNP43MA1.001&amp;ok=VNP43MA1.001
+#&gt; 74     https://search.earthdata.nasa.gov/search?q=VNP43MA2.001&amp;ok=VNP43MA2.001
+#&gt; 75     https://search.earthdata.nasa.gov/search?q=VNP43MA3.001&amp;ok=VNP43MA3.001
+#&gt; 76     https://search.earthdata.nasa.gov/search?q=VNP43MA4.001&amp;ok=VNP43MA4.001
+#&gt;         status login                             url_opendapserver
+#&gt; 1  Implemented  usgs https://gpm1.gesdisc.eosdis.nasa.gov/opendap/
+#&gt; 2  Implemented  usgs https://gpm1.gesdisc.eosdis.nasa.gov/opendap/
+#&gt; 3  Implemented  usgs https://gpm1.gesdisc.eosdis.nasa.gov/opendap/
+#&gt; 4  Implemented  usgs https://gpm1.gesdisc.eosdis.nasa.gov/opendap/
+#&gt; 5  Implemented  usgs https://gpm1.gesdisc.eosdis.nasa.gov/opendap/
+#&gt; 6  Implemented  usgs https://gpm1.gesdisc.eosdis.nasa.gov/opendap/
+#&gt; 7  Implemented  usgs https://gpm1.gesdisc.eosdis.nasa.gov/opendap/
+#&gt; 8  Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 9  Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 10 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 11 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 12 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 13 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 14 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 15 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 16 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 17 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 18 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 19 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 20 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 21 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 22 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 23 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 24 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 25 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 26 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 27 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 28 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 29 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 30 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 31 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 32 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 33 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 34 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 35 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 36 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 37 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 38 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 39 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 40 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 41 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 42 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 43 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 44 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 45 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 46 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 47 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 48 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 49 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 50 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 51 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 52 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 53 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 54 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 55 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 56 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 57 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 58 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 59 Implemented  usgs       https://n5eil02u.ecs.nsidc.org/opendap/
+#&gt; 60 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 61 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 62 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 63 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 64 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 65 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 66 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 67 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 68 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 69 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 70 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 71 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 72 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 73 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 74 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 75 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt; 76 Implemented  usgs    https://opendap.cr.usgs.gov/opendap/hyrax/
+#&gt;                                                   url_programmatic_access
+#&gt; 1    https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDE.06/
+#&gt; 2    https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/
+#&gt; 3    https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDL.06/
+#&gt; 4    https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.06/
+#&gt; 5   https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHE.06/
+#&gt; 6   https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHL.06/
+#&gt; 7     https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.06/
+#&gt; 8     https://opendap.cr.usgs.gov/opendap/hyrax/MCD12Q1.006/contents.html
+#&gt; 9    https://opendap.cr.usgs.gov/opendap/hyrax/MCD15A2H.006/contents.html
+#&gt; 10   https://opendap.cr.usgs.gov/opendap/hyrax/MCD15A3H.006/contents.html
+#&gt; 11    https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A1.006/contents.html
+#&gt; 12    https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A2.006/contents.html
+#&gt; 13    https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A3.006/contents.html
+#&gt; 14    https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A4.006/contents.html
+#&gt; 15    https://opendap.cr.usgs.gov/opendap/hyrax/MCD64A1.006/contents.html
+#&gt; 16    https://opendap.cr.usgs.gov/opendap/hyrax/MOD09A1.006/contents.html
+#&gt; 17    https://opendap.cr.usgs.gov/opendap/hyrax/MOD09GA.006/contents.html
+#&gt; 18    https://opendap.cr.usgs.gov/opendap/hyrax/MOD09GQ.006/contents.html
+#&gt; 19    https://opendap.cr.usgs.gov/opendap/hyrax/MOD09Q1.006/contents.html
+#&gt; 20    https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/contents.html
+#&gt; 21    https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.006/contents.html
+#&gt; 22    https://opendap.cr.usgs.gov/opendap/hyrax/MOD11B2.006/contents.html
+#&gt; 23    https://opendap.cr.usgs.gov/opendap/hyrax/MOD11B3.006/contents.html
+#&gt; 24    https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A1.006/contents.html
+#&gt; 25    https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A2.006/contents.html
+#&gt; 26    https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A3.006/contents.html
+#&gt; 27    https://opendap.cr.usgs.gov/opendap/hyrax/MOD13Q1.006/contents.html
+#&gt; 28   https://opendap.cr.usgs.gov/opendap/hyrax/MOD15A2H.006/contents.html
+#&gt; 29    https://opendap.cr.usgs.gov/opendap/hyrax/MOD16A2.006/contents.html
+#&gt; 30  https://opendap.cr.usgs.gov/opendap/hyrax/MOD16A2GF.006/contents.html
+#&gt; 31  https://opendap.cr.usgs.gov/opendap/hyrax/MOD16A3GF.006/contents.html
+#&gt; 32   https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A2H.006/contents.html
+#&gt; 33 https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A2HGF.006/contents.html
+#&gt; 34    https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A3.055/contents.html
+#&gt; 35 https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A3HGF.006/contents.html
+#&gt; 36    https://opendap.cr.usgs.gov/opendap/hyrax/MODOCGA.006/contents.html
+#&gt; 37    https://opendap.cr.usgs.gov/opendap/hyrax/MODTBGA.006/contents.html
+#&gt; 38    https://opendap.cr.usgs.gov/opendap/hyrax/MYD09A1.006/contents.html
+#&gt; 39    https://opendap.cr.usgs.gov/opendap/hyrax/MYD09GA.006/contents.html
+#&gt; 40    https://opendap.cr.usgs.gov/opendap/hyrax/MYD09GQ.006/contents.html
+#&gt; 41    https://opendap.cr.usgs.gov/opendap/hyrax/MYD09Q1.006/contents.html
+#&gt; 42    https://opendap.cr.usgs.gov/opendap/hyrax/MYD11A1.006/contents.html
+#&gt; 43    https://opendap.cr.usgs.gov/opendap/hyrax/MYD11A2.006/contents.html
+#&gt; 44    https://opendap.cr.usgs.gov/opendap/hyrax/MYD11B2.006/contents.html
+#&gt; 45    https://opendap.cr.usgs.gov/opendap/hyrax/MYD11B3.006/contents.html
+#&gt; 46    https://opendap.cr.usgs.gov/opendap/hyrax/MYD13A1.006/contents.html
+#&gt; 47    https://opendap.cr.usgs.gov/opendap/hyrax/MYD13A2.006/contents.html
+#&gt; 48    https://opendap.cr.usgs.gov/opendap/hyrax/MYD13A3.006/contents.html
+#&gt; 49    https://opendap.cr.usgs.gov/opendap/hyrax/MYD13Q1.006/contents.html
+#&gt; 50   https://opendap.cr.usgs.gov/opendap/hyrax/MYD15A2H.006/contents.html
+#&gt; 51    https://opendap.cr.usgs.gov/opendap/hyrax/MYD16A2.006/contents.html
+#&gt; 52  https://opendap.cr.usgs.gov/opendap/hyrax/MYD16A2GF.006/contents.html
+#&gt; 53  https://opendap.cr.usgs.gov/opendap/hyrax/MYD16A3GF.006/contents.html
+#&gt; 54   https://opendap.cr.usgs.gov/opendap/hyrax/MYD17A2H.006/contents.html
+#&gt; 55 https://opendap.cr.usgs.gov/opendap/hyrax/MYD17A2HGF.006/contents.html
+#&gt; 56 https://opendap.cr.usgs.gov/opendap/hyrax/MYD17A3HGF.006/contents.html
+#&gt; 57    https://opendap.cr.usgs.gov/opendap/hyrax/MYDOCGA.006/contents.html
+#&gt; 58    https://opendap.cr.usgs.gov/opendap/hyrax/MYDTBGA.006/contents.html
+#&gt; 59             https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/
+#&gt; 60    https://opendap.cr.usgs.gov/opendap/hyrax/VNP09A1.001/contents.html
+#&gt; 61    https://opendap.cr.usgs.gov/opendap/hyrax/VNP09H1.001/contents.html
+#&gt; 62    https://opendap.cr.usgs.gov/opendap/hyrax/VNP13A1.001/contents.html
+#&gt; 63    https://opendap.cr.usgs.gov/opendap/hyrax/VNP13A2.001/contents.html
+#&gt; 64    https://opendap.cr.usgs.gov/opendap/hyrax/VNP13A3.001/contents.html
+#&gt; 65    https://opendap.cr.usgs.gov/opendap/hyrax/VNP14A1.001/contents.html
+#&gt; 66   https://opendap.cr.usgs.gov/opendap/hyrax/VNP15A2H.001/contents.html
+#&gt; 67   https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A1D.001/contents.html
+#&gt; 68   https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A1N.001/contents.html
+#&gt; 69    https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A2.001/contents.html
+#&gt; 70   https://opendap.cr.usgs.gov/opendap/hyrax/VNP43IA2.001/contents.html
+#&gt; 71   https://opendap.cr.usgs.gov/opendap/hyrax/VNP43IA3.001/contents.html
+#&gt; 72   https://opendap.cr.usgs.gov/opendap/hyrax/VNP43IA4.001/contents.html
+#&gt; 73   https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA1.001/contents.html
+#&gt; 74   https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA2.001/contents.html
+#&gt; 75   https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA3.001/contents.html
+#&gt; 76   https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA4.001/contents.html
+#&gt;                                                                                                                                 url_opendapexample
+#&gt; 1              https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDE.06/2000/06/3B-DAY-E.MS.MRG.3IMERG.20000601-S000000-E235959.V06.nc4
+#&gt; 2          https://gpm1.gesdisc.eosdis.nasa.gov/opendap/hyrax/GPM_L3/GPM_3IMERGDF.06/2000/06/3B-DAY.MS.MRG.3IMERG.20000601-S000000-E235959.V06.nc4
+#&gt; 3        https://gpm1.gesdisc.eosdis.nasa.gov/opendap/hyrax/GPM_L3/GPM_3IMERGDL.06/2000/06/3B-DAY-L.MS.MRG.3IMERG.20000601-S000000-E235959.V06.nc4
+#&gt; 4  https://gpm1.gesdisc.eosdis.nasa.gov/opendap/hyrax/GPM_L3/GPM_3IMERGHH.06/2000/153/3B-HHR.MS.MRG.3IMERG.20000601-S000000-E002959.0000.V06B.HDF5
+#&gt; 5     https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHE.06/2000/153/3B-HHR-E.MS.MRG.3IMERG.20000601-S000000-E002959.0000.V06B.HDF5
+#&gt; 6     https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHL.06/2000/153/3B-HHR-L.MS.MRG.3IMERG.20000601-S000000-E002959.0000.V06B.HDF5
+#&gt; 7          https://gpm1.gesdisc.eosdis.nasa.gov/opendap/hyrax/GPM_L3/GPM_3IMERGM.06/2000/3B-MO.MS.MRG.3IMERG.20000601-S000000-E235959.06.V06B.HDF5
+#&gt; 8                                                                                https://opendap.cr.usgs.gov/opendap/hyrax/MCD12Q1.006/h00v08.ncml
+#&gt; 9                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MCD15A2H.006/h00v08.ncml
+#&gt; 10                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/MCD15A3H.006/h00v08.ncml
+#&gt; 11                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A1.006/h00v08.ncml
+#&gt; 12                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A2.006/h00v08.ncml
+#&gt; 13                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A3.006/h00v08.ncml
+#&gt; 14                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A4.006/h00v08.ncml
+#&gt; 15                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MCD64A1.006/h00v08.ncml
+#&gt; 16                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MOD09A1.006/h00v08.ncml
+#&gt; 17                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MOD09GA.006/h00v08.ncml
+#&gt; 18                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MOD09GQ.006/h00v08.ncml
+#&gt; 19                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MOD09Q1.006/h00v08.ncml
+#&gt; 20                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h00v08.ncml
+#&gt; 21                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.006/h00v08.ncml
+#&gt; 22                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MOD11B2.006/h00v08.ncml
+#&gt; 23                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MOD11B3.006/h00v08.ncml
+#&gt; 24                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A1.006/h00v08.ncml
+#&gt; 25                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A2.006/h00v08.ncml
+#&gt; 26                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A3.006/h00v08.ncml
+#&gt; 27                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MOD13Q1.006/h00v08.ncml
+#&gt; 28                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/MOD15A2H.006/h00v08.ncml
+#&gt; 29                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MOD16A2.006/h00v08.ncml
+#&gt; 30                                                                             https://opendap.cr.usgs.gov/opendap/hyrax/MOD16A2GF.006/h00v08.ncml
+#&gt; 31                                                                             https://opendap.cr.usgs.gov/opendap/hyrax/MOD16A3GF.006/h00v08.ncml
+#&gt; 32                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A2H.006/h00v08.ncml
+#&gt; 33                                                                            https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A2HGF.006/h00v08.ncml
+#&gt; 34                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A3.055/h00v08.ncml
+#&gt; 35                                                                            https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A3HGF.006/h00v08.ncml
+#&gt; 36                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MODOCGA.006/h00v08.ncml
+#&gt; 37                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MODTBGA.006/h00v08.ncml
+#&gt; 38                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYD09A1.006/h00v08.ncml
+#&gt; 39                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYD09GA.006/h00v08.ncml
+#&gt; 40                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYD09GQ.006/h00v08.ncml
+#&gt; 41                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYD09Q1.006/h00v08.ncml
+#&gt; 42                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYD11A1.006/h00v08.ncml
+#&gt; 43                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYD11A2.006/h00v08.ncml
+#&gt; 44                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYD11B2.006/h00v08.ncml
+#&gt; 45                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYD11B3.006/h00v08.ncml
+#&gt; 46                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYD13A1.006/h00v08.ncml
+#&gt; 47                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYD13A2.006/h00v08.ncml
+#&gt; 48                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYD13A3.006/h00v08.ncml
+#&gt; 49                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYD13Q1.006/h00v08.ncml
+#&gt; 50                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/MYD15A2H.006/h00v08.ncml
+#&gt; 51                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYD16A2.006/h00v08.ncml
+#&gt; 52                                                                             https://opendap.cr.usgs.gov/opendap/hyrax/MYD16A2GF.006/h00v08.ncml
+#&gt; 53                                                                             https://opendap.cr.usgs.gov/opendap/hyrax/MYD16A3GF.006/h00v08.ncml
+#&gt; 54                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/MYD17A2H.006/h00v08.ncml
+#&gt; 55                                                                            https://opendap.cr.usgs.gov/opendap/hyrax/MYD17A2HGF.006/h00v08.ncml
+#&gt; 56                                                                            https://opendap.cr.usgs.gov/opendap/hyrax/MYD17A3HGF.006/h00v08.ncml
+#&gt; 57                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYDOCGA.006/h00v08.ncml
+#&gt; 58                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/MYDTBGA.006/h00v08.ncml
+#&gt; 59                                      https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2015.04.07/SMAP_L3_SM_P_E_20150407_R16510_001.h5
+#&gt; 60                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/VNP09A1.001/h00v08.ncml
+#&gt; 61                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/VNP09H1.001/h00v08.ncml
+#&gt; 62                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/VNP13A1.001/h00v08.ncml
+#&gt; 63                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/VNP13A2.001/h00v08.ncml
+#&gt; 64                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/VNP13A3.001/h00v08.ncml
+#&gt; 65                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/VNP14A1.001/h00v08.ncml
+#&gt; 66                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/VNP15A2H.001/h00v08.ncml
+#&gt; 67                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A1D.001/h00v08.ncml
+#&gt; 68                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A1N.001/h00v08.ncml
+#&gt; 69                                                                               https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A2.001/h00v08.ncml
+#&gt; 70                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/VNP43IA2.001/h00v08.ncml
+#&gt; 71                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/VNP43IA3.001/h00v08.ncml
+#&gt; 72                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/VNP43IA4.001/h00v08.ncml
+#&gt; 73                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA1.001/h00v08.ncml
+#&gt; 74                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA2.001/h00v08.ncml
+#&gt; 75                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA3.001/h00v08.ncml
+#&gt; 76                                                                              https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA4.001/h00v08.ncml
+#&gt;                                      dim_lon
+#&gt; 1                                        lon
+#&gt; 2                                        lon
+#&gt; 3                                        lon
+#&gt; 4                                        lon
+#&gt; 5                                        lon
+#&gt; 6                                        lon
+#&gt; 7                                        lon
+#&gt; 8                                       XDim
+#&gt; 9                                       XDim
+#&gt; 10                                      XDim
+#&gt; 11                                      XDim
+#&gt; 12                                      XDim
+#&gt; 13                                      XDim
+#&gt; 14                                      XDim
+#&gt; 15                                      XDim
+#&gt; 16                                      XDim
+#&gt; 17                                      XDim
+#&gt; 18                                      XDim
+#&gt; 19                                      XDim
+#&gt; 20                                      XDim
+#&gt; 21                                      XDim
+#&gt; 22                                      XDim
+#&gt; 23                                      XDim
+#&gt; 24                                      XDim
+#&gt; 25                                      XDim
+#&gt; 26                                      XDim
+#&gt; 27                                      XDim
+#&gt; 28                                      XDim
+#&gt; 29                                      XDim
+#&gt; 30                                      XDim
+#&gt; 31                                      XDim
+#&gt; 32                                      XDim
+#&gt; 33                                      XDim
+#&gt; 34                                      XDim
+#&gt; 35                                      XDim
+#&gt; 36                                      XDim
+#&gt; 37                                      XDim
+#&gt; 38                                      XDim
+#&gt; 39                                      XDim
+#&gt; 40                                      XDim
+#&gt; 41                                      XDim
+#&gt; 42                                      XDim
+#&gt; 43                                      XDim
+#&gt; 44                                      XDim
+#&gt; 45                                      XDim
+#&gt; 46                                      XDim
+#&gt; 47                                      XDim
+#&gt; 48                                      XDim
+#&gt; 49                                      XDim
+#&gt; 50                                      XDim
+#&gt; 51                                      XDim
+#&gt; 52                                      XDim
+#&gt; 53                                      XDim
+#&gt; 54                                      XDim
+#&gt; 55                                      XDim
+#&gt; 56                                      XDim
+#&gt; 57                                      XDim
+#&gt; 58                                      XDim
+#&gt; 59 Soil_Moisture_Retrieval_Data_AM_longitude
+#&gt; 60                                      XDim
+#&gt; 61                                      XDim
+#&gt; 62                                      XDim
+#&gt; 63                                      XDim
+#&gt; 64                                      XDim
+#&gt; 65                                      XDim
+#&gt; 66                                      XDim
+#&gt; 67                                      XDim
+#&gt; 68                                      XDim
+#&gt; 69                                      XDim
+#&gt; 70                                      XDim
+#&gt; 71                                      XDim
+#&gt; 72                                      XDim
+#&gt; 73                                      XDim
+#&gt; 74                                      XDim
+#&gt; 75                                      XDim
+#&gt; 76                                      XDim
+#&gt;                                     dim_lat dim_time
+#&gt; 1                                       lat     time
+#&gt; 2                                       lat     time
+#&gt; 3                                       lat     time
+#&gt; 4                                       lat     time
+#&gt; 5                                       lat     time
+#&gt; 6                                       lat     time
+#&gt; 7                                       lat     time
+#&gt; 8                                      YDim     time
+#&gt; 9                                      YDim     time
+#&gt; 10                                     YDim     time
+#&gt; 11                                     YDim     time
+#&gt; 12                                     YDim     time
+#&gt; 13                                     YDim     time
+#&gt; 14                                     YDim     time
+#&gt; 15                                     YDim     time
+#&gt; 16                                     YDim     time
+#&gt; 17                                     YDim     time
+#&gt; 18                                     YDim     time
+#&gt; 19                                     YDim     time
+#&gt; 20                                     YDim     time
+#&gt; 21                                     YDim     time
+#&gt; 22                                     YDim     time
+#&gt; 23                                     YDim     time
+#&gt; 24                                     YDim     time
+#&gt; 25                                     YDim     time
+#&gt; 26                                     YDim     time
+#&gt; 27                                     YDim     time
+#&gt; 28                                     YDim     time
+#&gt; 29                                     YDim     time
+#&gt; 30                                     YDim     time
+#&gt; 31                                     YDim     time
+#&gt; 32                                     YDim     time
+#&gt; 33                                     YDim     time
+#&gt; 34                                     YDim     time
+#&gt; 35                                     YDim     time
+#&gt; 36                                     YDim     time
+#&gt; 37                                     YDim     time
+#&gt; 38                                     YDim     time
+#&gt; 39                                     YDim     time
+#&gt; 40                                     YDim     time
+#&gt; 41                                     YDim     time
+#&gt; 42                                     YDim     time
+#&gt; 43                                     YDim     time
+#&gt; 44                                     YDim     time
+#&gt; 45                                     YDim     time
+#&gt; 46                                     YDim     time
+#&gt; 47                                     YDim     time
+#&gt; 48                                     YDim     time
+#&gt; 49                                     YDim     time
+#&gt; 50                                     YDim     time
+#&gt; 51                                     YDim     time
+#&gt; 52                                     YDim     time
+#&gt; 53                                     YDim     time
+#&gt; 54                                     YDim     time
+#&gt; 55                                     YDim     time
+#&gt; 56                                     YDim     time
+#&gt; 57                                     YDim     time
+#&gt; 58                                     YDim     time
+#&gt; 59 Soil_Moisture_Retrieval_Data_AM_latitude     &lt;NA&gt;
+#&gt; 60                                     YDim     time
+#&gt; 61                                     YDim     time
+#&gt; 62                                     YDim     time
+#&gt; 63                                     YDim     time
+#&gt; 64                                     YDim     time
+#&gt; 65                                     YDim     time
+#&gt; 66                                     YDim     time
+#&gt; 67                                     YDim     time
+#&gt; 68                                     YDim     time
+#&gt; 69                                     YDim     time
+#&gt; 70                                     YDim     time
+#&gt; 71                                     YDim     time
+#&gt; 72                                     YDim     time
+#&gt; 73                                     YDim     time
+#&gt; 74                                     YDim     time
+#&gt; 75                                     YDim     time
+#&gt; 76                                     YDim     time
+#&gt;                                               dim_proj
+#&gt; 1                                                 &lt;NA&gt;
+#&gt; 2                                                 &lt;NA&gt;
+#&gt; 3                                                 &lt;NA&gt;
+#&gt; 4                                                 &lt;NA&gt;
+#&gt; 5                                                 &lt;NA&gt;
+#&gt; 6                                                 &lt;NA&gt;
+#&gt; 7                                                 &lt;NA&gt;
+#&gt; 8                            MCD12Q1_eos_cf_projection
+#&gt; 9                  MOD_Grid_MOD15A2H_eos_cf_projection
+#&gt; 10                 MOD_Grid_MCD15A3H_eos_cf_projection
+#&gt; 11                     MOD_Grid_BRDF_eos_cf_projection
+#&gt; 12                     MOD_Grid_BRDF_eos_cf_projection
+#&gt; 13                     MOD_Grid_BRDF_eos_cf_projection
+#&gt; 14                     MOD_Grid_BRDF_eos_cf_projection
+#&gt; 15       MOD_Grid_Monthly_500m_DB_BA_eos_cf_projection
+#&gt; 16 MOD_Grid_500m_Surface_Reflectance_eos_cf_projection
+#&gt; 17                MODIS_Grid_500m_2D_eos_cf_projection
+#&gt; 18                     MODIS_Grid_2D_eos_cf_projection
+#&gt; 19 MOD_Grid_250m_Surface_Reflectance_eos_cf_projection
+#&gt; 20          MODIS_Grid_Daily_1km_LST_eos_cf_projection
+#&gt; 21           MODIS_Grid_8Day_1km_LST_eos_cf_projection
+#&gt; 22           MODIS_Grid_8Day_6km_LST_eos_cf_projection
+#&gt; 23          MODIS_Grid_Month_6km_LST_eos_cf_projection
+#&gt; 24          MODIS_Grid_16DAY_500m_VI_eos_cf_projection
+#&gt; 25           MODIS_Grid_16DAY_1km_VI_eos_cf_projection
+#&gt; 26           MOD_Grid_monthly_1km_VI_eos_cf_projection
+#&gt; 27     MODIS_Grid_16DAY_250m_500m_VI_eos_cf_projection
+#&gt; 28                 MOD_Grid_MOD15A2H_eos_cf_projection
+#&gt; 29                  MOD_Grid_MOD16A2_eos_cf_projection
+#&gt; 30                  MOD_Grid_MOD16A2_eos_cf_projection
+#&gt; 31                  MOD_Grid_MOD16A3_eos_cf_projection
+#&gt; 32                 MOD_Grid_MOD17A2H_eos_cf_projection
+#&gt; 33                 MOD_Grid_MOD17A2H_eos_cf_projection
+#&gt; 34                  MOD_Grid_MOD17A3_eos_cf_projection
+#&gt; 35                 MOD_Grid_MOD17A3H_eos_cf_projection
+#&gt; 36                     MODIS_Grid_2D_eos_cf_projection
+#&gt; 37                     MODIS_Grid_2D_eos_cf_projection
+#&gt; 38 MOD_Grid_500m_Surface_Reflectance_eos_cf_projection
+#&gt; 39                MODIS_Grid_500m_2D_eos_cf_projection
+#&gt; 40                     MODIS_Grid_2D_eos_cf_projection
+#&gt; 41 MOD_Grid_250m_Surface_Reflectance_eos_cf_projection
+#&gt; 42          MODIS_Grid_Daily_1km_LST_eos_cf_projection
+#&gt; 43           MODIS_Grid_8Day_1km_LST_eos_cf_projection
+#&gt; 44           MODIS_Grid_8Day_6km_LST_eos_cf_projection
+#&gt; 45          MODIS_Grid_Month_6km_LST_eos_cf_projection
+#&gt; 46          MODIS_Grid_16DAY_500m_VI_eos_cf_projection
+#&gt; 47           MODIS_Grid_16DAY_1km_VI_eos_cf_projection
+#&gt; 48           MOD_Grid_monthly_1km_VI_eos_cf_projection
+#&gt; 49     MODIS_Grid_16DAY_250m_500m_VI_eos_cf_projection
+#&gt; 50                 MOD_Grid_MOD15A2H_eos_cf_projection
+#&gt; 51                  MOD_Grid_MOD16A2_eos_cf_projection
+#&gt; 52                  MOD_Grid_MOD16A2_eos_cf_projection
+#&gt; 53                  MOD_Grid_MOD16A3_eos_cf_projection
+#&gt; 54                 MOD_Grid_MOD17A2H_eos_cf_projection
+#&gt; 55                 MOD_Grid_MOD17A2H_eos_cf_projection
+#&gt; 56                 MOD_Grid_MOD17A3H_eos_cf_projection
+#&gt; 57                     MODIS_Grid_2D_eos_cf_projection
+#&gt; 58                     MODIS_Grid_2D_eos_cf_projection
+#&gt; 59                                                &lt;NA&gt;
+#&gt; 60                                   eos_cf_projection
+#&gt; 61                                   eos_cf_projection
+#&gt; 62                                   eos_cf_projection
+#&gt; 63                                   eos_cf_projection
+#&gt; 64                                   eos_cf_projection
+#&gt; 65                                   eos_cf_projection
+#&gt; 66                                   eos_cf_projection
+#&gt; 67                                   eos_cf_projection
+#&gt; 68                                   eos_cf_projection
+#&gt; 69                                   eos_cf_projection
+#&gt; 70                                   eos_cf_projection
+#&gt; 71                                   eos_cf_projection
+#&gt; 72                                   eos_cf_projection
+#&gt; 73                                   eos_cf_projection
+#&gt; 74                                   eos_cf_projection
+#&gt; 75                                   eos_cf_projection
+#&gt; 76                                   eos_cf_projection
+#&gt;                                                                                                       crs
+#&gt; 1                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0
+#&gt; 2                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,3
+#&gt; 3                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0
+#&gt; 4                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,4
+#&gt; 5                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,1
+#&gt; 6                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,2
+#&gt; 7                         +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,5
+#&gt; 8                       +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 9                       +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 10                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 11                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 12                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 13                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 14                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 15                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 16                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 17                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 18                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 19                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 20                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 21                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 22                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 23                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 24                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 25                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 26                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 27                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 28                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 29                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 30                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 31                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 32                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 33                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 34                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 35                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 36                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 37                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 38                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 39                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 40                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 41                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 42                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 43                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 44                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 45                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 46                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 47                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 48                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 49                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 50                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 51                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 52                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 53                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 54                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 55                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 56                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 57                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 58                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 59 +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0
+#&gt; 60                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 61                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 62                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 63                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 64                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 65                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 66                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 67                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 68                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 69                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 70                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 71                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 72                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 73                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 74                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 75                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs
+#&gt; 76                      +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs</div><div class='input'>
 
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
       

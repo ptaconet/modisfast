@@ -15,8 +15,7 @@ usethis::use_build_ignore("dev_history.R")
 usethis::use_build_ignore(".data_collections.csv")
 usethis::use_build_ignore(".notes_articles.txt")
 usethis::use_git()
-use_git_ignore(dev_history.R)
-#usethis::use_git_ignore("dev_history.R")
+usethis::use_git_ignore("dev_history.R")
 usethis::use_git_ignore(".data_collections.csv")
 usethis::use_git_ignore(".notes_articles.txt")
 usethis::use_gpl3_license()
@@ -35,7 +34,7 @@ usethis::use_github()
 devtools::install()
 usethis::use_readme_rmd()
 usethis::use_package("magrittr","dplyr","httr","sf","purrr","lubridate","xml2","stringr","rvest","utils","parallel","curl")
-
+# pour que les vignettes s'installent : ajouter VignetteBuilder: knitr dans le DESCRIPTION file
 # Intégration continue avec Travis-CI
 usethis::use_travis()
 
@@ -58,8 +57,11 @@ devtools::check()
 
 devtools::document()
 
-devtools::install()
+# For CRAN-like check
+devtools::check(args = c('--as-cran'))
 
+#then :
+devtools::install(build_vignettes = TRUE)
 
 ## Ajouter manuellement dans le description file, la liste des packages dont dépend le package
 
@@ -79,14 +81,19 @@ file.copy(roi_example,gsub("getRemoteData","opendapr",roi_example))
 roi_modis2tiles<-"/home/ptaconet/Documents/modis2tiles.gpkg"
 file.copy(roi_modis2tiles,gsub("Documents","opendapr/inst/extdata",roi_modis2tiles))
 
-### add a config file with username and password to usgs. More info : https://db.rstudio.com/best-practices/managing-credentials/
+### To add a config file with username and password to usgs. More info : https://db.rstudio.com/best-practices/managing-credentials/
 file.create("config.yml")
 usethis::use_build_ignore("config.yml")
 usethis::use_git_ignore("config.yml")
+
+## To build vignettes
+devtools::build_vignettes() # ne pas oublier d'avoir ajouté au préalable VignetteBuilder: knitr dans le DESCRIPTION file
+devtools::install(build_vignettes = TRUE)
 
 ## To build a website with home and vignettes
 usethis::use_package_doc()
 usethis::use_tibble()
 devtools::document()
 pkgdown::build_site()
+usethis::use_build_ignore("docs")
 ## Manual step : go to the settings of the package on the github page, then under "github page" put "master branch /docs folder"

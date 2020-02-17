@@ -4,7 +4,7 @@ author: "Paul Taconet"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Simple workflow}
+  %\VignetteIndexEntry{Simple data import workflow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,7 +14,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   message = FALSE,
-  warning = FALSE
+  warning = FALSE,
+  eval=F
 )
 ```
 
@@ -26,6 +27,7 @@ require(raster)
 require(ncdf4)
 require(magrittr)
 require(purrr)
+require(config)
 ```
 
 In this example we want to download, import and plot over the 3500 km^2^ wide region of interest (mapped below) :
@@ -40,7 +42,7 @@ roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr")
 mapview::mapview(roi,legend=F)
 ```
 
-## Set ROI, time range and connect to USGS with your credentials
+## Setup the region and time range of interest and login to the USGS EROS ERS
 
 First we prepare the script : set-up ROI, time frame and connect to USGS with our credentials
 
@@ -49,12 +51,12 @@ First we prepare the script : set-up ROI, time frame and connect to USGS with ou
 roi <- st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
-# Login to USGS servers with username and password. To create an account go to : https://ers.cr.usgs.gov/register/
+# Login to USGS servers with username and password. To create an account go to : https://ers.cr.usgs.gov/register/. Here we use the config package to store our credentials in a dedicated file locally
 credentials_usgs <- config::get("usgs")
 log <- login_usgs(c(credentials_usgs$usr,credentials_usgs$pwd))
 ```
 
-## Get the OPeNDAP URLs to download the data {#get-url}
+## Get the URLs to download the data {#get-url}
 
 With the function `get_url()`, we get the OPeNDAP URLs for our collections of interest (*MOD11A1.006*, *GPM_L3/GPM_3IMERGDF.06* and *SMAP/SPL3SMP_E.003*) given our ROI and time frame. 
 
@@ -90,10 +92,7 @@ urls_gpm <- get_url(
 ## Get the URLs of SMAP 3-days
 urls_smap <- get_url(
   collection = "SMAP/SPL3SMP_E.003",
-  variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture",
-  "Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag",
-  "Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm",
-  "Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),
+  variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture","Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag","Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm","Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),
   roi = roi,
   time_range = time_range
  )
@@ -115,12 +114,16 @@ Setting the argument `parallel` to `TRUE` will parallelize - therefore fasten - 
 
 ```{r download_data }
 df_to_dl <- rbind(urls_mod11a1,urls_gpm,urls_smap)
-res_dl <- download_data(df_to_dl,data_source="usgs",parallel = TRUE, verbose = TRUE)
+res_dl <- download_data(df_to_dl,data_source="usgs",parallel = TRUE)
+
+print(str(res_dl))
 ```
 
 ## Import the data in R {#import}
 
-We finally import the data in R. Various classes can be used to read the data downloaded through OPeNDAP. If `raster` is surely the most famous, many packages facilitate the use of spatiotemporal data. For instance, MODIS or VNP products can be imported as `stars` objects, to further use the excellent [`stars`](https://cran.r-project.org/package=stars) package for data cubes manipulation. All the data can also be imported as netcdf datasets using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4) package, or `RasterLayer` / `RasterStackBrick` of the [`raster`](https://cran.r-project.org/package=raster) package.
+We finally import the data in R. 
+
+`r emo::ji("warning")` Have a look at the section [Important note regarding the further import of the data in R](https://ptaconet.github.io/opendapr/index.html#important-note-import) of the README for additional information and an important note on the data import phase in R ! `r emo::ji("warning")` 
 
 ### Import MODIS / VNP {#import-modis-vnp}
 
@@ -174,7 +177,7 @@ smap_rast_sm_am <- urls_smap$destfile %>%
 
 Let's plot the data now !
 
-Only the first 16 dates are plotted here-under
+(Note that only the first 16 dates are plotted here-under)
 
 ```{r plot , fig.fullwidth = TRUE, fig.height = 10, fig.width = 9,fig.align = 'center'}
 # Land surface temperature

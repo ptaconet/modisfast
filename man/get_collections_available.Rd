@@ -4,19 +4,16 @@
 \alias{get_collections_available}
 \title{Get the collections implemented in the package}
 \usage{
-get_collections_available(collection)
-}
-\arguments{
-\item{collection}{string. Collection of interest.}
+get_collections_available()
 }
 \value{
-A data.frame with the available collections, and a set of related information. Columns are :
+A data.frame with the available collections, and a set of related information. Main columns are :
 \itemize{
   \item{collection :}{Collections available through \code{opendapr} }
   \item{source :}{source}
   \item{long_name :}{Collection long name}
   \item{url_metadata :}{URL pointing to metadata about the collection}
-  \item{DOI :}{DOI of the dataset}
+  \item{doi :}{DOI of the dataset}
   \item{url_opendapserver :}{URL of the OPeNDAP server from which the data is extracted }
   \item{status :}{Implemented status in s\code{opendapr} }
   \item{crs :}{Coordinates reference system of the collection }

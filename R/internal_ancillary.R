@@ -23,7 +23,7 @@
 
 .getMODIStileNames<-function(roi){
 
-  Name <- NULL
+  . <- Name <- NULL
 
   .testRoi(roi)
   roi <- sf::st_transform(roi,4326) %>%

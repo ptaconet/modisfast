@@ -5,3 +5,7 @@ data_collections.csv
 .notes_articles.txt
 config.yml
 tests/testthat/data/
+GPM_L3/
+MOD11A1.006/
+doc
+Meta

@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>R tools to efficiently download various kinds of spatio-temporal environmental/climatic data using the OPeNDAP framework • opendapr</title>
+<title>Fast download of various kinds of spatio-temporal environmental / climatic data in R using the OPeNDAP framework • opendapr</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="R tools to efficiently download various kinds of spatio-temporal environmental/climatic data using the OPeNDAP framework">
-<meta property="og:description" content="Provides functions to download various kinds of spatial-temporal environmental/climatic data in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) using the OPeNDAP framework.">
+<script src="pkgdown.js"></script><meta property="og:title" content="Fast download of various kinds of spatio-temporal environmental / climatic data in R using the OPeNDAP framework">
+<meta property="og:description" content="Provides functions to download various kinds of spatial-temporal Earth science data in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) using the OPeNDAP framework.">
 <meta property="og:image" content="/logo.png">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -54,7 +54,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/get_started.html">Get started</a>
+      <a href="articles/simple_workflow.html">Simple workflow : Download data for a given region of interest and time frame</a>
     </li>
   </ul>
 </li>
@@ -75,12 +75,7 @@
 <!--/.navbar -->
 
       
-      </header><script src="index_files/htmlwidgets-1.3/htmlwidgets.js"></script><script src="index_files/jquery-1.12.4/jquery.min.js"></script><link href="index_files/leaflet-1.3.1/leaflet.css" rel="stylesheet">
-<script src="index_files/leaflet-1.3.1/leaflet.js"></script><link href="index_files/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
-<script src="index_files/Proj4Leaflet-1.0.1/proj4-compressed.js"></script><script src="index_files/Proj4Leaflet-1.0.1/proj4leaflet.js"></script><link href="index_files/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
-<script src="index_files/leaflet-binding-2.0.2/leaflet.js"></script><script src="index_files/leaflet-providers-1.1.17/leaflet-providers.js"></script><script src="index_files/leaflet-providers-plugin-2.0.2/leaflet-providers-plugin.js"></script><link href="index_files/HomeButton-0.0.1/home-button.css" rel="stylesheet">
-<script src="index_files/HomeButton-0.0.1/home-button.js"></script><script src="index_files/HomeButton-0.0.1/easy-button-src.min.js"></script><link href="index_files/PopupTable-0.0.1/popup.css" rel="stylesheet">
-<div class="row">
+      </header><script src="index_files/kePrint-0.0.1/kePrint.js"></script><div class="row">
   <div class="col-md-9 contents">
     
 
@@ -93,68 +88,1768 @@
 </h1></div>
 <!-- badges: start -->
 
-<p><strong>[ Caution : Package still in development … ]</strong></p>
-<p>The goal of opendapr is to …</p>
+<p>The <code>opendapr</code> R package provides functions to <strong>facilitate</strong> and <strong>speed-up</strong> the <strong>download of some well-known and widely-used spatiotemporal Earth science data</strong> (such as <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/">MODIS</a>, <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/">VIIRS</a>, <a href="https://pmm.nasa.gov/GPM">GPM</a> or <a href="https://smap.jpl.nasa.gov/">SMAP</a> data) using the <a href="https://www.opendap.org/about">OPeNDAP</a> (<em>Open-source Project for a Network Data Access Protocol</em>).</p>
+<p><strong><em>Facilitate ?</em></strong></p>
+<p><code>opendapr</code> proposes a unique function to download the data, independently of the source. Users just need to care about the data collection, variables, time range and region of interest.</p>
+<p><strong><em>Speed-up ?</em></strong></p>
+<p><code>opendapr</code> takes advantage of the OPeNDAP abilities to download strictly the data that is needed : no more 1° x 1° MODIS tiles when the region of interest is only 100 km x 100 km ! This results in a reduction of the physical size of the data that is imported, and hence of the downloading time. In addition, <code>opendapr</code> enables to parallelize the download.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the released version of opendapr from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"opendapr"</span>)</a></code></pre></div>
-<p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ptaconet/opendapr"</span>)</a></code></pre></div>
+<!--
+You can install the released version of opendapr from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("opendapr")
+```
+-->
+<p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ptaconet/opendapr"</span>)</a></code></pre></div>
+<p>Work is ongoing to publish the package in the CRAN.</p>
+</div>
+<div id="how-to-use-opendapr" class="section level2">
+<h2 class="hasAnchor">
+<a href="#how-to-use-opendapr" class="anchor"></a>How to use <code>opendapr</code> ?</h2>
+<p>Downloading the data with <code>opendapr</code> is a simple two-steps workflow :</p>
+<ol style="list-style-type: decimal">
+<li>With the function <strong><code><a href="reference/get_url.html">get_url()</a></code></strong>: Retrieve the URL(s) of the data for a given collection, variables, time frame, region and output data format of interest ;</li>
+<li>With the function <strong><code><a href="reference/download_data.html">download_data()</a></code></strong>: Download the data to your computer.</li>
+</ol>
+<p>The <code><a href="reference/get_url.html">get_url()</a></code> function has the following input parameters that enable to select and filter the data :</p>
+<ul>
+<li>
+<code>collection</code> : collection of interest ;</li>
+<li>
+<code>variables</code> : variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted ;</li>
+<li>
+<code>roi</code> : region of interest. Must be a <code>sf</code> or <code>sfc</code> POLYGON-type object. Can be composed of several features ;</li>
+<li>
+<code>time_range</code> : date(s) / time(s) of interest (single date / datetime or time frame ) ;</li>
+<li>
+<code>output_format</code> : output format. Available options are : “nc4” (default), “ascii”, “json”</li>
+</ul>
+<p>Additional functions include login to the USGS EROS ERS needed to download the data ( <code><a href="reference/login_usgs.html">login_usgs()</a></code> ), check which collections are available for download ( <code><a href="reference/get_collections_available.html">get_collections_available()</a></code> ), check which variables are available for each collection ( <code><a href="reference/get_variables_info.html">get_variables_info()</a></code> ), etc.</p>
+<p>Have a look at the <a href="#example">example</a> below for a simple use case !</p>
+</div>
+<div id="which-products-are-available-for-download-through-opendapr" class="section level2">
+<h2 class="hasAnchor">
+<a href="#which-products-are-available-for-download-through-opendapr" class="anchor"></a>Which products are available for download through <code>opendapr</code> ?</h2>
+<p>Currently <code>opendapr</code> enables to download data from four main collections :</p>
+<ul>
+<li>
+<a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/">MODIS land products</a>, made available by the <a href="https://lpdaac.usgs.gov/">NASA / USGS LP DAAC</a> (➡️ <a href="https://opendap.cr.usgs.gov/opendap/hyrax/">source OPeNDAP server</a>) ;</li>
+<li>
+<a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/">VIIRS land products</a>, made available by the <a href="https://lpdaac.usgs.gov/">NASA / USGS LP DAAC</a> (➡️ <a href="https://opendap.cr.usgs.gov/opendap/hyrax/">source OPeNDAP server</a>) ;</li>
+<li>
+<a href="https://pmm.nasa.gov/GPM">Global Precipitation Measurement</a> (GPM), made available by the <a href="https://disc.gsfc.nasa.gov/">NASA / JAXA GES DISC</a> (OPeNDAP server is located <a href="https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3">here</a>) ;</li>
+<li>
+<a href="https://smap.jpl.nasa.gov/">Soil Moisture Active-Passive</a> (SMAP), made available by the <a href="https://nsidc.org/">NASA NSIDC DAAC</a> (➡️ <a href="https://n5eil02u.ecs.nsidc.org/opendap/SMAP/">source OPeNDAP server</a>)</li>
+</ul>
+<p>Details of each product available for download are provided in the table above. The function <code><a href="reference/get_collections_available.html">get_collections_available()</a></code> returns that same table with additional information. Want more details on a specific collection ? Click on the “DOI” column !</p>
+<details><summary>Products available for download with opendapr (click to expand)</summary><p>
+</p>
+<table class="table table table">
+<thead><tr>
+<th style="text-align:left;">
+Collection
+</th>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Source
+</th>
+<th style="text-align:left;">
+Nature
+</th>
+<th style="text-align:left;">
+DOI
+</th>
+<th style="text-align:left;">
+url_opendap_server
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+GPM_L3/GPM_3IMERGDE.06
+</td>
+<td style="text-align:left;">
+GPM IMERG Early Precipitation L3 1 day 0.1 degree x 0.1 degree V06
+</td>
+<td style="text-align:left;">
+GPM
+</td>
+<td style="text-align:left;">
+Rainfall
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/GPM/IMERGDE/DAY/06" class="uri">https://doi.org/10.5067/GPM/IMERGDE/DAY/06</a>
+</td>
+<td style="text-align:left;">
+<a href="https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDE.06/" class="uri">https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDE.06/</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GPM_L3/GPM_3IMERGDF.06
+</td>
+<td style="text-align:left;">
+GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V06
+</td>
+<td style="text-align:left;">
+GPM
+</td>
+<td style="text-align:left;">
+Rainfall
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/GPM/IMERGDF/DAY/06" class="uri">https://doi.org/10.5067/GPM/IMERGDF/DAY/06</a>
+</td>
+<td style="text-align:left;">
+<a href="https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/" class="uri">https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GPM_L3/GPM_3IMERGDL.06
+</td>
+<td style="text-align:left;">
+GPM IMERG Late Precipitation L3 1 day 0.1 degree x 0.1 degree V06
+</td>
+<td style="text-align:left;">
+GPM
+</td>
+<td style="text-align:left;">
+Rainfall
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/GPM/IMERGDL/DAY/06" class="uri">https://doi.org/10.5067/GPM/IMERGDL/DAY/06</a>
+</td>
+<td style="text-align:left;">
+<a href="https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDL.06/" class="uri">https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDL.06/</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GPM_L3/GPM_3IMERGHH.06
+</td>
+<td style="text-align:left;">
+GPM IMERG Final Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
+</td>
+<td style="text-align:left;">
+GPM
+</td>
+<td style="text-align:left;">
+Rainfall
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/GPM/IMERG/3B-HH/06" class="uri">https://doi.org/10.5067/GPM/IMERG/3B-HH/06</a>
+</td>
+<td style="text-align:left;">
+<a href="https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.06/" class="uri">https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHH.06/</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GPM_L3/GPM_3IMERGHHE.06
+</td>
+<td style="text-align:left;">
+GPM IMERG Early Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
+</td>
+<td style="text-align:left;">
+GPM
+</td>
+<td style="text-align:left;">
+Rainfall
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/GPM/IMERG/3B-HH-E/06" class="uri">https://doi.org/10.5067/GPM/IMERG/3B-HH-E/06</a>
+</td>
+<td style="text-align:left;">
+<a href="https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHE.06/" class="uri">https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHE.06/</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GPM_L3/GPM_3IMERGHHL.06
+</td>
+<td style="text-align:left;">
+GPM IMERG Late Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
+</td>
+<td style="text-align:left;">
+GPM
+</td>
+<td style="text-align:left;">
+Rainfall
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/GPM/IMERG/3B-HH-L/06" class="uri">https://doi.org/10.5067/GPM/IMERG/3B-HH-L/06</a>
+</td>
+<td style="text-align:left;">
+<a href="https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHL.06/" class="uri">https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHL.06/</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GPM_L3/GPM_3IMERGM.06
+</td>
+<td style="text-align:left;">
+GPM IMERG Final Precipitation L3 1 month 0.1 degree x 0.1 degree V06
+</td>
+<td style="text-align:left;">
+GPM
+</td>
+<td style="text-align:left;">
+Rainfall
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/GPM/IMERG/3B-MONTH/06" class="uri">https://doi.org/10.5067/GPM/IMERG/3B-MONTH/06</a>
+</td>
+<td style="text-align:left;">
+<a href="https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.06/" class="uri">https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.06/</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MCD12Q1.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra+Aqua Land Cover Type Yearly L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land cover
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD12Q1.006" class="uri">https://dx.doi.org/10.5067/MODIS/MCD12Q1.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MCD12Q1.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MCD12Q1.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MCD15A2H.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra+Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Leaf area index
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD15A2H.006" class="uri">https://dx.doi.org/10.5067/MODIS/MCD15A2H.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MCD15A2H.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MCD15A2H.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MCD15A3H.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra+Aqua Leaf Area Index/FPAR 4-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Leaf area index
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD15A3H.006" class="uri">https://dx.doi.org/10.5067/MODIS/MCD15A3H.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MCD15A3H.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MCD15A3H.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MCD43A1.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra and Aqua BRDF/Albedo Model Parameters Daily L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD43A1.006" class="uri">https://dx.doi.org/10.5067/MODIS/MCD43A1.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A1.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A1.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MCD43A2.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra and Aqua BRDF/Albedo Quality Daily L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD43A2.006" class="uri">https://dx.doi.org/10.5067/MODIS/MCD43A2.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A2.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A2.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MCD43A3.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra and Aqua Albedo Daily L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD43A3.006" class="uri">https://dx.doi.org/10.5067/MODIS/MCD43A3.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A3.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A3.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MCD43A4.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra and Aqua Nadir BRDF-Adjusted Reflectance Daily L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Surface reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD43A4.006" class="uri">https://dx.doi.org/10.5067/MODIS/MCD43A4.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A4.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MCD43A4.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MCD64A1.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra+Aqua Burned Area Monthly L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Burned areas
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD64A1.006" class="uri">https://dx.doi.org/10.5067/MODIS/MCD64A1.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MCD64A1.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MCD64A1.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD09A1.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Surface Reflectance 8-Day L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Surface reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD09A1.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD09A1.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD09A1.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD09A1.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD09GA.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Surface Reflectance Daily L2G Global 1 km and 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Surface reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD09GA.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD09GA.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD09GA.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD09GA.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD09GQ.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Surface Reflectance Daily L2G Global 250 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Surface reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD09GQ.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD09GQ.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD09GQ.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD09GQ.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD09Q1.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Surface Reflectance 8-Day L3 Global 250 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Surface reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD09Q1.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD09Q1.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD09Q1.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD09Q1.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD11A1.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid V006
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD11A1.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD11A1.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD11A2.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 Global 1 km SIN Grid V006
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD11A2.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD11A2.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD11B2.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 Global 6 km SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD11B2.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD11B2.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD11B2.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD11B2.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD11B3.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Land Surface Temperature/Emissivity Monthly L3 Global 6 km SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD11B3.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD11B3.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD11B3.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD11B3.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD13A1.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Vegetation Indices 16-Day L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Vegetation indices
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD13A1.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD13A1.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A1.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A1.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD13A2.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Vegetation Indices 16-Day L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Vegetation indices
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD13A2.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD13A2.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A2.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A2.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD13A3.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Vegetation Indices Monthly L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Vegetation indices
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD13A3.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD13A3.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A3.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A3.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD13Q1.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V006
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Vegetation indices
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD13Q1.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD13Q1.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD13Q1.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD13Q1.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD15A2H.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Leaf area index
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD15A2H.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD15A2H.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD15A2H.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD15A2H.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD16A2.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Net Evapotranspiration 8-Day L4 Global 500m SIN Grid V006
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Evapotranspiration
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD16A2.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD16A2.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD16A2.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD16A2.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD16A2GF.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Net Evapotranspiration Gap-Filled 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Evapotranspiration
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD16A2GF.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD16A2GF.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD16A2GF.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD16A2GF.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD16A3GF.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Net Evapotranspiration Gap-Filled Yearly L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Evapotranspiration
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD16A3GF.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD16A3GF.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD16A3GF.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD16A3GF.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD17A2H.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Gross Primary Productivity 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Primary Productivity
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD17A2H.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD17A2H.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A2H.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A2H.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD17A2HGF.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Gross Primary Productivity Gap-Filled 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Primary Productivity
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD17A2HGF.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD17A2HGF.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A2HGF.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A2HGF.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD17A3.055
+</td>
+<td style="text-align:left;">
+MODIS/Terra Net Primary Production Yearly L4 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Primary Productivity
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD17A3.055" class="uri">https://dx.doi.org/10.5067/MODIS/MOD17A3.055</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A3.055/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A3.055/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOD17A3HGF.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Net Primary Production Gap-Filled Yearly L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Primary Productivity
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD17A3HGF.006" class="uri">https://dx.doi.org/10.5067/MODIS/MOD17A3HGF.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A3HGF.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A3HGF.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MODOCGA.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Ocean Reflectance Daily L2G-Lite Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Ocean Reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MODOCGA.006" class="uri">https://dx.doi.org/10.5067/MODIS/MODOCGA.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MODOCGA.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MODOCGA.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MODTBGA.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Thermal Bands Daily L2G-Lite Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Thermal Bands
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MODTBGA.006" class="uri">https://dx.doi.org/10.5067/MODIS/MODTBGA.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MODTBGA.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MODTBGA.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD09A1.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Surface Reflectance 8-Day L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Surface reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD09A1.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD09A1.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD09A1.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD09A1.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD09GA.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Surface Reflectance Daily L2G Global 1 km and 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Surface reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD09GA.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD09GA.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD09GA.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD09GA.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD09GQ.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Surface Reflectance Daily L2G Global 250 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Surface reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD09GQ.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD09GQ.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD09GQ.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD09GQ.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD09Q1.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Surface Reflectance 8-Day L3 Global 250 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Surface reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD09Q1.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD09Q1.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD09Q1.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD09Q1.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD11A1.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid V006
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD11A1.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD11A1.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD11A1.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD11A1.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD11A2.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Land Surface Temperature/Emissivity 8-Day L3 Global 1 km SIN Grid V006
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD11A2.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD11A2.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD11A2.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD11A2.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD11B2.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Land Surface Temperature/Emissivity 8-Day L3 Global 6 km SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD11B2.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD11B2.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD11B2.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD11B2.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD11B3.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Land Surface Temperature/Emissivity Monthly L3 Global 6 km SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD11B3.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD11B3.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD11B3.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD11B3.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD13A1.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Vegetation Indices 16-Day L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Vegetation indices
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD13A1.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD13A1.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD13A1.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD13A1.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD13A2.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Vegetation Indices 16-Day L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Vegetation indices
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD13A2.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD13A2.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD13A2.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD13A2.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD13A3.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Vegetation Indices Monthly L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Vegetation indices
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD13A3.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD13A3.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD13A3.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD13A3.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD13Q1.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Vegetation Indices 16-Day L3 Global 250m SIN Grid V006
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Vegetation indices
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD13Q1.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD13Q1.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD13Q1.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD13Q1.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD15A2H.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Leaf area index
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD15A2H.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD15A2H.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD15A2H.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD15A2H.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD16A2.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Net Evapotranspiration 8-Day L4 Global 500m SIN Grid V006
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Evapotranspiration
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD16A2.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD16A2.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD16A2.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD16A2.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD16A2GF.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Net Evapotranspiration Gap-Filled 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Evapotranspiration
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD16A2GF.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD16A2GF.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD16A2GF.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD16A2GF.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD16A3GF.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Net Evapotranspiration Gap-Filled Yearly L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Evapotranspiration
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD16A3GF.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD16A3GF.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD16A3GF.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD16A3GF.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD17A2H.006
+</td>
+<td style="text-align:left;">
+MODIS/Terra Gross Primary Productivity 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Primary Productivity
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD17A2H.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD17A2H.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD17A2H.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD17A2H.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD17A2HGF.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Gross Primary Productivity Gap-Filled 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Primary Productivity
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD17A2HGF.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD17A2HGF.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD17A2HGF.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD17A2HGF.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYD17A3HGF.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Net Primary Production Gap-Filled Yearly L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Primary Productivity
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD17A3HGF.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYD17A3HGF.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYD17A3HGF.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYD17A3HGF.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYDOCGA.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Ocean Reflectance Daily L2G-Lite Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Ocean Reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYDOCGA.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYDOCGA.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYDOCGA.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYDOCGA.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MYDTBGA.006
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Thermal Bands Daily L2G-Lite Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Thermal Bands
+</td>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYDTBGA.006" class="uri">https://dx.doi.org/10.5067/MODIS/MYDTBGA.006</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/MYDTBGA.006/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/MYDTBGA.006/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SMAP/SPL3SMP_E.003
+</td>
+<td style="text-align:left;">
+SMAP Enhanced L3 Radiometer Global Daily 9 km EASE-Grid Soil Moisture, Version 3
+</td>
+<td style="text-align:left;">
+SMAP
+</td>
+<td style="text-align:left;">
+Soil Moisture
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/T90W6VRLCBHI" class="uri">https://doi.org/10.5067/T90W6VRLCBHI</a>
+</td>
+<td style="text-align:left;">
+<a href="https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/" class="uri">https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP09A1.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Surface Reflectance 8-Day L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Surface reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP09A1.001" class="uri">https://doi.org/10.5067/VIIRS/VNP09A1.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP09A1.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP09A1.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP09H1.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Surface Reflectance 8-Day L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Surface reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP09H1.001" class="uri">https://doi.org/10.5067/VIIRS/VNP09H1.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP09H1.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP09H1.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP13A1.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Vegetation Indices 16-Day L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Vegetation indices
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP13A1.001" class="uri">https://doi.org/10.5067/VIIRS/VNP13A1.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP13A1.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP13A1.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP13A2.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Vegetation Indices 16-Day L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Vegetation indices
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP13A2.001" class="uri">https://doi.org/10.5067/VIIRS/VNP13A2.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP13A2.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP13A2.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP13A3.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Vegetation Indices Monthly L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Vegetation indices
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP13A3.001" class="uri">https://doi.org/10.5067/VIIRS/VNP13A3.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP13A3.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP13A3.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP14A1.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Thermal Anomalies/Fire Daily L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Thermal Anomalies/Fire
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP14A1.001" class="uri">https://doi.org/10.5067/VIIRS/VNP14A1.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP14A1.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP14A1.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP15A2H.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Leaf area index
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP15A2H.001" class="uri">https://doi.org/10.5067/VIIRS/VNP15A2H.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP15A2H.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP15A2H.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP21A1D.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Land Surface Temperature and Emissivity Daily L3 Global 1 km SIN Grid Day
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP21A1D.001" class="uri">https://doi.org/10.5067/VIIRS/VNP21A1D.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A1D.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A1D.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP21A1N.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Land Surface Temperature and Emissivity Daily L3 Global 1 km SIN Grid Night
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP21A1N.001" class="uri">https://doi.org/10.5067/VIIRS/VNP21A1N.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A1N.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A1N.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP21A2.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Land Surface Temperature and Emissivity 8-Day L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP21A2.001" class="uri">https://doi.org/10.5067/VIIRS/VNP21A2.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A2.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP21A2.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP43IA2.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP BRDF/Albedo Quality Daily L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP43IA2.001" class="uri">https://doi.org/10.5067/VIIRS/VNP43IA2.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP43IA2.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP43IA2.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP43IA3.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Albedo Daily L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP43IA3.001" class="uri">https://doi.org/10.5067/VIIRS/VNP43IA3.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP43IA3.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP43IA3.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP43IA4.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Nadir BRDF-Adjusted Reflectance Daily L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Surface reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP43IA4.001" class="uri">https://doi.org/10.5067/VIIRS/VNP43IA4.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP43IA4.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP43IA4.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP43MA1.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP BRDF/Albedo Model Parameters Daily L3 Global 1 km SIN
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP43MA1.001" class="uri">https://doi.org/10.5067/VIIRS/VNP43MA1.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA1.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA1.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP43MA2.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP BRDF/Albedo Quality Daily L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP43MA2.001" class="uri">https://doi.org/10.5067/VIIRS/VNP43MA2.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA2.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA2.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP43MA3.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Albedo Daily L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP43MA3.001" class="uri">https://doi.org/10.5067/VIIRS/VNP43MA3.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA3.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA3.001/contents.html</a>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VNP43MA4.001
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Nadir BRDF-Adjusted Reflectance Daily L3 Global 1 km SIN
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Surface reflectance
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP43MA4.001" class="uri">https://doi.org/10.5067/VIIRS/VNP43MA4.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA4.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA4.001/contents.html</a>
+</td>
+</tr>
+</tbody>
+</table></details>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<p>We want to download over the 3500 km<sup>2</sup> wide region of interest (mapped below) :</p>
+<p>We want to download over the 50 km x 50 km wide region of interest :</p>
 <ul>
-<li>a 40 days time series of <a href="https://dx.doi.org/10.5067/MODIS/MOD11A1.006">MODIS Terra Land Surface Temperature (LST)</a> (spatial resolution : 1 km ; temporal resolution : 1 day),</li>
-<li>the same 40 days times series of <a href="https://doi.org/10.5067/GPM/IMERGDF/DAY/06">Global Precipitation Measurement (GPM)</a> (spatial resolution : 1° ; temporal resolution : 1 day)</li>
+<li>a 40 days time series of <a href="https://dx.doi.org/10.5067/MODIS/MOD11A1.006">MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid</a>
+</li>
+<li>the same 40 days times series of <a href="https://doi.org/10.5067/GPM/IMERGDF/DAY/06">GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree</a>
+</li>
 </ul>
-<pre><code>#&gt; Le chargement a nécessité le package : mapview</code></pre>
-<div id="htmlwidget-6d2f3f4a884b8d8c7706" style="width:100%;height:432.632880098888px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6d2f3f4a884b8d8c7706">{"x":{"options":{"minZoom":1,"maxZoom":100,"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}},"preferCanvas":false,"bounceAtZoomLimits":false,"maxBounds":[[[-90,-370]],[[90,370]]]},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron",1,"CartoDB.Positron",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["CartoDB.DarkMatter",2,"CartoDB.DarkMatter",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["OpenStreetMap",3,"OpenStreetMap",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["Esri.WorldImagery",4,"Esri.WorldImagery",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["OpenTopoMap",5,"OpenTopoMap",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"createMapPane","args":["polygon",420]},{"method":"addPolygons","args":[[[[{"lng":[-5.82250622442815,-5.42209452795113,-5.41196234718944,-5.8143018544141,-5.82250622442815],"lat":[9.54963099748978,9.55267981751371,8.84334117607262,8.84334117607262,9.54963099748978]}]]],null,"roi",{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}},"pane":"polygon","stroke":true,"color":"#333333","weight":1,"opacity":0.9,"fill":true,"fillColor":"#6666FF","fillOpacity":0.6,"smoothFactor":1,"noClip":false},"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"lib/popup/popup.css\"><\/head><body><div class=\"scrollableContainer\"><table class=\"popup scrollable\" id=\"popup\"><tr class='coord'><td><\/td><td><b>Feature ID<\/b><\/td><td align='right'>1&emsp;<\/td><\/tr><tr class='alt'><td>1<\/td><td><b>geom&emsp;<\/b><\/td><td align='right'>sfc_POLYGON&emsp;<\/td><\/tr><\/table><\/div><\/body><\/html>",{"maxWidth":800,"minWidth":50,"autoPan":true,"keepInView":false,"closeButton":true,"closeOnClick":true,"className":""},"1",{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},{"stroke":true,"weight":2,"opacity":0.9,"fillOpacity":0.84,"bringToFront":false,"sendToBack":false}]},{"method":"addScaleBar","args":[{"maxWidth":100,"metric":true,"imperial":true,"updateWhenIdle":true,"position":"bottomleft"}]},{"method":"addHomeButton","args":[-5.82250622442815,8.84334117607262,-5.41196234718944,9.55267981751371,"Zoom to roi","<strong> roi <\/strong>","bottomright"]},{"method":"addLayersControl","args":[["CartoDB.Positron","CartoDB.DarkMatter","OpenStreetMap","Esri.WorldImagery","OpenTopoMap"],"roi",{"collapsed":true,"autoZIndex":true,"position":"topleft"}]}],"limits":{"lat":[8.84334117607262,9.55267981751371],"lng":[-5.82250622442815,-5.41196234718944]}},"evals":[],"jsHooks":{"render":[{"code":"function(el, x, data) {\n  return (\n      function(el, x, data) {\n      // get the leaflet map\n      var map = this; //HTMLWidgets.find('#' + el.id);\n      // we need a new div element because we have to handle\n      // the mouseover output separately\n      // debugger;\n      function addElement () {\n      // generate new div Element\n      var newDiv = $(document.createElement('div'));\n      // append at end of leaflet htmlwidget container\n      $(el).append(newDiv);\n      //provide ID and style\n      newDiv.addClass('lnlt');\n      newDiv.css({\n      'position': 'relative',\n      'bottomleft':  '0px',\n      'background-color': 'rgba(255, 255, 255, 0.7)',\n      'box-shadow': '0 0 2px #bbb',\n      'background-clip': 'padding-box',\n      'margin': '0',\n      'padding-left': '5px',\n      'color': '#333',\n      'font': '9px/1.5 \"Helvetica Neue\", Arial, Helvetica, sans-serif',\n      'z-index': '700',\n      });\n      return newDiv;\n      }\n\n\n      // check for already existing lnlt class to not duplicate\n      var lnlt = $(el).find('.lnlt');\n\n      if(!lnlt.length) {\n      lnlt = addElement();\n\n      // grab the special div we generated in the beginning\n      // and put the mousmove output there\n\n      map.on('mousemove', function (e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                           ' lon: ' + (e.latlng.lng).toFixed(5) +\n                           ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                           ' | zoom: ' + map.getZoom() +\n                           ' | x: ' + L.CRS.EPSG3857.project(e.latlng).x.toFixed(0) +\n                           ' | y: ' + L.CRS.EPSG3857.project(e.latlng).y.toFixed(0) +\n                           ' | epsg: 3857 ' +\n                           ' | proj4: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs ');\n      } else {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      }\n      });\n\n      // remove the lnlt div when mouse leaves map\n      map.on('mouseout', function (e) {\n      var strip = document.querySelector('.lnlt');\n      strip.remove();\n      });\n\n      };\n\n      //$(el).keypress(67, function(e) {\n      map.on('preclick', function(e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      var txt = document.querySelector('.lnlt').textContent;\n      console.log(txt);\n      //txt.innerText.focus();\n      //txt.select();\n      setClipboardText('\"' + txt + '\"');\n      }\n      });\n\n      //map.on('click', function (e) {\n      //  var txt = document.querySelector('.lnlt').textContent;\n      //  console.log(txt);\n      //  //txt.innerText.focus();\n      //  //txt.select();\n      //  setClipboardText(txt);\n      //});\n\n      function setClipboardText(text){\n      var id = 'mycustom-clipboard-textarea-hidden-id';\n      var existsTextarea = document.getElementById(id);\n\n      if(!existsTextarea){\n      console.log('Creating textarea');\n      var textarea = document.createElement('textarea');\n      textarea.id = id;\n      // Place in top-left corner of screen regardless of scroll position.\n      textarea.style.position = 'fixed';\n      textarea.style.top = 0;\n      textarea.style.left = 0;\n\n      // Ensure it has a small width and height. Setting to 1px / 1em\n      // doesn't work as this gives a negative w/h on some browsers.\n      textarea.style.width = '1px';\n      textarea.style.height = '1px';\n\n      // We don't need padding, reducing the size if it does flash render.\n      textarea.style.padding = 0;\n\n      // Clean up any borders.\n      textarea.style.border = 'none';\n      textarea.style.outline = 'none';\n      textarea.style.boxShadow = 'none';\n\n      // Avoid flash of white box if rendered for any reason.\n      textarea.style.background = 'transparent';\n      document.querySelector('body').appendChild(textarea);\n      console.log('The textarea now exists :)');\n      existsTextarea = document.getElementById(id);\n      }else{\n      console.log('The textarea already exists :3')\n      }\n\n      existsTextarea.value = text;\n      existsTextarea.select();\n\n      try {\n      var status = document.execCommand('copy');\n      if(!status){\n      console.error('Cannot copy text');\n      }else{\n      console.log('The text is now on the clipboard');\n      }\n      } catch (err) {\n      console.log('Unable to copy.');\n      }\n      }\n\n\n      }\n      ).call(this.getMap(), el, x, data);\n}","data":null}]}}</script><p>First prepare the script : set-up ROI, time frame and connect to USGS</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co">### Prepare script</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co"># Packages</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(opendapr)</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(sf)</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co"># Set ROI and time range of interest</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">roi &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_read">st_read</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/roi_example.gpkg"</span>, <span class="dt">package =</span> <span class="st">"opendapr"</span>),<span class="dt">quiet=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">time_range &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"2017-01-01"</span>,<span class="st">"2017-01-30"</span>))</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co"># Login to USGS servers with username and password. To create an account : https://ers.cr.usgs.gov/register/</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">usgs_credentials &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readLines">readLines</a></span>(<span class="st">".usgs_credentials.txt"</span>)</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">username &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/strsplit">strsplit</a></span>(usgs_credentials,<span class="st">"="</span>)[[<span class="dv">1</span>]][<span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb4-13" data-line-number="13">password &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/strsplit">strsplit</a></span>(usgs_credentials,<span class="st">"="</span>)[[<span class="dv">2</span>]][<span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb4-14" data-line-number="14">log &lt;-<span class="st"> </span><span class="kw"><a href="reference/login_usgs.html">login_usgs</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(username,password))</a></code></pre></div>
-<p>Retrieve MODIS and GPM data : get the OPeNDAP URLs and download the data</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">## Get the URLs of MODIS Terra LST daily</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">urls_mod11a1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_url.html">get_url</a></span>(</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">  <span class="dt">collection =</span> <span class="st">"MOD11A1.006"</span>,</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">  <span class="dt">variables =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"LST_Day_1km"</span>,<span class="st">"LST_Night_1km"</span>,<span class="st">"QC_Day"</span>,<span class="st">"QC_Night"</span>),</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">  <span class="dt">roi =</span> roi,</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">  <span class="dt">time_range =</span> time_range</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"> )</a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">## Get the URLs of GPM daily</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11">urls_gpm &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_url.html">get_url</a></span>(</a>
-<a class="sourceLine" id="cb5-12" data-line-number="12">  <span class="dt">collection =</span> <span class="st">"GPM_L3/GPM_3IMERGDF.06"</span>,</a>
-<a class="sourceLine" id="cb5-13" data-line-number="13">  <span class="dt">variables =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"precipitationCal"</span>,<span class="st">"precipitationCal_cnt"</span>),</a>
-<a class="sourceLine" id="cb5-14" data-line-number="14">  <span class="dt">roi =</span> roi,</a>
-<a class="sourceLine" id="cb5-15" data-line-number="15">  <span class="dt">time_range =</span> time_range</a>
-<a class="sourceLine" id="cb5-16" data-line-number="16"> )</a>
-<a class="sourceLine" id="cb5-17" data-line-number="17"></a>
-<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">## Download the data. Destination file for each dataset is specified in the column "destfile" of the dataframe urls_mod11a1 and urls_gpm</span></a>
-<a class="sourceLine" id="cb5-19" data-line-number="19">df_to_dl &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">rbind</a></span>(urls_mod11a1,urls_gpm)</a>
-<a class="sourceLine" id="cb5-20" data-line-number="20">res_dl &lt;-<span class="st"> </span><span class="kw"><a href="reference/download_data.html">download_data</a></span>(df_to_dl,<span class="dt">data_source=</span><span class="st">"usgs"</span>,<span class="dt">parallel =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb5-21" data-line-number="21"></a>
-<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">## Check that data have been properly downloaded :</span></a>
-<a class="sourceLine" id="cb5-23" data-line-number="23"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list.files">list.files</a></span>(res_dl_modis<span class="op">$</span>destile)</a>
-<a class="sourceLine" id="cb5-24" data-line-number="24"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list.files">list.files</a></span>(res_dl_gpm<span class="op">$</span>destile)</a></code></pre></div>
-<p>Other examples, including import of downloaded data in R, are provided in the vignettes !</p>
+<p>First prepare the script : set-up ROI, time frame and login to USGS ERS</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">### Prepare script</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co"># Load the packages</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(opendapr)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(sf)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co"># Set ROI and time range of interest</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">roi &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_read">st_read</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/roi_example.gpkg"</span>, <span class="dt">package =</span> <span class="st">"opendapr"</span>),<span class="dt">quiet=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">time_range &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"2017-01-01"</span>,<span class="st">"2017-01-30"</span>))</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co"># Login to USGS servers with username and password. To create an account : https://ers.cr.usgs.gov/register/</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">credentials_usgs &lt;-<span class="st"> </span>config<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/config/topics/get">get</a></span>(<span class="st">"usgs"</span>)</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12">log &lt;-<span class="st"> </span><span class="kw"><a href="reference/login_usgs.html">login_usgs</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(credentials_usgs<span class="op">$</span>usr,credentials_usgs<span class="op">$</span>pwd))</a>
+<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt; Successfull login to USGS</span></a></code></pre></div>
+<p>Download MODIS and GPM data in two steps :</p>
+<ol style="list-style-type: decimal">
+<li>Get the OPeNDAP URLs with the <code><a href="reference/get_url.html">get_url()</a></code> function ;</li>
+<li>Download the data with the <code><a href="reference/download_data.html">download_data()</a></code> function.</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">## Get the URLs for MOD11A1.006</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">urls_mod11a1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_url.html">get_url</a></span>(</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dt">collection =</span> <span class="st">"MOD11A1.006"</span>,</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">roi =</span> roi,</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="dt">time_range =</span> time_range</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"> )</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">## Get the URLs for GPM_L3/GPM_3IMERGDF.06</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">urls_gpm &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_url.html">get_url</a></span>(</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">  <span class="dt">collection =</span> <span class="st">"GPM_L3/GPM_3IMERGDF.06"</span>,</a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">  <span class="dt">roi =</span> roi,</a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">  <span class="dt">time_range =</span> time_range</a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"> )</a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(urls_mod11a1))</a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; 'data.frame':    1 obs. of  4 variables:</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt;  $ time_start: Date, format: "2017-01-01"</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt;  $ name      : chr "MOD11A1.006.2017001_2017030.h17v08"</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt;  $ url       : chr "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__</span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt;  $ destfile  : chr "MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4"</span></a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; NULL</span></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(urls_gpm))</a>
+<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt; 'data.frame':    30 obs. of  4 variables:</span></a>
+<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt;  $ time_start: Date, format: "2017-01-01" "2017-01-02" ...</span></a>
+<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt;  $ name      : chr  "3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170104-S000000-E235959.V06" ...</span></a>
+<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">#&gt;  $ url       : chr  "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170103-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170104-S0000"| __truncated__ ...</span></a>
+<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="co">#&gt;  $ destfile  : chr  "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170104-S000000-E235959.V06.nc4" ...</span></a>
+<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="co">#&gt; NULL</span></a>
+<a class="sourceLine" id="cb3-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb3-31" data-line-number="31"><span class="co">## Download the data. Destination file for each dataset is specified in the column "destfile" of the dataframe urls_mod11a1 and urls_gpm</span></a>
+<a class="sourceLine" id="cb3-32" data-line-number="32">df_to_dl &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">rbind</a></span>(urls_mod11a1,urls_gpm)</a>
+<a class="sourceLine" id="cb3-33" data-line-number="33">res_dl &lt;-<span class="st"> </span><span class="kw"><a href="reference/download_data.html">download_data</a></span>(df_to_dl,<span class="dt">data_source=</span><span class="st">"usgs"</span>,<span class="dt">parallel =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-34" data-line-number="34"></a>
+<a class="sourceLine" id="cb3-35" data-line-number="35"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(res_dl))</a>
+<a class="sourceLine" id="cb3-36" data-line-number="36"><span class="co">#&gt; 'data.frame':    31 obs. of  7 variables:</span></a>
+<a class="sourceLine" id="cb3-37" data-line-number="37"><span class="co">#&gt;  $ time_start: Date, format: "2017-01-01" "2017-01-01" ...</span></a>
+<a class="sourceLine" id="cb3-38" data-line-number="38"><span class="co">#&gt;  $ name      : chr  "MOD11A1.006.2017001_2017030.h17v08" "3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06" ...</span></a>
+<a class="sourceLine" id="cb3-39" data-line-number="39"><span class="co">#&gt;  $ url       : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170103-S0000"| __truncated__ ...</span></a>
+<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="co">#&gt;  $ destfile  : chr  "MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4" ...</span></a>
+<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">#&gt;  $ fileDl    : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...</span></a>
+<a class="sourceLine" id="cb3-42" data-line-number="42"><span class="co">#&gt;  $ fileSize  : num  622231 60802 60817 60827 60794 ...</span></a>
+<a class="sourceLine" id="cb3-43" data-line-number="43"><span class="co">#&gt;  $ dlStatus  : num  3 3 3 3 3 3 3 3 3 3 ...</span></a>
+<a class="sourceLine" id="cb3-44" data-line-number="44"><span class="co">#&gt; NULL</span></a></code></pre></div>
+<p>It is also possible to subset the bands to download with the parameter <code>variables</code> of the function <code><a href="reference/get_url.html">get_url()</a></code>.</p>
+<p>To further import the data in R, have a look at the section <a href="#important-note-import">Important note regarding the further import of the data in R</a> !</p>
+<p>Simple or more complex data download + import workflows are provided in the vignettes <a href="https://ptaconet.github.io/opendapr/articles/simple_workflow.html">here</a> or <a href="">there</a>.</p>
+</div>
+<div id="important-note-import" class="section level2">
+<h2 class="hasAnchor">
+<a href="#important-note-import" class="anchor"></a>Important note regarding the further import of the data in R</h2>
+<p>Various packages and related classes can be used to read the data downloaded through OPeNDAP. If <code>raster</code> is surely the most famous, many packages facilitate the use of spatiotemporal data. For instance, MODIS or VIIRS products can be imported as a <code>stars</code> object from the excellent <a href="https://cran.r-project.org/package=stars"><code>stars</code></a> package for data cubes manipulation. All the data can also be imported as netcdf datasets using e.g. the <a href="https://cran.r-project.org/package=ncdf4"><code>ncdf4</code></a> package, or <code>RasterLayer</code> / <code>RasterStackBrick</code> of the <a href="https://cran.r-project.org/package=raster"><code>raster</code></a> package.</p>
+<p>In any case, care must be taken when importing data that was downloaded through OPeNDAP. Depending on the collection, some “issues” were raised. These issues are independant from <code>opendapr</code> : they result most of time of a kind of lack of full implementation of the OPeNDAP framework by the data providers. These issues are :</p>
+<ul>
+<li>for MODIS and VNP collections : CRS has to be provided</li>
+<li>for GPM collections : CRS has to be provided + data have to be flipped</li>
+<li>for SMAP collections : CRS + bounding coordinates of the data have to be provided</li>
+</ul>
+<p>These issues can easily be dealt at the import phase in R. The functions below includes the manipulations that have to be done at the data import phase to open the data as <code>raster</code> objects. (“path.to.nc4” is the path to a dataset downloaded with <code>opendapr</code> and “variable.of.interest” is the name of a variable).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(raster)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">######## MODIS or VIIRS ############ </span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co"># : To import as a raster object a single variable of a MODIS or VIIRS product (with the raster package) : </span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">rast_modis_viirs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/raster">raster</a></span>(<span class="dt">x=</span><span class="st">"path.to.nc4"</span>,<span class="dt">varname=</span><span class="st">"variable.of.interest"</span>,<span class="dt">crs=</span><span class="st">"+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"</span>)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">####################</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(raster)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">######## GPM ############ </span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#To import as a raster object a single variable of a GPM product (with the raster package) : </span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">rast_gpm &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/raster">raster</a></span>(<span class="dt">x=</span><span class="st">"path.to.nc4"</span>,<span class="dt">varname=</span><span class="st">"variable.of.interest"</span>,<span class="dt">crs=</span><span class="st">"+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/transpose">t</a></span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/flip">flip</a></span>(<span class="st">"y"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/flip">flip</a></span>(<span class="st">"x"</span>)</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">####################</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(raster)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(ncdf4)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">######## SMAP ############ </span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#To import as a raster object a single variable of a SMAP product (with the raster and ncdf4 package) : </span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">smap_sp_bound &lt;-<span class="st"> </span>opendapr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/opendapr/topics/get_optional_parameters">get_optional_parameters</a></span>(<span class="dt">roi =</span> roi, <span class="dt">collection =</span> <span class="st">"SMAP/SPL3SMP_E.003"</span>)<span class="op">$</span>roiSpatialBound<span class="op">$</span><span class="st">`</span><span class="dt">1</span><span class="st">`</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">  </a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">rast_smap &lt;-<span class="st"> </span>ncdf4<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ncdf4/topics/nc_open">nc_open</a></span>(<span class="st">"path.to.nc4"</span>)<span class="er">)</span> <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="st">  </span>ncdf4<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ncdf4/topics/ncvar_get">ncvar_get</a></span>(<span class="st">"variable.of.interest"</span>)<span class="er">)</span> <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/raster">raster</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/transpose">t</a></span>(.), <span class="dt">ymn=</span>smap_sp_bound[<span class="dv">1</span>], <span class="dt">ymx=</span>smap_sp_bound[<span class="dv">2</span>], <span class="dt">xmn=</span>smap_sp_bound[<span class="dv">3</span>], <span class="dt">xmx=</span>smap_sp_bound[<span class="dv">4</span>], <span class="dt">crs=</span><span class="st">"+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"</span>) <span class="co"># EPSG : 6933</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">####################</span></a></code></pre></div>
+</div>
+<div id="why-was-the-opendapr-package-developed" class="section level2">
+<h2 class="hasAnchor">
+<a href="#why-was-the-opendapr-package-developed" class="anchor"></a>Why was the <code>opendapr</code> package developed ?</h2>
+<p><code>opendapr</code> provides an entry point to some specific OPeNDAP servers (e.g. MODIS, VNP, GPM or SMAP). The development of the package was motivated by the following reasons :</p>
+<ul>
+<li>
+<strong>Providing a simple and single way in R to download data stored on heterogeneous servers</strong> : People that use Earth science data often struggle with data access. In <code>opendapr</code> we propose an easy way to download data from various providers in R. What these providers have in common is the implementation of OPeNDAP to access their data.</li>
+<li>
+<strong>Fastening the data import phase</strong>, especially for long time series analysis.</li>
+</ul>
+<p>Apart from these performance considerations, ethical considerations have driven the development of this package :</p>
+<ul>
+<li>
+<strong>Facilitating the access to Earth science data in places of the World where internet connections is slow or expensive</strong> : Earth science products are generally huge files that can be quite difficult to download in places with slow internet connection, even more if long time series are needed. By enabling to download strictly the data that is needed, the products become more accessible in those places;</li>
+<li>
+<strong>Caring about the environmental digital impact of our research work</strong> : Downloading data has an impact on environment and to some extent contributes to climate change. If we download only the data that is need (rather than e.g a whole MODIS tile, or a global SMAP or GPM dataset), we contribute to digital sobriety.</li>
+<li>
+<strong>Support of the open-source movement</strong> : The OPeNDAP is developed and advanced openly and collaboratively, by the non-profit <a href="https://www.opendap.org/about">OPeNDAP, Inc.</a>. It is more and more used, by major data providers worldwide (e.g. NASA or NOAA). Using OPeNDAP means supporting th</li>
+</ul>
+</div>
+<div id="other-packages" class="section level2">
+<h2 class="hasAnchor">
+<a href="#other-packages" class="anchor"></a>Other packages</h2>
+<p>To our knowledge, there are no other R packages that use the OPeNDAP protocol to download remote data. Various packages enable to download the data that are proposed through <code>opendapr</code> using various web protocols. Above we list some of them, along with their ability to filter the data (spatially and dimensionally) :</p>
+<ul>
+<li>
+<a href="https://github.com/MatMatt/MODIS"><code>MODIS</code></a> : <em>Download and processing framework for MODIS imagery</em>. Spatial subsetting : ❌ ; dimensional subsetting : ❌</li>
+<li>
+<a href="https://github.com/ropensci/MODIStsp"><code>MODIStsp</code></a> : <em>An “R” package for automatic download and preprocessing of MODIS Land Products Time Series</em>. Spatial subsetting : ❌ ; dimensional subsetting : ✅</li>
+<li>
+<a href="https://github.com/ropensci/MODISTools"><code>MODISTools</code></a> : <em>Interface to the MODIS Land Products Subsets Web Services</em>. Spatial subsetting : ✅ ; dimensional subsetting : ✅</li>
+<li>
+<a href="https://github.com/ropensci/smapr"><code>smapr</code></a> : <em>An R package for acquisition and processing of NASA SMAP data</em>. Spatial subsetting : ❌ ; dimensional subsetting : ❌</li>
+</ul>
+<!--
+## Citation
+
+We thank in advance people that use `opendapr` for citing it in their work / publication(s). For this, please use the citation provided at this link [zenodo link to add] or through `citation("opendapr")`.
+-->
+</div>
+<div id="acknowledgment" class="section level2">
+<h2 class="hasAnchor">
+<a href="#acknowledgment" class="anchor"></a>Acknowledgment</h2>
+<p>The initial development and first release of this package were done during my ongoing <a href="https://github.com/ptaconet/phd_scripts">PhD project</a> financed by the <a href="https://www.mivegec.ird.fr/en/">MIVEGEC</a> unit of the <a href="https://en.ird.fr/">French Research Institute for Sustainable Development</a>, as part of the <a href="https://burkina-faso.ird.fr/la-recherche/projets-de-recherche2/gestion-de-la-resistance-aux-insecticides-au-burkina-faso-et-en-cote-d-ivoire-recherche-sur-les-strategies-de-lutte-anti-vectorielle-react">REACT project</a>.</p>
 </div>
 </div>
   </div>

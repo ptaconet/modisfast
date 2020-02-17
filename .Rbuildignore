@@ -8,3 +8,11 @@
 ^\.notes_articles\.txt$
 ^config\.yml$
 ^tests/testthat/data$
+^vignettes/GPM_L3$
+^vignettes/SMAP$
+^vignettes/MOD11A1.006$
+^GPM_L3$
+^MOD11A1.006$
+^docs$
+^doc$
+^Meta$

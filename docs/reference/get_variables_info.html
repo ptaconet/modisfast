@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get variables/dimensions information for a collection of interest — get_variables_info • opendapr</title>
+<title>Get informations related to the variables available for a given collection — get_variables_info • opendapr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Get variables/dimensions information for a collection of interest — get_variables_info" />
+<meta property="og:title" content="Get informations related to the variables available for a given collection — get_variables_info" />
 
 <meta property="og:description" content="Outputs a data frame with the variables available for a given collection" />
 
@@ -88,7 +88,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/get_started.html">Get started</a>
+      <a href="../articles/simple_workflow.html">Simple workflow : Download data for a given region of interest and time frame</a>
     </li>
   </ul>
 </li>
@@ -113,7 +113,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get variables/dimensions information for a collection of interest</h1>
+    <h1>Get informations related to the variables available for a given collection</h1>
     <small class="dont-index">Source: <a href='https://github.com/ptaconet/opendapr/blob/master/R/get_variables_info.R'><code>R/get_variables_info.R</code></a></small>
     <div class="hidden name"><code>get_variables_info.Rd</code></div>
     </div>
@@ -142,17 +142,14 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data.frame with the available variables for the collection, and a set of related information for each variable.
-These variables can be provided as input parameter <code>variables</code> of the function <a href='get_url.html'>get_url</a></p>
+The variables marked as "extractable" in the column *extractable_w_opendapr* can be provided as input parameter <code>variables</code> of the function <a href='get_url.html'>get_url</a></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 </div><span class='co'># NOT RUN {</span>
 <span class='co'># login to usgs</span>
-<span class='no'>usgs_credentials</span><span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/readLines'>readLines</a></span>(<span class='st'>"/home/ptaconet/opendapr/.usgs_credentials.txt"</span>)
-<span class='no'>username</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/strsplit'>strsplit</a></span>(<span class='no'>usgs_credentials</span>,<span class='st'>"="</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>2</span>]
-<span class='no'>password</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/strsplit'>strsplit</a></span>(<span class='no'>usgs_credentials</span>,<span class='st'>"="</span>)<span class='kw'>[[</span><span class='fl'>2</span>]][<span class='fl'>2</span>]
-<span class='no'>login</span><span class='kw'>&lt;-</span><span class='fu'><a href='login_usgs.html'>login_usgs</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>username</span>,<span class='no'>password</span>))
+<span class='fu'><a href='login_usgs.html'>login_usgs</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"my.usgs.username"</span>,<span class='st'>"my.usgs.password"</span>))
 
 <span class='co'># Get the collections implemented in the package :</span>
 <span class='no'>collections_available</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_collections_available.html'>get_collections_available</a></span>()

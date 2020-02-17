@@ -31,7 +31,7 @@
 get_variables_info<-function(collection,login_credentials=NULL){  # for a given collection, get the available variables and associated information
 
   .testIfCollExists(collection)
-
+  .testInternetConnection()
   .testLogin(login_credentials)
 
   httr::set_config(httr::authenticate(user=getOption("usgs_user"), password=getOption("usgs_pass"), type = "basic"))

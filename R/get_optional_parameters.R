@@ -44,7 +44,7 @@
 
 get_optional_parameters<-function(collection,roi,login_credentials=NULL){
 
-  odap_coll_info <- odap_source <- odap_server <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- odap_crs <- odap_urlExample <- modis_tile <- OpendapURL <- OpenDAPtimeVector <- OpenDAPXVector <- OpenDAPYVector <- roi_bbox <- Opendap_minLat <- Opendap_maxLat <- Opendap_minLon <- Opendap_maxLon <- roiSpatialIndexBound <- minLat <- maxLat <- minLon <- maxLon <- roiSpatialBound <- availableDimensions <- NULL
+  . <- odap_coll_info <- odap_source <- odap_server <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- odap_crs <- odap_urlExample <- modis_tile <- OpendapURL <- OpenDAPtimeVector <- OpenDAPXVector <- OpenDAPYVector <- roi_bbox <- Opendap_minLat <- Opendap_maxLat <- Opendap_minLon <- Opendap_maxLon <- roiSpatialIndexBound <- minLat <- maxLat <- minLon <- maxLon <- roiSpatialBound <- availableDimensions <- NULL
 
   OpenDAPtimeVector <- modis_tile <- NULL
 
@@ -70,6 +70,7 @@ get_optional_parameters<-function(collection,roi,login_credentials=NULL){
   ## tests :
   .testIfCollExists(collection)
   .testRoi(roi)
+  .testInternetConnection()
   .testLogin(login_credentials)
 
   ## Retrieve opendap information for the collection of interest

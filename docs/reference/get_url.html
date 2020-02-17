@@ -88,7 +88,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/get_started.html">Get started</a>
+      <a href="../articles/simple_workflow.html">Simple workflow : Download data for a given region of interest and time frame</a>
     </li>
   </ul>
 </li>
@@ -124,9 +124,9 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_url</span>(<span class='no'>collection</span>, <span class='no'>variables</span>, <span class='no'>roi</span>, <span class='no'>time_range</span>, <span class='kw'>output_format</span> <span class='kw'>=</span> <span class='st'>"nc4"</span>,
-  <span class='kw'>single_netcdf</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>opt_param</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>login_credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_url</span>(<span class='no'>collection</span>, <span class='kw'>variables</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>roi</span>, <span class='no'>time_range</span>,
+  <span class='kw'>output_format</span> <span class='kw'>=</span> <span class='st'>"nc4"</span>, <span class='kw'>single_netcdf</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>opt_param</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>login_credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,11 +137,11 @@
     </tr>
     <tr>
       <th>variables</th>
-      <td><p>string vector. Variables to retrieve for the collection of interest</p></td>
+      <td><p>string vector. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted.</p></td>
     </tr>
     <tr>
       <th>roi</th>
-      <td><p>object of class <code>sf</code> or <code>sfc</code> Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details)</p></td>
+      <td><p>object of class <code>sf</code> or <code>sfc</code> Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details).</p></td>
     </tr>
     <tr>
       <th>time_range</th>
@@ -153,7 +153,7 @@
     </tr>
     <tr>
       <th>single_netcdf</th>
-      <td><p>boolean. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VNP collections.</p></td>
+      <td><p>boolean. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.</p></td>
     </tr>
     <tr>
       <th>opt_param</th>
@@ -174,7 +174,7 @@
     <p>a data.frame with one row for each dataset to download and 4 columns  :</p><ul>
 <li><p>*time_start* : Start Date/time for the dataset</p></li>
 <li><p>*name* : An indicative name for the dataset</p></li>
-<li><p>*url* : http URL of the dataset</p></li>
+<li><p>*url* : http URL (OPeNDAP) of the dataset</p></li>
 <li><p>*destfile* : An indicative destination file for the dataset</p></li>
 </ul>
 
@@ -182,6 +182,10 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This is the main function of the package. It enables to retrieve</p>
+<p>#' Argument <code>time_range</code> can be provided either as a single date (e.g. <code>as.Date("2017-01-01"))</code> or time frame provided as two bounding dates ( e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date(c("2010-01-01","2010-01-30"))</a></code>) or as a POSIXlt single time or time range (e.g. "2010-01-01 18:00:00") for the half-hourly collection (GPM_3IMERGHH.06). If POSIXlt, times must be in UTC.</p>
+<p>Argument <code>optionals_opendap</code> is optional. This parameter is automatically calculated within the function if it is not provided. However, providing it optimizes the performances of the function (i.e. fasten the processing time).
+It might be particularly useful to provide it if looping over the same ROI or dates is planned.
+The parameter can be retrieved outside the function with the function <code><a href='get_optional_parameters.html'>get_optional_parameters</a></code>.</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -198,7 +202,7 @@
 <span class='co'>### Retrieve the URLs (OPeNDAP) to download the following datasets :</span>
 <span class='co'># MODIS Terra LST Daily (MOD11A1.006) (collection)</span>
 <span class='co'># Day + Night bands (LST_Day_1km,LST_Night_1km) (variables)</span>
-<span class='co'># over a 50km x 70km region of interest located in Northern Ivory Coast (roi)</span>
+<span class='co'># over a 50km x 70km region of interest (roi)</span>
 <span class='co'># for the time frame 2017-01-01 to 2017-01-30 (30 days) (time_range)</span>
 
 (<span class='no'>opendap_urls_mod11a1</span> <span class='kw'>&lt;-</span> <span class='fu'>get_url</span>(<span class='kw'>collection</span> <span class='kw'>=</span> <span class='st'>"MOD11A1.006"</span>,

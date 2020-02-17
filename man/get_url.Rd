@@ -19,7 +19,7 @@ get_url(collection, variables = NULL, roi, time_range,
 
 \item{output_format}{string. Output format. Available options are : "nc4" (default), "ascii", "json"}
 
-\item{single_netcdf}{boolean. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VNP collections.}
+\item{single_netcdf}{boolean. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.}
 
 \item{opt_param}{list of optional arguments (see details). This parameter is the output of the function \link{get_optional_parameters}.}
 
@@ -32,7 +32,7 @@ a data.frame with one row for each dataset to download and 4 columns  :
  \itemize{
  \item{*time_start* : }{Start Date/time for the dataset}
  \item{*name* : }{An indicative name for the dataset}
- \item{*url* : }{http URL of the dataset}
+ \item{*url* : }{http URL (OPeNDAP) of the dataset}
  \item{*destfile* : }{An indicative destination file for the dataset}
  }
 }
@@ -46,7 +46,7 @@ This is the main function of the package. It enables to retrieve
 
 Argument \code{optionals_opendap} is optional. This parameter is automatically calculated within the function if it is not provided. However, providing it optimizes the performances of the function (i.e. fasten the processing time).
 It might be particularly useful to provide it if looping over the same ROI or dates is planned.
-The parameter can be retrieved outside the function with the function \code{\link{.getOpendapOptArguments_gpm}}.
+The parameter can be retrieved outside the function with the function \code{\link{get_optional_parameters}}.
 }
 \note{
 some note

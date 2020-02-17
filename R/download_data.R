@@ -32,13 +32,23 @@
 #'
 #' @note In a data import workflow, this function is typically used after a call to the \link{get_url} function. The output value of \code{get_url} can be used as input of parameter \code{df_to_dl} of the \code{download_data} function.
 #' @import dplyr parallel
-#' @importFrom utils txtProgressBar
 #' @export
 #'
 
 download_data<-function(df_to_dl,parallel=FALSE,login_credentials=NULL,data_source="usgs",verbose=FALSE){
 
-  destfile <- fileDl <- NULL
+  fileSize <- destfile <- fileDl <- NULL
+
+  # tests
+  if(!inherits(verbose,"logical")){stop("verbose argument must be boolean\n")}
+  if(!inherits(parallel,"logical")){stop("parallel argument must be boolean\n")}
+  if(!is.null(data_source) && !inherits(data_source,"character")){stop("data_source argument must be either NULL or 'usgs' \n")}
+  if(!inherits(df_to_dl,"data.frame")){stop("df_to_dl argument must be a data.frame\n")}
+  if(!("url" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 2 columns named 'url' and 'destfile' \n")}
+  if(!("destfile" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 2 columns named 'url' and 'destfile' \n")}
+
+  .testInternetConnection()
+
 
   # check which data is already downloaded
   data_dl<-df_to_dl %>%
