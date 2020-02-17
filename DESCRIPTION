@@ -38,5 +38,4 @@ Suggests:
     stars,
     mapview,
     config,
-    rmarkdown,
-    emo
+    rmarkdown
