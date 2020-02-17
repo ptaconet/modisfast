@@ -123,7 +123,7 @@ print(str(res_dl))
 
 We finally import the data in R. 
 
-`r emo::ji("warning")` Have a look at the section [Important note regarding the further import of the data in R](https://ptaconet.github.io/opendapr/index.html#important-note-import) of the README for additional information and an important note on the data import phase in R ! `r emo::ji("warning")` 
+`r emo::ji("warning")` Have a look at the section [Important note regarding the further import of the data in R](https://ptaconet.github.io/opendapr/index.html#important-note-import) of the README for additional information and an important note on the data import phase in R ! `r emo::ji("warning")`
 
 ### Import MODIS / VNP {#import-modis-vnp}
 

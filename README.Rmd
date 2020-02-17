@@ -24,7 +24,7 @@ require(emo)
 [![Travis build status](https://travis-ci.org/ptaconet/opendapr.svg?branch=master)](https://travis-ci.org/ptaconet/opendapr)
 <!-- badges: end -->
 
-The `opendapr` R package provides functions to **facilitate** and **speed-up** the **download of some well-known and widely-used spatiotemporal Earth science data** (such as [MODIS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/), [VIIRS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/), [GPM](https://pmm.nasa.gov/GPM) or [SMAP](https://smap.jpl.nasa.gov/) data) using the [OPeNDAP](https://www.opendap.org/about) (*Open-source Project for a Network Data Access Protocol*).
+The `opendapr` R package provides functions to **facilitate** and **speed-up** the **download of some well-known and widely-used spatiotemporal Earth science data** (such as [MODIS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/), [VIIRS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/), [GPM](https://pmm.nasa.gov/GPM) or [SMAP](https://smap.jpl.nasa.gov/) data) using the [OPeNDAP](https://www.opendap.org/about) framework (*Open-source Project for a Network Data Access Protocol*).
 
 ***Facilitate ?***
 
@@ -212,7 +212,7 @@ Apart from these performance considerations, ethical considerations have driven 
 
 * **Facilitating the access to Earth science data in places of the World where internet connections is slow or expensive** : Earth science products are generally huge files that can be quite difficult to download in places with slow internet connection, even more if long time series are needed. By enabling to download strictly the data that is needed, the products become more accessible in those places;
 * **Caring about the environmental digital impact of our research work** : Downloading data has an impact on environment and to some extent contributes to climate change. If we download only the data that is need (rather than e.g a whole MODIS tile, or a global SMAP or GPM dataset), we contribute to digital sobriety. 
-* **Support of the open-source movement** : The OPeNDAP is developed and advanced openly and collaboratively, by the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about). It is more and more used, by major data providers worldwide (e.g. NASA or NOAA). Using OPeNDAP means supporting th
+* **Support of the open-source movement** : The OPeNDAP is developed and advanced openly and collaboratively, by the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about). It is more and more used, by major Earth science data providers worldwide (e.g. NASA or NOAA). Using OPeNDAP means supporting methods and data access protocols that are open.
 
 ## Other packages
 

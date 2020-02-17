@@ -16,8 +16,8 @@ spatiotemporal Earth science data** (such as
 [MODIS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/),
 [VIIRS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/),
 [GPM](https://pmm.nasa.gov/GPM) or [SMAP](https://smap.jpl.nasa.gov/)
-data) using the [OPeNDAP](https://www.opendap.org/about) (*Open-source
-Project for a Network Data Access Protocol*).
+data) using the [OPeNDAP](https://www.opendap.org/about) framework
+(*Open-source Project for a Network Data Access Protocol*).
 
 ***Facilitate ?***
 
@@ -3426,8 +3426,9 @@ driven the development of this package :
   - **Support of the open-source movement** : The OPeNDAP is developed
     and advanced openly and collaboratively, by the non-profit [OPeNDAP,
     Inc.](https://www.opendap.org/about). It is more and more used, by
-    major data providers worldwide (e.g. NASA or NOAA). Using OPeNDAP
-    means supporting th
+    major Earth science data providers worldwide (e.g. NASA or NOAA).
+    Using OPeNDAP means supporting methods and data access protocols
+    that are open.
 
 ## Other packages
 
