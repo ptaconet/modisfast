@@ -1,6 +1,6 @@
 context("Collections implemented are working")
 skip_on_cran() # because it uses login
-#skip_on_travis()
+skip_on_travis()
 
 require(opendapr)
 require(sf)
