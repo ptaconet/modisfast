@@ -3265,8 +3265,11 @@ roi <- st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),qui
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
 # Login to Earthdata servers with username and password. To create an account go to : https://urs.earthdata.nasa.gov/.
-log <- login(credentials = c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")), source = "earthdata")
-#> Successfull login to Earthdata.
+username <- Sys.getenv("earthdata_un")
+password <- Sys.getenv("earthdata_pw")
+log <- login(credentials = c(username,password), source = "earthdata")
+#> Checking credentials...
+#> Successfull login to  earthdata
 ```
 
 Download MODIS and GPM data in two steps :

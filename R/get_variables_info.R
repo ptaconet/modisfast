@@ -43,7 +43,7 @@ get_variables_info<-function(collection,credentials=NULL){  # for a given collec
   InfoURL<-paste0(URL,".info")
   vector_response<-httr::GET(InfoURL)
   if(vector_response$status_code==400){ stop("Bad request\n")}
-  vector_content<-httr::content(vector_response,"text")
+  vector_content<-httr::content(vector_response,"text",encoding="UTF-8")
   vector_html<-xml2::read_html(vector_content)
   tab<-rvest::html_table(vector_html)
   if(purrr::is_empty(tab)){ stop("The server might be temporarily unavailable. Try again later. Paste ",InfoURL," to check the error message in your brower\n")}
@@ -55,7 +55,7 @@ get_variables_info<-function(collection,credentials=NULL){  # for a given collec
 
   DdsURL<-paste0(URL,".dds")
   vector_response<-httr::GET(DdsURL)
-  vector<-httr::content(vector_response,"text")
+  vector<-httr::content(vector_response,"text",encoding="UTF-8")
   vector<-strsplit(vector,"\n")
   vector<-vector[[1]][-length(vector[[1]])]
   vector<-vector[-1]

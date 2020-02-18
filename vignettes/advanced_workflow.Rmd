@@ -1,0 +1,29 @@
+---
+title: "Advanced data import workflow : the use of the `get_optional_parameters()` function"
+author: "Paul Taconet"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Advanced data import workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true") # vignette will not be executed when tested on the cran
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  purl = NOT_CRAN
+)
+```
+
+```{r setup, message=F}
+require(opendapr)
+require(sf)
+
+```
+
+In the vignette \link{simple_workflow} we

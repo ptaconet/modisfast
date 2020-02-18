@@ -45,7 +45,10 @@
 #'
 #' \donttest{
 #' ### First login to Earthdata
-#' log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
+#' Login to Earthdata servers with username and password. To create an account go to : https://urs.earthdata.nasa.gov/.
+#' username <- Sys.getenv("earthdata_un")
+#' password <- Sys.getenv("earthdata_pw")
+#' log <- login(credentials = c(username,password), source = "earthdata")
 #'
 #'############################################################
 #' ### Retrieve the URLs (OPeNDAP) to download the following datasets :

@@ -19,7 +19,7 @@
 #' \donttest{
 #' username <- Sys.getenv("earthdata_un")
 #' password <- Sys.getenv("earthdata_pw")
-#' login(c(username,password),"earthdata")
+#' login(credentials = c(username,password),source = "earthdata")
 #' }
 #'
 
