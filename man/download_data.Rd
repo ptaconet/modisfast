@@ -4,19 +4,19 @@
 \alias{download_data}
 \title{Download several datasets given their URLs and a destination files}
 \usage{
-download_data(df_to_dl, parallel = FALSE, login_credentials = NULL,
-  data_source = "usgs", verbose = FALSE)
+download_data(df_to_dl, parallel = FALSE, credentials = NULL,
+  source = NULL, verbose = FALSE)
 }
 \arguments{
-\item{df_to_dl}{data.frame. Urls and destination files of dataset to download. See Details for the structure}
+\item{df_to_dl}{data.frame. Urls and destination files of dataset to download. Typically output of \link{get_url}. See Details for the structure}
 
 \item{parallel}{boolean. Parallelize the download ? Default to FALSE}
 
-\item{login_credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
+\item{credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
 
-\item{data_source}{String. default to "usgs". Additional information is the Details}
+\item{source}{source. Currently available: Earthdata for EOSDIS Earthdata Login with usual credentials}
 
-\item{verbose}{boolean. Verbose ?}
+\item{verbose}{boolean. Verbose (default FALSE)}
 }
 \value{
 a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional olumns are :
@@ -36,9 +36,9 @@ Parameter \code{df_to_dl} is a data.frame with the following minimal structure :
 \item{"destfile": }{Destination file (character string)}
 }
 
-Parameter \code{data_source} takes "usgs" as default value. Options are :
+Parameter \code{source} takes NULL as default value. Options are :
 \itemize{
 \item{ \code{NULL} : } {when no login is required to download the data). }
-\item{ \code{"usgs"} : } {to download data requiring a login to Earthdata }
+\item{ \code{"earthdata"} : } {to download data requiring a login to Earthdata }
 }
 }

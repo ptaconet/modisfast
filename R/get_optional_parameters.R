@@ -30,8 +30,8 @@
 #' \donttest{
 #' require(sf)
 #'
-#' # Login to USGS
-#' log <- login_usgs(c(Sys.getenv("usgs_un"),Sys.getenv("usgs_pw")))
+#' # Login to Earthdata
+#' log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
 #'
 #' # Get the optional parameters for the collection MOD11A1.006 and the roi :
 #' roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
@@ -42,7 +42,7 @@
 #'}
 
 
-get_optional_parameters<-function(collection,roi,login_credentials=NULL){
+get_optional_parameters<-function(collection,roi,credentials=NULL){
 
   . <- odap_coll_info <- odap_source <- odap_server <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- odap_crs <- odap_urlExample <- modis_tile <- OpendapURL <- OpenDAPtimeVector <- OpenDAPXVector <- OpenDAPYVector <- roi_bbox <- Opendap_minLat <- Opendap_maxLat <- Opendap_minLon <- Opendap_maxLon <- roiSpatialIndexBound <- minLat <- maxLat <- minLon <- maxLon <- roiSpatialBound <- availableDimensions <- NULL
 
@@ -71,7 +71,7 @@ get_optional_parameters<-function(collection,roi,login_credentials=NULL){
   .testIfCollExists(collection)
   .testRoi(roi)
   .testInternetConnection()
-  .testLogin(login_credentials)
+  .testLogin(credentials)
 
   ## Retrieve opendap information for the collection of interest
   odap_coll_info <- opendapMetadata_internal[which(opendapMetadata_internal$collection==collection),]

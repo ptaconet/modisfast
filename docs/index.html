@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fast download of various kinds of spatio-temporal environmental / climatic data in R using the OPeNDAP framework • opendapr</title>
+<title>Fast download of various kinds of spatio-temporal Earth science data in R using the OPeNDAP framework • opendapr</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Fast download of various kinds of spatio-temporal environmental / climatic data in R using the OPeNDAP framework">
+<script src="pkgdown.js"></script><meta property="og:title" content="Fast download of various kinds of spatio-temporal Earth science data in R using the OPeNDAP framework">
 <meta property="og:description" content="Provides functions to download various kinds of spatial-temporal Earth science data in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) using the OPeNDAP framework.">
 <meta property="og:image" content="/logo.png">
 <meta name="twitter:card" content="summary">
@@ -88,11 +88,11 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The <code>opendapr</code> R package provides functions to <strong>facilitate</strong> and <strong>speed-up</strong> the <strong>download of some well-known and widely-used spatiotemporal Earth science data</strong> (such as <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/">MODIS</a>, <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/">VIIRS</a>, <a href="https://pmm.nasa.gov/GPM">GPM</a> or <a href="https://smap.jpl.nasa.gov/">SMAP</a> data) using the <a href="https://www.opendap.org/about">OPeNDAP</a> (<em>Open-source Project for a Network Data Access Protocol</em>).</p>
+<p>The <code>opendapr</code> R package provides functions to <strong>facilitate</strong> and <strong>speed-up</strong> the <strong>download of some well-known and widely-used spatiotemporal Earth science data</strong> (such as <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/">MODIS</a>, <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/">VIIRS</a>, <a href="https://pmm.nasa.gov/GPM">GPM</a> or <a href="https://smap.jpl.nasa.gov/">SMAP</a> data) using the <a href="https://www.opendap.org/about">OPeNDAP</a> framework (<em>Open-source Project for a Network Data Access Protocol</em>).</p>
 <p><strong><em>Facilitate ?</em></strong></p>
 <p><code>opendapr</code> proposes a unique function to download the data, independently of the source. Users just need to care about the data collection, variables, time range and region of interest.</p>
 <p><strong><em>Speed-up ?</em></strong></p>
-<p><code>opendapr</code> takes advantage of the OPeNDAP abilities to download strictly the data that is needed : no more 1° x 1° MODIS tiles when the region of interest is only 100 km x 100 km ! This results in a reduction of the physical size of the data that is imported, and hence of the downloading time. In addition, <code>opendapr</code> enables to parallelize the download.</p>
+<p><code>opendapr</code> takes advantage of the OPeNDAP abilities to download strictly the data that is needed : no more 1° x 1° MODIS tiles when the region of interest is only 100 km x 100 km wide ! This results in a reduction of the physical size of the data that is imported, and hence of the downloading time. In addition, <code>opendapr</code> enables to parallelize the download.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -129,7 +129,7 @@ install.packages("opendapr")
 <li>
 <code>output_format</code> : output format. Available options are : “nc4” (default), “ascii”, “json”</li>
 </ul>
-<p>Additional functions include login to the USGS EROS ERS needed to download the data ( <code><a href="reference/login_usgs.html">login_usgs()</a></code> ), check which collections are available for download ( <code><a href="reference/get_collections_available.html">get_collections_available()</a></code> ), check which variables are available for each collection ( <code><a href="reference/get_variables_info.html">get_variables_info()</a></code> ), etc.</p>
+<p>Additional functions include login to the USGS EROS ERS needed to download the data ( <code>login_usgs()</code> ), check which collections are available for download ( <code><a href="reference/get_collections_available.html">get_collections_available()</a></code> ), check which variables are available for each collection ( <code><a href="reference/get_variables_info.html">get_variables_info()</a></code> ), etc.</p>
 <p>Have a look at the <a href="#example">example</a> below for a simple use case !</p>
 </div>
 <div id="which-products-are-available-for-download-through-opendapr" class="section level2">
@@ -142,12 +142,12 @@ install.packages("opendapr")
 <li>
 <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/">VIIRS land products</a>, made available by the <a href="https://lpdaac.usgs.gov/">NASA / USGS LP DAAC</a> (➡️ <a href="https://opendap.cr.usgs.gov/opendap/hyrax/">source OPeNDAP server</a>) ;</li>
 <li>
-<a href="https://pmm.nasa.gov/GPM">Global Precipitation Measurement</a> (GPM), made available by the <a href="https://disc.gsfc.nasa.gov/">NASA / JAXA GES DISC</a> (OPeNDAP server is located <a href="https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3">here</a>) ;</li>
+<a href="https://pmm.nasa.gov/GPM">Global Precipitation Measurement</a> (GPM), made available by the <a href="https://disc.gsfc.nasa.gov/">NASA / JAXA GES DISC</a> (➡️ <a href="https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3">source OPeNDAP server</a>) ;</li>
 <li>
 <a href="https://smap.jpl.nasa.gov/">Soil Moisture Active-Passive</a> (SMAP), made available by the <a href="https://nsidc.org/">NASA NSIDC DAAC</a> (➡️ <a href="https://n5eil02u.ecs.nsidc.org/opendap/SMAP/">source OPeNDAP server</a>)</li>
 </ul>
 <p>Details of each product available for download are provided in the table above. The function <code><a href="reference/get_collections_available.html">get_collections_available()</a></code> returns that same table with additional information. Want more details on a specific collection ? Click on the “DOI” column !</p>
-<details><summary>Products available for download with opendapr (click to expand)</summary><p>
+<details><summary><b>Products available for download with opendapr (click to expand)</b></summary><p>
 </p>
 <table class="table table table">
 <thead><tr>
@@ -1704,7 +1704,7 @@ Surface reflectance
 <li>the same 40 days times series of <a href="https://doi.org/10.5067/GPM/IMERGDF/DAY/06">GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree</a>
 </li>
 </ul>
-<p>First prepare the script : set-up ROI, time frame and login to USGS ERS</p>
+<p>First prepare the script : set-up ROI, time frame and login to EOSDIS Earthdata</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">### Prepare script</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co"># Load the packages</span></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(opendapr)</a>
@@ -1714,10 +1714,10 @@ Surface reflectance
 <a class="sourceLine" id="cb2-7" data-line-number="7">roi &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_read">st_read</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/roi_example.gpkg"</span>, <span class="dt">package =</span> <span class="st">"opendapr"</span>),<span class="dt">quiet=</span><span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb2-8" data-line-number="8">time_range &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"2017-01-01"</span>,<span class="st">"2017-01-30"</span>))</a>
 <a class="sourceLine" id="cb2-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co"># Login to USGS servers with username and password. To create an account : https://ers.cr.usgs.gov/register/</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">credentials_usgs &lt;-<span class="st"> </span>config<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/config/topics/get">get</a></span>(<span class="st">"usgs"</span>)</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">log &lt;-<span class="st"> </span><span class="kw"><a href="reference/login_usgs.html">login_usgs</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(credentials_usgs<span class="op">$</span>usr,credentials_usgs<span class="op">$</span>pwd))</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt; Successfull login to USGS</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co"># Login to Earthdata servers with username and password. To create an account go to : https://urs.earthdata.nasa.gov/.</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">log &lt;-<span class="st"> </span><span class="kw"><a href="reference/login.html">login</a></span>(<span class="dt">credentials =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.getenv">Sys.getenv</a></span>(<span class="st">"earthdata_un"</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.getenv">Sys.getenv</a></span>(<span class="st">"earthdata_pw"</span>)), <span class="dt">source =</span> <span class="st">"earthdata"</span>)</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#&gt; Checking credentials...</span></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt; Successfull login to  earthdata</span></a></code></pre></div>
 <p>Download MODIS and GPM data in two steps :</p>
 <ol style="list-style-type: decimal">
 <li>Get the OPeNDAP URLs with the <code><a href="reference/get_url.html">get_url()</a></code> function ;</li>
@@ -1755,7 +1755,7 @@ Surface reflectance
 <a class="sourceLine" id="cb3-30" data-line-number="30"></a>
 <a class="sourceLine" id="cb3-31" data-line-number="31"><span class="co">## Download the data. Destination file for each dataset is specified in the column "destfile" of the dataframe urls_mod11a1 and urls_gpm</span></a>
 <a class="sourceLine" id="cb3-32" data-line-number="32">df_to_dl &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">rbind</a></span>(urls_mod11a1,urls_gpm)</a>
-<a class="sourceLine" id="cb3-33" data-line-number="33">res_dl &lt;-<span class="st"> </span><span class="kw"><a href="reference/download_data.html">download_data</a></span>(df_to_dl,<span class="dt">data_source=</span><span class="st">"usgs"</span>,<span class="dt">parallel =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-33" data-line-number="33">res_dl &lt;-<span class="st"> </span><span class="kw"><a href="reference/download_data.html">download_data</a></span>(df_to_dl,<span class="dt">source=</span><span class="st">"earthdata"</span>,<span class="dt">parallel =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb3-34" data-line-number="34"></a>
 <a class="sourceLine" id="cb3-35" data-line-number="35"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(res_dl))</a>
 <a class="sourceLine" id="cb3-36" data-line-number="36"><span class="co">#&gt; 'data.frame':    31 obs. of  7 variables:</span></a>
@@ -1769,7 +1769,7 @@ Surface reflectance
 <a class="sourceLine" id="cb3-44" data-line-number="44"><span class="co">#&gt; NULL</span></a></code></pre></div>
 <p>It is also possible to subset the bands to download with the parameter <code>variables</code> of the function <code><a href="reference/get_url.html">get_url()</a></code>.</p>
 <p>To further import the data in R, have a look at the section <a href="#important-note-import">Important note regarding the further import of the data in R</a> !</p>
-<p>Simple or more complex data download + import workflows are provided in the vignettes <a href="https://ptaconet.github.io/opendapr/articles/simple_workflow.html">here</a> or <a href="">there</a>.</p>
+<p>Simple or advanced data download and import workflows are provided in the vignettes <code><a href="articles/simple_workflow.html">vignette("simple_workflow")</a></code>.</p>
 </div>
 <div id="important-note-import" class="section level2">
 <h2 class="hasAnchor">
@@ -1823,7 +1823,7 @@ Surface reflectance
 <li>
 <strong>Caring about the environmental digital impact of our research work</strong> : Downloading data has an impact on environment and to some extent contributes to climate change. If we download only the data that is need (rather than e.g a whole MODIS tile, or a global SMAP or GPM dataset), we contribute to digital sobriety.</li>
 <li>
-<strong>Support of the open-source movement</strong> : The OPeNDAP is developed and advanced openly and collaboratively, by the non-profit <a href="https://www.opendap.org/about">OPeNDAP, Inc.</a>. It is more and more used, by major data providers worldwide (e.g. NASA or NOAA). Using OPeNDAP means supporting th</li>
+<strong>Supporting the open-source movement</strong> : The OPeNDAP is developed and advanced openly and collaboratively, by the non-profit <a href="https://www.opendap.org/about">OPeNDAP, Inc.</a>. It is more and more used, by major Earth science data providers worldwide (e.g. NASA or NOAA). Using OPeNDAP means supporting methods and data access protocols that are open.</li>
 </ul>
 </div>
 <div id="other-packages" class="section level2">

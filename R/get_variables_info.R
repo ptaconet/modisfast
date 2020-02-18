@@ -18,7 +18,7 @@
 #'
 #' \donttest{
 #' # login to usgs
-#' log <- login_usgs(c(Sys.getenv("usgs_un"),Sys.getenv("usgs_pw")))
+#' log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
 #'
 #' # Get the collections implemented in the package :
 #' collections_available <- get_collections_available()
@@ -28,13 +28,13 @@
 #'}
 #'
 
-get_variables_info<-function(collection,login_credentials=NULL){  # for a given collection, get the available variables and associated information
+get_variables_info<-function(collection,credentials=NULL){  # for a given collection, get the available variables and associated information
 
   .testIfCollExists(collection)
   .testInternetConnection()
-  .testLogin(login_credentials)
+  .testLogin(credentials)
 
-  httr::set_config(httr::authenticate(user=getOption("usgs_user"), password=getOption("usgs_pass"), type = "basic"))
+  httr::set_config(httr::authenticate(user=getOption("earthdata_user"), password=getOption("earthdata_pass"), type = "basic"))
 
   opendapMetadata <- opendapMetadata_internal[which(opendapMetadata_internal$collection==collection),]
 

@@ -62,7 +62,7 @@ devtools::check(args = c('--as-cran'))
 
 #then :
 devtools::install(build_vignettes = TRUE)
-
+devtools::test() #reloads your code with load_all(), then runs all testthat tests.
 ## Ajouter manuellement dans le description file, la liste des packages dont dépend le package
 
 ## ci dessous, pour ajouter des données internes au package (ie non visibles par les utilisateurs)

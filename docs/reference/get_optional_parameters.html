@@ -124,7 +124,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_optional_parameters</span>(<span class='no'>collection</span>, <span class='no'>roi</span>, <span class='kw'>login_credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>get_optional_parameters</span>(<span class='no'>collection</span>, <span class='no'>roi</span>, <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -138,7 +138,7 @@
       <td><p>object of class <code>sf</code> or <code>sfc</code> Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details).</p></td>
     </tr>
     <tr>
-      <th>login_credentials</th>
+      <th>credentials</th>
       <td><p>vector string. In case of data that needs login : string vector of length 2 with username and password</p></td>
     </tr>
     </table>
@@ -165,19 +165,15 @@ This will save much time, as internal parameters will be calculated only once.</
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-</div><span class='co'># NOT RUN {</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>sf</span>)
-
-<span class='co'># Login to USGS</span>
-<span class='no'>login</span><span class='kw'>&lt;-</span><span class='fu'><a href='login_usgs.html'>login_usgs</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>username</span>,<span class='no'>password</span>))
-
+</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>sf</span>)</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : sf</span></div><div class='output co'>#&gt; <span class='message'>Linking to GEOS 3.7.0, GDAL 2.3.2, PROJ 5.2.0</span></div><div class='input'>
+<span class='co'># Login to Earthdata</span>
+<span class='no'>log</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='login.html'>login</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_un"</span>),<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_pw"</span>)))</div><div class='output co'>#&gt; Checking credentials...</div><div class='output co'>#&gt; <span class='error'>Error in login(c(Sys.getenv("earthdata_un"), Sys.getenv("earthdata_pw"))): l'argument "source" est manquant, avec aucune valeur par défaut</span></div><div class='input'>
 <span class='co'># Get the optional parameters for the collection MOD11A1.006 and the roi :</span>
 <span class='no'>roi</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sf/topics/st_read'>st_read</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/roi_example.gpkg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"opendapr"</span>),<span class='kw'>quiet</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-(<span class='no'>opt_param_mod11a1</span> <span class='kw'>&lt;-</span> <span class='fu'>get_optional_parameters</span>(<span class='st'>"MOD11A1.006"</span>,<span class='no'>roi</span>) )
+(<span class='no'>opt_param_mod11a1</span> <span class='kw'>&lt;-</span> <span class='fu'>get_optional_parameters</span>(<span class='st'>"MOD11A1.006"</span>,<span class='no'>roi</span>) )</div><div class='output co'>#&gt; <span class='error'>Error in login(credentials): credentials must be a vector character string of length 2 (username and password)</span></div><div class='input'>
+# Now we can
 
-<span class='co'># Now we can</span>
-
-<span class='co'># }</span></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

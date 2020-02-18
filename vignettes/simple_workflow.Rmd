@@ -37,13 +37,13 @@ In this example we want to download, import and plot over the 3500 km^2^ wide re
 - the same 40 days times series of precipitations from [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERGDF/DAY/06) (collection *GPM_L3/GPM_3IMERGDF.06*) (spatial resolution : 1° ; temporal resolution : 1 day)
 - the same 40 days times series of soil moisture from [SMAP Daily](https://doi.org/10.5067/T90W6VRLCBHI) (collection *SMAP/SPL3SMP_E.003*) (spatial resolution : 9 km ; temporal resolution : 3 days)
 
-```{r, echo=F, fig.height=5, fig.width=3 }
+```{r, echo=F, fig.height=5, fig.width=3, eval=NOT_CRAN }
 require(mapview)
 roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
 mapview::mapview(roi,legend=F)
 ```
 
-## Setup the region and time range of interest and login to the USGS EROS ERS
+## Setup the region and time range of interest and login to EOSDIS Earthdata
 
 First we prepare the script : set-up ROI, time frame and connect to USGS with our credentials
 
@@ -52,8 +52,8 @@ First we prepare the script : set-up ROI, time frame and connect to USGS with ou
 roi <- st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
-# Login to USGS servers with username and password. To create an account go to : https://ers.cr.usgs.gov/register/.
-log <- login_usgs(c(Sys.getenv("usgs_un"),Sys.getenv("usgs_pw")))
+# Login to Earthdata servers with username and password. To create an account go to : https://urs.earthdata.nasa.gov/.
+log <- login(credentials = c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")), source = "earthdata")
 ```
 
 ## Get the URLs to download the data {#get-url}
@@ -114,7 +114,7 @@ Setting the argument `parallel` to `TRUE` will parallelize - therefore fasten - 
 
 ```{r download_data, eval=NOT_CRAN }
 df_to_dl <- rbind(urls_mod11a1,urls_gpm,urls_smap)
-res_dl <- download_data(df_to_dl,data_source="usgs",parallel = TRUE)
+res_dl <- download_data(df_to_dl,source="earthdata",parallel = TRUE)
 
 print(str(res_dl))
 ```
@@ -179,7 +179,7 @@ Let's plot the data now !
 
 (Note that only the first 16 dates are plotted here-under)
 
-```{r plot , fig.fullwidth = TRUE, fig.height = 10, fig.width = 9,fig.align = 'center', eval=F}
+```{r plot , fig.fullwidth = TRUE, fig.height = 10, fig.width = 9,fig.align = 'center', eval=NOT_CRAN}
 # Land surface temperature
 mod11a1_rast_day <- projectRaster(mod11a1_rast_day,crs = "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 ")
 plot(mod11a1_rast_day)

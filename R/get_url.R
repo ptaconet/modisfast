@@ -10,7 +10,7 @@
 #' @param output_format string. Output format. Available options are : "nc4" (default), "ascii", "json"
 #' @param single_netcdf boolean. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.
 #' @param opt_param list of optional arguments (see details). This parameter is the output of the function \link{get_optional_parameters}.
-#' @param login_credentials vector string. In case of data that needs login : string vector of length 2 with username and password
+#' @param credentials vector string. In case of data that needs login : string vector of length 2 with username and password
 #' @param verbose boolean. Verbose (default FALSE)
 #'
 #' @return a data.frame with one row for each dataset to download and 4 columns  :
@@ -44,8 +44,8 @@
 #' @examples
 #'
 #' \donttest{
-#' ### First login to USGS
-#' log <- login_usgs(c(Sys.getenv("usgs_un"),Sys.getenv("usgs_pw")))
+#' ### First login to Earthdata
+#' log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
 #'
 #'############################################################
 #' ### Retrieve the URLs (OPeNDAP) to download the following datasets :
@@ -101,7 +101,7 @@ get_url<-function(collection,
                  output_format="nc4",
                  single_netcdf=TRUE,
                  opt_param=NULL,
-                 login_credentials=NULL,
+                 credentials=NULL,
                  verbose=FALSE){
 
   existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName  <- . <- name <- destfile <- NULL
@@ -124,8 +124,8 @@ get_url<-function(collection,
   if(!inherits(verbose,"logical")){stop("verbose argument must be boolean\n")}
   # Internet connection
   .testInternetConnection()
-  # login_credentials
-  .testLogin(login_credentials)
+  # credentials
+  .testLogin(credentials)
 
   if(is.null(opt_param)){
     if(verbose){cat("Retrieving opendap arguments for the collection specified...\n")}
@@ -142,7 +142,7 @@ get_url<-function(collection,
 
   # build URLs
   if(verbose){cat("Building the opendap URLs...\n")}
-  table_urls <- .buildUrls(collection,variables,roi,time_range,output_format,single_netcdf,opt_param,login_credentials)
+  table_urls <- .buildUrls(collection,variables,roi,time_range,output_format,single_netcdf,opt_param,credentials)
 
   table_urls <- table_urls %>%
     dplyr::mutate(name=stringr::str_replace(name,".*/","")) %>%

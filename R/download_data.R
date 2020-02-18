@@ -4,10 +4,9 @@
 #' @description This function enables to download datasets, enventually parallelizing the download. In a data import workflow, this function is typically used after a call to the \link{get_url} function. The output value of \link{get_url} can be used as input of parameter \code{df_to_dl} of the \link{download_data} function.
 #'
 #' @inheritParams get_url
-#' @param df_to_dl data.frame. Urls and destination files of dataset to download. See Details for the structure
+#' @inheritParams login
+#' @param df_to_dl data.frame. Urls and destination files of dataset to download. Typically output of \link{get_url}. See Details for the structure
 #' @param parallel boolean. Parallelize the download ? Default to FALSE
-#' @param data_source String. default to "usgs". Additional information is the Details
-#' @param verbose boolean. Verbose ?
 #'
 #' @return a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional olumns are :
 #' \itemize{
@@ -24,24 +23,24 @@
 #' \item{"destfile": }{Destination file (character string)}
 #' }
 #'
-#' Parameter \code{data_source} takes "usgs" as default value. Options are :
+#' Parameter \code{source} takes NULL as default value. Options are :
 #' \itemize{
 #' \item{ \code{NULL} : } {when no login is required to download the data). }
-#' \item{ \code{"usgs"} : } {to download data requiring a login to Earthdata }
+#' \item{ \code{"earthdata"} : } {to download data requiring a login to Earthdata }
 #'}
 #'
 #' @import dplyr parallel
 #' @export
 #'
 
-download_data<-function(df_to_dl,parallel=FALSE,login_credentials=NULL,data_source="usgs",verbose=FALSE){
+download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL,verbose=FALSE){
 
   fileSize <- destfile <- fileDl <- NULL
 
   # tests
   if(!inherits(verbose,"logical")){stop("verbose argument must be boolean\n")}
   if(!inherits(parallel,"logical")){stop("parallel argument must be boolean\n")}
-  if(!is.null(data_source) && !inherits(data_source,"character")){stop("data_source argument must be either NULL or 'usgs' \n")}
+  if(!is.null(source) && !inherits(source,"character")){stop("source argument must be either NULL or 'earthdata' \n")}
   if(!inherits(df_to_dl,"data.frame")){stop("df_to_dl argument must be a data.frame\n")}
   if(!("url" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 2 columns named 'url' and 'destfile' \n")}
   if(!("destfile" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 2 columns named 'url' and 'destfile' \n")}
@@ -79,11 +78,11 @@ download_data<-function(df_to_dl,parallel=FALSE,login_credentials=NULL,data_sour
     #for (i in 1:nrow(data_to_download)){
     #    httr::GET(data_to_download$url[i],httr::authenticate(username,password),write_disk(data_to_download$destfile[i]))
     # }
-    if(!is.null(data_source)){
-      if(data_source=="usgs"){
-        .testLogin(login_credentials)
-        username<-getOption("usgs_user")
-        password<-getOption("usgs_pass")
+    if(!is.null(source)){
+      if(source=="earthdata"){
+        .testLogin(credentials)
+        username<-getOption("earthdata_user")
+        password<-getOption("earthdata_pass")
       }
     } else {
       username <- password <- "no_auth"
@@ -114,7 +113,7 @@ download_data<-function(df_to_dl,parallel=FALSE,login_credentials=NULL,data_sour
   data_downloaded <- dplyr::filter(data_dl,fileSize>=5000)
 
   if(!(identical(data_dl,data_downloaded))){
-    download_data(df_to_dl=df_to_dl,parallel=FALSE,login_credentials=login_credentials,data_source=data_source)
+    download_data(df_to_dl=df_to_dl,parallel=FALSE,credentials=credentials,source=source)
   }
 
   # 1 : download ok

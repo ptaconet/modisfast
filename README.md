@@ -3251,7 +3251,8 @@ We want to download over the 50 km x 50 km wide region of interest :
     day 0.1 degree x 0.1
     degree](https://doi.org/10.5067/GPM/IMERGDF/DAY/06)
 
-First prepare the script : set-up ROI, time frame and login to USGS ERS
+First prepare the script : set-up ROI, time frame and login to EOSDIS
+Earthdata
 
 ``` r
 ### Prepare script
@@ -3263,9 +3264,9 @@ require(sf)
 roi <- st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
-# Login to USGS servers with username and password. To create an account : https://ers.cr.usgs.gov/register/
-log <- login_usgs(c(Sys.getenv("usgs_un"),Sys.getenv("usgs_pw")))
-#> Successfull login to USGS
+# Login to Earthdata servers with username and password. To create an account go to : https://urs.earthdata.nasa.gov/.
+log <- login(credentials = c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")), source = "earthdata")
+#> Successfull login to Earthdata.
 ```
 
 Download MODIS and GPM data in two steps :
@@ -3308,7 +3309,7 @@ print(str(urls_gpm))
 
 ## Download the data. Destination file for each dataset is specified in the column "destfile" of the dataframe urls_mod11a1 and urls_gpm
 df_to_dl <- rbind(urls_mod11a1,urls_gpm)
-res_dl <- download_data(df_to_dl,data_source="usgs",parallel = TRUE)
+res_dl <- download_data(df_to_dl,source="earthdata",parallel = TRUE)
 
 print(str(res_dl))
 #> 'data.frame':    31 obs. of  7 variables:

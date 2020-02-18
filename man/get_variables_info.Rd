@@ -4,12 +4,12 @@
 \alias{get_variables_info}
 \title{Get informations related to the variables available for a given collection}
 \usage{
-get_variables_info(collection, login_credentials = NULL)
+get_variables_info(collection, credentials = NULL)
 }
 \arguments{
 \item{collection}{string. Collection of interest.}
 
-\item{login_credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
+\item{credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
 }
 \value{
 A data.frame with the available variables for the collection, and a set of related information for each variable.
@@ -22,7 +22,7 @@ Outputs a data frame with the variables available for a given collection
 
 \donttest{
 # login to usgs
-log <- login_usgs(c(Sys.getenv("usgs_un"),Sys.getenv("usgs_pw")))
+log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
 
 # Get the collections implemented in the package :
 collections_available <- get_collections_available()

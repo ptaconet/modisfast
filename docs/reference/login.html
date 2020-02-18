@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Download several datasets given their URLs and a destination files — download_data • opendapr</title>
+<title>Login to download data — login • opendapr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Download several datasets given their URLs and a destination files — download_data" />
+<meta property="og:title" content="Login to download data — login" />
 
-<meta property="og:description" content="This function enables to download datasets, enventually parallelizing the download. In a data import workflow, this function is typically used after a call to the get_url function. The output value of get_url can be used as input of parameter df_to_dl of the download_data function." />
+<meta property="og:description" content="In case a login is required, login before querying data servers" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -113,31 +113,22 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Download several datasets given their URLs and a destination files</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ptaconet/opendapr/blob/master/R/download_data.R'><code>R/download_data.R</code></a></small>
-    <div class="hidden name"><code>download_data.Rd</code></div>
+    <h1>Login to download data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ptaconet/opendapr/blob/master/R/login.R'><code>R/login.R</code></a></small>
+    <div class="hidden name"><code>login.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function enables to download datasets, enventually parallelizing the download. In a data import workflow, this function is typically used after a call to the <a href='get_url.html'>get_url</a> function. The output value of <a href='get_url.html'>get_url</a> can be used as input of parameter <code>df_to_dl</code> of the download_data function.</p>
+    <p>In case a login is required, login before querying data servers</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>download_data</span>(<span class='no'>df_to_dl</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>source</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>login</span>(<span class='no'>credentials</span>, <span class='no'>source</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>df_to_dl</th>
-      <td><p>data.frame. Urls and destination files of dataset to download. Typically output of <a href='get_url.html'>get_url</a>. See Details for the structure</p></td>
-    </tr>
-    <tr>
-      <th>parallel</th>
-      <td><p>boolean. Parallelize the download ? Default to FALSE</p></td>
-    </tr>
     <tr>
       <th>credentials</th>
       <td><p>vector string. In case of data that needs login : string vector of length 2 with username and password</p></td>
@@ -154,25 +145,21 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data.frame with the same structure of the input data.frame <code>df_to_dl</code> + columns providing details of the data downloaded. The additional olumns are :</p><ul>
-<li><p>"fileDl": Booloean (dataset downloaded or failure)</p></li>
-<li><p>"dlStatus": Download status : 1 = download ok ; 2 = download error ; 3 = dataset was already existing in destination file</p></li>
-<li><p>"fileSize": file size on disk</p></li>
-</ul>
-
+    <p>None.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Parameter <code>df_to_dl</code> is a data.frame with the following minimal structure :</p><ul>
-<li><p>"url": URL of the source file (character string)</p></li>
-<li><p>"destfile": Destination file (character string)</p></li>
-</ul>
-    <p>Parameter <code>source</code> takes NULL as default value. Options are :</p><ul>
-<li><p><code>NULL</code> :  when no login is required to download the data).</p></li>
-<li><p><code>"earthdata"</code> :  to download data requiring a login to Earthdata</p></li>
-</ul>
+    <p>Earthdata login enables to download MODIS, VNP, SMAP, GPM data.</p>
+<p>Create an account to Earthdata here : <a href='https://urs.earthdata.nasa.gov/'>https://urs.earthdata.nasa.gov/</a>.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+</div><div class='input'><span class='no'>username</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_un"</span>)
+<span class='no'>password</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_pw"</span>)
+<span class='fu'>login</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>username</span>,<span class='no'>password</span>),<span class='st'>"earthdata"</span>)</div><div class='output co'>#&gt; Checking credentials...
+#&gt; Successfull login to  earthdata </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -182,7 +169,9 @@
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

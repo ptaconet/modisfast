@@ -4,14 +4,14 @@
 \alias{get_optional_parameters}
 \title{Precompute the parameter \code{opt_param} of the function \link{get_url}}
 \usage{
-get_optional_parameters(collection, roi, login_credentials = NULL)
+get_optional_parameters(collection, roi, credentials = NULL)
 }
 \arguments{
 \item{collection}{string. Collection of interest.}
 
 \item{roi}{object of class \code{sf} or \code{sfc} Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details).}
 
-\item{login_credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
+\item{credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
 }
 \value{
 a list with the following named objects :
@@ -38,8 +38,8 @@ This will save much time, as internal parameters will be calculated only once.
 \donttest{
 require(sf)
 
-# Login to USGS
-log <- login_usgs(c(Sys.getenv("usgs_un"),Sys.getenv("usgs_pw")))
+# Login to Earthdata
+log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
 
 # Get the optional parameters for the collection MOD11A1.006 and the roi :
 roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)

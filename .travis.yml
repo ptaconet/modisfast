@@ -40,3 +40,7 @@ r_packages:
 # only report coverage after build is successful
 after_success:
   - Rscript -e 'covr::codecov()'
+
+# do not build vignettes...takes too long and times out on travis
+r_build_args: --no-build-vignettes --no-manual
+r_check_args: --no-build-vignettes --no-manual --timings

@@ -124,7 +124,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_variables_info</span>(<span class='no'>collection</span>, <span class='kw'>login_credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>get_variables_info</span>(<span class='no'>collection</span>, <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,7 +134,7 @@
       <td><p>string. Collection of interest.</p></td>
     </tr>
     <tr>
-      <th>login_credentials</th>
+      <th>credentials</th>
       <td><p>vector string. In case of data that needs login : string vector of length 2 with username and password</p></td>
     </tr>
     </table>
@@ -147,16 +147,13 @@ The variables marked as "extractable" in the column *extractable_w_opendapr* can
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-</div><span class='co'># NOT RUN {</span>
-<span class='co'># login to usgs</span>
-<span class='fu'><a href='login_usgs.html'>login_usgs</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"my.usgs.username"</span>,<span class='st'>"my.usgs.password"</span>))
-
+</div><div class='input'><span class='co'># login to usgs</span>
+<span class='no'>log</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='login.html'>login</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_un"</span>),<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_pw"</span>)))</div><div class='output co'>#&gt; Checking credentials...</div><div class='output co'>#&gt; <span class='error'>Error in login(c(Sys.getenv("earthdata_un"), Sys.getenv("earthdata_pw"))): l'argument "source" est manquant, avec aucune valeur par défaut</span></div><div class='input'>
 <span class='co'># Get the collections implemented in the package :</span>
 <span class='no'>collections_available</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_collections_available.html'>get_collections_available</a></span>()
 
 <span class='co'># Get the variables available for the collection MOD11A1.006</span>
-(<span class='no'>df_varinfo</span><span class='kw'>&lt;-</span><span class='fu'>get_variables_info</span>(<span class='st'>"MOD11A1.006"</span>))
-<span class='co'># }</span><div class='input'>
+(<span class='no'>df_varinfo</span><span class='kw'>&lt;-</span><span class='fu'>get_variables_info</span>(<span class='st'>"MOD11A1.006"</span>))</div><div class='output co'>#&gt; <span class='error'>Error in login(credentials): credentials must be a vector character string of length 2 (username and password)</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

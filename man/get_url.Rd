@@ -6,7 +6,7 @@
 \usage{
 get_url(collection, variables = NULL, roi, time_range,
   output_format = "nc4", single_netcdf = TRUE, opt_param = NULL,
-  login_credentials = NULL, verbose = FALSE)
+  credentials = NULL, verbose = FALSE)
 }
 \arguments{
 \item{collection}{string. Collection of interest.}
@@ -23,7 +23,7 @@ get_url(collection, variables = NULL, roi, time_range,
 
 \item{opt_param}{list of optional arguments (see details). This parameter is the output of the function \link{get_optional_parameters}.}
 
-\item{login_credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
+\item{credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
 
 \item{verbose}{boolean. Verbose (default FALSE)}
 }
@@ -54,8 +54,8 @@ some note
 \examples{
 
 \donttest{
-### First login to USGS
-log <- login_usgs(c(Sys.getenv("usgs_un"),Sys.getenv("usgs_pw")))
+### First login to Earthdata
+log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
 
 ############################################################
 ### Retrieve the URLs (OPeNDAP) to download the following datasets :

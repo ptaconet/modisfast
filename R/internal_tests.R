@@ -28,11 +28,11 @@
 
 }
 
-#.testIfVarExists2<-function(collection,specified_variables,login_credentials=NULL){
+#.testIfVarExists2<-function(collection,specified_variables,credentials=NULL){
 #  variables <- NULL
 #  .testIfCollExists(collection)
-#  .testLogin(login_credentials)
-#  variables <- get_variables_info(collection,login_credentials)
+#  .testLogin(credentials)
+#  variables <- get_variables_info(collection,credentials)
 #  variables <- variables$name
 #  .testIfVarExists2(variables,specified_variables)
 #}
@@ -41,12 +41,12 @@
 #' @title Test login, else log
 #' @noRd
 
-.testLogin<-function(login_credentials=NULL){
+.testLogin<-function(credentials=NULL){
 
   login <- NULL
 
-  if(!is.null(login_credentials) || is.null(getOption("usgs_login"))){
-    login <- login_usgs(login_credentials)
+  if(!is.null(credentials) || is.null(getOption("earthdata_login"))){
+    login <- login(credentials)
     return(login)
   }
 
@@ -93,5 +93,4 @@
 
 .testInternetConnection<-function(){
   if(!curl::has_internet()){stop("Internet connection is required. Are you connected to the Internet ?\n")}
-  httr::set_config(config(maxredirs=-1))
 }

@@ -44,13 +44,13 @@
 #' @import httr
 #' @noRd
 
-.getVarVector<-function(OpenDAPUrl,variableName,login_credentials=NULL){
+.getVarVector<-function(OpenDAPUrl,variableName,credentials=NULL){
 
   vector_response <- vector <- NULL
 
-  .testLogin(login_credentials)
+  .testLogin(credentials)
 
-  httr::set_config(httr::authenticate(user=getOption("usgs_user"), password=getOption("usgs_pass"), type = "basic"))
+  httr::set_config(httr::authenticate(user=getOption("earthdata_user"), password=getOption("earthdata_pass"), type = "basic"))
   vector_response<-httr::GET(paste0(OpenDAPUrl,".ascii?",variableName))
   vector<-httr::content(vector_response,"text",encoding="UTF-8")
   vector<-strsplit(vector,",")
@@ -70,14 +70,14 @@
 #' @importFrom lubridate year yday hour minute second floor_date
 #' @noRd
 
-.buildUrls<-function(collection,variables,roi,time_range,output_format="nc4",single_netcdf=TRUE,optionalsOpendap=NULL,login_credentials=NULL){
+.buildUrls<-function(collection,variables,roi,time_range,output_format="nc4",single_netcdf=TRUE,optionalsOpendap=NULL,credentials=NULL){
 
   ideal_date <- date_closest_to_ideal_date <- index_opendap_closest_to_date <- dimensions_url <- hour_end <- date_character <- hour_start <- number_minutes_from_start_day <- year <- day <- product_name <- month <- x <- . <- url_product <- NULL
 
   .testIfCollExists(collection)
   .testRoi(roi)
   .testTimeRange(time_range)
-  .testLogin(login_credentials)
+  .testLogin(credentials)
   .testFormat(output_format)
 
   odap_coll_info <- opendapMetadata_internal[which(opendapMetadata_internal$collection==collection),]
