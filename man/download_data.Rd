@@ -27,7 +27,7 @@ a data.frame with the same structure of the input data.frame \code{df_to_dl} + c
 }
 }
 \description{
-This function enables to download datasets, enventually parallelizing the download.
+This function enables to download datasets, enventually parallelizing the download. In a data import workflow, this function is typically used after a call to the \link{get_url} function. The output value of \link{get_url} can be used as input of parameter \code{df_to_dl} of the \link{download_data} function.
 }
 \details{
 Parameter \code{df_to_dl} is a data.frame with the following minimal structure :
@@ -41,7 +41,4 @@ Parameter \code{data_source} takes "usgs" as default value. Options are :
 \item{ \code{NULL} : } {when no login is required to download the data). }
 \item{ \code{"usgs"} : } {to download data requiring a login to Earthdata }
 }
-}
-\note{
-In a data import workflow, this function is typically used after a call to the \link{get_url} function. The output value of \code{get_url} can be used as input of parameter \code{df_to_dl} of the \code{download_data} function.
 }

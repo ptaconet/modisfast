@@ -43,9 +43,9 @@
 #'
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' ### First login to USGS
-#' login_usgs(c("my.usgs.username","my.usgs.password"))
+#' log <- login_usgs(c(Sys.getenv("usgs_un"),Sys.getenv("usgs_pw")))
 #'
 #'############################################################
 #' ### Retrieve the URLs (OPeNDAP) to download the following datasets :

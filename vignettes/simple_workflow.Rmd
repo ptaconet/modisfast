@@ -10,12 +10,13 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
+NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true") # vignette will not be executed when tested on the cran
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   message = FALSE,
   warning = FALSE,
-  eval=F
+  purl = NOT_CRAN
 )
 ```
 
@@ -46,14 +47,13 @@ mapview::mapview(roi,legend=F)
 
 First we prepare the script : set-up ROI, time frame and connect to USGS with our credentials
 
-```{r example_prepare}
+```{r example_prepare, eval=NOT_CRAN}
 # Set ROI and time range of interest
 roi <- st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
-# Login to USGS servers with username and password. To create an account go to : https://ers.cr.usgs.gov/register/. Here we use the config package to store our credentials in a dedicated file locally
-credentials_usgs <- config::get("usgs")
-log <- login_usgs(c(credentials_usgs$usr,credentials_usgs$pwd))
+# Login to USGS servers with username and password. To create an account go to : https://ers.cr.usgs.gov/register/.
+log <- login_usgs(c(Sys.getenv("usgs_un"),Sys.getenv("usgs_pw")))
 ```
 
 ## Get the URLs to download the data {#get-url}
@@ -64,7 +64,7 @@ With the function `get_url()`, we get the OPeNDAP URLs for our collections of in
 
 The collections generally contain several variables (sometimes called "dimensions", or "bands"). As an example, MODIS LST products contain one band for the day temperature ("LST_Day_1km"), one band for the night temperature ("LST_Night_1km"), etc. To get all the variables available for a given collection along with information for each of them (meaning, etc.), use the function `get_variables_info`, e.g. :
 
-```{r get_variables_info}
+```{r get_variables_info, eval=NOT_CRAN}
 tail(get_variables_info("MOD11A1.006"))
 ```
 
@@ -72,7 +72,7 @@ In `get_url()`, the `variables` parameter enables to restrict the data to downlo
 
 In our example, we specify some variables for each collection. 
 
-```{r get_url}
+```{r get_url, eval=NOT_CRAN}
 ## Get the URLs of MODIS Terra LST daily
 urls_mod11a1 <- get_url(
   collection = "MOD11A1.006",
@@ -112,7 +112,7 @@ Destination file for each dataset is specified in the column *destfile* of the d
 
 Setting the argument `parallel` to `TRUE` will parallelize - therefore fasten - the download in case their are numerous datasets to download
 
-```{r download_data }
+```{r download_data, eval=NOT_CRAN }
 df_to_dl <- rbind(urls_mod11a1,urls_gpm,urls_smap)
 res_dl <- download_data(df_to_dl,data_source="usgs",parallel = TRUE)
 
@@ -127,7 +127,7 @@ Caution ! Have a look at the section [Important note regarding the further impor
 
 ### Import MODIS / VNP {#import-modis-vnp}
 
-```{r import_modis_vnp_raster }
+```{r import_modis_vnp_raster, eval=NOT_CRAN }
 # Import the MODIS time series as a rasterBrick object (1 rasterBrick for each dimension) :
   mod11a1_rast_day <- urls_mod11a1$destfile %>%
   raster::brick(varname="LST_Day_1km",crs="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")
@@ -137,14 +137,14 @@ Caution ! Have a look at the section [Important note regarding the further impor
 
 We can also import the same MODIS time series as a `stars` object. Here the interesting point is that all the dimensions are imported at once.
 
-```{r import_modis_vnp_stars }
+```{r import_modis_vnp_stars, eval=NOT_CRAN }
 (mod11a1_stars <- stars::read_stars(urls_mod11a1$destfile) %>% st_set_crs("+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"))
 # plot(mod11a1_stars)
 ```
 
 ### Import GPM {#import-gpm}
 
-```{r import_gpm, message=F}
+```{r import_gpm, message=F, eval=NOT_CRAN}
 ## Import the GPM time series as a rasterBrick object (1 rasterBrick for each dimension) :
 gpm_rast_precipitationcal <- urls_gpm$destfile %>%
   purrr::map(~raster(.,varname="precipitationCal",crs="+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 ")) %>%
@@ -156,11 +156,11 @@ gpm_rast_precipitationcal <- urls_gpm$destfile %>%
 # The same can be done with the other variables ("precipitationCal_cnt", etc.)
 ```
 
-### Import SMAP {#import-smap}
+### Import SMAP {#import-smap, eval=NOT_CRAN}
 
 We set-up the missing bounding coordinates. For this we use the function `get_optional_parameters()` of the `opendapr` package.
 
-```{r import_smap, message=F}
+```{r import_smap, message=F, eval=NOT_CRAN}
 ## Import the SMAP time series as a rasterBrick object (1 rasterBrick for each dimension) :
 smap_sp_bound <- opendapr::get_optional_parameters(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
   
@@ -179,7 +179,7 @@ Let's plot the data now !
 
 (Note that only the first 16 dates are plotted here-under)
 
-```{r plot , fig.fullwidth = TRUE, fig.height = 10, fig.width = 9,fig.align = 'center'}
+```{r plot , fig.fullwidth = TRUE, fig.height = 10, fig.width = 9,fig.align = 'center', eval=NOT_CRAN}
 # Land surface temperature
 mod11a1_rast_day <- projectRaster(mod11a1_rast_day,crs = "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 ")
 plot(mod11a1_rast_day)

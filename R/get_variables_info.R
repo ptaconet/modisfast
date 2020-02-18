@@ -16,9 +16,9 @@
 #' @import purrr dplyr httr
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' # login to usgs
-#' login_usgs(c("my.usgs.username","my.usgs.password"))
+#' log <- login_usgs(c(Sys.getenv("usgs_un"),Sys.getenv("usgs_pw")))
 #'
 #' # Get the collections implemented in the package :
 #' collections_available <- get_collections_available()

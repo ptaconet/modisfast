@@ -29,9 +29,10 @@ collection, variables, time range and region of interest.
 
 `opendapr` takes advantage of the OPeNDAP abilities to download strictly
 the data that is needed : no more 1° x 1° MODIS tiles when the region of
-interest is only 100 km x 100 km \! This results in a reduction of the
-physical size of the data that is imported, and hence of the downloading
-time. In addition, `opendapr` enables to parallelize the download.
+interest is only 100 km x 100 km wide \! This results in a reduction of
+the physical size of the data that is imported, and hence of the
+downloading time. In addition, `opendapr` enables to parallelize the
+download.
 
 ## Installation
 
@@ -102,8 +103,8 @@ Currently `opendapr` enables to download data from four main collections
     server](https://opendap.cr.usgs.gov/opendap/hyrax/)) ;
   - [Global Precipitation Measurement](https://pmm.nasa.gov/GPM) (GPM),
     made available by the [NASA / JAXA GES
-    DISC](https://disc.gsfc.nasa.gov/) (OPeNDAP server is located
-    [here](https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3)) ;
+    DISC](https://disc.gsfc.nasa.gov/) (➡️ [source OPeNDAP
+    server](https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3)) ;
   - [Soil Moisture Active-Passive](https://smap.jpl.nasa.gov/) (SMAP),
     made available by the [NASA NSIDC DAAC](https://nsidc.org/) (➡️
     [source OPeNDAP
@@ -116,8 +117,8 @@ collection ? Click on the “DOI” column \!
 
 <details>
 
-<summary>Products available for download with opendapr (click to
-expand)</summary>
+<summary><b>Products available for download with opendapr (click to
+expand)</b></summary>
 
 <p>
 
@@ -3263,8 +3264,7 @@ roi <- st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),qui
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
 # Login to USGS servers with username and password. To create an account : https://ers.cr.usgs.gov/register/
-credentials_usgs <- config::get("usgs")
-log <- login_usgs(c(credentials_usgs$usr,credentials_usgs$pwd))
+log <- login_usgs(c(Sys.getenv("usgs_un"),Sys.getenv("usgs_pw")))
 #> Successfull login to USGS
 ```
 
@@ -3423,7 +3423,7 @@ driven the development of this package :
     extent contributes to climate change. If we download only the data
     that is need (rather than e.g a whole MODIS tile, or a global SMAP
     or GPM dataset), we contribute to digital sobriety.
-  - **Support of the open-source movement** : The OPeNDAP is developed
+  - **Supporting the open-source movement** : The OPeNDAP is developed
     and advanced openly and collaboratively, by the non-profit [OPeNDAP,
     Inc.](https://www.opendap.org/about). It is more and more used, by
     major Earth science data providers worldwide (e.g. NASA or NOAA).

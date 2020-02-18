@@ -35,11 +35,11 @@ This will save much time, as internal parameters will be calculated only once.
 }
 \examples{
 
-\dontrun{
+\donttest{
 require(sf)
 
 # Login to USGS
-login<-login_usgs(c(username,password))
+log <- login_usgs(c(Sys.getenv("usgs_un"),Sys.getenv("usgs_pw")))
 
 # Get the optional parameters for the collection MOD11A1.006 and the roi :
 roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)

@@ -4,10 +4,12 @@
 \alias{login_usgs}
 \title{Login to USGS EROS ERS}
 \usage{
-login_usgs(login_credentials)
+login_usgs(login_credentials, verbose = TRUE)
 }
 \arguments{
 \item{login_credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
+
+\item{verbose}{boolean. Verbose (default FALSE)}
 }
 \value{
 None.
@@ -23,9 +25,9 @@ The function is inspired from : \url{https://github.com/16EAGLE/getSpatialData/b
 }
 \examples{
 
-\dontrun{
-username="user"
-password="pass"
+\donttest{
+username <- Sys.getenv("usgs_un")
+password <- Sys.getenv("usgs_pw")
 login_usgs(c(username,password))
 }
 

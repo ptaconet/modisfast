@@ -14,14 +14,14 @@
 #'
 #' @examples
 #'
-#' \dontrun{
-#' username="user"
-#' password="pass"
+#' \donttest{
+#' username <- Sys.getenv("usgs_un")
+#' password <- Sys.getenv("usgs_pw")
 #' login_usgs(c(username,password))
 #' }
 #'
 
-login_usgs<-function(login_credentials){
+login_usgs<-function(login_credentials,verbose=TRUE){
 
   if(!inherits(login_credentials,"character") || length(login_credentials)!=2 ) {stop("login_credentials must be a vector character string of length 2 (username and password)\n")}
   .testInternetConnection()
@@ -38,7 +38,7 @@ login_usgs<-function(login_credentials){
     options(usgs_user=login_credentials[1])
     options(usgs_pass=login_credentials[2])
     options(usgs_login=TRUE)
-    cat("Successfull login to USGS\n")
+    if(verbose){cat("Successfull login to USGS\n")}
   }
 }
 

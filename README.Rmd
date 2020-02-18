@@ -32,7 +32,7 @@ The `opendapr` R package provides functions to **facilitate** and **speed-up** t
 
 ***Speed-up ?***
 
-`opendapr` takes advantage of the OPeNDAP abilities to download strictly the data that is needed : no more 1° x 1° MODIS tiles when the region of interest is only 100 km x 100 km ! This results in a reduction of the physical size of the data that is imported, and hence of the downloading time. In addition, `opendapr` enables to parallelize the download. 
+`opendapr` takes advantage of the OPeNDAP abilities to download strictly the data that is needed : no more 1° x 1° MODIS tiles when the region of interest is only 100 km x 100 km wide ! This results in a reduction of the physical size of the data that is imported, and hence of the downloading time. In addition, `opendapr` enables to parallelize the download. 
 
 ## Installation
 
@@ -76,12 +76,12 @@ Currently `opendapr` enables to download data from four main collections :
 
 * [MODIS land products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/), made available by the [NASA / USGS LP DAAC](https://lpdaac.usgs.gov/) (`r emo::ji("right arrow")` [source OPeNDAP server](https://opendap.cr.usgs.gov/opendap/hyrax/)) ;
 * [VIIRS land products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/), made available by the [NASA / USGS LP DAAC](https://lpdaac.usgs.gov/) (`r emo::ji("right arrow")` [source OPeNDAP server](https://opendap.cr.usgs.gov/opendap/hyrax/)) ;
-* [Global Precipitation Measurement](https://pmm.nasa.gov/GPM) (GPM), made available by the [NASA / JAXA GES DISC](https://disc.gsfc.nasa.gov/) (OPeNDAP server is located [here](https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3)) ;
+* [Global Precipitation Measurement](https://pmm.nasa.gov/GPM) (GPM), made available by the [NASA / JAXA GES DISC](https://disc.gsfc.nasa.gov/) (`r emo::ji("right arrow")` [source OPeNDAP server](https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3)) ;
 * [Soil Moisture Active-Passive](https://smap.jpl.nasa.gov/) (SMAP), made available by the [NASA NSIDC DAAC](https://nsidc.org/) (`r emo::ji("right arrow")` [source OPeNDAP server](https://n5eil02u.ecs.nsidc.org/opendap/SMAP/))
 
 Details of each product available for download are provided in the table above. The function `get_collections_available()` returns that same table with additional information. Want more details on a specific collection ? Click on the "DOI" column !
 
-<details><summary>Products available for download with opendapr (click to expand)</summary>
+<details><summary><b>Products available for download with opendapr (click to expand)</b></summary>
 <p>
 
 ```{r, eval = TRUE, echo=F,message=F}
@@ -116,8 +116,7 @@ roi <- st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),qui
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
 # Login to USGS servers with username and password. To create an account : https://ers.cr.usgs.gov/register/
-credentials_usgs <- config::get("usgs")
-log <- login_usgs(c(credentials_usgs$usr,credentials_usgs$pwd))
+log <- login_usgs(c(Sys.getenv("usgs_un"),Sys.getenv("usgs_pw")))
 ```
 
 Download MODIS and GPM data in two steps : 
@@ -212,7 +211,7 @@ Apart from these performance considerations, ethical considerations have driven 
 
 * **Facilitating the access to Earth science data in places of the World where internet connections is slow or expensive** : Earth science products are generally huge files that can be quite difficult to download in places with slow internet connection, even more if long time series are needed. By enabling to download strictly the data that is needed, the products become more accessible in those places;
 * **Caring about the environmental digital impact of our research work** : Downloading data has an impact on environment and to some extent contributes to climate change. If we download only the data that is need (rather than e.g a whole MODIS tile, or a global SMAP or GPM dataset), we contribute to digital sobriety. 
-* **Support of the open-source movement** : The OPeNDAP is developed and advanced openly and collaboratively, by the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about). It is more and more used, by major Earth science data providers worldwide (e.g. NASA or NOAA). Using OPeNDAP means supporting methods and data access protocols that are open.
+* **Supporting the open-source movement** : The OPeNDAP is developed and advanced openly and collaboratively, by the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about). It is more and more used, by major Earth science data providers worldwide (e.g. NASA or NOAA). Using OPeNDAP means supporting methods and data access protocols that are open.
 
 ## Other packages
 

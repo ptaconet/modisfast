@@ -1,7 +1,7 @@
 #' @name download_data
 #' @aliases download_data
 #' @title  Download several datasets given their URLs and a destination files
-#' @description This function enables to download datasets, enventually parallelizing the download.
+#' @description This function enables to download datasets, enventually parallelizing the download. In a data import workflow, this function is typically used after a call to the \link{get_url} function. The output value of \link{get_url} can be used as input of parameter \code{df_to_dl} of the \link{download_data} function.
 #'
 #' @inheritParams get_url
 #' @param df_to_dl data.frame. Urls and destination files of dataset to download. See Details for the structure
@@ -30,7 +30,6 @@
 #' \item{ \code{"usgs"} : } {to download data requiring a login to Earthdata }
 #'}
 #'
-#' @note In a data import workflow, this function is typically used after a call to the \link{get_url} function. The output value of \code{get_url} can be used as input of parameter \code{df_to_dl} of the \code{download_data} function.
 #' @import dplyr parallel
 #' @export
 #'
@@ -73,7 +72,8 @@ download_data<-function(df_to_dl,parallel=FALSE,login_credentials=NULL,data_sour
 
     # Create directories if they do not exist
     unique(dirname(data_to_download$destfile)) %>%
-      lapply(dir.create,recursive = TRUE, mode = "0777", showWarnings = FALSE)
+      lapply(dir.create,recursive = TRUE, showWarnings = FALSE#, mode = "0777"
+             )
 
     # download data
     #for (i in 1:nrow(data_to_download)){
