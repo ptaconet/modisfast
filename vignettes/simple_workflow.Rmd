@@ -179,7 +179,7 @@ Let's plot the data now !
 
 (Note that only the first 16 dates are plotted here-under)
 
-```{r plot , fig.fullwidth = TRUE, fig.height = 10, fig.width = 9,fig.align = 'center', eval=NOT_CRAN}
+```{r plot , fig.fullwidth = TRUE, fig.height = 10, fig.width = 9,fig.align = 'center', eval=F}
 # Land surface temperature
 mod11a1_rast_day <- projectRaster(mod11a1_rast_day,crs = "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 ")
 plot(mod11a1_rast_day)

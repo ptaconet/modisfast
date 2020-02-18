@@ -3329,7 +3329,7 @@ To further import the data in R, have a look at the section [Important
 note regarding the further import of the data in
 R](#important-note-import) \!
 
-Simple or more complex data download + import workflows are provided in
+Simple or advanced data download and import workflows are provided in
 the vignettes `vignette("simple_workflow")`.
 
 ## Important note regarding the further import of the data in R

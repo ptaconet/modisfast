@@ -93,4 +93,5 @@
 
 .testInternetConnection<-function(){
   if(!curl::has_internet()){stop("Internet connection is required. Are you connected to the Internet ?\n")}
+  httr::set_config(config(maxredirs=-1))
 }
