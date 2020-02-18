@@ -1,5 +1,5 @@
 context("Collections implemented are working")
-skip_on_cran() # because it uses login to usgs
+skip_on_cran() # because it uses login
 #skip_on_travis()
 
 require(opendapr)

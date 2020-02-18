@@ -52,7 +52,7 @@
 
   httr::set_config(httr::authenticate(user=getOption("earthdata_user"), password=getOption("earthdata_pass"), type = "basic"))
   httr::config(maxredirs=-1)
-  vector_response<-httr::GET(paste0(OpenDAPUrl,".ascii?",variableName))
+  vector_response<-httr::GET(paste0(OpenDAPUrl,".ascii?",variableName),config = list(maxredirs=-1))
   vector<-httr::content(vector_response,"text",encoding="UTF-8")
   vector<-strsplit(vector,",")
   vector<-vector[[1]]

@@ -88,8 +88,7 @@ download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL,ver
       username <- password <- "no_auth"
     }
 
-    dl_func<-function(url,output,username,password) {httr::GET(url,httr::authenticate(username,password),httr::write_disk(output),httr::progress())}
-    httr::config(maxredirs=-1)
+    dl_func<-function(url,output,username,password) {httr::GET(url,httr::authenticate(username,password),httr::write_disk(output),httr::progress(),config = list(maxredirs=-1))}
 
     if(verbose){cat("Downloading the data...\n")}
     if (parallel){
