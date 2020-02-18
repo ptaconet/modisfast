@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE,
   purl = NOT_CRAN
-)
+  )
 ```
 
 ```{r setup, message=F}
@@ -28,7 +28,6 @@ require(raster)
 require(ncdf4)
 require(magrittr)
 require(purrr)
-require(config)
 ```
 
 In this example we want to download, import and plot over the 3500 km^2^ wide region of interest (mapped below) :
