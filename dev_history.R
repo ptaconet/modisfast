@@ -74,9 +74,9 @@ usethis::use_data(opendapMetadata_internal,modis_tiles, internal = TRUE,overwrit
 
 
 
-roi_example<-"/home/ptaconet/getRemoteData/inst/extdata/roi_example.gpkg"
-dir.create("inst/extdata")
-file.copy(roi_example,gsub("getRemoteData","opendapr",roi_example))
+#roi_example<-"/home/ptaconet/getRemoteData/inst/extdata/roi_example.gpkg"
+#dir.create("inst/extdata")
+#file.copy(roi_example,gsub("getRemoteData","opendapr",roi_example))
 
 roi_modis2tiles<-"/home/ptaconet/Documents/modis2tiles.gpkg"
 file.copy(roi_modis2tiles,gsub("Documents","opendapr/inst/extdata",roi_modis2tiles))
@@ -89,6 +89,9 @@ usethis::use_git_ignore("config.yml")
 ## To build vignettes
 devtools::build_vignettes() # ne pas oublier d'avoir ajouté au préalable VignetteBuilder: knitr dans le DESCRIPTION file
 devtools::install(build_vignettes = TRUE)
+
+# to test build on windows
+#check_win()
 
 ## To build a website with home and vignettes
 usethis::use_package_doc()

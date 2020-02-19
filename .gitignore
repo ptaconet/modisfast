@@ -1,12 +1,13 @@
 .Rproj.user
 .Rhistory
 .RData
-data_collections.csv
+.data_collections.csv
 .notes_articles.txt
 config.yml
 tests/testthat/data/
 GPM_L3/
 MOD11A1.006/
+SMAP/
 Meta
 data
 doc

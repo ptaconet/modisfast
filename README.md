@@ -10,29 +10,36 @@
 status](https://travis-ci.org/ptaconet/opendapr.svg?branch=master)](https://travis-ci.org/ptaconet/opendapr)
 <!-- badges: end -->
 
-The `opendapr` R package provides functions to **facilitate** and
-**speed-up** the **download of some well-known and widely-used
-spatiotemporal Earth science data** (such as
+opendapr is an R package that provides functions to **harmonize** and
+**speed-up** the **download** of some well-known and widely-used
+**spatiotemporal Earth science data** (e.g.
 [MODIS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/),
 [VIIRS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/),
-[GPM](https://pmm.nasa.gov/GPM) or [SMAP](https://smap.jpl.nasa.gov/)
-data) using the [OPeNDAP](https://www.opendap.org/about) framework
-(*Open-source Project for a Network Data Access Protocol*).
+[GPM](https://pmm.nasa.gov/GPM) or [SMAP](https://smap.jpl.nasa.gov/))
+using the [**OPeNDAP framework**](https://www.opendap.org/about).
 
-***Facilitate ?***
+***Harmonize ?***
 
-`opendapr` proposes a unique function to download the data,
-independently of the source. Users just need to care about the data
-collection, variables, time range and region of interest.
+opendapr uses a single function to query the various data servers and
+another single function to download the data. Users just need to care
+about the data collection, variables, time range and region of interest.
 
 ***Speed-up ?***
 
-`opendapr` takes advantage of the OPeNDAP abilities to download strictly
-the data that is needed : no more 1° x 1° MODIS tiles when the region of
-interest is only 100 km x 100 km wide \! This results in a reduction of
-the physical size of the data that is imported, and hence of the
-downloading time. In addition, `opendapr` enables to parallelize the
-download.
+opendapr uses the OPeNDAP (*Open-source Project for a Network Data
+Access Protocol*) abilities to download strictly the data that is needed
+: no more 1° x 1° MODIS tiles when our region of interest is only 100 km
+x 100 km wide \! This results in a reduction of the physical size of the
+data that is imported, and hence of the downloading time. In addition,
+opendapr enables to parallelize the download.
+
+[*Another package to download MODIS or SMAP data ?*](#other-packages)
+Yes. But opendapr acts a bit differently and hopefully helps if you :
+
+  - look for a single way to import multiple kind of satellite-derived
+    data in R,
+  - are concerned about downloading time and / or data storage (e.g. in
+    case of large time series or slow internet connection)
 
 ## Installation
 
@@ -52,11 +59,11 @@ You can install the development version from
 devtools::install_github("ptaconet/opendapr")
 ```
 
-Work is ongoing to publish the package in the CRAN.
+Work is ongoing to publish the package on the CRAN.
 
-## How to use `opendapr` ?
+## How to use opendapr ?
 
-Downloading the data with `opendapr` is a simple two-steps workflow :
+Downloading the data with opendapr is a simple two-steps workflow :
 
 1.  With the function **`get_url()`**: Retrieve the URL(s) of the data
     for a given collection, variables, time frame, region and output
@@ -78,18 +85,17 @@ to select and filter the data :
   - `output_format` : output format. Available options are : “nc4”
     (default), “ascii”, “json”
 
-Additional functions include login to the USGS EROS ERS needed to
-download the data ( `login_usgs()` ), check which collections are
-available for download ( `get_collections_available()` ), check which
-variables are available for each collection ( `get_variables_info()` ),
-etc.
+Additional functions include : login to EOSDIS Earthdata before querying
+the servers and downloading the data (`login()`), check which
+collections are available for download ( `get_collections_available()`
+), check which variables are available for each collection (
+`get_variables_info()` ), etc.
 
 Have a look at the [example](#example) below for a simple use case \!
 
-## Which products are available for download through `opendapr` ?
+## Which products are available for download through opendapr ?
 
-Currently `opendapr` enables to download data from four main collections
-:
+Currently opendapr enables to download data from four main collections :
 
   - [MODIS land
     products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/),
@@ -3247,9 +3253,11 @@ We want to download over the 50 km x 50 km wide region of interest :
   - a 40 days time series of [MODIS/Terra Land Surface
     Temperature/Emissivity Daily L3 Global 1km SIN
     Grid](https://dx.doi.org/10.5067/MODIS/MOD11A1.006)
+    (collection=“MOD11A1.006”)
   - the same 40 days times series of [GPM IMERG Final Precipitation L3 1
     day 0.1 degree x 0.1
     degree](https://doi.org/10.5067/GPM/IMERGDF/DAY/06)
+    (collection=“GPM\_L3/GPM\_3IMERGDF.06”)
 
 First prepare the script : set-up ROI, time frame and login to EOSDIS
 Earthdata
@@ -3261,7 +3269,7 @@ require(opendapr)
 require(sf)
 
 # Set ROI and time range of interest
-roi <- st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
+roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
 # Login to Earthdata servers with username and password. To create an account go to : https://urs.earthdata.nasa.gov/.
@@ -3339,20 +3347,21 @@ the vignettes `vignette("simple_workflow")`.
 ## Important note regarding the further import of the data in R
 
 Various packages and related classes can be used to read the data
-downloaded through OPeNDAP. If `raster` is surely the most famous, many
-packages facilitate the use of spatiotemporal data. For instance, MODIS
-or VIIRS products can be imported as a `stars` object from the excellent
+downloaded through OPeNDAP (as nc4, ascii or json files). If `raster` is
+surely the most famous, many packages facilitate the use of
+spatiotemporal data. For instance, MODIS or VIIRS products can be
+imported as a `stars` object from the excellent
 [`stars`](https://cran.r-project.org/package=stars) package for data
-cubes manipulation. All the data can also be imported as netcdf datasets
+cubes manipulation. All the data can also be imported as NetCDF datasets
 using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4)
 package, or `RasterLayer` / `RasterStackBrick` of the
 [`raster`](https://cran.r-project.org/package=raster) package.
 
 In any case, care must be taken when importing data that was downloaded
-through OPeNDAP. Depending on the collection, some “issues” were raised.
-These issues are independant from `opendapr` : they result most of time
-of a kind of lack of full implementation of the OPeNDAP framework by the
-data providers. These issues are :
+through the OPeNDAP data providers servers. Depending on the collection,
+some “issues” were raised. These issues are independant from opendapr :
+they result most of time of a kind of lack of full implementation of the
+OPeNDAP framework by the data providers. These issues are :
 
   - for MODIS and VNP collections : CRS has to be provided
   - for GPM collections : CRS has to be provided + data have to be
@@ -3363,8 +3372,8 @@ data providers. These issues are :
 These issues can easily be dealt at the import phase in R. The functions
 below includes the manipulations that have to be done at the data import
 phase to open the data as `raster` objects. (“path.to.nc4” is the path
-to a dataset downloaded with `opendapr` and “variable.of.interest” is
-the name of a variable).
+to a dataset downloaded with opendapr and “variable.of.interest” is the
+name of a variable).
 
 ``` r
 require(raster)
@@ -3398,15 +3407,15 @@ rast_smap <- ncdf4::nc_open("path.to.nc4")) %>%
 ####################
 ```
 
-## Why was the `opendapr` package developed ?
+## Context
 
-`opendapr` provides an entry point to some specific OPeNDAP servers
+opendapr provides an entry point to some specific OPeNDAP servers
 (e.g. MODIS, VNP, GPM or SMAP). The development of the package was
 motivated by the following reasons :
 
   - **Providing a simple and single way in R to download data stored on
     heterogeneous servers** : People that use Earth science data often
-    struggle with data access. In `opendapr` we propose an easy way to
+    struggle with data access. In opendapr we propose an easy way to
     download data from various providers in R. What these providers have
     in common is the implementation of OPeNDAP to access their data.
   - **Fastening the data import phase**, especially for long time series
@@ -3424,44 +3433,61 @@ driven the development of this package :
     accessible in those places;
   - **Caring about the environmental digital impact of our research
     work** : Downloading data has an impact on environment and to some
-    extent contributes to climate change. If we download only the data
+    extent contributes to climate change. We downloading only the data
     that is need (rather than e.g a whole MODIS tile, or a global SMAP
-    or GPM dataset), we contribute to digital sobriety.
+    or GPM dataset) we somehow contribute to digital sobriety.
   - **Supporting the open-source movement** : The OPeNDAP is developed
     and advanced openly and collaboratively, by the non-profit [OPeNDAP,
-    Inc.](https://www.opendap.org/about). It is more and more used, by
-    major Earth science data providers worldwide (e.g. NASA or NOAA).
-    Using OPeNDAP means supporting methods and data access protocols
-    that are open.
+    Inc.](https://www.opendap.org/about) This data access protocol is
+    more and more used, by major Earth science data providers worldwide
+    (e.g. NASA or NOAA). Using OPeNDAP means supporting methods and data
+    access protocols that are open.
 
 ## Other packages
 
-To our knowledge, there are no other R packages that use the OPeNDAP
-protocol to download remote data. Various packages enable to download
-the data that are proposed through `opendapr` using various web
-protocols. Above we list some of them, along with their ability to
-filter the data (spatially and dimensionally) :
+Many packages enable to download the data that are proposed through
+opendapr. Above we list some of them, along with some of their
+characteristics
+:
 
-  - [`MODIS`](https://github.com/MatMatt/MODIS) : *Download and
-    processing framework for MODIS imagery*. Spatial subsetting : ❌ ;
-    dimensional subsetting : ❌
-  - [`MODIStsp`](https://github.com/ropensci/MODIStsp) : *An “R” package
-    for automatic download and preprocessing of MODIS Land Products Time
-    Series*. Spatial subsetting : ❌ ; dimensional subsetting : ✅
-  - [`MODISTools`](https://github.com/ropensci/MODISTools) : *Interface
-    to the MODIS Land Products Subsets Web Services*. Spatial subsetting
-    : ✅ ; dimensional subsetting : ✅
-  - [`smapr`](https://github.com/ropensci/smapr) : *An R package for
-    acquisition and processing of NASA SMAP data*. Spatial subsetting :
-    ❌ ; dimensional subsetting : ❌
+| Package                                                |          Data           |                   Data access protocol                   | Spatial subsetting\* | Dimensional subsetting\* | Image preprocessing |
+| :----------------------------------------------------- | :---------------------: | :------------------------------------------------------: | :------------------: | :----------------------: | :-----------------: |
+| [`MODIS`](https://github.com/MatMatt/MODIS)            |          MODIS          |                                                          |          ❌           |            ❌             |          ✅          |
+|                                                        |                         |                                                          |                      |                          |                     |
+| [`MODIStsp`](https://github.com/ropensci/MODIStsp)     |          MODIS          |                                                          |          ❌           |            ✅             |          ✅          |
+|                                                        |                         |                                                          |                      |                          |                     |
+| [`MODISTools`](https://github.com/ropensci/MODISTools) |          MODIS          | MODIS and VIIRS Land Product Subsets RESTful Web Service |          ✅           |            ✅             |          ✅          |
+|                                                        |                         |                                                          |                      |                          |                     |
+| [`smapr`](https://github.com/ropensci/smapr)           |          SMAP           |                                                          |          ❌           |            ❌             |          ❌          |
+|                                                        |                         |                                                          |                      |                          |                     |
+| [`opendapr`](https://github.com/ptaconet/opendapr)     | MODIS, VIIRS, SMAP, GPM |                         OPeNDAP                          |          ✅           |            ✅             |          ❌          |
+
+\* at the downloading phase
 
 <!--
 ## Citation
 
-We thank in advance people that use `opendapr` for citing it in their work / publication(s). For this, please use the citation provided at this link [zenodo link to add] or through `citation("opendapr")`.
+We thank in advance people that use opendapr for citing it in their work / publication(s). For this, please use the citation provided at this link [zenodo link to add] or through `citation("opendapr")`.
 -->
 
+## Next steps
+
+Next development steps may involve :
+
+  - short term : including more SMAP collections (at now only
+    SPL3SMP\_3.003 collection is available)
+  - longer terme : including access to other collections and OPeNDAP
+    servers
+
+Any contribution is welcome \!
+
 ## Acknowledgment
+
+We thank NASA and its partners for making all their Earth science data
+freely available, and implementing data access protocols such as
+OPeNDAP. opendapr heavily builds on top of the OPeNDAP, so we thank the
+non-profit [OPeNDAP, Inc.](https://www.opendap.org/about) for developing
+the eponym tool in an open and collaborative way.
 
 The initial development and first release of this package were done
 during my ongoing [PhD project](https://github.com/ptaconet/phd_scripts)

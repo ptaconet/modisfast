@@ -99,6 +99,10 @@
   roiSpatialBound <- optionalsOpendap$roiSpatialBound
   modis_tile <- optionalsOpendap$modis_tile
 
+  if (length(time_range)==1){
+    time_range <- c(time_range,time_range)
+  }
+
   ############################################
   ##############  MODIS/VIIRS   ######################
   ############################################
@@ -107,9 +111,6 @@
 
     .workflow_get_url_modisvnp <- function(time_range,OpenDAPtimeVector,modis_tile,roiSpatialIndexBound){
       time_range <- as.Date(time_range,origin="1970-01-01")
-      if (length(time_range)==1){
-        time_range <- c(time_range,time_range)
-      }
 
       revisit_time <- OpenDAPtimeVector[2]-OpenDAPtimeVector[1]
 

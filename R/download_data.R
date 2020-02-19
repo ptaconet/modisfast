@@ -1,7 +1,9 @@
 #' @name download_data
 #' @aliases download_data
-#' @title  Download several datasets given their URLs and a destination files
-#' @description This function enables to download datasets, enventually parallelizing the download. In a data import workflow, this function is typically used after a call to the \link{get_url} function. The output value of \link{get_url} can be used as input of parameter \code{df_to_dl} of the \link{download_data} function.
+#' @title  Download several datasets given their URLs and destination path
+#' @description This function enables to download datasets. In a data import workflow, this function is typically used after a call to the \link{get_url} function. The output value of \link{get_url} can be used as input of parameter \code{df_to_dl} of \link{download_data}.
+#'
+#' The download can the parallelized.
 #'
 #' @inheritParams get_url
 #' @inheritParams login
@@ -31,6 +33,7 @@
 #'
 #' @import dplyr parallel
 #' @export
+#'
 #'
 
 download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL,verbose=FALSE){

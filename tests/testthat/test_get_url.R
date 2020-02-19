@@ -6,7 +6,7 @@ require(opendapr)
 require(sf)
 require(magrittr)
 
-roi = sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
+roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
 log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),"earthdata")
 
 

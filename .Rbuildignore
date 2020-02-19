@@ -13,6 +13,7 @@
 ^vignettes/MOD11A1.006$
 ^GPM_L3$
 ^MOD11A1.006$
+^SMAP$
 ^data$
 ^docs$
 ^Meta$

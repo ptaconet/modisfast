@@ -31,13 +31,17 @@
 #' require(sf)
 #'
 #' # Login to Earthdata
-#' log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
+#' log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),source="earthdata")
 #'
 #' # Get the optional parameters for the collection MOD11A1.006 and the roi :
 #' roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
 #' (opt_param_mod11a1 <- get_optional_parameters("MOD11A1.006",roi) )
 #'
-#' # Now we can
+#' # Now we can provide opt_param_mod11a1 as input parameter of the function get_url().
+#'
+#' dates_of_interest <- list("2017-01-01","2017-02-01","2017-03-01","2017-04-01","2017-05-01")
+#' %>% purrr::map(~as.Date())
+#' first_weeks <-
 #'
 #'}
 

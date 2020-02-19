@@ -1,7 +1,7 @@
 #' @name get_url
 #' @aliases get_url
-#' @title Get the URL of
-#' @description some descirption
+#' @title Build the OPeNDAP URL(s)
+#' @description This is the main function of the package. It enables to build the
 #'
 #' @param collection string. Collection of interest.
 #' @param variables string vector. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted.
@@ -10,7 +10,7 @@
 #' @param output_format string. Output format. Available options are : "nc4" (default), "ascii", "json"
 #' @param single_netcdf boolean. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.
 #' @param opt_param list of optional arguments (see details). This parameter is the output of the function \link{get_optional_parameters}.
-#' @param credentials vector string. In case of data that needs login : string vector of length 2 with username and password
+#' @param credentials vector string. In case of data that needs login for download : string vector of length 2 with username and password
 #' @param verbose boolean. Verbose (default FALSE)
 #'
 #' @return a data.frame with one row for each dataset to download and 4 columns  :
@@ -50,13 +50,13 @@
 #' password <- Sys.getenv("earthdata_pw")
 #' log <- login(credentials = c(username,password), source = "earthdata")
 #'
-#'############################################################
 #' ### Retrieve the URLs (OPeNDAP) to download the following datasets :
 #' # MODIS Terra LST Daily (MOD11A1.006) (collection)
 #' # Day + Night bands (LST_Day_1km,LST_Night_1km) (variables)
 #' # over a 50km x 70km region of interest (roi)
 #' # for the time frame 2017-01-01 to 2017-01-30 (30 days) (time_range)
 #'
+#'############################################################
 #' (opendap_urls_mod11a1 <- get_url(collection = "MOD11A1.006",
 #' variables = c("LST_Day_1km","LST_Night_1km"),
 #' roi = sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE),
@@ -87,7 +87,7 @@
 #' (mod11a1_rast_day <- brick(res_dl$destfile,varname="LST_Day_1km",crs=modis_crs))
 #' (mod11a1_rast_night <- brick(res_dl$destfile,varname="LST_Night_1km",crs=modis_crs))
 #'
-#' plot(mod11a1_rast_day[[1]])
+#' plot(mod11a1_rast_day)
 #' # Here the time dimension is set as the z dimension :
 #' (getZ(mod11a1_rast_day))
 #'}

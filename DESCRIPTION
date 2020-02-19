@@ -37,4 +37,5 @@ Suggests:
     raster,
     stars,
     mapview,
-    rmarkdown
+    rmarkdown,
+    tictoc

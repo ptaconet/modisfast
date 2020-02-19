@@ -18,7 +18,7 @@
 #'
 #' \donttest{
 #' # login to usgs
-#' log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
+#' log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),source="earthdata")
 #'
 #' # Get the collections implemented in the package :
 #' collections_available <- get_collections_available()
