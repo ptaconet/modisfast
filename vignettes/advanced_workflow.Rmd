@@ -48,7 +48,7 @@ password <- Sys.getenv("earthdata_pw")
 log <- login(credentials = c(username,password), source = "earthdata")
 ```
 
-## Import data over multiple regions of interest
+## Download data over multiple regions of interest
 
 The `get_url()` function internally supports the import of multiple regions of interest : the `roi` argument (which must be a POLYGON-type geometry `sf` or `sfc` object) can be composed of several features. 
 
@@ -116,7 +116,7 @@ print(str(res_dl))
 
 -->
 
-## Import data over multiple time frames of interest
+## Download data over multiple time frames of interest
 
 Of course, we could loop over the `get_url()` with the time ranges of interest, and get the data. However, the `get_url()` function does query the OPeNDAP servers each time it is called. This query internally imports various data, including OPeNDAP time, latitude and longitude vectors, and this process takes some time. In case you loop over the function for the same ROI and multiple time frames of interest, it will import again and again the same data, which is quite useless.
 
@@ -237,3 +237,6 @@ toc()
 
 identical(urls_mod11a1_notprov,urls_mod11a1_prov)
 ```
+
+
+## Import in R

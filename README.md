@@ -8,6 +8,8 @@
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3)
 [![Travis build
 status](https://travis-ci.org/ptaconet/opendapr.svg?branch=master)](https://travis-ci.org/ptaconet/opendapr)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/opendapr)](https://cran.r-project.org/package=opendapr)
+[![Github\_Status\_Badge](https://img.shields.io/badge/Github-0.0.9007-blue.svg)](https://github.com/ptaconet/opendapr)
 <!-- badges: end -->
 
 opendapr is an R package that provides functions to **harmonize** and
@@ -3407,7 +3409,41 @@ rast_smap <- ncdf4::nc_open("path.to.nc4")) %>%
 ####################
 ```
 
-## Context
+## Other packages
+
+Many packages enable to download the data that are proposed through
+opendapr. Above we list some of them, along with some of their
+characteristics
+:
+
+| Package                                                |          Data           |                   Data access protocol                   | Spatial subsetting\* | Dimensional subsetting\* | Image preprocessing |
+| :----------------------------------------------------- | :---------------------: | :------------------------------------------------------: | :------------------: | :----------------------: | :-----------------: |
+| [`MODIS`](https://github.com/MatMatt/MODIS)            |          MODIS          |                                                          |          ❌           |            ❌             |          ✅          |
+| [`MODIStsp`](https://github.com/ropensci/MODIStsp)     |          MODIS          |                                                          |          ❌           |            ✅             |          ✅          |
+| [`MODISTools`](https://github.com/ropensci/MODISTools) |          MODIS          | MODIS and VIIRS Land Product Subsets RESTful Web Service |          ✅           |            ✅             |          ✅          |
+| [`smapr`](https://github.com/ropensci/smapr)           |          SMAP           |                                                          |          ❌           |            ❌             |          ❌          |
+| [`opendapr`](https://github.com/ptaconet/opendapr)     | MODIS, VIIRS, SMAP, GPM |                         OPeNDAP                          |          ✅           |            ✅             |          ❌          |
+
+\* at the downloading phase
+
+<!--
+## Citation
+
+We thank in advance people that use opendapr for citing it in their work / publication(s). For this, please use the citation provided at this link [zenodo link to add] or through `citation("opendapr")`.
+-->
+
+## Next steps
+
+Next developments may involve :
+
+  - Short term : including more SMAP collections (at now only
+    SPL3SMP\_3.003 collection is available)
+  - Longer term : including access to other collections and OPeNDAP
+    servers
+
+Any contribution is welcome \!
+
+## Context and other thoughts
 
 opendapr provides an entry point to some specific OPeNDAP servers
 (e.g. MODIS, VNP, GPM or SMAP). The development of the package was
@@ -3421,8 +3457,8 @@ motivated by the following reasons :
   - **Fastening the data import phase**, especially for long time series
     analysis.
 
-Apart from these performance considerations, ethical considerations have
-driven the development of this package :
+Apart from these performance aspects, ethical considerations have driven
+the development of this package :
 
   - **Facilitating the access to Earth science data in places of the
     World where internet connections is slow or expensive** : Earth
@@ -3442,44 +3478,6 @@ driven the development of this package :
     more and more used, by major Earth science data providers worldwide
     (e.g. NASA or NOAA). Using OPeNDAP means supporting methods and data
     access protocols that are open.
-
-## Other packages
-
-Many packages enable to download the data that are proposed through
-opendapr. Above we list some of them, along with some of their
-characteristics
-:
-
-| Package                                                |          Data           |                   Data access protocol                   | Spatial subsetting\* | Dimensional subsetting\* | Image preprocessing |
-| :----------------------------------------------------- | :---------------------: | :------------------------------------------------------: | :------------------: | :----------------------: | :-----------------: |
-| [`MODIS`](https://github.com/MatMatt/MODIS)            |          MODIS          |                                                          |          ❌           |            ❌             |          ✅          |
-|                                                        |                         |                                                          |                      |                          |                     |
-| [`MODIStsp`](https://github.com/ropensci/MODIStsp)     |          MODIS          |                                                          |          ❌           |            ✅             |          ✅          |
-|                                                        |                         |                                                          |                      |                          |                     |
-| [`MODISTools`](https://github.com/ropensci/MODISTools) |          MODIS          | MODIS and VIIRS Land Product Subsets RESTful Web Service |          ✅           |            ✅             |          ✅          |
-|                                                        |                         |                                                          |                      |                          |                     |
-| [`smapr`](https://github.com/ropensci/smapr)           |          SMAP           |                                                          |          ❌           |            ❌             |          ❌          |
-|                                                        |                         |                                                          |                      |                          |                     |
-| [`opendapr`](https://github.com/ptaconet/opendapr)     | MODIS, VIIRS, SMAP, GPM |                         OPeNDAP                          |          ✅           |            ✅             |          ❌          |
-
-\* at the downloading phase
-
-<!--
-## Citation
-
-We thank in advance people that use opendapr for citing it in their work / publication(s). For this, please use the citation provided at this link [zenodo link to add] or through `citation("opendapr")`.
--->
-
-## Next steps
-
-Next development steps may involve :
-
-  - short term : including more SMAP collections (at now only
-    SPL3SMP\_3.003 collection is available)
-  - longer terme : including access to other collections and OPeNDAP
-    servers
-
-Any contribution is welcome \!
 
 ## Acknowledgment
 
