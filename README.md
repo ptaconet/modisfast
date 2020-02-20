@@ -74,7 +74,7 @@ The `odr_get_url()` function has the following input parameters that
 enable to select and filter the data of interest :
 
   - `collection` : collection of interest (see [next
-    section](#coll-available));
+    section](#which-products-are-available-for-download-through-opendapr-));
   - `variables` : variables to retrieve for the collection of interest.
     If not specified (default) all available variables will be extracted
     ;
@@ -3280,8 +3280,8 @@ log <- odr_login(credentials = c(username,password), source = "earthdata")
 
 Download the data in two steps :
 
-1.  Get the OPeNDAP URLs with the `odr_get_url()` function ;
-2.  Download the data with the `odr_download_data()` function.
+1.  Get the URLs with the function `odr_get_url()`;
+2.  Download the data with the function `odr_download_data()`.
 
 <!-- end list -->
 
@@ -3337,7 +3337,7 @@ It is also possible to subset the bands to download with the parameter
 
 To further import the data in R, have a look at the section [Important
 note regarding the further import of the data in
-R](#important-note-import) \!
+R](#important-note-regarding-the-further-import-of-the-data-in-r) \!
 
 Simple or advanced data download and import workflows are provided in
 the vignettes `vignette("simple_workflow")` and
