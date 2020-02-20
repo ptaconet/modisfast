@@ -7,33 +7,33 @@ require(sf)
 require(magrittr)
 
 roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
-log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),"earthdata")
+log <- odr_login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),"earthdata")
 
 
 ## test that errors are working
 test_that("test if errors are sent back", {
   # wrong type for roi
-  expect_error(get_url(collection = "MOD11A1.006", roi = "not_a_sf_object", time_range = as.Date(c("2017-01-01","2017-02-01"))),"Argument roi must be a object of class sf or sfc with only POLYGON-type geometries")
+  expect_error(odr_get_url(collection = "MOD11A1.006", roi = "not_a_sf_object", time_range = as.Date(c("2017-01-01","2017-02-01"))),"Argument roi must be a object of class sf or sfc with only POLYGON-type geometries")
  # wrong type for time range
-  expect_error(get_url(collection = "MOD11A1.006", roi = roi, time_range = c("2017-01-01","2017-02-01")),"Argument time_range is not of class Date or POSIXlt or is not of length 1 or 2 \n")
+  expect_error(odr_get_url(collection = "MOD11A1.006", roi = roi, time_range = c("2017-01-01","2017-02-01")),"Argument time_range is not of class Date or POSIXlt or is not of length 1 or 2 \n")
   # wrong dates
-  expect_error(get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2000-01-01","2017-02-01"))),"First time frame in time_range argument is before the beginning of the mission\n")
-  expect_error(get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2000-01-01","1999-02-01"))),"Time end is superior to time start in time_range argument \n")
+  expect_error(odr_get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2000-01-01","2017-02-01"))),"First time frame in time_range argument is before the beginning of the mission\n")
+  expect_error(odr_get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2000-01-01","1999-02-01"))),"Time end is superior to time start in time_range argument \n")
   # wrong length for time range
-  expect_error(get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01","2017-02-03"))),"Argument time_range is not of class Date or POSIXlt or is not of length 1 or 2 \n")
+  expect_error(odr_get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01","2017-02-03"))),"Argument time_range is not of class Date or POSIXlt or is not of length 1 or 2 \n")
   # wrong type for singleNetcdf
-  expect_error(get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01")), single_netcdf = "TRUE"),"single_netcdf argument must be boolean\n")
+  expect_error(odr_get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01")), single_netcdf = "TRUE"),"single_netcdf argument must be boolean\n")
   # Collection does not exist
-  #expect_error(get_url(collection = "MOD11A1v006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01"))),"The collection that you specified does not exist. Check get_collections_available() to see which collections are implemented\n")
+  #expect_error(odr_get_url(collection = "MOD11A1v006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01"))),"The collection that you specified does not exist. Check get_collections_available() to see which collections are implemented\n")
   # output format is not specified
-  expect_error(get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01")), output_format = NA),"Specified output format is not valid. Please specify a valid output format \n")
+  expect_error(odr_get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01")), output_format = NA),"Specified output format is not valid. Please specify a valid output format \n")
 
 })
 
 
 
 
-## test that the function get_url is working (above in comments, to test all the collections)
+## test that the function odr_get_url is working (above in comments, to test all the collections)
 #for (i in 1:nrow(opendapr:::opendapMetadata_internal)){
 # collection_tested <- opendapr:::opendapMetadata_internal$collection[i]
 
@@ -48,7 +48,7 @@ for (i in 1:length(collection_tested)){
 
   test_that(paste0(collection_tested[i]," is working"), {
 
-    opendap_urls <- get_url(collection = collection_tested[i],
+    opendap_urls <- odr_get_url(collection = collection_tested[i],
                                     roi = roi,
                                     time_range = time_range
                                     )
@@ -58,7 +58,7 @@ for (i in 1:length(collection_tested)){
     expect_gt(nrow(opendap_urls),0) # there is at least 1 row
 
     opendap_urls$destfile <- file.path("data",opendap_urls$destfile)
-    res <- download_data(opendap_urls,source = "earthdata", parallel = TRUE)
+    res <- odr_download_data(opendap_urls,source = "earthdata", parallel = TRUE)
 
     expect_equal(unique(res$fileDl),TRUE) # all files have been downloaded
 

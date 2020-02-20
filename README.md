@@ -3446,7 +3446,7 @@ Next developments may involve :
 
   - Short term : including more SMAP collections (at now only
     SPL3SMP\_3.003 collection is available)
-  - Longer term : including access to other collections and OPeNDAP
+  - Longer term : including access to more collections and OPeNDAP
     servers
 
 Any contribution is welcome \!
@@ -3468,8 +3468,8 @@ motivated by the following reasons :
 Apart from these performance aspects, ethical considerations have driven
 the development of this package :
 
-  - **Facilitating the access to Earth science data in places of the
-    World where internet connections is slow or expensive** : Earth
+  - **Facilitating the access to Earth science data for R users in
+    places where internet connection is slow or expensive** : Earth
     science products are generally huge files that can be quite
     difficult to download in places with slow internet connection, even
     more if large time series are needed. By enabling to download

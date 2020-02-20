@@ -54,7 +54,7 @@ time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
 ## Login to EOSDIS Earthdata
 
-And we odr_login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
+And we login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
 
 ```{r odr_login, eval=NOT_CRAN}
 # Login to Earthdata servers with username and password. Here we have stored our credentials in local environment variables
