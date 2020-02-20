@@ -1,13 +1,13 @@
-#' @name download_data
-#' @aliases download_data
+#' @name odr_download_data
+#' @aliases odr_download_data
 #' @title  Download several datasets given their URLs and destination path
-#' @description This function enables to download datasets. In a data import workflow, this function is typically used after a call to the \link{get_url} function. The output value of \link{get_url} can be used as input of parameter \code{df_to_dl} of \link{download_data}.
+#' @description This function enables to download datasets. In a data import workflow, this function is typically used after a call to the \link{odr_get_url} function. The output value of \link{odr_get_url} can be used as input of parameter \code{df_to_dl} of \link{odr_download_data}.
 #'
 #' The download can the parallelized.
 #'
-#' @inheritParams get_url
-#' @inheritParams login
-#' @param df_to_dl data.frame. Urls and destination files of dataset to download. Typically output of \link{get_url}. See Details for the structure
+#' @inheritParams odr_get_url
+#' @inheritParams odr_login
+#' @param df_to_dl data.frame. Urls and destination files of dataset to download. Typically output of \link{odr_get_url}. See Details for the structure
 #' @param parallel boolean. Parallelize the download ? Default to FALSE
 #'
 #' @return a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional columns are :
@@ -27,8 +27,8 @@
 #'
 #' Parameter \code{source} takes NULL as default value. Options are :
 #' \itemize{
-#' \item{ \code{NULL} : } {when no login is required to download the data. }
-#' \item{ \code{"earthdata"} : } {to download data requiring a login to EOSDIS Earthdata. To create an account go to : https://urs.earthdata.nasa.gov/  }
+#' \item{ \code{NULL} : } {when no odr_login is required to download the data. }
+#' \item{ \code{"earthdata"} : } {to download data requiring a odr_login to EOSDIS Earthdata. To create an account go to : https://urs.earthdata.nasa.gov/  }
 #'}
 #'
 #' @import dplyr parallel
@@ -36,7 +36,7 @@
 #'
 #'
 
-download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL,verbose=FALSE){
+odr_download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL,verbose=FALSE){
 
   fileSize <- destfile <- fileDl <- NULL
 
@@ -116,7 +116,7 @@ download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL,ver
   data_downloaded <- dplyr::filter(data_dl,fileSize>=5000)
 
   if(!(identical(data_dl,data_downloaded))){
-    download_data(df_to_dl=df_to_dl,parallel=FALSE,credentials=credentials,source=source)
+    odr_download_data(df_to_dl=df_to_dl,parallel=FALSE,credentials=credentials,source=source)
   }
 
   # 1 : download ok

@@ -1,10 +1,10 @@
 ---
-title: "2. Advanced use of `get_url()`"
+title: "2. Advanced use of `odr_get_url()`"
 author: "Paul Taconet"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Advanced use of the function get_url}
+  %\VignetteIndexEntry{Advanced use of the function odr_get_url}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -58,20 +58,20 @@ time_ranges <- list(as.Date(c("2016-01-01","2016-01-31")),
 
 ## Login to EOSDIS Earthdata
 
-And we login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
+And we odr_login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
 
-```{r login, eval=NOT_CRAN}
+```{r odr_login, eval=NOT_CRAN}
 # Login to Earthdata servers with username and password.
 username <- Sys.getenv("earthdata_un")
 password <- Sys.getenv("earthdata_pw")
-log <- login(credentials = c(username,password), source = "earthdata")
+log <- odr_login(credentials = c(username,password), source = "earthdata")
 ```
 
 
 <!--
 ## Download data over multiple regions of interest
 
-The `get_url()` function internally supports the import of multiple regions of interest : the `roi` argument (which must be a POLYGON-type geometry `sf` or `sfc` object) can be composed of several features. 
+The `odr_get_url()` function internally supports the import of multiple regions of interest : the `roi` argument (which must be a POLYGON-type geometry `sf` or `sfc` object) can be composed of several features. 
 
 As an example :
 
@@ -89,11 +89,11 @@ mapview::mapview(roi,legend=F)
 
 Get the urls for MOD11A1.006, GPM_L3/GPM_3IMERGDF.06 and SMAP/SPL3SMP_E.003 collections for these 2 regions of interest and the time frame : 
 
-```{r get_url, eval=NOT_CRAN}
+```{r odr_get_url, eval=NOT_CRAN}
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
 ## Get the URLs of MODIS Terra LST daily
-urls_mod11a1 <- get_url(
+urls_mod11a1 <- odr_get_url(
   collection = "MOD11A1.006",
   variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
   roi = roi,
@@ -101,7 +101,7 @@ urls_mod11a1 <- get_url(
  )
 
 ## Get the URLs of GPM daily
-urls_gpm <- get_url(
+urls_gpm <- odr_get_url(
   collection = "GPM_L3/GPM_3IMERGDF.06",
   variables = c("precipitationCal","precipitationCal_cnt"),
   roi = roi,
@@ -109,7 +109,7 @@ urls_gpm <- get_url(
  )
 
 ## Get the URLs of SMAP 3-days
-urls_smap <- get_url(
+urls_smap <- odr_get_url(
   collection = "SMAP/SPL3SMP_E.003",
   variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture","Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag","Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm","Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),
   roi = roi,
@@ -125,12 +125,12 @@ head(urls_smap,3)
 
 We notice that in the 'name' and 'destfile' fields, we now have a '_1' and '_2' at the end of the name / destfile which correspond to the two features of the object `roi`.
 
-We can now download data as usual with `download_data()` ! 
+We can now download data as usual with `odr_download_data()` ! 
 
 <!--
-```{r download_data, eval=F }
+```{r odr_download_data, eval=F }
 df_to_dl <- rbind(urls_mod11a1,urls_gpm,urls_smap)
-res_dl <- download_data(df_to_dl,source="earthdata",parallel = TRUE)
+res_dl <- odr_download_data(df_to_dl,source="earthdata",parallel = TRUE)
 
 print(str(res_dl))
 ```
@@ -139,22 +139,22 @@ print(str(res_dl))
 
 ## Get the OPeNDAP URLs of the data to download {#get-url}
 
-Of course, we could loop over the `get_url()` with the time ranges of interest, and get the data. However, the `get_url()` function does query the OPeNDAP servers each time it is called. This query internally imports various data, including OPeNDAP time, latitude and longitude vectors, and this process takes some time. In case you loop over the function for the same ROI and multiple time frames of interest, it will import again and again the same data, which is quite useless.
+Of course, we could loop over the `odr_get_url()` with the time ranges of interest, and get the data. However, the `odr_get_url()` function does query the OPeNDAP servers each time it is called. This query internally imports various data, including OPeNDAP time, latitude and longitude vectors, and this process takes some time. In case you loop over the function for the same ROI and multiple time frames of interest, it will import again and again the same data, which is quite useless.
 
-Here is where the function `get_optional_parameters()` comes into the game. For a given collection and ROI, this function queries the OPeNDAP server and retrieves the information that we were mentionning in the previous paragraph. This function is actually run within the `get_url()` function, but its output can also be provided as input parameter `opt_param` of `get_url()`. If `get_url()` is queried multiple times for the same couple {collection, ROI}, it is hence more efficient to pre-compute only once the argument `opt_param` using `get_optional_parameters()` and to further provide it to `get_url()` within a `for` loop or e.g. a `purrr::map()` function.
+Here is where the function `odr_get_opt_param()` comes into the game. For a given collection and ROI, this function queries the OPeNDAP server and retrieves the information that we were mentionning in the previous paragraph. This function is actually run within the `odr_get_url()` function, but its output can also be provided as input parameter `opt_param` of `odr_get_url()`. If `odr_get_url()` is queried multiple times for the same couple {collection, ROI}, it is hence more efficient to pre-compute only once the argument `opt_param` using `odr_get_opt_param()` and to further provide it to `odr_get_url()` within a `for` loop or e.g. a `purrr::map()` function.
 
-So when we have multiple time frames of interest, prior to executing `get_url()` we retrieve the `opt_param` parameter for each collection and roi with `get_optional_parameters()` :
+So when we have multiple time frames of interest, prior to executing `odr_get_url()` we retrieve the `opt_param` parameter for each collection and roi with `odr_get_opt_param()` :
 
 ```{r multiple_timeframes, eval=NOT_CRAN }
-opt_param_mod11a1 <- get_optional_parameters("MOD11A1.006",roi)
-opt_param_gpm <- get_optional_parameters("GPM_L3/GPM_3IMERGDF.06",roi)
-opt_param_smap <- get_optional_parameters("SMAP/SPL3SMP_E.003",roi)
+opt_param_mod11a1 <- odr_get_opt_param("MOD11A1.006",roi)
+opt_param_gpm <- odr_get_opt_param("GPM_L3/GPM_3IMERGDF.06",roi)
+opt_param_smap <- odr_get_opt_param("SMAP/SPL3SMP_E.003",roi)
 ```
 
-And we get our URLs, using a `purrr::map()` function over our time frames of interest and setting the `opt_param` parameter in `get_url()`  : 
+And we get our URLs, using a `purrr::map()` function over our time frames of interest and setting the `opt_param` parameter in `odr_get_url()`  : 
 
-```{r get_url_multiple_timeframes, eval=NOT_CRAN}
-urls_mod11a1 <- map(.x = time_ranges, ~get_url(
+```{r odr_get_url_multiple_timeframes, eval=NOT_CRAN}
+urls_mod11a1 <- map(.x = time_ranges, ~odr_get_url(
   collection = "MOD11A1.006",
   variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
   roi = roi,
@@ -162,7 +162,7 @@ urls_mod11a1 <- map(.x = time_ranges, ~get_url(
   opt_param = opt_param_mod11a1)
   )
 
-urls_gpm <- map(.x = time_ranges, ~get_url(
+urls_gpm <- map(.x = time_ranges, ~odr_get_url(
   collection = "GPM_L3/GPM_3IMERGDF.06",
   variables = c("precipitationCal","precipitationCal_cnt"),
   roi = roi,
@@ -170,7 +170,7 @@ urls_gpm <- map(.x = time_ranges, ~get_url(
   opt_param = opt_param_gpm)
 )
 
-urls_smap <- map(.x = time_ranges, ~get_url(
+urls_smap <- map(.x = time_ranges, ~odr_get_url(
   collection = "SMAP/SPL3SMP_E.003",
   variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture","Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag","Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm","Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),
   roi = roi,
@@ -194,7 +194,7 @@ require(tictoc)
 tic()
 for (i in 1:length(time_ranges)){
   urls_mod11a1_notprov <- rbind(urls_mod11a1,
-                      get_url(
+                      odr_get_url(
                         collection = "MOD11A1.006",
                         variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
                         roi = roi,
@@ -205,10 +205,10 @@ toc()
 
 # Providing the `opt_param` parameter
 tic()
-opt_param_mod11a1 <- get_optional_parameters("MOD11A1.006",roi)
+opt_param_mod11a1 <- odr_get_opt_param("MOD11A1.006",roi)
 for (i in 1:length(time_ranges)){
   urls_mod11a1_prov <- rbind(urls_mod11a1,
-                      get_url(
+                      odr_get_url(
                         collection = "MOD11A1.006",
                         variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
                         roi = roi,
@@ -226,7 +226,7 @@ identical(urls_mod11a1_notprov,urls_mod11a1_prov)
 
 ```{r dl, eval=NOT_CRAN}
 df_to_dl <- map_df(c(urls_mod11a1,urls_gpm,urls_smap),~.x)
-res_dl <- download_data(df_to_dl,source="earthdata",parallel = TRUE)
+res_dl <- odr_download_data(df_to_dl,source="earthdata",parallel = TRUE)
 
 print(str(res_dl))
 ```
@@ -286,7 +286,7 @@ modis_ts <- urls_mod11a1 %>%
 gpm_ts <- urls_gpm %>%
   purrr::map(~.import_gpm(.$destfile,"precipitationCal"))
 
-smap_sp_bound <- opendapr::get_optional_parameters(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
+smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
 smap_ts <- urls_smap %>%
   purrr::map(~.import_smap(.$destfile,"Soil_Moisture_Retrieval_Data_AM_soil_moisture",smap_sp_bound))
 

@@ -54,54 +54,54 @@ time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
 ## Login to EOSDIS Earthdata
 
-And we login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
+And we odr_login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
 
-```{r login, eval=NOT_CRAN}
+```{r odr_login, eval=NOT_CRAN}
 # Login to Earthdata servers with username and password. Here we have stored our credentials in local environment variables
 username <- Sys.getenv("earthdata_un")
 password <- Sys.getenv("earthdata_pw")
-log <- login(credentials = c(username,password), source = "earthdata")
+log <- odr_login(credentials = c(username,password), source = "earthdata")
 ```
 
 ## Get the OPeNDAP URLs of the data to download {#get-url}
 
-With the function `get_url()`, we get the https URLs for our collections of interest (*MOD11A1.006*, *GPM_L3/GPM_3IMERGDF.06* and *SMAP/SPL3SMP_E.003*) given our ROI and time frame. 
+With the function `odr_get_url()`, we get the https URLs for our collections of interest (*MOD11A1.006*, *GPM_L3/GPM_3IMERGDF.06* and *SMAP/SPL3SMP_E.003*) given our ROI and time frame. 
 
-**Note on the use of the parameter `variables` of the function `get_url()`** :
+**Note on the use of the parameter `variables` of the function `odr_get_url()`** :
 
-The collections generally contain several variables (sometimes called "dimensions", or "bands"). As an example, MODIS LST products contain one band for the day temperature ("LST_Day_1km"), one band for the night temperature ("LST_Night_1km"), etc. To get all the variables available for a given collection along with information for each of them (description, etc.), use the function `get_variables_info()`. e.g. :
+The collections generally contain several variables (sometimes called "dimensions", or "bands"). As an example, MODIS LST products contain one band for the day temperature ("LST_Day_1km"), one band for the night temperature ("LST_Night_1km"), etc. To get all the variables available for a given collection along with information for each of them (description, etc.), use the function `odr_list_variables()`. e.g. :
 
-```{r get_variables_info, eval=NOT_CRAN}
-tail(get_variables_info("MOD11A1.006"))
+```{r odr_list_variables, eval=NOT_CRAN}
+tail(odr_list_variables("MOD11A1.006"))
 ```
 
-In `get_url()`, the parameter `variables` enables to restrict the data to download to only specific variables. By default it is set to `NULL`, which means that all the available variables for the specified collection are downloaded. Specifying `variables` will make the data to download lighter. 
+In `odr_get_url()`, the parameter `variables` enables to restrict the data to download to only specific variables. By default it is set to `NULL`, which means that all the available variables for the specified collection are downloaded. Specifying `variables` will make the data to download lighter. 
 
 **End Note**
 
 In our example, we specify some variables for each collection. 
 
-```{r get_url, eval=NOT_CRAN}
+```{r odr_get_url, eval=NOT_CRAN}
 ## Get the URLs of MODIS Terra LST daily
-urls_mod11a1 <- get_url(
+urls_mod11a1 <- odr_get_url(
   collection = "MOD11A1.006",
-  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),  # get the variables available with : get_variables_info("MOD11A1.006") ; or set to NULL (defaults) to download all the variables
+  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),  # get the variables available with : odr_list_variables("MOD11A1.006") ; or set to NULL (defaults) to download all the variables
   roi = roi,
   time_range = time_range
  )
 
 ## Get the URLs of GPM daily
-urls_gpm <- get_url(
+urls_gpm <- odr_get_url(
   collection = "GPM_L3/GPM_3IMERGDF.06",
-  variables = c("precipitationCal","precipitationCal_cnt"),  # get the variables available with : get_variables_info("GPM_L3/GPM_3IMERGDF.06")
+  variables = c("precipitationCal","precipitationCal_cnt"),  # get the variables available with : odr_list_variables("GPM_L3/GPM_3IMERGDF.06")
   roi = roi,
   time_range = time_range
  )
 
 ## Get the URLs of SMAP 3-days
-urls_smap <- get_url(
+urls_smap <- odr_get_url(
   collection = "SMAP/SPL3SMP_E.003",
-  variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture","Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag","Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm","Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),     # get the variables available with : get_variables_info("SMAP/SPL3SMP_E.003")
+  variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture","Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag","Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm","Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),     # get the variables available with : odr_list_variables("SMAP/SPL3SMP_E.003")
   roi = roi,
   time_range = time_range
  )
@@ -119,15 +119,15 @@ head(urls_smap,3)
 
 ## Download the data {#download}
 
-Now we download the data with the function `download_data()`.
+Now we download the data with the function `odr_download_data()`.
 
 Destination file for each dataset is specified in the column *destfile* of the dataframes *urls_mod11a1*,  *urls_gpm* and *urls_smap*. The destination file is specified by default but it can of course be modified.
 
 Setting the argument `parallel` to `TRUE` will parallelize - therefore fasten - the download in case their are numerous datasets to download
 
-```{r download_data, eval=NOT_CRAN }
+```{r odr_download_data, eval=NOT_CRAN }
 df_to_dl <- rbind(urls_mod11a1,urls_gpm,urls_smap)
-res_dl <- download_data(df_to_dl,source="earthdata",parallel = TRUE)
+res_dl <- odr_download_data(df_to_dl,source="earthdata",parallel = TRUE)
 
 print(str(res_dl))
 ```
@@ -179,11 +179,11 @@ We can also import the same MODIS time series as a `stars` object. Here the inte
 
 #### As a `RasterLayer` object
 
-We set-up the missing bounding coordinates. For this we use the function `get_optional_parameters()`.
+We set-up the missing bounding coordinates. For this we use the function `odr_get_opt_param()`.
 
 ```{r import_smap, message=F, eval=NOT_CRAN}
 ## Import the SMAP time series as a rasterBrick object (1 rasterBrick for each dimension) :
-smap_sp_bound <- opendapr::get_optional_parameters(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
+smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
   
 (smap_rast_sm_am <- urls_smap$destfile %>%
   purrr::map(~ncdf4::nc_open(.)) %>%

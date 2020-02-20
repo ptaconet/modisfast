@@ -1,12 +1,12 @@
-#' @name get_variables_info
-#' @aliases get_variables_info
+#' @name odr_list_variables
+#' @aliases odr_list_variables
 #' @title Get informations related to the variables available for a given collection
 #' @description Get the variables available for a given collection
 #'
-#' @inheritParams get_url
+#' @inheritParams odr_get_url
 #'
 #' @return A data.frame with the available variables for the collection, and a set of related information for each variable.
-#' The variables marked as "extractable" in the column "extractable_w_opendapr" can be provided as input parameter \code{variables} of the function \link{get_url}
+#' The variables marked as "extractable" in the column "extractable_w_opendapr" can be provided as input parameter \code{variables} of the function \link{odr_get_url}
 #'
 #' @export
 #'
@@ -17,15 +17,15 @@
 #' @examples
 #'
 #' \donttest{
-#' # login to Earthdata
-#' log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),source="earthdata")
+#' # odr_login to Earthdata
+#' log <- odr_login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),source="earthdata")
 #'
 #' # Get the variables available for the collection MOD11A1.006
-#' (df_varinfo <- get_variables_info("MOD11A1.006"))
+#' (df_varinfo <- odr_list_variables("MOD11A1.006"))
 #'}
 #'
 
-get_variables_info<-function(collection,credentials=NULL){  # for a given collection, get the available variables and associated information
+odr_list_variables<-function(collection,credentials=NULL){  # for a given collection, get the available variables and associated information
 
   .testIfCollExists(collection)
   .testInternetConnection()

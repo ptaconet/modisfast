@@ -57,7 +57,7 @@
       <a href="articles/opendapr1.html">1. Simple workflow : Download and import data for a given region of interest and time frame</a>
     </li>
     <li>
-      <a href="articles/opendapr2.html">2. Advanced use of `get_url()`</a>
+      <a href="articles/opendapr2.html">2. Advanced use of `odr_get_url()`</a>
     </li>
   </ul>
 </li>
@@ -121,10 +121,10 @@ install.packages("opendapr")
 <a href="#how-to-use-opendapr" class="anchor"></a>How to use opendapr ?</h2>
 <p>Downloading the data with opendapr is a simple two-steps workflow :</p>
 <ol style="list-style-type: decimal">
-<li>With the function <strong><code><a href="reference/get_url.html">get_url()</a></code></strong>: Retrieve the URL(s) of the data for a given collection, variables, time frame, region and output data format of interest ;</li>
-<li>With the function <strong><code><a href="reference/download_data.html">download_data()</a></code></strong>: Download the data to your computer.</li>
+<li>With the function <strong><code><a href="reference/odr_get_url.html">odr_get_url()</a></code></strong>: Retrieve the URL(s) of the data for a given collection, variables, time frame, region and output data format of interest ;</li>
+<li>With the function <strong><code><a href="reference/odr_download_data.html">odr_download_data()</a></code></strong>: Download the data to your computer.</li>
 </ol>
-<p>The <code><a href="reference/get_url.html">get_url()</a></code> function has the following input parameters that enable to select and filter the data of interest :</p>
+<p>The <code><a href="reference/odr_get_url.html">odr_get_url()</a></code> function has the following input parameters that enable to select and filter the data of interest :</p>
 <ul>
 <li>
 <code>collection</code> : collection of interest (see <a href="#coll-available">next section</a>);</li>
@@ -137,7 +137,7 @@ install.packages("opendapr")
 <li>
 <code>output_format</code> : output format. Available options are : “nc4” (default), “ascii”, “json”</li>
 </ul>
-<p>Additional functions include : login to EOSDIS Earthdata before querying the servers and downloading the data (<code><a href="reference/login.html">login()</a></code>), list collection available for download ( <code><a href="reference/get_collections_available.html">get_collections_available()</a></code> ), list variables available for each collection ( <code><a href="reference/get_variables_info.html">get_variables_info()</a></code> ).</p>
+<p>Additional functions include : odr_login to EOSDIS Earthdata before querying the servers and downloading the data (<code><a href="reference/odr_login.html">odr_login()</a></code>), list collection available for download ( <code><a href="reference/odr_list_collections.html">odr_list_collections()</a></code> ), list variables available for each collection ( <code><a href="reference/odr_list_variables.html">odr_list_variables()</a></code> ).</p>
 <p>Have a look at the <a href="#example">example</a> below for a simple use case !</p>
 </div>
 <div id="coll-available" class="section level2">
@@ -154,7 +154,7 @@ install.packages("opendapr")
 <li>
 <a href="https://smap.jpl.nasa.gov/">Soil Moisture Active-Passive</a> (SMAP), made available by the <a href="https://nsidc.org/">NASA NSIDC DAAC</a> (➡️ <a href="https://n5eil02u.ecs.nsidc.org/opendap/SMAP/">source OPeNDAP server</a>)</li>
 </ul>
-<p>Details of each product available for download are provided in the table above or through the function <code><a href="reference/get_collections_available.html">get_collections_available()</a></code>. Want more details on a specific collection ? Click on the “DOI” column !</p>
+<p>Details of each product available for download are provided in the table above or through the function <code><a href="reference/odr_list_collections.html">odr_list_collections()</a></code>. Want more details on a specific collection ? Click on the “DOI” column !</p>
 <details><summary><b>Data collections available for download with opendapr (click to expand)</b></summary><p>
 </p>
 <table class="table table table">
@@ -1710,7 +1710,7 @@ Surface reflectance
 <li>a 40 days time series of <a href="https://dx.doi.org/10.5067/MODIS/MOD11A1.006">MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid</a> (collection=“MOD11A1.006”)</li>
 <li>the same 40 days times series of <a href="https://doi.org/10.5067/GPM/IMERGDF/DAY/06">GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree</a> (collection=“GPM_L3/GPM_3IMERGDF.06”)</li>
 </ul>
-<p>First prepare the script : set-up the ROI and time frame + login to EOSDIS Earthdata</p>
+<p>First prepare the script : set-up the ROI and time frame + odr_login to EOSDIS Earthdata</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">### Prepare script</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co"># Load the packages</span></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(opendapr)</a>
@@ -1724,23 +1724,23 @@ Surface reflectance
 <a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co"># Here we have stored our credentials in local environment variables</span></a>
 <a class="sourceLine" id="cb2-12" data-line-number="12">username &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.getenv">Sys.getenv</a></span>(<span class="st">"earthdata_un"</span>) </a>
 <a class="sourceLine" id="cb2-13" data-line-number="13">password &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.getenv">Sys.getenv</a></span>(<span class="st">"earthdata_pw"</span>)</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">log &lt;-<span class="st"> </span><span class="kw"><a href="reference/login.html">login</a></span>(<span class="dt">credentials =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(username,password), <span class="dt">source =</span> <span class="st">"earthdata"</span>)</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">log &lt;-<span class="st"> </span><span class="kw"><a href="reference/odr_login.html">odr_login</a></span>(<span class="dt">credentials =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(username,password), <span class="dt">source =</span> <span class="st">"earthdata"</span>)</a>
 <a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt; Checking credentials...</span></a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#&gt; Successfull login to earthdata</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#&gt; Successfull odr_login to earthdata</span></a></code></pre></div>
 <p>Download the data in two steps :</p>
 <ol style="list-style-type: decimal">
-<li>Get the OPeNDAP URLs with the <code><a href="reference/get_url.html">get_url()</a></code> function ;</li>
-<li>Download the data with the <code><a href="reference/download_data.html">download_data()</a></code> function.</li>
+<li>Get the OPeNDAP URLs with the <code><a href="reference/odr_get_url.html">odr_get_url()</a></code> function ;</li>
+<li>Download the data with the <code><a href="reference/odr_download_data.html">odr_download_data()</a></code> function.</li>
 </ol>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">## Get the URLs for MOD11A1.006</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">urls_mod11a1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_url.html">get_url</a></span>(</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">urls_mod11a1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/odr_get_url.html">odr_get_url</a></span>(</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dt">collection =</span> <span class="st">"MOD11A1.006"</span>,</a>
 <a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">roi =</span> roi,</a>
 <a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="dt">time_range =</span> time_range</a>
 <a class="sourceLine" id="cb3-6" data-line-number="6"> )</a>
 <a class="sourceLine" id="cb3-7" data-line-number="7"></a>
 <a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">## Get the URLs for GPM_L3/GPM_3IMERGDF.06</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">urls_gpm &lt;-<span class="st"> </span><span class="kw"><a href="reference/get_url.html">get_url</a></span>(</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">urls_gpm &lt;-<span class="st"> </span><span class="kw"><a href="reference/odr_get_url.html">odr_get_url</a></span>(</a>
 <a class="sourceLine" id="cb3-10" data-line-number="10">  <span class="dt">collection =</span> <span class="st">"GPM_L3/GPM_3IMERGDF.06"</span>,</a>
 <a class="sourceLine" id="cb3-11" data-line-number="11">  <span class="dt">roi =</span> roi,</a>
 <a class="sourceLine" id="cb3-12" data-line-number="12">  <span class="dt">time_range =</span> time_range</a>
@@ -1764,7 +1764,7 @@ Surface reflectance
 <a class="sourceLine" id="cb3-30" data-line-number="30"></a>
 <a class="sourceLine" id="cb3-31" data-line-number="31"><span class="co">## Download the data. Destination file for each dataset is specified in the column "destfile" of the data.frames urls_mod11a1 and urls_gpm</span></a>
 <a class="sourceLine" id="cb3-32" data-line-number="32">df_to_dl &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">rbind</a></span>(urls_mod11a1,urls_gpm)</a>
-<a class="sourceLine" id="cb3-33" data-line-number="33">res_dl &lt;-<span class="st"> </span><span class="kw"><a href="reference/download_data.html">download_data</a></span>(df_to_dl,<span class="dt">source=</span><span class="st">"earthdata"</span>,<span class="dt">parallel =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-33" data-line-number="33">res_dl &lt;-<span class="st"> </span><span class="kw"><a href="reference/odr_download_data.html">odr_download_data</a></span>(df_to_dl,<span class="dt">source=</span><span class="st">"earthdata"</span>,<span class="dt">parallel =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb3-34" data-line-number="34"></a>
 <a class="sourceLine" id="cb3-35" data-line-number="35"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(res_dl))</a>
 <a class="sourceLine" id="cb3-36" data-line-number="36"><span class="co">#&gt; 'data.frame':    31 obs. of  7 variables:</span></a>
@@ -1776,7 +1776,7 @@ Surface reflectance
 <a class="sourceLine" id="cb3-42" data-line-number="42"><span class="co">#&gt;  $ fileSize  : num  274915 60802 60817 60827 60794 ...</span></a>
 <a class="sourceLine" id="cb3-43" data-line-number="43"><span class="co">#&gt;  $ dlStatus  : num  3 3 3 3 3 3 3 3 3 3 ...</span></a>
 <a class="sourceLine" id="cb3-44" data-line-number="44"><span class="co">#&gt; NULL</span></a></code></pre></div>
-<p>It is also possible to subset the bands to download with the parameter <code>variables</code> of the function <code><a href="reference/get_url.html">get_url()</a></code>.</p>
+<p>It is also possible to subset the bands to download with the parameter <code>variables</code> of the function <code><a href="reference/odr_get_url.html">odr_get_url()</a></code>.</p>
 <p>To further import the data in R, have a look at the section <a href="#important-note-import">Important note regarding the further import of the data in R</a> !</p>
 <p>Simple or advanced data download and import workflows are provided in the vignettes <code>vignette("simple_workflow")</code> and <code>vignette("advanced_workflow")</code>.</p>
 </div>
@@ -1790,7 +1790,7 @@ Surface reflectance
 <li>for GPM collections : CRS has to be provided + data have to be flipped</li>
 <li>for SMAP collections : CRS + bounding coordinates of the data have to be provided</li>
 </ul>
-<p>These issues can easily be dealt at the import phase in R. The functions below includes the processings that have to be done at the data import phase in order to open the data as <code>raster</code> objects. (argument <code>destfiles</code> is the path to a dataset downloaded with opendapr - output of <code>get_url()$destfile</code> - and <code>variable</code> is the name of a variable to import).</p>
+<p>These issues can easily be dealt at the import phase in R. The functions below includes the processings that have to be done at the data import phase in order to open the data as <code>raster</code> objects. (argument <code>destfiles</code> is the path to a dataset downloaded with opendapr - output of <code>odr_get_url()$destfile</code> - and <code>variable</code> is the name of a variable to import).</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(raster)</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">## Function to import MODIS or VIIRS products as RasterLayer object</span></a>
 <a class="sourceLine" id="cb4-3" data-line-number="3">.import_modis &lt;-<span class="st"> </span><span class="cf">function</span>(destfiles,variable){</a>
@@ -1814,7 +1814,7 @@ Surface reflectance
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(purrr)</a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(ncdf4)</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">## Function to import SMAP products as RasterLayer object</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">smap_sp_bound &lt;-<span class="st"> </span>opendapr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/opendapr/topics/get_optional_parameters">get_optional_parameters</a></span>(<span class="dt">roi =</span> roi, <span class="dt">collection =</span> <span class="st">"SMAP/SPL3SMP_E.003"</span>)<span class="op">$</span>roiSpatialBound<span class="op">$</span><span class="st">`</span><span class="dt">1</span><span class="st">`</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">smap_sp_bound &lt;-<span class="st"> </span>opendapr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/opendapr/topics/odr_get_opt_param">odr_get_opt_param</a></span>(<span class="dt">roi =</span> roi, <span class="dt">collection =</span> <span class="st">"SMAP/SPL3SMP_E.003"</span>)<span class="op">$</span>roiSpatialBound<span class="op">$</span><span class="st">`</span><span class="dt">1</span><span class="st">`</span></a>
 <a class="sourceLine" id="cb6-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb6-7" data-line-number="7">.import_smap &lt;-<span class="st"> </span><span class="cf">function</span>(destfiles,variable,smap_sp_bound){</a>
 <a class="sourceLine" id="cb6-8" data-line-number="8"> rasts &lt;-<span class="st"> </span>destfiles <span class="op">%&gt;%</span></a>

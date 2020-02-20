@@ -1,10 +1,10 @@
-#' @name get_optional_parameters
-#' @aliases get_optional_parameters
+#' @name odr_get_opt_param
+#' @aliases odr_get_opt_param
 #'
-#' @title Precompute the parameter \code{opt_param} of the function \link{get_url}
-#' @description  Precompute the parameter \code{opt_param} to further provide as input of the \link{get_url} function. Useful to speed-up the overall processing time.
+#' @title Precompute the parameter \code{opt_param} of the function \link{odr_get_url}
+#' @description  Precompute the parameter \code{opt_param} to further provide as input of the \link{odr_get_url} function. Useful to speed-up the overall processing time.
 #'
-#' @inheritParams get_url
+#' @inheritParams odr_get_url
 #'
 #' @return a list with the following named objects :
 #' \describe{
@@ -20,7 +20,7 @@
 #'
 #' @details
 #'
-#' When it is needed to loop the function \link{get_url} over several time frames, it is advised to previously run the function \code{get_optional_parameters} and provide the output as input \code{opt_param} parameter of the \link{get_url} function.
+#' When it is needed to loop the function \link{odr_get_url} over several time frames, it is advised to previously run the function \code{odr_get_opt_param} and provide the output as input \code{opt_param} parameter of the \link{odr_get_url} function.
 #' This will save much time, as internal parameters will be calculated only once.
 #'
 #' @export
@@ -32,24 +32,24 @@
 #' require(purrr)
 #'
 #' # Login to Earthdata
-#' log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),source="earthdata")
+#' log <- odr_login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),source="earthdata")
 #'
 #' # Get the optional parameters for the collection MOD11A1.006 and the roi :
 #' roi <- st_as_sf(data.frame(
 #' geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
 #' wkt="geom",crs = 4326)
 #'
-#' opt_param_mod11a1 <- get_optional_parameters("MOD11A1.006",roi)
+#' opt_param_mod11a1 <- odr_get_opt_param("MOD11A1.006",roi)
 #' str(opt_param_mod11a1)
 #'
-#' # Now we can provide opt_param_mod11a1 as input parameter of the function get_url().
+#' # Now we can provide opt_param_mod11a1 as input parameter of the function odr_get_url().
 #'
 #' time_ranges <- list(as.Date(c("2016-01-01","2016-01-31")),
 #'                    as.Date(c("2017-01-01","2017-01-31")),
 #'                    as.Date(c("2018-01-01","2018-01-31")),
 #'                    as.Date(c("2019-01-01","2019-01-31")))
 #'
-#' (urls_mod11a1 <- map(.x = time_ranges, ~get_url(
+#' (urls_mod11a1 <- map(.x = time_ranges, ~odr_get_url(
 #'  collection = "MOD11A1.006",
 #'  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
 #'  roi = roi,
@@ -60,7 +60,7 @@
 #'}
 
 
-get_optional_parameters<-function(collection,roi,credentials=NULL){
+odr_get_opt_param<-function(collection,roi,credentials=NULL){
 
   . <- odap_coll_info <- odap_source <- odap_server <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- odap_crs <- odap_urlExample <- modis_tile <- OpendapURL <- OpenDAPtimeVector <- OpenDAPXVector <- OpenDAPYVector <- roi_bbox <- Opendap_minLat <- Opendap_maxLat <- Opendap_minLon <- Opendap_maxLon <- roiSpatialIndexBound <- minLat <- maxLat <- minLon <- maxLon <- roiSpatialBound <- availableDimensions <- NULL
 
@@ -68,7 +68,7 @@ get_optional_parameters<-function(collection,roi,credentials=NULL){
 
 
   ## define useful function
-  .get_optional_parameters_singleROIfeature <- function(OpenDAPYVector,OpenDAPXVector,roi_bbox){
+  .odr_get_opt_param_singleROIfeature <- function(OpenDAPYVector,OpenDAPXVector,roi_bbox){
 
     Opendap_minLat <- which.min(abs(OpenDAPYVector-roi_bbox$ymax))
     Opendap_maxLat <- which.min(abs(OpenDAPYVector-roi_bbox$ymin))
@@ -116,8 +116,8 @@ get_optional_parameters<-function(collection,roi,credentials=NULL){
     OpenDAPYVector <- .getVarVector(OpendapURL,odap_coll_info$dim_lat)
 
     roi_div_bboxes <- purrr::map(roi_div,~sf::st_bbox(.))
-    list_roiSpatialIndexBound <- purrr::map(roi_div_bboxes,~.get_optional_parameters_singleROIfeature(OpenDAPYVector,OpenDAPXVector,.)$roiSpatialIndexBound)
-    list_roiSpatialBound <- purrr::map(roi_div_bboxes,~.get_optional_parameters_singleROIfeature(OpenDAPYVector,OpenDAPXVector,.)$roiSpatialBound)
+    list_roiSpatialIndexBound <- purrr::map(roi_div_bboxes,~.odr_get_opt_param_singleROIfeature(OpenDAPYVector,OpenDAPXVector,.)$roiSpatialIndexBound)
+    list_roiSpatialBound <- purrr::map(roi_div_bboxes,~.odr_get_opt_param_singleROIfeature(OpenDAPYVector,OpenDAPXVector,.)$roiSpatialBound)
 
     ### MODIS
   } else if (odap_coll_info$source %in% c("MODIS","VIIRS")){
@@ -145,14 +145,14 @@ get_optional_parameters<-function(collection,roi,credentials=NULL){
     modis_tile <- purrr::flatten(modis_tile)
 
     list_roiSpatialIndexBound <- purrr::pmap(list(OpenDAPYVector,OpenDAPXVector,roi_div_bboxes),
-                                             ~.get_optional_parameters_singleROIfeature(..1,..2,..3)$roiSpatialIndexBound
+                                             ~.odr_get_opt_param_singleROIfeature(..1,..2,..3)$roiSpatialIndexBound
     )
 
     list_roiSpatialBound <- NULL
   }
 
 
-  availableVariables <- get_variables_info(collection)
+  availableVariables <- odr_list_variables(collection)
 
   return(list(roiSpatialIndexBound = list_roiSpatialIndexBound, availableVariables = availableVariables, roiSpatialBound = list_roiSpatialBound, OpenDAPXVector = OpenDAPXVector, OpenDAPYVector = OpenDAPYVector, OpenDAPtimeVector = OpenDAPtimeVector, modis_tile = modis_tile))
 

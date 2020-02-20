@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2. Advanced use of <code><a href="../reference/get_url.html">get_url()</a></code> • opendapr</title>
+<title>2. Advanced use of <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> • opendapr</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="2. Advanced use of &lt;code&gt;get_url()&lt;/code&gt;">
+<script src="../pkgdown.js"></script><meta property="og:title" content="2. Advanced use of &lt;code&gt;odr_get_url()&lt;/code&gt;">
 <meta property="og:description" content="">
 <meta property="og:image" content="/logo.png">
 <meta name="twitter:card" content="summary">
@@ -57,7 +57,7 @@
       <a href="../articles/opendapr1.html">1. Simple workflow : Download and import data for a given region of interest and time frame</a>
     </li>
     <li>
-      <a href="../articles/opendapr2.html">2. Advanced use of `get_url()`</a>
+      <a href="../articles/opendapr2.html">2. Advanced use of `odr_get_url()`</a>
     </li>
   </ul>
 </li>
@@ -81,7 +81,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>2. Advanced use of <code><a href="../reference/get_url.html">get_url()</a></code>
+      <h1>2. Advanced use of <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code>
 </h1>
                         <h4 class="author">Paul Taconet</h4>
             
@@ -127,17 +127,17 @@
 <div id="login-to-eosdis-earthdata" class="section level2">
 <h2 class="hasAnchor">
 <a href="#login-to-eosdis-earthdata" class="anchor"></a>Login to EOSDIS Earthdata</h2>
-<p>And we login to EOSDIS Earthdata with our credentials. To create an account go to : <a href="https://urs.earthdata.nasa.gov/" class="uri">https://urs.earthdata.nasa.gov/</a>.</p>
+<p>And we odr_login to EOSDIS Earthdata with our credentials. To create an account go to : <a href="https://urs.earthdata.nasa.gov/" class="uri">https://urs.earthdata.nasa.gov/</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Login to Earthdata servers with username and password.</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">username &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.getenv">Sys.getenv</a></span>(<span class="st">"earthdata_un"</span>)</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">password &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.getenv">Sys.getenv</a></span>(<span class="st">"earthdata_pw"</span>)</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">log &lt;-<span class="st"> </span><span class="kw"><a href="../reference/login.html">login</a></span>(<span class="dt">credentials =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(username,password), <span class="dt">source =</span> <span class="st">"earthdata"</span>)</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">log &lt;-<span class="st"> </span><span class="kw"><a href="../reference/odr_login.html">odr_login</a></span>(<span class="dt">credentials =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(username,password), <span class="dt">source =</span> <span class="st">"earthdata"</span>)</a>
 <a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; Checking credentials...</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; Successfull login to earthdata</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; Successfull odr_login to earthdata</span></a></code></pre></div>
 <!--
 ## Download data over multiple regions of interest
 
-The `get_url()` function internally supports the import of multiple regions of interest : the `roi` argument (which must be a POLYGON-type geometry `sf` or `sfc` object) can be composed of several features. 
+The `odr_get_url()` function internally supports the import of multiple regions of interest : the `roi` argument (which must be a POLYGON-type geometry `sf` or `sfc` object) can be composed of several features. 
 
 As an example :
 
@@ -158,7 +158,7 @@ Get the urls for MOD11A1.006, GPM_L3/GPM_3IMERGDF.06 and SMAP/SPL3SMP_E.003 coll
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
 ## Get the URLs of MODIS Terra LST daily
-urls_mod11a1 <- get_url(
+urls_mod11a1 <- odr_get_url(
   collection = "MOD11A1.006",
   variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
   roi = roi,
@@ -166,7 +166,7 @@ urls_mod11a1 <- get_url(
  )
 
 ## Get the URLs of GPM daily
-urls_gpm <- get_url(
+urls_gpm <- odr_get_url(
   collection = "GPM_L3/GPM_3IMERGDF.06",
   variables = c("precipitationCal","precipitationCal_cnt"),
   roi = roi,
@@ -174,7 +174,7 @@ urls_gpm <- get_url(
  )
 
 ## Get the URLs of SMAP 3-days
-urls_smap <- get_url(
+urls_smap <- odr_get_url(
   collection = "SMAP/SPL3SMP_E.003",
   variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture","Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag","Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm","Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),
   roi = roi,
@@ -220,13 +220,13 @@ head(urls_smap,3)
 
 We notice that in the 'name' and 'destfile' fields, we now have a '_1' and '_2' at the end of the name / destfile which correspond to the two features of the object `roi`.
 
-We can now download data as usual with `download_data()` ! 
+We can now download data as usual with `odr_download_data()` ! 
 
 <!--
 
 ```r
 df_to_dl <- rbind(urls_mod11a1,urls_gpm,urls_smap)
-res_dl <- download_data(df_to_dl,source="earthdata",parallel = TRUE)
+res_dl <- odr_download_data(df_to_dl,source="earthdata",parallel = TRUE)
 
 print(str(res_dl))
 ```
@@ -236,14 +236,14 @@ print(str(res_dl))
 <div id="get-url" class="section level2">
 <h2 class="hasAnchor">
 <a href="#get-url" class="anchor"></a>Get the OPeNDAP URLs of the data to download</h2>
-<p>Of course, we could loop over the <code><a href="../reference/get_url.html">get_url()</a></code> with the time ranges of interest, and get the data. However, the <code><a href="../reference/get_url.html">get_url()</a></code> function does query the OPeNDAP servers each time it is called. This query internally imports various data, including OPeNDAP time, latitude and longitude vectors, and this process takes some time. In case you loop over the function for the same ROI and multiple time frames of interest, it will import again and again the same data, which is quite useless.</p>
-<p>Here is where the function <code><a href="../reference/get_optional_parameters.html">get_optional_parameters()</a></code> comes into the game. For a given collection and ROI, this function queries the OPeNDAP server and retrieves the information that we were mentionning in the previous paragraph. This function is actually run within the <code><a href="../reference/get_url.html">get_url()</a></code> function, but its output can also be provided as input parameter <code>opt_param</code> of <code><a href="../reference/get_url.html">get_url()</a></code>. If <code><a href="../reference/get_url.html">get_url()</a></code> is queried multiple times for the same couple {collection, ROI}, it is hence more efficient to pre-compute only once the argument <code>opt_param</code> using <code><a href="../reference/get_optional_parameters.html">get_optional_parameters()</a></code> and to further provide it to <code><a href="../reference/get_url.html">get_url()</a></code> within a <code>for</code> loop or e.g. a <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code> function.</p>
-<p>So when we have multiple time frames of interest, prior to executing <code><a href="../reference/get_url.html">get_url()</a></code> we retrieve the <code>opt_param</code> parameter for each collection and roi with <code><a href="../reference/get_optional_parameters.html">get_optional_parameters()</a></code> :</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">opt_param_mod11a1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_optional_parameters.html">get_optional_parameters</a></span>(<span class="st">"MOD11A1.006"</span>,roi)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">opt_param_gpm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_optional_parameters.html">get_optional_parameters</a></span>(<span class="st">"GPM_L3/GPM_3IMERGDF.06"</span>,roi)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">opt_param_smap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_optional_parameters.html">get_optional_parameters</a></span>(<span class="st">"SMAP/SPL3SMP_E.003"</span>,roi)</a></code></pre></div>
-<p>And we get our URLs, using a <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code> function over our time frames of interest and setting the <code>opt_param</code> parameter in <code><a href="../reference/get_url.html">get_url()</a></code> :</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">urls_mod11a1 &lt;-<span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="dt">.x =</span> time_ranges, <span class="op">~</span><span class="kw"><a href="../reference/get_url.html">get_url</a></span>(</a>
+<p>Of course, we could loop over the <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> with the time ranges of interest, and get the data. However, the <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> function does query the OPeNDAP servers each time it is called. This query internally imports various data, including OPeNDAP time, latitude and longitude vectors, and this process takes some time. In case you loop over the function for the same ROI and multiple time frames of interest, it will import again and again the same data, which is quite useless.</p>
+<p>Here is where the function <code><a href="../reference/odr_get_opt_param.html">odr_get_opt_param()</a></code> comes into the game. For a given collection and ROI, this function queries the OPeNDAP server and retrieves the information that we were mentionning in the previous paragraph. This function is actually run within the <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> function, but its output can also be provided as input parameter <code>opt_param</code> of <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code>. If <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> is queried multiple times for the same couple {collection, ROI}, it is hence more efficient to pre-compute only once the argument <code>opt_param</code> using <code><a href="../reference/odr_get_opt_param.html">odr_get_opt_param()</a></code> and to further provide it to <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> within a <code>for</code> loop or e.g. a <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code> function.</p>
+<p>So when we have multiple time frames of interest, prior to executing <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> we retrieve the <code>opt_param</code> parameter for each collection and roi with <code><a href="../reference/odr_get_opt_param.html">odr_get_opt_param()</a></code> :</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">opt_param_mod11a1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/odr_get_opt_param.html">odr_get_opt_param</a></span>(<span class="st">"MOD11A1.006"</span>,roi)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">opt_param_gpm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/odr_get_opt_param.html">odr_get_opt_param</a></span>(<span class="st">"GPM_L3/GPM_3IMERGDF.06"</span>,roi)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">opt_param_smap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/odr_get_opt_param.html">odr_get_opt_param</a></span>(<span class="st">"SMAP/SPL3SMP_E.003"</span>,roi)</a></code></pre></div>
+<p>And we get our URLs, using a <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code> function over our time frames of interest and setting the <code>opt_param</code> parameter in <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> :</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">urls_mod11a1 &lt;-<span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="dt">.x =</span> time_ranges, <span class="op">~</span><span class="kw"><a href="../reference/odr_get_url.html">odr_get_url</a></span>(</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">  <span class="dt">collection =</span> <span class="st">"MOD11A1.006"</span>,</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">  <span class="dt">variables =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"LST_Day_1km"</span>,<span class="st">"LST_Night_1km"</span>,<span class="st">"QC_Day"</span>,<span class="st">"QC_Night"</span>),</a>
 <a class="sourceLine" id="cb5-4" data-line-number="4">  <span class="dt">roi =</span> roi,</a>
@@ -251,7 +251,7 @@ print(str(res_dl))
 <a class="sourceLine" id="cb5-6" data-line-number="6">  <span class="dt">opt_param =</span> opt_param_mod11a1)</a>
 <a class="sourceLine" id="cb5-7" data-line-number="7">  )</a>
 <a class="sourceLine" id="cb5-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9">urls_gpm &lt;-<span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="dt">.x =</span> time_ranges, <span class="op">~</span><span class="kw"><a href="../reference/get_url.html">get_url</a></span>(</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">urls_gpm &lt;-<span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="dt">.x =</span> time_ranges, <span class="op">~</span><span class="kw"><a href="../reference/odr_get_url.html">odr_get_url</a></span>(</a>
 <a class="sourceLine" id="cb5-10" data-line-number="10">  <span class="dt">collection =</span> <span class="st">"GPM_L3/GPM_3IMERGDF.06"</span>,</a>
 <a class="sourceLine" id="cb5-11" data-line-number="11">  <span class="dt">variables =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"precipitationCal"</span>,<span class="st">"precipitationCal_cnt"</span>),</a>
 <a class="sourceLine" id="cb5-12" data-line-number="12">  <span class="dt">roi =</span> roi,</a>
@@ -259,7 +259,7 @@ print(str(res_dl))
 <a class="sourceLine" id="cb5-14" data-line-number="14">  <span class="dt">opt_param =</span> opt_param_gpm)</a>
 <a class="sourceLine" id="cb5-15" data-line-number="15">)</a>
 <a class="sourceLine" id="cb5-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17">urls_smap &lt;-<span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="dt">.x =</span> time_ranges, <span class="op">~</span><span class="kw"><a href="../reference/get_url.html">get_url</a></span>(</a>
+<a class="sourceLine" id="cb5-17" data-line-number="17">urls_smap &lt;-<span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="dt">.x =</span> time_ranges, <span class="op">~</span><span class="kw"><a href="../reference/odr_get_url.html">odr_get_url</a></span>(</a>
 <a class="sourceLine" id="cb5-18" data-line-number="18">  <span class="dt">collection =</span> <span class="st">"SMAP/SPL3SMP_E.003"</span>,</a>
 <a class="sourceLine" id="cb5-19" data-line-number="19">  <span class="dt">variables =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Soil_Moisture_Retrieval_Data_AM_soil_moisture"</span>,<span class="st">"Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag"</span>,<span class="st">"Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm"</span>,<span class="st">"Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"</span>),</a>
 <a class="sourceLine" id="cb5-20" data-line-number="20">  <span class="dt">roi =</span> roi,</a>
@@ -346,7 +346,7 @@ require(tictoc)
 tic()
 for (i in 1:length(time_ranges)){
   urls_mod11a1_notprov <- rbind(urls_mod11a1,
-                      get_url(
+                      odr_get_url(
                         collection = "MOD11A1.006",
                         variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
                         roi = roi,
@@ -357,10 +357,10 @@ toc()
 
 # Providing the `opt_param` parameter
 tic()
-opt_param_mod11a1 <- get_optional_parameters("MOD11A1.006",roi)
+opt_param_mod11a1 <- odr_get_opt_param("MOD11A1.006",roi)
 for (i in 1:length(time_ranges)){
   urls_mod11a1_prov <- rbind(urls_mod11a1,
-                      get_url(
+                      odr_get_url(
                         collection = "MOD11A1.006",
                         variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
                         roi = roi,
@@ -379,7 +379,7 @@ identical(urls_mod11a1_notprov,urls_mod11a1_prov)
 <h2 class="hasAnchor">
 <a href="#download" class="anchor"></a>Download the data</h2>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">df_to_dl &lt;-<span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_df</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(urls_mod11a1,urls_gpm,urls_smap),<span class="op">~</span>.x)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">res_dl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/download_data.html">download_data</a></span>(df_to_dl,<span class="dt">source=</span><span class="st">"earthdata"</span>,<span class="dt">parallel =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">res_dl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/odr_download_data.html">odr_download_data</a></span>(df_to_dl,<span class="dt">source=</span><span class="st">"earthdata"</span>,<span class="dt">parallel =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(res_dl))</a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; 'data.frame':    252 obs. of  7 variables:</span></a>
@@ -441,7 +441,7 @@ identical(urls_mod11a1_notprov,urls_mod11a1_prov)
 <a class="sourceLine" id="cb8-8" data-line-number="8">gpm_ts &lt;-<span class="st"> </span>urls_gpm <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb8-9" data-line-number="9"><span class="st">  </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span><span class="kw">.import_gpm</span>(.<span class="op">$</span>destfile,<span class="st">"precipitationCal"</span>))</a>
 <a class="sourceLine" id="cb8-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">smap_sp_bound &lt;-<span class="st"> </span>opendapr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/opendapr/topics/get_optional_parameters">get_optional_parameters</a></span>(<span class="dt">roi =</span> roi, <span class="dt">collection =</span> <span class="st">"SMAP/SPL3SMP_E.003"</span>)<span class="op">$</span>roiSpatialBound<span class="op">$</span><span class="st">`</span><span class="dt">1</span><span class="st">`</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11">smap_sp_bound &lt;-<span class="st"> </span>opendapr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/opendapr/topics/odr_get_opt_param">odr_get_opt_param</a></span>(<span class="dt">roi =</span> roi, <span class="dt">collection =</span> <span class="st">"SMAP/SPL3SMP_E.003"</span>)<span class="op">$</span>roiSpatialBound<span class="op">$</span><span class="st">`</span><span class="dt">1</span><span class="st">`</span></a>
 <a class="sourceLine" id="cb8-12" data-line-number="12">smap_ts &lt;-<span class="st"> </span>urls_smap <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb8-13" data-line-number="13"><span class="st">  </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span><span class="kw">.import_smap</span>(.<span class="op">$</span>destfile,<span class="st">"Soil_Moisture_Retrieval_Data_AM_soil_moisture"</span>,smap_sp_bound))</a>
 <a class="sourceLine" id="cb8-14" data-line-number="14"></a>

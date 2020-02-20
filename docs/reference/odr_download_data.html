@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • opendapr</title>
+<title>Download several datasets given their URLs and destination path — odr_download_data • opendapr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Download several datasets given their URLs and destination path — odr_download_data" />
+
+<meta property="og:description" content="This function enables to download datasets. In a data import workflow, this function is typically used after a call to the odr_get_url function. The output value of odr_get_url can be used as input of parameter df_to_dl of odr_download_data.
+The download can the parallelized." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -50,7 +53,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -112,72 +115,80 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Download several datasets given their URLs and destination path</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ptaconet/opendapr/blob/master/R/odr_download_data.R'><code>R/odr_download_data.R</code></a></small>
+    <div class="hidden name"><code>odr_download_data.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    
+    <p>This function enables to download datasets. In a data import workflow, this function is typically used after a call to the <a href='odr_get_url.html'>odr_get_url</a> function. The output value of <a href='odr_get_url.html'>odr_get_url</a> can be used as input of parameter <code>df_to_dl</code> of odr_download_data.</p>
+<p>The download can the parallelized.</p>
+    
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
-
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="odr_download_data.html">odr_download_data()</a></code> </p>
-        </td>
-        <td><p>Download several datasets given their URLs and destination path</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="odr_get_opt_param.html">odr_get_opt_param()</a></code> </p>
-        </td>
-        <td><p>Precompute the parameter <code>opt_param</code> of the function odr_get_url</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="odr_get_url.html">odr_get_url()</a></code> </p>
-        </td>
-        <td><p>Build the URL(s) of the data to download</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="odr_list_collections.html">odr_list_collections()</a></code> </p>
-        </td>
-        <td><p>Get the collections implemented in the package</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="odr_list_variables.html">odr_list_variables()</a></code> </p>
-        </td>
-        <td><p>Get informations related to the variables available for a given collection</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="odr_login.html">odr_login()</a></code> </p>
-        </td>
-        <td><p>Login to query servers and download data</p></td>
-      </tr>
-    </tbody>
+    <pre class="usage"><span class='fu'>odr_download_data</span>(<span class='no'>df_to_dl</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>source</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>df_to_dl</th>
+      <td><p>data.frame. Urls and destination files of dataset to download. Typically output of <a href='odr_get_url.html'>odr_get_url</a>. See Details for the structure</p></td>
+    </tr>
+    <tr>
+      <th>parallel</th>
+      <td><p>boolean. Parallelize the download ? Default to FALSE</p></td>
+    </tr>
+    <tr>
+      <th>credentials</th>
+      <td><p>vector string of length 2 with username and password. optional.</p></td>
+    </tr>
+    <tr>
+      <th>source</th>
+      <td><p>source. See details</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>boolean. optional. Verbose (default FALSE)</p></td>
+    </tr>
     </table>
-  </div>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>a data.frame with the same structure of the input data.frame <code>df_to_dl</code> + columns providing details of the data downloaded. The additional columns are :</p><dl class='dl-horizontal'>
+<dt>fileDl</dt><dd><p>Booloean (dataset downloaded or failure)</p></dd>
+<dt>dlStatus</dt><dd><p>Download status : 1 = download ok ; 2 = download error ; 3 = dataset was already existing in destination file</p></dd>
+<dt>fileSize</dt><dd><p>File size on disk</p></dd>
+</dl>
+
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Parameter <code>df_to_dl</code> must a data.frame with the following minimal structure :</p><dl class='dl-horizontal'>
+<dt>url</dt><dd><p>URL of the source file (character string)</p></dd>
+<dt>destfile</dt><dd><p>Destination file (character string)</p></dd>
+</dl>
+    <p>Parameter <code>source</code> takes NULL as default value. Options are :</p><ul>
+<li><p><code>NULL</code> :  when no odr_login is required to download the data.</p></li>
+<li><p><code>"earthdata"</code> :  to download data requiring a odr_login to EOSDIS Earthdata. To create an account go to : https://urs.earthdata.nasa.gov/</p></li>
+</ul>
+    
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
-    </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+          </ul>
+
   </div>
 </div>
 

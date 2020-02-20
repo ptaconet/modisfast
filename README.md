@@ -64,14 +64,14 @@ Work is ongoing to publish the package on the CRAN.
 
 Downloading the data with opendapr is a simple two-steps workflow :
 
-1.  With the function **`get_url()`**: Retrieve the URL(s) of the data
-    for a given collection, variables, time frame, region and output
-    data format of interest ;
-2.  With the function **`download_data()`**: Download the data to your
-    computer.
+1.  With the function **`odr_get_url()`**: Retrieve the URL(s) of the
+    data for a given collection, variables, time frame, region and
+    output data format of interest ;
+2.  With the function **`odr_download_data()`**: Download the data to
+    your computer.
 
-The `get_url()` function has the following input parameters that enable
-to select and filter the data of interest :
+The `odr_get_url()` function has the following input parameters that
+enable to select and filter the data of interest :
 
   - `collection` : collection of interest (see [next
     section](#coll-available));
@@ -85,9 +85,9 @@ to select and filter the data of interest :
     (default), “ascii”, “json”
 
 Additional functions include : login to EOSDIS Earthdata before querying
-the servers and downloading the data (`login()`), list collection
-available for download ( `get_collections_available()` ), list variables
-available for each collection ( `get_variables_info()` ).
+the servers and downloading the data (`odr_login()`), list collection
+available for download ( `odr_list_collections()` ), list variables
+available for each collection ( `odr_list_variables()` ).
 
 Have a look at the [example](#example) below for a simple use case \!
 
@@ -115,7 +115,7 @@ Currently opendapr enables to download data from four main collections :
     server](https://n5eil02u.ecs.nsidc.org/opendap/SMAP/))
 
 Details of each product available for download are provided in the table
-above or through the function `get_collections_available()`. Want more
+above or through the function `odr_list_collections()`. Want more
 details on a specific collection ? Click on the “DOI” column \!
 
 <details>
@@ -3257,8 +3257,7 @@ interest (ROI) located in Northern Ivory Coast :
     degree](https://doi.org/10.5067/GPM/IMERGDF/DAY/06)
     (collection=“GPM\_L3/GPM\_3IMERGDF.06”)
 
-First prepare the script : set-up the ROI and time frame + login to
-EOSDIS Earthdata
+<!-- end list -->
 
 ``` r
 ### Prepare script
@@ -3274,28 +3273,28 @@ time_range <- as.Date(c("2017-01-01","2017-01-30"))
 # Here we have stored our credentials in local environment variables
 username <- Sys.getenv("earthdata_un") 
 password <- Sys.getenv("earthdata_pw")
-log <- login(credentials = c(username,password), source = "earthdata")
+log <- odr_login(credentials = c(username,password), source = "earthdata")
 #> Checking credentials...
-#> Successfull login to earthdata
+#> Successfull odr_login to earthdata
 ```
 
 Download the data in two steps :
 
-1.  Get the OPeNDAP URLs with the `get_url()` function ;
-2.  Download the data with the `download_data()` function.
+1.  Get the OPeNDAP URLs with the `odr_get_url()` function ;
+2.  Download the data with the `odr_download_data()` function.
 
 <!-- end list -->
 
 ``` r
 ## Get the URLs for MOD11A1.006
-urls_mod11a1 <- get_url(
+urls_mod11a1 <- odr_get_url(
   collection = "MOD11A1.006",
   roi = roi,
   time_range = time_range
  )
 
 ## Get the URLs for GPM_L3/GPM_3IMERGDF.06
-urls_gpm <- get_url(
+urls_gpm <- odr_get_url(
   collection = "GPM_L3/GPM_3IMERGDF.06",
   roi = roi,
   time_range = time_range
@@ -3319,7 +3318,7 @@ print(str(urls_gpm))
 
 ## Download the data. Destination file for each dataset is specified in the column "destfile" of the data.frames urls_mod11a1 and urls_gpm
 df_to_dl <- rbind(urls_mod11a1,urls_gpm)
-res_dl <- download_data(df_to_dl,source="earthdata",parallel = TRUE)
+res_dl <- odr_download_data(df_to_dl,source="earthdata",parallel = TRUE)
 
 print(str(res_dl))
 #> 'data.frame':    31 obs. of  7 variables:
@@ -3334,7 +3333,7 @@ print(str(res_dl))
 ```
 
 It is also possible to subset the bands to download with the parameter
-`variables` of the function `get_url()`.
+`variables` of the function `odr_get_url()`.
 
 To further import the data in R, have a look at the section [Important
 note regarding the further import of the data in
@@ -3373,8 +3372,8 @@ These issues can easily be dealt at the import phase in R. The functions
 below includes the processings that have to be done at the data import
 phase in order to open the data as `raster` objects. (argument
 `destfiles` is the path to a dataset downloaded with opendapr - output
-of `get_url()$destfile` - and `variable` is the name of a variable to
-import).
+of `odr_get_url()$destfile` - and `variable` is the name of a variable
+to import).
 
 ``` r
 require(raster)
@@ -3406,7 +3405,7 @@ require(raster)
 require(purrr)
 require(ncdf4)
 ## Function to import SMAP products as RasterLayer object
-smap_sp_bound <- opendapr::get_optional_parameters(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
+smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
 
 .import_smap <- function(destfiles,variable,smap_sp_bound){
  rasts <- destfiles %>%

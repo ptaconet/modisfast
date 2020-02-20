@@ -1,4 +1,4 @@
-#' @name get_collections_available
+#' @name odr_list_collections
 #' @title Get the collections implemented in the package
 #' @description Get the collections implemented in the package and a set of related information
 #'
@@ -16,12 +16,12 @@
 #'
 #' @examples
 #'
-#' (head(get_collections_available()))
+#' (head(odr_list_collections()))
 #'
 #'
 
 
-get_collections_available <- function(){
+odr_list_collections <- function(){
 
   return(opendapMetadata_internal)
 

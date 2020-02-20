@@ -1,11 +1,11 @@
-#' @name get_url
-#' @aliases get_url
+#' @name odr_get_url
+#' @aliases odr_get_url
 #' @title Build the URL(s) of the data to download
 #' @description This is the main function of the package. It enables to build the URL(s) of the spatiotemporal datacube to download, given a collection, variables, region and time range of interest.
 #'
-#' @param collection string. mandatory. Collection of interest (see details of \link{get_url}).
-#' @param variables string vector. optional. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted (see details of \link{get_url}).
-#' @param roi object of class \code{sf} or \code{sfc}. mandatory. Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details of \link{get_url}).
+#' @param collection string. mandatory. Collection of interest (see details of \link{odr_get_url}).
+#' @param variables string vector. optional. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted (see details of \link{odr_get_url}).
+#' @param roi object of class \code{sf} or \code{sfc}. mandatory. Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details of \link{odr_get_url}).
 #' @param time_range date(s) / POSIXlt of interest . mandatory. Single date/datetime or time frame : vector with start and end dates/times (see details).
 #' @param output_format string. Output data format. optional. Available options are : "nc4" (default), "ascii", "json"
 #' @param single_netcdf boolean. optional. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.
@@ -23,9 +23,9 @@
 #'
 #' @details
 #'
-#' Argument \code{collection} : Collections available can be retrieved with the function \link{get_collections_available}
+#' Argument \code{collection} : Collections available can be retrieved with the function \link{odr_list_collections}
 #'
-#' Argument \code{variables} : For each collection, variables available can be retrieved with the function \link{get_variables_info}
+#' Argument \code{variables} : For each collection, variables available can be retrieved with the function \link{odr_list_variables}
 #'
 #' Argument \code{roi} : The ROI can be composed of one or more features. In case of multiple features, data will be downloaded strictly over each feature.
 #'
@@ -33,10 +33,10 @@
 #'
 #' Argument \code{single_netcdf} : for MODIS and VIIRS products : download the data as a single file encompassing the whole time frame (TRUE) or as multiple files : one for each date, which is the behavious for the other collections - GPM and SMAP) (FALSE) ?
 #'
-#' Argument \code{opt_param} : list of parameters related to the queried OPeNDAP server and the roi. See \link{get_optional_parameters} for additional details. The parameter can be retrieved outside the function with the function \link{get_optional_parameters}. If not provided, it will be automatically calculated within the \link{get_url} function. However, providing it fastens the processing time.
+#' Argument \code{opt_param} : list of parameters related to the queried OPeNDAP server and the roi. See \link{odr_get_opt_param} for additional details. The parameter can be retrieved outside the function with the function \link{odr_get_opt_param}. If not provided, it will be automatically calculated within the \link{odr_get_url} function. However, providing it fastens the processing time.
 #' It might be particularly useful to precompute and provide it in case the function is used within a loop for the same ROI.
 #'
-#' Argument \code{credentials} : Login to the OPeNDAP servers is required to use the function. login can be done either within the function or outside with the function \link{login}
+#' Argument \code{credentials} : Login to the OPeNDAP servers is required to use the function. odr_login can be done either within the function or outside with the function \link{odr_login}
 #'
 #' @export
 #'
@@ -53,11 +53,11 @@
 #' require(raster)
 #' require(stars)
 #'
-#' ### First login to EOSDIS Earthdata with username and password.
+#' ### First odr_login to EOSDIS Earthdata with username and password.
 #' # To create an account go to : https://urs.earthdata.nasa.gov/.
 #' username <- Sys.getenv("earthdata_un")
 #' password <- Sys.getenv("earthdata_pw")
-#' log <- login(credentials = c(username,password), source = "earthdata")
+#' log <- odr_login(credentials = c(username,password), source = "earthdata")
 #'
 #' ### Retrieve the URLs (OPeNDAP) to download the following datasets :
 #' # MODIS Terra LST Daily (MOD11A1.006) (collection)
@@ -72,7 +72,7 @@
 #' time_range = as.Date(c("2017-01-01","2017-01-30"))
 #'
 #' ############################################################
-#' (opendap_urls_mod11a1 <- get_url(collection = "MOD11A1.006",
+#' (opendap_urls_mod11a1 <- odr_get_url(collection = "MOD11A1.006",
 #' variables = c("LST_Day_1km","LST_Night_1km"),
 #' roi = roi,
 #' time_range = time_range
@@ -81,7 +81,7 @@
 #'
 #' ### Download the data :
 #'
-#' res_dl <- download_data(opendap_urls_mod11a1)
+#' res_dl <- odr_download_data(opendap_urls_mod11a1)
 #'
 #' ### Import the data :
 #' ## Have a look at the README file for important details regarding the data import in R.
@@ -108,7 +108,7 @@
 #'
 
 
-get_url<-function(collection,
+odr_get_url<-function(collection,
                  variables=NULL,
                  roi,
                  time_range,
@@ -143,7 +143,7 @@ get_url<-function(collection,
 
   if(is.null(opt_param)){
     if(verbose){cat("Retrieving opendap arguments for the collection specified...\n")}
-    opt_param <- get_optional_parameters(collection,roi)
+    opt_param <- odr_get_opt_param(collection,roi)
   }
 
   # test variables
