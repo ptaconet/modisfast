@@ -7,28 +7,25 @@
 get_variables_info(collection, credentials = NULL)
 }
 \arguments{
-\item{collection}{string. Collection of interest.}
+\item{collection}{string. mandatory. Collection of interest (see details of \link{get_url}).}
 
-\item{credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
+\item{credentials}{vector string of length 2 with username and password. optional.}
 }
 \value{
 A data.frame with the available variables for the collection, and a set of related information for each variable.
-The variables marked as "extractable" in the column *extractable_w_opendapr* can be provided as input parameter \code{variables} of the function \link{get_url}
+The variables marked as "extractable" in the column "extractable_w_opendapr" can be provided as input parameter \code{variables} of the function \link{get_url}
 }
 \description{
-Outputs a data frame with the variables available for a given collection
+Get the variables available for a given collection
 }
 \examples{
 
 \donttest{
-# login to usgs
-log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
-
-# Get the collections implemented in the package :
-collections_available <- get_collections_available()
+# login to Earthdata
+log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),source="earthdata")
 
 # Get the variables available for the collection MOD11A1.006
-(df_varinfo<-get_variables_info("MOD11A1.006"))
+(df_varinfo <- get_variables_info("MOD11A1.006"))
 }
 
 }

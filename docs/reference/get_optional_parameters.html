@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">opendapr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -88,7 +88,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/simple_workflow.html">Simple workflow : Download data for a given region of interest and time frame</a>
+      <a href="../articles/opendapr1.html">1. Simple workflow : Download and import data for a given region of interest and time frame</a>
+    </li>
+    <li>
+      <a href="../articles/opendapr2.html">2. Advanced use of `get_url()`</a>
     </li>
   </ul>
 </li>
@@ -131,30 +134,30 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>collection</th>
-      <td><p>string. Collection of interest.</p></td>
+      <td><p>string. mandatory. Collection of interest (see details of <a href='get_url.html'>get_url</a>).</p></td>
     </tr>
     <tr>
       <th>roi</th>
-      <td><p>object of class <code>sf</code> or <code>sfc</code> Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details).</p></td>
+      <td><p>object of class <code>sf</code> or <code>sfc</code>. mandatory. Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details of <a href='get_url.html'>get_url</a>).</p></td>
     </tr>
     <tr>
       <th>credentials</th>
-      <td><p>vector string. In case of data that needs login : string vector of length 2 with username and password</p></td>
+      <td><p>vector string of length 2 with username and password. optional.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list with the following named objects :</p><ul>
-<li><p>*roiSpatialIndexBound*: OPeNDAP indices for the spatial coordinates of the bounding box of the ROI (minLat, maxLat, minLon, maxLon)</p></li>
-<li><p>*availableVariables*: Variables available for the collection of interest</p></li>
-<li><p>*roiSpatialBound*:</p></li>
-<li><p>*roiSpatialBound*: The spatial coordinates of the bounding box of the ROI expressed in the CRS of the collection</p></li>
-<li><p>*OpenDAPXVector*: The X (longitude) vector</p></li>
-<li><p>*OpenDAPYVector*: The Y (longitude) vector</p></li>
-<li><p>*OpenDAPtimeVector*: The time vector, or NULL if the collection does not have a time vector</p></li>
-<li><p>*modis_tile*: The MODIS tile(s) number(s) for the ROI or NULL if the collection is not MODIS</p></li>
-</ul>
+    <p>a list with the following named objects :</p><dl class='dl-horizontal'>
+ <dt>roiSpatialIndexBound</dt><dd><p>OPeNDAP indices for the spatial coordinates of the bounding box of the ROI (minLat, maxLat, minLon, maxLon)</p></dd>
+ <dt>availableVariables</dt><dd><p>Variables available for the collection of interest</p></dd>
+ <dt>roiSpatialBound</dt><dd><p></p></dd>
+ <dt>roiSpatialBound </dt><dd><p>The spatial coordinates of the bounding box of the ROI expressed in the CRS of the collection</p></dd>
+ <dt>OpenDAPXVector</dt><dd><p>The X (longitude) vector</p></dd>
+ <dt>OpenDAPYVector</dt><dd><p>The Y (longitude) vector</p></dd>
+ <dt>OpenDAPtimeVector</dt><dd><p>The time vector, or NULL if the collection does not have a time vector</p></dd>
+ <dt>modis_tile</dt><dd><p>The MODIS tile(s) number(s) for the ROI or NULL if the collection is not MODIS</p></dd>
+</dl>
 
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -165,14 +168,82 @@ This will save much time, as internal parameters will be calculated only once.</
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>sf</span>)</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : sf</span></div><div class='output co'>#&gt; <span class='message'>Linking to GEOS 3.7.0, GDAL 2.3.2, PROJ 5.2.0</span></div><div class='input'>
+</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>sf</span>)</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : sf</span></div><div class='output co'>#&gt; <span class='message'>Linking to GEOS 3.7.0, GDAL 2.3.2, PROJ 5.2.0</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>purrr</span>)</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : purrr</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attachement du package : ‘purrr’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:testthat’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    is_null</span></div><div class='input'>
 <span class='co'># Login to Earthdata</span>
-<span class='no'>log</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='login.html'>login</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_un"</span>),<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_pw"</span>)))</div><div class='output co'>#&gt; Checking credentials...</div><div class='output co'>#&gt; <span class='error'>Error in login(c(Sys.getenv("earthdata_un"), Sys.getenv("earthdata_pw"))): l'argument "source" est manquant, avec aucune valeur par défaut</span></div><div class='input'>
+<span class='no'>log</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='login.html'>login</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_un"</span>),<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_pw"</span>)),<span class='kw'>source</span><span class='kw'>=</span><span class='st'>"earthdata"</span>)</div><div class='output co'>#&gt; Checking credentials...
+#&gt; Successfull login to earthdata </div><div class='input'>
 <span class='co'># Get the optional parameters for the collection MOD11A1.006 and the roi :</span>
-<span class='no'>roi</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sf/topics/st_read'>st_read</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/roi_example.gpkg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"opendapr"</span>),<span class='kw'>quiet</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-(<span class='no'>opt_param_mod11a1</span> <span class='kw'>&lt;-</span> <span class='fu'>get_optional_parameters</span>(<span class='st'>"MOD11A1.006"</span>,<span class='no'>roi</span>) )</div><div class='output co'>#&gt; <span class='error'>Error in login(credentials): credentials must be a vector character string of length 2 (username and password)</span></div><div class='input'>
-# Now we can
+<span class='no'>roi</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/sf/topics/st_as_sf'>st_as_sf</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
+<span class='kw'>geom</span><span class='kw'>=</span><span class='st'>"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span>),
+<span class='kw'>wkt</span><span class='kw'>=</span><span class='st'>"geom"</span>,<span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
 
+<span class='no'>opt_param_mod11a1</span> <span class='kw'>&lt;-</span> <span class='fu'>get_optional_parameters</span>(<span class='st'>"MOD11A1.006"</span>,<span class='no'>roi</span>)</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='warning'>Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/str'>str</a></span>(<span class='no'>opt_param_mod11a1</span>)</div><div class='output co'>#&gt; List of 7
+#&gt;  $ roiSpatialIndexBound:List of 1
+#&gt;   ..$ 1: int [1:4] 55 140 512 560
+#&gt;  $ availableVariables  :'data.frame':	18 obs. of  6 variables:
+#&gt;   ..$ name                  : chr [1:18] "Latitude" "Longitude" "YDim" "XDim" ...
+#&gt;   ..$ long_name             : chr [1:18] "Latitude" "Longitude" "y coordinate of projection for grid MODIS_Grid_Daily_1km_LST" "x coordinate of projection for grid MODIS_Grid_Daily_1km_LST" ...
+#&gt;   ..$ units                 : chr [1:18] NA NA "meter" "meter" ...
+#&gt;   ..$ indices               : chr [1:18] "[YDim = 1200] [XDim = 1200]" "[YDim = 1200] [XDim = 1200]" "[YDim = 1200]" "[XDim = 1200]" ...
+#&gt;   ..$ all_info              : chr [1:18] "Array of 64 bit Reals [YDim = 0..1199][XDim = 0..1199]long_name: Latitude\nunits: degrees_north" "Array of 64 bit Reals [YDim = 0..1199][XDim = 0..1199]long_name: Longitude\nunits: degrees_east" "Array of 64 bit Reals [YDim = 0..1199]standard_name: projection_y_coordinate\nlong_name: y coordinate of projec"| __truncated__ "Array of 64 bit Reals [XDim = 0..1199]standard_name: projection_x_coordinate\nlong_name: x coordinate of projec"| __truncated__ ...
+#&gt;   ..$ extractable_w_opendapr: chr [1:18] "not extractable" "not extractable" "automatically extracted" "automatically extracted" ...
+#&gt;  $ roiSpatialBound     : NULL
+#&gt;  $ OpenDAPXVector      :List of 1
+#&gt;   ..$ 1: num [1:1200] -1111951 -1111024 -1110097 -1109171 -1108244 ...
+#&gt;  $ OpenDAPYVector      :List of 1
+#&gt;   ..$ 1: num [1:1200] 1111951 1111024 1110097 1109171 1108244 ...
+#&gt;  $ OpenDAPtimeVector   :List of 1
+#&gt;   ..$ 1: num [1:7237] 54 55 56 57 58 59 60 61 62 63 ...
+#&gt;  $ modis_tile          :List of 1
+#&gt;   ..$ 1: chr "h17v08"</div><div class='input'>
+<span class='co'># Now we can provide opt_param_mod11a1 as input parameter of the function get_url().</span>
+
+<span class='no'>time_ranges</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2016-01-01"</span>,<span class='st'>"2016-01-31"</span>)),
+                   <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2017-01-01"</span>,<span class='st'>"2017-01-31"</span>)),
+                   <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2018-01-01"</span>,<span class='st'>"2018-01-31"</span>)),
+                   <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2019-01-01"</span>,<span class='st'>"2019-01-31"</span>)))
+
+(<span class='no'>urls_mod11a1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>map</a></span>(<span class='kw'>.x</span> <span class='kw'>=</span> <span class='no'>time_ranges</span>, ~<span class='fu'><a href='get_url.html'>get_url</a></span>(
+ <span class='kw'>collection</span> <span class='kw'>=</span> <span class='st'>"MOD11A1.006"</span>,
+ <span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"LST_Day_1km"</span>,<span class='st'>"LST_Night_1km"</span>,<span class='st'>"QC_Day"</span>,<span class='st'>"QC_Night"</span>),
+ <span class='kw'>roi</span> <span class='kw'>=</span> <span class='no'>roi</span>,
+ <span class='kw'>time_range</span> <span class='kw'>=</span> <span class='no'>.x</span>,
+ <span class='kw'>opt_param</span> <span class='kw'>=</span> <span class='no'>opt_param_mod11a1</span>)
+))</div><div class='output co'>#&gt; [[1]]
+#&gt;   time_start                               name
+#&gt; 1 2016-01-01 MOD11A1.006.2016001_2016031.h17v08
+#&gt;                                                                                                                                                                                                                                                                                                                     url
+#&gt; 1 https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projection,LST_Day_1km[5736:5766][55:140][512:560],LST_Night_1km[5736:5766][55:140][512:560],QC_Day[5736:5766][55:140][512:560],QC_Night[5736:5766][55:140][512:560],time[5736:5766],YDim[55:140],XDim[512:560]
+#&gt;                                             destfile
+#&gt; 1 MOD11A1.006/MOD11A1.006.2016001_2016031.h17v08.nc4
+#&gt; 
+#&gt; [[2]]
+#&gt;   time_start                               name
+#&gt; 1 2017-01-01 MOD11A1.006.2017001_2017031.h17v08
+#&gt;                                                                                                                                                                                                                                                                                                                     url
+#&gt; 1 https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projection,LST_Day_1km[6093:6123][55:140][512:560],LST_Night_1km[6093:6123][55:140][512:560],QC_Day[6093:6123][55:140][512:560],QC_Night[6093:6123][55:140][512:560],time[6093:6123],YDim[55:140],XDim[512:560]
+#&gt;                                             destfile
+#&gt; 1 MOD11A1.006/MOD11A1.006.2017001_2017031.h17v08.nc4
+#&gt; 
+#&gt; [[3]]
+#&gt;   time_start                               name
+#&gt; 1 2018-01-01 MOD11A1.006.2018001_2018031.h17v08
+#&gt;                                                                                                                                                                                                                                                                                                                     url
+#&gt; 1 https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projection,LST_Day_1km[6458:6488][55:140][512:560],LST_Night_1km[6458:6488][55:140][512:560],QC_Day[6458:6488][55:140][512:560],QC_Night[6458:6488][55:140][512:560],time[6458:6488],YDim[55:140],XDim[512:560]
+#&gt;                                             destfile
+#&gt; 1 MOD11A1.006/MOD11A1.006.2018001_2018031.h17v08.nc4
+#&gt; 
+#&gt; [[4]]
+#&gt;   time_start                               name
+#&gt; 1 2019-01-01 MOD11A1.006.2019001_2019031.h17v08
+#&gt;                                                                                                                                                                                                                                                                                                                     url
+#&gt; 1 https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projection,LST_Day_1km[6823:6853][55:140][512:560],LST_Night_1km[6823:6853][55:140][512:560],QC_Day[6823:6853][55:140][512:560],QC_Night[6823:6853][55:140][512:560],time[6823:6853],YDim[55:140],XDim[512:560]
+#&gt;                                             destfile
+#&gt; 1 MOD11A1.006/MOD11A1.006.2019001_2019031.h17v08.nc4
+#&gt; </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

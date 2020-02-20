@@ -1,21 +1,23 @@
 #' @name login
-#' @title Login to download data
-#' @description In case a login is required, login before querying data servers
+#' @title Login to query servers and download data
+#' @description Login before querying data servers
 #'
 #' @inheritParams get_url
-#' @param source source. Currently available: Earthdata for EOSDIS Earthdata Login with usual credentials
+#' @param source source. See details
 #'
 #' @return None.
 #' @export
 #'
 #' @details
 #'
-#' Earthdata login enables to download MODIS, VNP, SMAP, GPM data.
-#'
+#' Current options for parameter \code{"source"} are :
+#' \itemize{
+#' \item{"earthdata"}{ : to query and download MODIS, VNP, SMAP, GPM collections}
+#'}
 #' Create an account to Earthdata here : \url{https://urs.earthdata.nasa.gov/}.
 #'
 #' @examples
-#'
+#' # login to Earthdata
 #' \donttest{
 #' username <- Sys.getenv("earthdata_un")
 #' password <- Sys.getenv("earthdata_pw")
@@ -37,7 +39,7 @@ login<-function(credentials,source,verbose=TRUE){
    options(earthdata_pass=credentials[2])
    options(earthdata_login=TRUE)
   }
-  if(verbose){cat("Successfull login to ",source,"\n")}
+  if(verbose){cat("Successfull login to",source,"\n")}
 
 }
 

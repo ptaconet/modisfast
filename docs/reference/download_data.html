@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Download several datasets given their URLs and a destination files — download_data • opendapr</title>
+<title>Download several datasets given their URLs and destination path — download_data • opendapr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Download several datasets given their URLs and a destination files — download_data" />
+<meta property="og:title" content="Download several datasets given their URLs and destination path — download_data" />
 
-<meta property="og:description" content="This function enables to download datasets, enventually parallelizing the download. In a data import workflow, this function is typically used after a call to the get_url function. The output value of get_url can be used as input of parameter df_to_dl of the download_data function." />
+<meta property="og:description" content="This function enables to download datasets. In a data import workflow, this function is typically used after a call to the get_url function. The output value of get_url can be used as input of parameter df_to_dl of download_data.
+The download can the parallelized." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -65,7 +66,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">opendapr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -88,7 +89,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/simple_workflow.html">Simple workflow : Download data for a given region of interest and time frame</a>
+      <a href="../articles/opendapr1.html">1. Simple workflow : Download and import data for a given region of interest and time frame</a>
+    </li>
+    <li>
+      <a href="../articles/opendapr2.html">2. Advanced use of `get_url()`</a>
     </li>
   </ul>
 </li>
@@ -113,14 +117,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Download several datasets given their URLs and a destination files</h1>
+    <h1>Download several datasets given their URLs and destination path</h1>
     <small class="dont-index">Source: <a href='https://github.com/ptaconet/opendapr/blob/master/R/download_data.R'><code>R/download_data.R</code></a></small>
     <div class="hidden name"><code>download_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function enables to download datasets, enventually parallelizing the download. In a data import workflow, this function is typically used after a call to the <a href='get_url.html'>get_url</a> function. The output value of <a href='get_url.html'>get_url</a> can be used as input of parameter <code>df_to_dl</code> of the download_data function.</p>
+    <p>This function enables to download datasets. In a data import workflow, this function is typically used after a call to the <a href='get_url.html'>get_url</a> function. The output value of <a href='get_url.html'>get_url</a> can be used as input of parameter <code>df_to_dl</code> of download_data.</p>
+<p>The download can the parallelized.</p>
     
     </div>
 
@@ -140,36 +145,36 @@
     </tr>
     <tr>
       <th>credentials</th>
-      <td><p>vector string. In case of data that needs login : string vector of length 2 with username and password</p></td>
+      <td><p>vector string of length 2 with username and password. optional.</p></td>
     </tr>
     <tr>
       <th>source</th>
-      <td><p>source. Currently available: Earthdata for EOSDIS Earthdata Login with usual credentials</p></td>
+      <td><p>source. See details</p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>boolean. Verbose (default FALSE)</p></td>
+      <td><p>boolean. optional. Verbose (default FALSE)</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data.frame with the same structure of the input data.frame <code>df_to_dl</code> + columns providing details of the data downloaded. The additional olumns are :</p><ul>
-<li><p>"fileDl": Booloean (dataset downloaded or failure)</p></li>
-<li><p>"dlStatus": Download status : 1 = download ok ; 2 = download error ; 3 = dataset was already existing in destination file</p></li>
-<li><p>"fileSize": file size on disk</p></li>
-</ul>
+    <p>a data.frame with the same structure of the input data.frame <code>df_to_dl</code> + columns providing details of the data downloaded. The additional columns are :</p><dl class='dl-horizontal'>
+<dt>fileDl</dt><dd><p>Booloean (dataset downloaded or failure)</p></dd>
+<dt>dlStatus</dt><dd><p>Download status : 1 = download ok ; 2 = download error ; 3 = dataset was already existing in destination file</p></dd>
+<dt>fileSize</dt><dd><p>File size on disk</p></dd>
+</dl>
 
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Parameter <code>df_to_dl</code> is a data.frame with the following minimal structure :</p><ul>
-<li><p>"url": URL of the source file (character string)</p></li>
-<li><p>"destfile": Destination file (character string)</p></li>
-</ul>
+    <p>Parameter <code>df_to_dl</code> must a data.frame with the following minimal structure :</p><dl class='dl-horizontal'>
+<dt>url</dt><dd><p>URL of the source file (character string)</p></dd>
+<dt>destfile</dt><dd><p>Destination file (character string)</p></dd>
+</dl>
     <p>Parameter <code>source</code> takes NULL as default value. Options are :</p><ul>
-<li><p><code>NULL</code> :  when no login is required to download the data).</p></li>
-<li><p><code>"earthdata"</code> :  to download data requiring a login to Earthdata</p></li>
+<li><p><code>NULL</code> :  when no login is required to download the data.</p></li>
+<li><p><code>"earthdata"</code> :  to download data requiring a login to EOSDIS Earthdata. To create an account go to : https://urs.earthdata.nasa.gov/</p></li>
 </ul>
     
 

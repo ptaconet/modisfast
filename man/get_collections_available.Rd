@@ -8,15 +8,13 @@ get_collections_available()
 }
 \value{
 A data.frame with the available collections, and a set of related information. Main columns are :
-\itemize{
-  \item{collection :}{Collections available through \code{opendapr} }
-  \item{source :}{source}
-  \item{long_name :}{Collection long name}
-  \item{url_metadata :}{URL pointing to metadata about the collection}
-  \item{doi :}{DOI of the dataset}
-  \item{url_opendapserver :}{URL of the OPeNDAP server from which the data is extracted }
-  \item{status :}{Implemented status in s\code{opendapr} }
-  \item{crs :}{Coordinates reference system of the collection }
+\describe{
+  \item{collection}{Collections name}
+  \item{source}{Data provider}
+  \item{long_name}{Collection long name}
+  \item{doi}{DOI of the collection}
+  \item{start_date}{Start date for the collection}
+  \item{url_opendapserver}{URL of the OPeNDAP server from which the data is extracted }
 }
 }
 \description{
@@ -24,7 +22,7 @@ Get the collections implemented in the package and a set of related information
 }
 \examples{
 
-(collections <- get_collections_available())
+(head(get_collections_available()))
 
 
 }

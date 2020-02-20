@@ -7,15 +7,15 @@
 #' @inheritParams get_url
 #'
 #' @return a list with the following named objects :
-#' \itemize{
-#'  \item{*roiSpatialIndexBound*: }{OPeNDAP indices for the spatial coordinates of the bounding box of the ROI (minLat, maxLat, minLon, maxLon)}
-#'  \item{*availableVariables*: }{Variables available for the collection of interest}
-#'  \item{*roiSpatialBound*: }{}
-#'  \item{*roiSpatialBound*: }{The spatial coordinates of the bounding box of the ROI expressed in the CRS of the collection}
-#'  \item{*OpenDAPXVector*: }{The X (longitude) vector}
-#'  \item{*OpenDAPYVector*: }{The Y (longitude) vector}
-#'  \item{*OpenDAPtimeVector*: }{The time vector, or NULL if the collection does not have a time vector}
-#'  \item{*modis_tile*: }{The MODIS tile(s) number(s) for the ROI or NULL if the collection is not MODIS}
+#' \describe{
+#'  \item{roiSpatialIndexBound}{OPeNDAP indices for the spatial coordinates of the bounding box of the ROI (minLat, maxLat, minLon, maxLon)}
+#'  \item{availableVariables}{Variables available for the collection of interest}
+#'  \item{roiSpatialBound}{}
+#'  \item{roiSpatialBound }{The spatial coordinates of the bounding box of the ROI expressed in the CRS of the collection}
+#'  \item{OpenDAPXVector}{The X (longitude) vector}
+#'  \item{OpenDAPYVector}{The Y (longitude) vector}
+#'  \item{OpenDAPtimeVector}{The time vector, or NULL if the collection does not have a time vector}
+#'  \item{modis_tile}{The MODIS tile(s) number(s) for the ROI or NULL if the collection is not MODIS}
 #' }
 #'
 #' @details
@@ -29,19 +29,33 @@
 #'
 #' \donttest{
 #' require(sf)
+#' require(purrr)
 #'
 #' # Login to Earthdata
 #' log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),source="earthdata")
 #'
 #' # Get the optional parameters for the collection MOD11A1.006 and the roi :
-#' roi <- sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE)
-#' (opt_param_mod11a1 <- get_optional_parameters("MOD11A1.006",roi) )
+#' roi <- st_as_sf(data.frame(
+#' geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
+#' wkt="geom",crs = 4326)
+#'
+#' opt_param_mod11a1 <- get_optional_parameters("MOD11A1.006",roi)
+#' str(opt_param_mod11a1)
 #'
 #' # Now we can provide opt_param_mod11a1 as input parameter of the function get_url().
 #'
-#' dates_of_interest <- list("2017-01-01","2017-02-01","2017-03-01","2017-04-01","2017-05-01")
-#' %>% purrr::map(~as.Date())
-#' first_weeks <-
+#' time_ranges <- list(as.Date(c("2016-01-01","2016-01-31")),
+#'                    as.Date(c("2017-01-01","2017-01-31")),
+#'                    as.Date(c("2018-01-01","2018-01-31")),
+#'                    as.Date(c("2019-01-01","2019-01-31")))
+#'
+#' (urls_mod11a1 <- map(.x = time_ranges, ~get_url(
+#'  collection = "MOD11A1.006",
+#'  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
+#'  roi = roi,
+#'  time_range = .x,
+#'  opt_param = opt_param_mod11a1)
+#' ))
 #'
 #'}
 

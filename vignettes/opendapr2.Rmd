@@ -1,5 +1,5 @@
 ---
-title: "Advanced use of `get_url()`"
+title: "2. Advanced use of `get_url()`"
 author: "Paul Taconet"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -24,6 +24,10 @@ knitr::opts_chunk$set(
 require(opendapr)
 require(sf)
 require(purrr)
+require(raster)
+require(ncdf4)
+require(magrittr)
+require(purrr)
 ```
 
 In the `vignette("simple_workflow")`, we have imported data : 
@@ -37,31 +41,48 @@ So far so good, but what if we need ***multiple regions of interest***, and / or
 * multiple time frames of interest : we have spatiotemporal sampling data - e.g. species occurence - that were collected over a large time frame and we want to study how local past environmental / climatic conditions influence the occurence ;
 * multiple regions of interest : we want to compare two areas in terms of their environmental or climatic conditions.
 
-We could use `for` loops or related stuff to do the job. However, this would not be very optimized. In this vignette, we explain why and we show how to optimize the data import in those cases. Let's start ! 
+We could use `for` loops or related stuff to do the job. However, this would not be very optimized. In this vignette, we explain why and we show how to optimize the data import **in the case of multiple time frames**. Multiple regions of interest will be dealt in another vignette. Let's start ! 
 
-First of all login to EOSDIS Earthdata
+## Setup the region and time range of interest
+
+First we prepare the script : define ROI and time frames (here, for the example, january of each year from 2016 to 2019)
 
 ```{r example_prepare, eval=NOT_CRAN}
-# Login to Earthdata servers with username and password. To create an account go to : https://urs.earthdata.nasa.gov/.
+# Set ROI and time range of interest
+roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
+time_ranges <- list(as.Date(c("2016-01-01","2016-01-31")),
+                    as.Date(c("2017-01-01","2017-01-31")),
+                    as.Date(c("2018-01-01","2018-01-31")),
+                    as.Date(c("2019-01-01","2019-01-31")))
+```
+
+## Login to EOSDIS Earthdata
+
+And we login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
+
+```{r login, eval=NOT_CRAN}
+# Login to Earthdata servers with username and password.
 username <- Sys.getenv("earthdata_un")
 password <- Sys.getenv("earthdata_pw")
 log <- login(credentials = c(username,password), source = "earthdata")
 ```
 
+
+<!--
 ## Download data over multiple regions of interest
 
 The `get_url()` function internally supports the import of multiple regions of interest : the `roi` argument (which must be a POLYGON-type geometry `sf` or `sfc` object) can be composed of several features. 
 
 As an example :
 
-```{r, eval=NOT_CRAN }
+```{r, eval=F }
 # This ROI is composed of two features :
 (roi <- st_as_sf(data.frame(name=c("Korhogo","Diebougou"),geom=c("POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))",
                                    "POLYGON ((-3.62 11.03, -3.13 11.04, -3.11 10.60, -3.60 10.60, -3.62 11.03))"
                                    )),wkt="geom",crs = 4326))
 ```
 
-```{r, echo=F, fig.height=5, fig.width=3, eval=NOT_CRAN }
+```{r, echo=F, fig.height=5, fig.width=3, eval=F }
 require(mapview)
 mapview::mapview(roi,legend=F)
 ```
@@ -107,7 +128,7 @@ We notice that in the 'name' and 'destfile' fields, we now have a '_1' and '_2' 
 We can now download data as usual with `download_data()` ! 
 
 <!--
-```{r download_data, eval=NOT_CRAN }
+```{r download_data, eval=F }
 df_to_dl <- rbind(urls_mod11a1,urls_gpm,urls_smap)
 res_dl <- download_data(df_to_dl,source="earthdata",parallel = TRUE)
 
@@ -116,7 +137,7 @@ print(str(res_dl))
 
 -->
 
-## Download data over multiple time frames of interest
+## Get the OPeNDAP URLs of the data to download {#get-url}
 
 Of course, we could loop over the `get_url()` with the time ranges of interest, and get the data. However, the `get_url()` function does query the OPeNDAP servers each time it is called. This query internally imports various data, including OPeNDAP time, latitude and longitude vectors, and this process takes some time. In case you loop over the function for the same ROI and multiple time frames of interest, it will import again and again the same data, which is quite useless.
 
@@ -125,85 +146,48 @@ Here is where the function `get_optional_parameters()` comes into the game. For 
 So when we have multiple time frames of interest, prior to executing `get_url()` we retrieve the `opt_param` parameter for each collection and roi with `get_optional_parameters()` :
 
 ```{r multiple_timeframes, eval=NOT_CRAN }
-# We use the ROI defined above and we get the opt_param for each collection
 opt_param_mod11a1 <- get_optional_parameters("MOD11A1.006",roi)
 opt_param_gpm <- get_optional_parameters("GPM_L3/GPM_3IMERGDF.06",roi)
 opt_param_smap <- get_optional_parameters("SMAP/SPL3SMP_E.003",roi)
 ```
 
-Next we define our time frames of interest (here, for the example, january of each year from 2016 to 2019) : 
-
-```{r set_multiple_timeframes, eval=NOT_CRAN }
-time_ranges <- list(as.Date(c("2016-01-01","2016-01-31")),
-                    as.Date(c("2017-01-01","2017-01-31")),
-                    as.Date(c("2018-01-01","2018-01-31")),
-                    as.Date(c("2019-01-01","2019-01-31")))
-```
-
-And we finally get our URLs, using a for loop or a `purrr::map()` function over our time frames of interest and setting the `opt_param` parameter in `get_url()`  : 
+And we get our URLs, using a `purrr::map()` function over our time frames of interest and setting the `opt_param` parameter in `get_url()`  : 
 
 ```{r get_url_multiple_timeframes, eval=NOT_CRAN}
-# initialization
-urls_mod11a1 <- NULL
-urls_gpm <- NULL
-urls_smap <- NULL
+urls_mod11a1 <- map(.x = time_ranges, ~get_url(
+  collection = "MOD11A1.006",
+  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
+  roi = roi,
+  time_range = .x,
+  opt_param = opt_param_mod11a1)
+  )
 
-# for loop to get the url for each time range of interest. 
-for (i in 1:length(time_ranges)){
+urls_gpm <- map(.x = time_ranges, ~get_url(
+  collection = "GPM_L3/GPM_3IMERGDF.06",
+  variables = c("precipitationCal","precipitationCal_cnt"),
+  roi = roi,
+  time_range = .x,
+  opt_param = opt_param_gpm)
+)
 
-  urls_mod11a1 <- rbind(urls_mod11a1,
-                      get_url(
-                        collection = "MOD11A1.006",
-                        variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
-                        roi = roi,
-                        time_range = time_ranges[[i]],
-                        opt_param = opt_param_mod11a1) # note the presence of the argument 'opt_param'  
-                      )
+urls_smap <- map(.x = time_ranges, ~get_url(
+  collection = "SMAP/SPL3SMP_E.003",
+  variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture","Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag","Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm","Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),
+  roi = roi,
+  time_range = .x,
+  opt_param = opt_param_smap)
+  )
 
-  urls_gpm <- rbind(urls_gpm,
-                  get_url(
-                    collection = "GPM_L3/GPM_3IMERGDF.06",
-                    variables = c("precipitationCal","precipitationCal_cnt"),
-                    roi = roi,
-                    time_range = time_ranges[[i]],
-                    opt_param = opt_param_gpm)
-                  )
+str(urls_mod11a1)
 
-  urls_smap <- rbind(urls_smap,
-                  get_url(
-                    collection = "SMAP/SPL3SMP_E.003",
-                    variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture","Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag","Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm","Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),
-                    roi = roi,
-                    time_range = time_ranges[[i]],
-                    opt_param = opt_param_smap)
-                  )
+str(urls_gpm)
 
-}
-
-nrow(urls_mod11a1)
-head(urls_mod11a1,3)
-
-nrow(urls_gpm)
-head(urls_gpm,3)
-
-nrow(urls_smap)
-head(urls_smap,3)
+str(urls_smap)
 ```
-
-```{r get_url_multiple_timeframes_purr, eval=NOT_CRAN}
-### Note : we could have done the same thing more elegantly using purrr::map(), e.g.  : 
-#urls_mod11a1 <- map_dfr(.x = time_ranges, ~get_url(
-#  collection = "MOD11A1.006",
-#  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
-#  roi = roi,
-#  time_range = .x,
-#  opt_param = opt_param_mod11a1)
-#  )
-```
-
+<!--
 If we want to be convinced that this way of doing the things is quicker than not providing the `opt_param` parameter : 
 
-```{r compare, eval=NOT_CRAN}
+```{r compare, eval=F}
 require(tictoc)
 
 # Not providing the `opt_param` parameter
@@ -237,6 +221,78 @@ toc()
 
 identical(urls_mod11a1_notprov,urls_mod11a1_prov)
 ```
+-->
+## Download the data {#download}
 
+```{r dl, eval=NOT_CRAN}
+df_to_dl <- map_df(c(urls_mod11a1,urls_gpm,urls_smap),~.x)
+res_dl <- download_data(df_to_dl,source="earthdata",parallel = TRUE)
 
-## Import in R
+print(str(res_dl))
+```
+
+## Import the data in R {#import}
+
+`stars` or `ncdf4` object are best adapted for these kind of spatiotemporal data. However, in this example we will show how to import them as lists of `RasterLayer` objects : one list for each time range.
+
+First, we write the functions to import the data as `RasterLayer` objects (check out [Important note regarding the further import of the data in R](https://ptaconet.github.io/opendapr/index.html#important-note-import) in the README for additional information)
+
+```{r functions_import, eval=NOT_CRAN}
+## Function to import MODIS or VIIRS data
+.import_modis <- function(destfiles,variable){
+  
+  rasts <- destfiles %>%
+    raster::brick(varname = variable, crs = "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")
+  
+  return(rasts)
+}
+
+## Function to import GPM data
+.import_gpm <- function(destfiles,variable){
+  
+  rasts <- destfiles %>%
+    purrr::map(~raster(., varname = variable,crs = "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 ")) %>%
+    raster::brick() %>%
+    raster::t() %>%
+    raster::flip("y") %>%
+    raster::flip("x")
+
+  return(rasts)
+}
+
+## Function to import SMAP data
+.import_smap <- function(destfiles,variable,smap_sp_bound){
+  
+ rasts <- destfiles %>%
+   purrr::map(~ncdf4::nc_open(.)) %>%
+   purrr::map(~ncdf4::ncvar_get(., variable)) %>%
+   purrr::map(~raster(t(.), ymn=smap_sp_bound[1], ymx=smap_sp_bound[2], xmn=smap_sp_bound[3], xmx=smap_sp_bound[4], crs="+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")) %>%  # EPSG : 6933
+   raster::brick()
+
+  return(rasts)
+}
+```
+
+We now use these functions to import the data (here, only 1 band is selected for each data collection). Output is a list of 4 elements (1 by time frame provided in `time_ranges` ). Each element is a RasterBrick containing 1 layer for each day (hence, here, 30 days).
+
+```{r import, eval=NOT_CRAN}
+modis_ts <- urls_mod11a1 %>%
+  purrr::map(~.import_modis(.$destfile,"LST_Day_1km"))
+## or even better : as stars objects (will import all the bands, i.e. no need to select one band only)
+# modis_ts <- urls_mod11a1 %>%
+#   purrr::map(~stars::read_stars(.$destfile)) %>%
+#   purrr::map(~st_set_crs(.,"+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"))
+
+gpm_ts <- urls_gpm %>%
+  purrr::map(~.import_gpm(.$destfile,"precipitationCal"))
+
+smap_sp_bound <- opendapr::get_optional_parameters(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
+smap_ts <- urls_smap %>%
+  purrr::map(~.import_smap(.$destfile,"Soil_Moisture_Retrieval_Data_AM_soil_moisture",smap_sp_bound))
+
+print(modis_ts)
+
+print(gpm_ts)
+
+print(smap_ts)
+```

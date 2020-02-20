@@ -2,72 +2,91 @@
 % Please edit documentation in R/get_url.R
 \name{get_url}
 \alias{get_url}
-\title{Get the URL of}
+\title{Build the URL(s) of the data to download}
 \usage{
 get_url(collection, variables = NULL, roi, time_range,
   output_format = "nc4", single_netcdf = TRUE, opt_param = NULL,
   credentials = NULL, verbose = FALSE)
 }
 \arguments{
-\item{collection}{string. Collection of interest.}
+\item{collection}{string. mandatory. Collection of interest (see details of \link{get_url}).}
 
-\item{variables}{string vector. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted.}
+\item{variables}{string vector. optional. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted (see details of \link{get_url}).}
 
-\item{roi}{object of class \code{sf} or \code{sfc} Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details).}
+\item{roi}{object of class \code{sf} or \code{sfc}. mandatory. Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details of \link{get_url}).}
 
-\item{time_range}{date(s) / POSIXlt of interest (single date/datetime or time frame : vector with start and end dates/times) (see details)}
+\item{time_range}{date(s) / POSIXlt of interest . mandatory. Single date/datetime or time frame : vector with start and end dates/times (see details).}
 
-\item{output_format}{string. Output format. Available options are : "nc4" (default), "ascii", "json"}
+\item{output_format}{string. Output data format. optional. Available options are : "nc4" (default), "ascii", "json"}
 
-\item{single_netcdf}{boolean. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.}
+\item{single_netcdf}{boolean. optional. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.}
 
-\item{opt_param}{list of optional arguments (see details). This parameter is the output of the function \link{get_optional_parameters}.}
+\item{opt_param}{list of optional arguments. optional. (see details).}
 
-\item{credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
+\item{credentials}{vector string of length 2 with username and password. optional.}
 
-\item{verbose}{boolean. Verbose (default FALSE)}
+\item{verbose}{boolean. optional. Verbose (default FALSE)}
 }
 \value{
 a data.frame with one row for each dataset to download and 4 columns  :
- \itemize{
- \item{*time_start* : }{Start Date/time for the dataset}
- \item{*name* : }{An indicative name for the dataset}
- \item{*url* : }{http URL (OPeNDAP) of the dataset}
- \item{*destfile* : }{An indicative destination file for the dataset}
+ \describe{
+ \item{time_start}{Start Date/time for the dataset}
+ \item{name}{Indicative name for the dataset}
+ \item{url}{https URL (OPeNDAP) of the dataset}
+ \item{destfile}{Indicative destination file for the dataset}
  }
 }
 \description{
-some descirption
+This is the main function of the package. It enables to build the URL(s) of the spatiotemporal datacube to download, given a collection, variables, region and time range of interest.
 }
 \details{
-This is the main function of the package. It enables to retrieve
+Argument \code{collection} : Collections available can be retrieved with the function \link{get_collections_available}
 
-#' Argument \code{time_range} can be provided either as a single date (e.g. \code{as.Date("2017-01-01"))} or time frame provided as two bounding dates ( e.g. \code{as.Date(c("2010-01-01","2010-01-30"))}) or as a POSIXlt single time or time range (e.g. "2010-01-01 18:00:00") for the half-hourly collection (GPM_3IMERGHH.06). If POSIXlt, times must be in UTC.
+Argument \code{variables} : For each collection, variables available can be retrieved with the function \link{get_variables_info}
 
-Argument \code{optionals_opendap} is optional. This parameter is automatically calculated within the function if it is not provided. However, providing it optimizes the performances of the function (i.e. fasten the processing time).
-It might be particularly useful to provide it if looping over the same ROI or dates is planned.
-The parameter can be retrieved outside the function with the function \code{\link{get_optional_parameters}}.
-}
-\note{
-some note
+Argument \code{roi} : The ROI can be composed of one or more features. In case of multiple features, data will be downloaded strictly over each feature.
+
+Argument \code{time_range} : Can be provided either as i) a single date (e.g. \code{as.Date("2017-01-01"))} or ii) a time frame provided as two bounding dates (starting and ending time) ( e.g. \code{as.Date(c("2010-01-01","2010-01-30"))}) or iii) a POSIXlt single time (e.g. \code{as.POSIXlt("2010-01-01 18:00:00")}) or iv) a POSIXlt time range (e.g. \code{as.POSIXlt(c("2010-01-01 18:00:00","2010-01-02 09:00:00"))}) for the half-hourly collection (GPM_3IMERGHH.06). If POSIXlt, times must be in UTC.
+
+Argument \code{single_netcdf} : for MODIS and VIIRS products : download the data as a single file encompassing the whole time frame (TRUE) or as multiple files : one for each date, which is the behavious for the other collections - GPM and SMAP) (FALSE) ?
+
+Argument \code{opt_param} : list of parameters related to the queried OPeNDAP server and the roi. See \link{get_optional_parameters} for additional details. The parameter can be retrieved outside the function with the function \link{get_optional_parameters}. If not provided, it will be automatically calculated within the \link{get_url} function. However, providing it fastens the processing time.
+It might be particularly useful to precompute and provide it in case the function is used within a loop for the same ROI.
+
+Argument \code{credentials} : Login to the OPeNDAP servers is required to use the function. login can be done either within the function or outside with the function \link{login}
 }
 \examples{
 
 \donttest{
-### First login to Earthdata
-log <- login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
 
-############################################################
+require(sf)
+require(magrittr)
+require(raster)
+require(stars)
+
+### First login to EOSDIS Earthdata with username and password.
+# To create an account go to : https://urs.earthdata.nasa.gov/.
+username <- Sys.getenv("earthdata_un")
+password <- Sys.getenv("earthdata_pw")
+log <- login(credentials = c(username,password), source = "earthdata")
+
 ### Retrieve the URLs (OPeNDAP) to download the following datasets :
 # MODIS Terra LST Daily (MOD11A1.006) (collection)
 # Day + Night bands (LST_Day_1km,LST_Night_1km) (variables)
 # over a 50km x 70km region of interest (roi)
 # for the time frame 2017-01-01 to 2017-01-30 (30 days) (time_range)
 
+roi = st_as_sf(data.frame(
+geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
+wkt="geom",crs = 4326)
+
+time_range = as.Date(c("2017-01-01","2017-01-30"))
+
+############################################################
 (opendap_urls_mod11a1 <- get_url(collection = "MOD11A1.006",
 variables = c("LST_Day_1km","LST_Night_1km"),
-roi = sf::st_read(system.file("extdata/roi_example.gpkg", package = "opendapr"),quiet=TRUE),
-time_range = as.Date(c("2017-01-01","2017-01-30"))
+roi = roi,
+time_range = time_range
 ))
 ############################################################
 
@@ -75,31 +94,27 @@ time_range = as.Date(c("2017-01-01","2017-01-30"))
 
 res_dl <- download_data(opendap_urls_mod11a1)
 
-### Open the data :
-# When opening the data, do not forget to reset the CRS
-# here, MODIS crs : https://spatialreference.org/ref/sr-org/modis-sinusoidal-3/proj4/
+### Import the data :
+## Have a look at the README file for important details regarding the data import in R.
+## README file : \\url{https://ptaconet.github.io/opendapr/index.html#important-note-import}
 modis_crs <- "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
 
 ## open as a stars object (deals with multiple dimensions and time)
 
-require(stars)
-require(magrittr)
-(mod11a1_stars <- read_stars(res_dl$destfile) \%>\% st_set_crs(modis_crs))
+(mod11a1_stars <- read_stars(opendap_urls_mod11a1$destfile) \%>\% st_set_crs(modis_crs))
 
 plot(mod11a1_stars)
 
 ## or open as a rasterBrick object (1 rasterBrick for each dimension)
 
-require(raster)
-(mod11a1_rast_day <- brick(res_dl$destfile,varname="LST_Day_1km",crs=modis_crs))
-(mod11a1_rast_night <- brick(res_dl$destfile,varname="LST_Night_1km",crs=modis_crs))
+(mod11a1_rast_day <- brick(opendap_urls_mod11a1$destfile,varname="LST_Day_1km",crs=modis_crs))
+(mod11a1_rast_night <- brick(opendap_urls_mod11a1$destfile,varname="LST_Night_1km",crs=modis_crs))
 
-plot(mod11a1_rast_day[[1]])
+plot(mod11a1_rast_day)
 # Here the time dimension is set as the z dimension :
 (getZ(mod11a1_rast_day))
 }
 
 # Check out the vignettes for additional examples and more complex data import workflows
-
 
 }

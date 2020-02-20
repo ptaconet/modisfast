@@ -2,34 +2,36 @@
 % Please edit documentation in R/login.R
 \name{login}
 \alias{login}
-\title{Login to download data}
+\title{Login to query servers and download data}
 \usage{
 login(credentials, source, verbose = TRUE)
 }
 \arguments{
-\item{credentials}{vector string. In case of data that needs login : string vector of length 2 with username and password}
+\item{credentials}{vector string of length 2 with username and password. optional.}
 
-\item{source}{source. Currently available: Earthdata for EOSDIS Earthdata Login with usual credentials}
+\item{source}{source. See details}
 
-\item{verbose}{boolean. Verbose (default FALSE)}
+\item{verbose}{boolean. optional. Verbose (default FALSE)}
 }
 \value{
 None.
 }
 \description{
-In case a login is required, login before querying data servers
+Login before querying data servers
 }
 \details{
-Earthdata login enables to download MODIS, VNP, SMAP, GPM data.
-
+Current options for parameter \code{"source"} are :
+\itemize{
+\item{"earthdata"}{ : to query and download MODIS, VNP, SMAP, GPM collections}
+}
 Create an account to Earthdata here : \url{https://urs.earthdata.nasa.gov/}.
 }
 \examples{
-
+# login to Earthdata
 \donttest{
 username <- Sys.getenv("earthdata_un")
 password <- Sys.getenv("earthdata_pw")
-login(c(username,password),"earthdata")
+login(credentials = c(username,password),source = "earthdata")
 }
 
 }

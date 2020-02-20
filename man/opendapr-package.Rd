@@ -4,11 +4,11 @@
 \name{opendapr-package}
 \alias{opendapr}
 \alias{opendapr-package}
-\title{opendapr: Fast download of various kinds of spatio-temporal Earth science data in R using the OPeNDAP framework}
+\title{opendapr: Harmonized and Optimized Download of Various Kinds of Spatio-Temporal Earth Science Data in R using the OPeNDAP Framework}
 \description{
 \if{html}{\figure{logo.png}{options: align='right'}}
 
-Provides functions to download various kinds of spatial-temporal Earth science data in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) using the OPeNDAP framework.
+Provides functions to download various kinds of spatial-temporal Earth science datacubes in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) using the OPeNDAP framework.
 }
 \seealso{
 Useful links:

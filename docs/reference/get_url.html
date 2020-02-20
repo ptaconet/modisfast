@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the URL of — get_url • opendapr</title>
+<title>Build the URL(s) of the data to download — get_url • opendapr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Get the URL of — get_url" />
+<meta property="og:title" content="Build the URL(s) of the data to download — get_url" />
 
-<meta property="og:description" content="some descirption" />
+<meta property="og:description" content="This is the main function of the package. It enables to build the URL(s) of the spatiotemporal datacube to download, given a collection, variables, region and time range of interest." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">opendapr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -88,7 +88,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/simple_workflow.html">Simple workflow : Download data for a given region of interest and time frame</a>
+      <a href="../articles/opendapr1.html">1. Simple workflow : Download and import data for a given region of interest and time frame</a>
+    </li>
+    <li>
+      <a href="../articles/opendapr2.html">2. Advanced use of `get_url()`</a>
     </li>
   </ul>
 </li>
@@ -113,14 +116,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get the URL of</h1>
+    <h1>Build the URL(s) of the data to download</h1>
     <small class="dont-index">Source: <a href='https://github.com/ptaconet/opendapr/blob/master/R/get_url.R'><code>R/get_url.R</code></a></small>
     <div class="hidden name"><code>get_url.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>some descirption</p>
+    <p>This is the main function of the package. It enables to build the URL(s) of the spatiotemporal datacube to download, given a collection, variables, region and time range of interest.</p>
     
     </div>
 
@@ -133,107 +136,167 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>collection</th>
-      <td><p>string. Collection of interest.</p></td>
+      <td><p>string. mandatory. Collection of interest (see details of get_url).</p></td>
     </tr>
     <tr>
       <th>variables</th>
-      <td><p>string vector. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted.</p></td>
+      <td><p>string vector. optional. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted (see details of get_url).</p></td>
     </tr>
     <tr>
       <th>roi</th>
-      <td><p>object of class <code>sf</code> or <code>sfc</code> Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details).</p></td>
+      <td><p>object of class <code>sf</code> or <code>sfc</code>. mandatory. Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details of get_url).</p></td>
     </tr>
     <tr>
       <th>time_range</th>
-      <td><p>date(s) / POSIXlt of interest (single date/datetime or time frame : vector with start and end dates/times) (see details)</p></td>
+      <td><p>date(s) / POSIXlt of interest . mandatory. Single date/datetime or time frame : vector with start and end dates/times (see details).</p></td>
     </tr>
     <tr>
       <th>output_format</th>
-      <td><p>string. Output format. Available options are : "nc4" (default), "ascii", "json"</p></td>
+      <td><p>string. Output data format. optional. Available options are : "nc4" (default), "ascii", "json"</p></td>
     </tr>
     <tr>
       <th>single_netcdf</th>
-      <td><p>boolean. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.</p></td>
+      <td><p>boolean. optional. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.</p></td>
     </tr>
     <tr>
       <th>opt_param</th>
-      <td><p>list of optional arguments (see details). This parameter is the output of the function <a href='get_optional_parameters.html'>get_optional_parameters</a>.</p></td>
+      <td><p>list of optional arguments. optional. (see details).</p></td>
     </tr>
     <tr>
       <th>credentials</th>
-      <td><p>vector string. In case of data that needs login : string vector of length 2 with username and password</p></td>
+      <td><p>vector string of length 2 with username and password. optional.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>boolean. Verbose (default FALSE)</p></td>
+      <td><p>boolean. optional. Verbose (default FALSE)</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data.frame with one row for each dataset to download and 4 columns  :</p><ul>
-<li><p>*time_start* : Start Date/time for the dataset</p></li>
-<li><p>*name* : An indicative name for the dataset</p></li>
-<li><p>*url* : http URL (OPeNDAP) of the dataset</p></li>
-<li><p>*destfile* : An indicative destination file for the dataset</p></li>
-</ul>
+    <p>a data.frame with one row for each dataset to download and 4 columns  :</p><dl class='dl-horizontal'>
+ <dt>time_start</dt><dd><p>Start Date/time for the dataset</p></dd>
+ <dt>name</dt><dd><p>Indicative name for the dataset</p></dd>
+ <dt>url</dt><dd><p>https URL (OPeNDAP) of the dataset</p></dd>
+ <dt>destfile</dt><dd><p>Indicative destination file for the dataset</p></dd>
+ </dl>
 
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This is the main function of the package. It enables to retrieve</p>
-<p>#' Argument <code>time_range</code> can be provided either as a single date (e.g. <code>as.Date("2017-01-01"))</code> or time frame provided as two bounding dates ( e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date(c("2010-01-01","2010-01-30"))</a></code>) or as a POSIXlt single time or time range (e.g. "2010-01-01 18:00:00") for the half-hourly collection (GPM_3IMERGHH.06). If POSIXlt, times must be in UTC.</p>
-<p>Argument <code>optionals_opendap</code> is optional. This parameter is automatically calculated within the function if it is not provided. However, providing it optimizes the performances of the function (i.e. fasten the processing time).
-It might be particularly useful to provide it if looping over the same ROI or dates is planned.
-The parameter can be retrieved outside the function with the function <code><a href='get_optional_parameters.html'>get_optional_parameters</a></code>.</p>
-    
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>some note</p>
+    <p>Argument <code>collection</code> : Collections available can be retrieved with the function <a href='get_collections_available.html'>get_collections_available</a></p>
+<p>Argument <code>variables</code> : For each collection, variables available can be retrieved with the function <a href='get_variables_info.html'>get_variables_info</a></p>
+<p>Argument <code>roi</code> : The ROI can be composed of one or more features. In case of multiple features, data will be downloaded strictly over each feature.</p>
+<p>Argument <code>time_range</code> : Can be provided either as i) a single date (e.g. <code>as.Date("2017-01-01"))</code> or ii) a time frame provided as two bounding dates (starting and ending time) ( e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date(c("2010-01-01","2010-01-30"))</a></code>) or iii) a POSIXlt single time (e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/as.POSIXlt'>as.POSIXlt("2010-01-01 18:00:00")</a></code>) or iv) a POSIXlt time range (e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/as.POSIXlt'>as.POSIXlt(c("2010-01-01 18:00:00","2010-01-02 09:00:00"))</a></code>) for the half-hourly collection (GPM_3IMERGHH.06). If POSIXlt, times must be in UTC.</p>
+<p>Argument <code>single_netcdf</code> : for MODIS and VIIRS products : download the data as a single file encompassing the whole time frame (TRUE) or as multiple files : one for each date, which is the behavious for the other collections - GPM and SMAP) (FALSE) ?</p>
+<p>Argument <code>opt_param</code> : list of parameters related to the queried OPeNDAP server and the roi. See <a href='get_optional_parameters.html'>get_optional_parameters</a> for additional details. The parameter can be retrieved outside the function with the function <a href='get_optional_parameters.html'>get_optional_parameters</a>. If not provided, it will be automatically calculated within the get_url function. However, providing it fastens the processing time.
+It might be particularly useful to precompute and provide it in case the function is used within a loop for the same ROI.</p>
+<p>Argument <code>credentials</code> : Login to the OPeNDAP servers is required to use the function. login can be done either within the function or outside with the function <a href='login.html'>login</a></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-</div><div class='input'><span class='co'>### First login to Earthdata</span>
-<span class='no'>log</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='login.html'>login</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_un"</span>),<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_pw"</span>)))</div><div class='output co'>#&gt; Checking credentials...</div><div class='output co'>#&gt; <span class='error'>Error in login(c(Sys.getenv("earthdata_un"), Sys.getenv("earthdata_pw"))): l'argument "source" est manquant, avec aucune valeur par défaut</span></div><div class='input'>
-<span class='co'>############################################################</span>
+</div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>sf</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>magrittr</span>)</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : magrittr</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attachement du package : ‘magrittr’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:purrr’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    set_names</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:testthat’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    equals, is_less_than, not</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>raster</span>)</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : raster</span></div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : sp</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attachement du package : ‘raster’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:magrittr’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    extract</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>stars</span>)</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : stars</span></div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : abind</span></div><div class='input'>
+<span class='co'>### First login to EOSDIS Earthdata with username and password.</span>
+<span class='co'># To create an account go to : https://urs.earthdata.nasa.gov/.</span>
+<span class='no'>username</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_un"</span>)
+<span class='no'>password</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_pw"</span>)
+<span class='no'>log</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='login.html'>login</a></span>(<span class='kw'>credentials</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>username</span>,<span class='no'>password</span>), <span class='kw'>source</span> <span class='kw'>=</span> <span class='st'>"earthdata"</span>)</div><div class='output co'>#&gt; Checking credentials...
+#&gt; Successfull login to earthdata </div><div class='input'>
 <span class='co'>### Retrieve the URLs (OPeNDAP) to download the following datasets :</span>
 <span class='co'># MODIS Terra LST Daily (MOD11A1.006) (collection)</span>
 <span class='co'># Day + Night bands (LST_Day_1km,LST_Night_1km) (variables)</span>
 <span class='co'># over a 50km x 70km region of interest (roi)</span>
 <span class='co'># for the time frame 2017-01-01 to 2017-01-30 (30 days) (time_range)</span>
 
+<span class='no'>roi</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stars/topics/st_as_sf'>st_as_sf</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
+<span class='kw'>geom</span><span class='kw'>=</span><span class='st'>"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span>),
+<span class='kw'>wkt</span><span class='kw'>=</span><span class='st'>"geom"</span>,<span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
+
+<span class='no'>time_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2017-01-01"</span>,<span class='st'>"2017-01-30"</span>))
+
+<span class='co'>############################################################</span>
 (<span class='no'>opendap_urls_mod11a1</span> <span class='kw'>&lt;-</span> <span class='fu'>get_url</span>(<span class='kw'>collection</span> <span class='kw'>=</span> <span class='st'>"MOD11A1.006"</span>,
 <span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"LST_Day_1km"</span>,<span class='st'>"LST_Night_1km"</span>),
-<span class='kw'>roi</span> <span class='kw'>=</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sf/topics/st_read'>st_read</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/roi_example.gpkg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"opendapr"</span>),<span class='kw'>quiet</span><span class='kw'>=</span><span class='fl'>TRUE</span>),
-<span class='kw'>time_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2017-01-01"</span>,<span class='st'>"2017-01-30"</span>))
-))</div><div class='output co'>#&gt; <span class='error'>Error in login(credentials): credentials must be a vector character string of length 2 (username and password)</span></div><div class='input'><span class='co'>############################################################</span>
+<span class='kw'>roi</span> <span class='kw'>=</span> <span class='no'>roi</span>,
+<span class='kw'>time_range</span> <span class='kw'>=</span> <span class='no'>time_range</span>
+))</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='warning'>Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></div><div class='output co'>#&gt;   time_start                               name
+#&gt; 1 2017-01-01 MOD11A1.006.2017001_2017030.h17v08
+#&gt;                                                                                                                                                                                                                                             url
+#&gt; 1 https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projection,LST_Day_1km[6093:6122][55:140][512:560],LST_Night_1km[6093:6122][55:140][512:560],time[6093:6122],YDim[55:140],XDim[512:560]
+#&gt;                                             destfile
+#&gt; 1 MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4</div><div class='input'><span class='co'>############################################################</span>
 
 <span class='co'>### Download the data :</span>
 
-<span class='no'>res_dl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='download_data.html'>download_data</a></span>(<span class='no'>opendap_urls_mod11a1</span>)</div><div class='output co'>#&gt; <span class='error'>Error in inherits(df_to_dl, "data.frame"): objet 'opendap_urls_mod11a1' introuvable</span></div><div class='input'>
-<span class='co'>### Open the data :</span>
-<span class='co'># When opening the data, do not forget to reset the CRS</span>
-<span class='co'># here, MODIS crs : https://spatialreference.org/ref/sr-org/modis-sinusoidal-3/proj4/</span>
+<span class='no'>res_dl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='download_data.html'>download_data</a></span>(<span class='no'>opendap_urls_mod11a1</span>)
+
+<span class='co'>### Import the data :</span>
+<span class='co'>## Have a look at the README file for important details regarding the data import in R.</span>
+<span class='co'>## README file : \url{https://ptaconet.github.io/opendapr/index.html#important-note-import}</span>
 <span class='no'>modis_crs</span> <span class='kw'>&lt;-</span> <span class='st'>"+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"</span>
 
 <span class='co'>## open as a stars object (deals with multiple dimensions and time)</span>
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>stars</span>)</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : stars</span></div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : abind</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>magrittr</span>)</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : magrittr</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attachement du package : ‘magrittr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:testthat’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    equals, is_less_than, not</span></div><div class='input'>(<span class='no'>mod11a1_stars</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stars/topics/read_stars'>read_stars</a></span>(<span class='no'>res_dl</span>$<span class='no'>destfile</span>) <span class='kw'>%&gt;%</span> <span class='fu'>st_set_crs</span>(<span class='no'>modis_crs</span>))</div><div class='output co'>#&gt; <span class='error'>Error in read_stars(res_dl$destfile): objet 'res_dl' introuvable</span></div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/stars/topics/plot'>plot</a></span>(<span class='no'>mod11a1_stars</span>)</div><div class='output co'>#&gt; <span class='error'>Error in plot(mod11a1_stars): objet 'mod11a1_stars' introuvable</span></div><div class='input'>
+(<span class='no'>mod11a1_stars</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stars/topics/read_stars'>read_stars</a></span>(<span class='no'>opendap_urls_mod11a1</span>$<span class='no'>destfile</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/sf/topics/st_crs'>st_set_crs</a></span>(<span class='no'>modis_crs</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Message 1: No UNIDATA NC_GLOBAL:Conventions attribute</span></div><div class='output co'>#&gt; LST_Night_1km, </div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Message 1: No UNIDATA NC_GLOBAL:Conventions attribute</span></div><div class='output co'>#&gt; LST_Day_1km, </div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Message 1: No UNIDATA NC_GLOBAL:Conventions attribute</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; stars object with 3 dimensions and 2 attributes
+#&gt; attribute(s):
+#&gt;  LST_Night_1km [K] LST_Day_1km [K]
+#&gt;  Min.   :281.1     Min.   :293.8  
+#&gt;  1st Qu.:289.1     1st Qu.:304.8  
+#&gt;  Median :290.3     Median :306.6  
+#&gt;  Mean   :290.1     Mean   :306.5  
+#&gt;  3rd Qu.:291.4     3rd Qu.:308.4  
+#&gt;  Max.   :297.9     Max.   :315.1  
+#&gt;  NA's   :67750     NA's   :33597  
+#&gt; dimension(s):
+#&gt;      from to         offset    delta                       refsys point values
+#&gt; x       1 49        -637982  926.625 +proj=sinu +lon_0=0 +x_0=...    NA   NULL
+#&gt; y       1 86        1061449 -926.625 +proj=sinu +lon_0=0 +x_0=...    NA   NULL
+#&gt; time    1 30 2017-01-01 UTC   1 days                      POSIXct    NA   NULL
+#&gt;         
+#&gt; x    [x]
+#&gt; y    [y]
+#&gt; time    </div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/stars/topics/plot'>plot</a></span>(<span class='no'>mod11a1_stars</span>)</div><div class='img'><img src='get_url-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## or open as a rasterBrick object (1 rasterBrick for each dimension)</span>
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>raster</span>)</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : raster</span></div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : sp</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attachement du package : ‘raster’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:magrittr’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    extract</span></div><div class='input'>(<span class='no'>mod11a1_rast_day</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/brick'>brick</a></span>(<span class='no'>res_dl</span>$<span class='no'>destfile</span>,<span class='kw'>varname</span><span class='kw'>=</span><span class='st'>"LST_Day_1km"</span>,<span class='kw'>crs</span><span class='kw'>=</span><span class='no'>modis_crs</span>))</div><div class='output co'>#&gt; <span class='error'>Error in brick(res_dl$destfile, varname = "LST_Day_1km", crs = modis_crs): objet 'res_dl' introuvable</span></div><div class='input'>(<span class='no'>mod11a1_rast_night</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/brick'>brick</a></span>(<span class='no'>res_dl</span>$<span class='no'>destfile</span>,<span class='kw'>varname</span><span class='kw'>=</span><span class='st'>"LST_Night_1km"</span>,<span class='kw'>crs</span><span class='kw'>=</span><span class='no'>modis_crs</span>))</div><div class='output co'>#&gt; <span class='error'>Error in brick(res_dl$destfile, varname = "LST_Night_1km", crs = modis_crs): objet 'res_dl' introuvable</span></div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/plot'>plot</a></span>(<span class='no'>mod11a1_rast_day</span><span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; <span class='error'>Error in plot(mod11a1_rast_day[[1]]): objet 'mod11a1_rast_day' introuvable</span></div><div class='input'><span class='co'># Here the time dimension is set as the z dimension :</span>
-(<span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/zvalues'>getZ</a></span>(<span class='no'>mod11a1_rast_day</span>))</div><div class='output co'>#&gt; <span class='error'>Error in getZ(mod11a1_rast_day): objet 'mod11a1_rast_day' introuvable</span></div><div class='input'>
+(<span class='no'>mod11a1_rast_day</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/brick'>brick</a></span>(<span class='no'>opendap_urls_mod11a1</span>$<span class='no'>destfile</span>,<span class='kw'>varname</span><span class='kw'>=</span><span class='st'>"LST_Day_1km"</span>,<span class='kw'>crs</span><span class='kw'>=</span><span class='no'>modis_crs</span>))</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : ncdf4</span></div><div class='output co'>#&gt; class       : RasterBrick 
+#&gt; dimensions  : 86, 49, 4214, 30  (nrow, ncol, ncell, nlayers)
+#&gt; resolution  : 926.6254, 926.6254  (x, y)
+#&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)
+#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs 
+#&gt; data source : /home/ptaconet/opendapr/docs/reference/MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4 
+#&gt; names       : X2017.01.01, X2017.01.02, X2017.01.03, X2017.01.04, X2017.01.05, X2017.01.06, X2017.01.07, X2017.01.08, X2017.01.09, X2017.01.10, X2017.01.11, X2017.01.12, X2017.01.13, X2017.01.14, X2017.01.15, ... 
+#&gt; Date        : 2017-01-01, 2017-01-30 (min, max)
+#&gt; varname     : LST_Day_1km 
+#&gt; </div><div class='input'>(<span class='no'>mod11a1_rast_night</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/brick'>brick</a></span>(<span class='no'>opendap_urls_mod11a1</span>$<span class='no'>destfile</span>,<span class='kw'>varname</span><span class='kw'>=</span><span class='st'>"LST_Night_1km"</span>,<span class='kw'>crs</span><span class='kw'>=</span><span class='no'>modis_crs</span>))</div><div class='output co'>#&gt; class       : RasterBrick 
+#&gt; dimensions  : 86, 49, 4214, 30  (nrow, ncol, ncell, nlayers)
+#&gt; resolution  : 926.6254, 926.6254  (x, y)
+#&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)
+#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs 
+#&gt; data source : /home/ptaconet/opendapr/docs/reference/MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4 
+#&gt; names       : X2017.01.01, X2017.01.02, X2017.01.03, X2017.01.04, X2017.01.05, X2017.01.06, X2017.01.07, X2017.01.08, X2017.01.09, X2017.01.10, X2017.01.11, X2017.01.12, X2017.01.13, X2017.01.14, X2017.01.15, ... 
+#&gt; Date        : 2017-01-01, 2017-01-30 (min, max)
+#&gt; varname     : LST_Night_1km 
+#&gt; </div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/stars/topics/plot'>plot</a></span>(<span class='no'>mod11a1_rast_day</span>)</div><div class='img'><img src='get_url-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Here the time dimension is set as the z dimension :</span>
+(<span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/zvalues'>getZ</a></span>(<span class='no'>mod11a1_rast_day</span>))</div><div class='output co'>#&gt;  [1] "2017-01-01" "2017-01-02" "2017-01-03" "2017-01-04" "2017-01-05"
+#&gt;  [6] "2017-01-06" "2017-01-07" "2017-01-08" "2017-01-09" "2017-01-10"
+#&gt; [11] "2017-01-11" "2017-01-12" "2017-01-13" "2017-01-14" "2017-01-15"
+#&gt; [16] "2017-01-16" "2017-01-17" "2017-01-18" "2017-01-19" "2017-01-20"
+#&gt; [21] "2017-01-21" "2017-01-22" "2017-01-23" "2017-01-24" "2017-01-25"
+#&gt; [26] "2017-01-26" "2017-01-27" "2017-01-28" "2017-01-29" "2017-01-30"</div><div class='input'>
 # Check out the vignettes for additional examples and more complex data import workflows
-
 
 </div></pre>
   </div>
@@ -245,8 +308,6 @@ The parameter can be retrieved outside the function with the function <code><a h
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#note">Note</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

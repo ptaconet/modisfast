@@ -1,5 +1,5 @@
 ---
-title: "Simple workflow : Download and import data for a given region of interest and time frame"
+title: "1. Simple workflow : Download and import data for a given region of interest and time frame"
 author: "Paul Taconet"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -34,7 +34,7 @@ In this example we want to download, import and plot over the 3500 km^2^ wide re
 
 - a 40 days time series of land surface temperature from [MODIS Terra LST](https://dx.doi.org/10.5067/MODIS/MOD11A1.006) (collection *MOD11A1.006*) (spatial resolution : 1 km ; temporal resolution : 1 day),
 - the same 40 days times series of precipitations from [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERGDF/DAY/06) (collection *GPM_L3/GPM_3IMERGDF.06*) (spatial resolution : 1° ; temporal resolution : 1 day)
-- the same 40 days times series of soil moisture from [SMAP Daily](https://doi.org/10.5067/T90W6VRLCBHI) (collection *SMAP/SPL3SMP_E.003*) (spatial resolution : 9 km ; temporal resolution : 3 days)
+- the same 40 days times series of soil moisture from [SMAP Daily](https://doi.org/10.5067/T90W6VRLCBHI) (collection *SMAP/SPL3SMP_E.003*) (spatial resolution : 9 km ; temporal resolution : 2/3 days)
 
 ```{r, echo=F, fig.height=5, fig.width=3, eval=NOT_CRAN }
 require(mapview)
@@ -44,7 +44,7 @@ mapview::mapview(roi,legend=F)
 
 ## Setup the region and time range of interest
 
-First we prepare the script : set-up ROI and time frame
+First we prepare the script : define the ROI and the time frame
 
 ```{r example_prepare, eval=NOT_CRAN}
 # Set ROI and time range of interest
@@ -57,7 +57,7 @@ time_range <- as.Date(c("2017-01-01","2017-01-30"))
 And we login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
 
 ```{r login, eval=NOT_CRAN}
-# Login to Earthdata servers with username and password.
+# Login to Earthdata servers with username and password. Here we have stored our credentials in local environment variables
 username <- Sys.getenv("earthdata_un")
 password <- Sys.getenv("earthdata_pw")
 log <- login(credentials = c(username,password), source = "earthdata")
@@ -65,17 +65,19 @@ log <- login(credentials = c(username,password), source = "earthdata")
 
 ## Get the OPeNDAP URLs of the data to download {#get-url}
 
-With the function `get_url()`, we get the OPeNDAP URLs for our collections of interest (*MOD11A1.006*, *GPM_L3/GPM_3IMERGDF.06* and *SMAP/SPL3SMP_E.003*) given our ROI and time frame. 
+With the function `get_url()`, we get the https URLs for our collections of interest (*MOD11A1.006*, *GPM_L3/GPM_3IMERGDF.06* and *SMAP/SPL3SMP_E.003*) given our ROI and time frame. 
 
-**Note : on the use of the parameter `variables` of the function `get_url()`**
+**Note on the use of the parameter `variables` of the function `get_url()`** :
 
-The collections generally contain several variables (sometimes called "dimensions", or "bands"). As an example, MODIS LST products contain one band for the day temperature ("LST_Day_1km"), one band for the night temperature ("LST_Night_1km"), etc. To get all the variables available for a given collection along with information for each of them (meaning, etc.), use the function `get_variables_info`, e.g. :
+The collections generally contain several variables (sometimes called "dimensions", or "bands"). As an example, MODIS LST products contain one band for the day temperature ("LST_Day_1km"), one band for the night temperature ("LST_Night_1km"), etc. To get all the variables available for a given collection along with information for each of them (description, etc.), use the function `get_variables_info()`. e.g. :
 
 ```{r get_variables_info, eval=NOT_CRAN}
 tail(get_variables_info("MOD11A1.006"))
 ```
 
-In `get_url()`, the `variables` parameter enables to restrict the data to download to only specific variables. By default it is set to `NULL`, which means that all the available variables for the specified collection are downloaded. Specifying `variables` will make the data to download lighter. 
+In `get_url()`, the parameter `variables` enables to restrict the data to download to only specific variables. By default it is set to `NULL`, which means that all the available variables for the specified collection are downloaded. Specifying `variables` will make the data to download lighter. 
+
+**End Note**
 
 In our example, we specify some variables for each collection. 
 
@@ -83,7 +85,7 @@ In our example, we specify some variables for each collection.
 ## Get the URLs of MODIS Terra LST daily
 urls_mod11a1 <- get_url(
   collection = "MOD11A1.006",
-  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
+  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),  # get the variables available with : get_variables_info("MOD11A1.006") ; or set to NULL (defaults) to download all the variables
   roi = roi,
   time_range = time_range
  )
@@ -91,7 +93,7 @@ urls_mod11a1 <- get_url(
 ## Get the URLs of GPM daily
 urls_gpm <- get_url(
   collection = "GPM_L3/GPM_3IMERGDF.06",
-  variables = c("precipitationCal","precipitationCal_cnt"),
+  variables = c("precipitationCal","precipitationCal_cnt"),  # get the variables available with : get_variables_info("GPM_L3/GPM_3IMERGDF.06")
   roi = roi,
   time_range = time_range
  )
@@ -99,7 +101,7 @@ urls_gpm <- get_url(
 ## Get the URLs of SMAP 3-days
 urls_smap <- get_url(
   collection = "SMAP/SPL3SMP_E.003",
-  variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture","Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag","Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm","Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),
+  variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture","Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag","Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm","Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),     # get the variables available with : get_variables_info("SMAP/SPL3SMP_E.003")
   roi = roi,
   time_range = time_range
  )
@@ -119,7 +121,7 @@ head(urls_smap,3)
 
 Now we download the data with the function `download_data()`.
 
-Destination file for each dataset is specified in the column *destfile* of the dataframes *urls_mod11a1*,  *urls_gpm* and *urls_smap*. A destination file is specified by default but it can of course be modified.
+Destination file for each dataset is specified in the column *destfile* of the dataframes *urls_mod11a1*,  *urls_gpm* and *urls_smap*. The destination file is specified by default but it can of course be modified.
 
 Setting the argument `parallel` to `TRUE` will parallelize - therefore fasten - the download in case their are numerous datasets to download
 
@@ -138,6 +140,8 @@ Caution ! Have a look at the section [Important note regarding the further impor
 
 ### Import MODIS / VNP {#import-modis-vnp}
 
+#### As a `RasterLayer` object
+
 ```{r import_modis_vnp_raster, eval=NOT_CRAN }
 # Import the MODIS time series as a rasterBrick object (1 rasterBrick for each dimension) :
   (mod11a1_rast_day <- urls_mod11a1$destfile %>%
@@ -145,6 +149,8 @@ Caution ! Have a look at the section [Important note regarding the further impor
 
 # The same can be done with the other variables (LST_Night_1km, etc.)
 ```
+
+#### As a `stars` object
 
 We can also import the same MODIS time series as a `stars` object. Here the interesting point is that all the dimensions are imported at once.
 
@@ -154,6 +160,8 @@ We can also import the same MODIS time series as a `stars` object. Here the inte
 ```
 
 ### Import GPM {#import-gpm}
+
+#### As a `RasterLayer` object
 
 ```{r import_gpm, message=F, eval=NOT_CRAN}
 ## Import the GPM time series as a rasterBrick object (1 rasterBrick for each dimension) :
@@ -167,9 +175,11 @@ We can also import the same MODIS time series as a `stars` object. Here the inte
 # The same can be done with the other variables ("precipitationCal_cnt", etc.)
 ```
 
-### Import SMAP {#import-smap, eval=NOT_CRAN}
+### Import SMAP {#import-smap}
 
-We set-up the missing bounding coordinates. For this we use the function `get_optional_parameters()` of the `opendapr` package.
+#### As a `RasterLayer` object
+
+We set-up the missing bounding coordinates. For this we use the function `get_optional_parameters()`.
 
 ```{r import_smap, message=F, eval=NOT_CRAN}
 ## Import the SMAP time series as a rasterBrick object (1 rasterBrick for each dimension) :

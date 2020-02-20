@@ -10,25 +10,25 @@
 #' @param df_to_dl data.frame. Urls and destination files of dataset to download. Typically output of \link{get_url}. See Details for the structure
 #' @param parallel boolean. Parallelize the download ? Default to FALSE
 #'
-#' @return a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional olumns are :
-#' \itemize{
-#' \item{"fileDl": }{Booloean (dataset downloaded or failure)}
-#' \item{"dlStatus": }{Download status : 1 = download ok ; 2 = download error ; 3 = dataset was already existing in destination file }
-#' \item{"fileSize": }{file size on disk}
+#' @return a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional columns are :
+#' \describe{
+#' \item{fileDl}{Booloean (dataset downloaded or failure)}
+#' \item{dlStatus}{Download status : 1 = download ok ; 2 = download error ; 3 = dataset was already existing in destination file }
+#' \item{fileSize}{File size on disk}
 #' }
 #'
 #' @details
 #'
-#' Parameter \code{df_to_dl} is a data.frame with the following minimal structure :
-#' \itemize{
-#' \item{"url": }{URL of the source file (character string)}
-#' \item{"destfile": }{Destination file (character string)}
+#' Parameter \code{df_to_dl} must a data.frame with the following minimal structure :
+#' \describe{
+#' \item{url}{URL of the source file (character string)}
+#' \item{destfile}{Destination file (character string)}
 #' }
 #'
 #' Parameter \code{source} takes NULL as default value. Options are :
 #' \itemize{
-#' \item{ \code{NULL} : } {when no login is required to download the data). }
-#' \item{ \code{"earthdata"} : } {to download data requiring a login to Earthdata }
+#' \item{ \code{NULL} : } {when no login is required to download the data. }
+#' \item{ \code{"earthdata"} : } {to download data requiring a login to EOSDIS Earthdata. To create an account go to : https://urs.earthdata.nasa.gov/  }
 #'}
 #'
 #' @import dplyr parallel

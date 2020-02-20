@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Login to download data — login • opendapr</title>
+<title>Login to query servers and download data — login • opendapr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Login to download data — login" />
+<meta property="og:title" content="Login to query servers and download data — login" />
 
-<meta property="og:description" content="In case a login is required, login before querying data servers" />
+<meta property="og:description" content="Login before querying data servers" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">opendapr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -88,7 +88,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/simple_workflow.html">Simple workflow : Download data for a given region of interest and time frame</a>
+      <a href="../articles/opendapr1.html">1. Simple workflow : Download and import data for a given region of interest and time frame</a>
+    </li>
+    <li>
+      <a href="../articles/opendapr2.html">2. Advanced use of `get_url()`</a>
     </li>
   </ul>
 </li>
@@ -113,14 +116,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Login to download data</h1>
+    <h1>Login to query servers and download data</h1>
     <small class="dont-index">Source: <a href='https://github.com/ptaconet/opendapr/blob/master/R/login.R'><code>R/login.R</code></a></small>
     <div class="hidden name"><code>login.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>In case a login is required, login before querying data servers</p>
+    <p>Login before querying data servers</p>
     
     </div>
 
@@ -131,15 +134,15 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>credentials</th>
-      <td><p>vector string. In case of data that needs login : string vector of length 2 with username and password</p></td>
+      <td><p>vector string of length 2 with username and password. optional.</p></td>
     </tr>
     <tr>
       <th>source</th>
-      <td><p>source. Currently available: Earthdata for EOSDIS Earthdata Login with usual credentials</p></td>
+      <td><p>source. See details</p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>boolean. Verbose (default FALSE)</p></td>
+      <td><p>boolean. optional. Verbose (default FALSE)</p></td>
     </tr>
     </table>
     
@@ -149,16 +152,17 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Earthdata login enables to download MODIS, VNP, SMAP, GPM data.</p>
-<p>Create an account to Earthdata here : <a href='https://urs.earthdata.nasa.gov/'>https://urs.earthdata.nasa.gov/</a>.</p>
+    <p>Current options for parameter <code>"source"</code> are :</p><ul>
+<li><p>"earthdata" : to query and download MODIS, VNP, SMAP, GPM collections</p></li>
+</ul><p>Create an account to Earthdata here : <a href='https://urs.earthdata.nasa.gov/'>https://urs.earthdata.nasa.gov/</a>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
+    <pre class="examples"><div class='input'># login to Earthdata
 </div><div class='input'><span class='no'>username</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_un"</span>)
 <span class='no'>password</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_pw"</span>)
-<span class='fu'>login</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>username</span>,<span class='no'>password</span>),<span class='st'>"earthdata"</span>)</div><div class='output co'>#&gt; Checking credentials...
-#&gt; Successfull login to  earthdata </div><div class='input'>
+<span class='fu'>login</span>(<span class='kw'>credentials</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>username</span>,<span class='no'>password</span>),<span class='kw'>source</span> <span class='kw'>=</span> <span class='st'>"earthdata"</span>)</div><div class='output co'>#&gt; Checking credentials...
+#&gt; Successfull login to earthdata </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

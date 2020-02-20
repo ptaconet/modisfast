@@ -1,5 +1,5 @@
 Package: opendapr
-Title: Fast download of various kinds of spatio-temporal Earth science data in R using the OPeNDAP framework
+Title: Harmonized and Optimized Download of Various Kinds of Spatio-Temporal Earth Science Data in R using the OPeNDAP Framework
 Version: 0.1.0
 Authors@R: 
     person(given = "Paul",
@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "paul.taconet@ird.fr",
            comment = c(ORCID = "0000-0001-7429-7204"))
-Description: Provides functions to download various kinds of spatial-temporal Earth science data in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) using the OPeNDAP framework.
+Description: Provides functions to download various kinds of spatial-temporal Earth science datacubes in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) using the OPeNDAP framework.
 License: GPL-3
 URL: https://github.com/ptaconet/opendapr
 BugReports: https://github.com/ptaconet/opendapr/issues
@@ -20,6 +20,7 @@ Imports:
     magrittr,
     dplyr,
     httr,
+    curl,
     sf,
     purrr,
     lubridate,
@@ -27,9 +28,7 @@ Imports:
     stringr,
     rvest,
     utils,
-    parallel,
-    curl,
-    tibble
+    parallel
 Suggests: 
     testthat,
     knitr,
@@ -37,5 +36,4 @@ Suggests:
     raster,
     stars,
     mapview,
-    rmarkdown,
-    tictoc
+    rmarkdown
