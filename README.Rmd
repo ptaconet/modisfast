@@ -34,12 +34,24 @@ opendapr uses a single function to query the various data servers, and output da
 
 ***Speed-up ?***
 
-opendapr uses the abilities offered by OPeNDAP (*Open-source Project for a Network Data Access Protocol*) to download strictly the data that is needed : no more 1° x 1° MODIS tiles when our region of interest is only 100 km x 100 km wide ! This results in a reduction of the physical size of the data that is imported, and hence of the downloading time. In addition, opendapr enables to parallelize the download. 
+**opendapr** uses the abilities offered by OPeNDAP (*Open-source Project for a Network Data Access Protocol*) to download a subset of data cube, along spatial, temporal or any other data dimension (depth, ...). This way, it reduces downloading time and disk usage to their minimum: no more 1° x 1° MODIS tiles when your region of interest is only 100 km x 100 km wide !
+Moreover, **opendapr** supports parallelized downloads.
 
-[*Another package to download MODIS or SMAP data ?*](#other-packages) Yes. But opendapr acts a bit differently and hopefully helps if you : 
 
-* are looking to import multiple kind of spatio-temporal Earth science data in R (e.g. MODIS, SMAP, GPM),
-* are concerned about downloading time and / or data storage.
+Below is a comparison of **opendapr** with other packages available for downloading chunks of remote sensing data:
+
+
+|    Package                                           | Data  |  Spatial subsetting* | Dimensional subsetting*   
+| :-------------------------------------------------- | :-------------: | :-------------: |  :-------------: | 
+| [`opendapr`](https://github.com/ptaconet/opendapr)      | MODIS, VIIRS, SMAP, GPM |  `r emo::ji("white heavy check mark")`  |   `r emo::ji("white heavy check mark")`  
+| [`MODIS`](https://github.com/MatMatt/MODIS)       | MODIS  |  `r emo::ji("cross mark")`  |  `r emo::ji("cross mark")`  
+| [`MODIStsp`](https://github.com/ropensci/MODIStsp)   |  MODIS |   `r emo::ji("cross mark")`   |  `r emo::ji("white heavy check mark")` 
+| [`MODISTools`](https://github.com/ropensci/MODISTools)  |  MODIS  |   `r emo::ji("white heavy check mark")`   |   `r emo::ji("white heavy check mark")` 
+| [`smapr`](https://github.com/ropensci/smapr)      |  SMAP |   `r emo::ji("cross mark")` | `r emo::ji("cross mark")`  | `r emo::ji("cross mark")`
+
+
+\* at the downloading phase
+
 
 ## Installation
 
@@ -50,7 +62,7 @@ You can install the released version of opendapr from [CRAN](https://CRAN.R-proj
 install.packages("opendapr")
 ```
 -->
-You can install the development version from [GitHub](https://github.com/) with:
+The package can be installed with:
 
 ``` r
 # install.packages("devtools")
@@ -58,28 +70,27 @@ devtools::install_github("ptaconet/opendapr")
 ```
 Work is ongoing to publish the package on the CRAN. 
 
-## How to use opendapr ? 
+## Get Started 
 
-Downloading the data with opendapr is a simple two-steps workflow : 
+Downloading the data with **opendapr** is a simple two-steps workflow : 
 
-1. With the function **`odr_get_url()`**: Retrieve the URL(s) of the data for a given collection, variables, time frame, region and output data format of interest ;
+1. With the function **`odr_get_url()`**, get the URL(s) of the data for:
+  
+  * a collection : see [next section](#coll-available),
+  * variables,
+  * region of interest (`sf`/`sfc` polygons),
+  * time range,
+  * output data format (netcdf, ascii, json)
+  
 2. With the function **`odr_download_data()`**: Download the data to your computer.
-
-The `odr_get_url()` function has the following input parameters that enable to select and filter the data of interest : 
-
-* `collection` : collection of interest (see [next section](#which-products-are-available-for-download-through-opendapr-));
-* `variables` : variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted ;
-* `roi` : region of interest (`sf` or `sfc` POLYGON-type object) ;
-* `time_range` : date(s) / time(s) of interest (single date / datetime or time frame ) ;
-* `output_format` : output format. Available options are : "nc4" (default), "ascii", "json"
 
 Additional functions include : login to EOSDIS Earthdata before querying the servers and downloading the data (`odr_login()`), list collection available for download ( `odr_list_collections()` ), list variables available for each collection ( `odr_list_variables()` ).
 
 Have a look at the [example](#example) below for a simple use case ! 
 
-## Which products are available for download through opendapr ? {#coll-available}
+## Collections available in **opendapr** {#coll-available}
 
-Currently opendapr enables to download data from four main collections : 
+Currently **opendapr** supports data dowload from : 
 
 * [MODIS land products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/), made available by the [NASA / USGS LP DAAC](https://lpdaac.usgs.gov/) (`r emo::ji("right arrow")` [source OPeNDAP server](https://opendap.cr.usgs.gov/opendap/hyrax/)) ;
 * [VIIRS land products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/), made available by the [NASA / USGS LP DAAC](https://lpdaac.usgs.gov/) (`r emo::ji("right arrow")` [source OPeNDAP server](https://opendap.cr.usgs.gov/opendap/hyrax/)) ;
@@ -246,21 +257,6 @@ smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = "SMAP/SPL3S
   return(rasts)
 }
 ```
-
-## Other packages {#other-packages}
-
-Above are some packages that enable to download some of the data that are proposed through opendapr, along with some of their characteristics :
-
-
-|    Package                                           | Data  |  Spatial subsetting* | Dimensional subsetting*   
-| :-------------------------------------------------- | :-------------: | :-------------: |  :-------------: | 
-| [`MODIS`](https://github.com/MatMatt/MODIS)       | MODIS  |  `r emo::ji("cross mark")`  |  `r emo::ji("cross mark")`  
-| [`MODIStsp`](https://github.com/ropensci/MODIStsp)   |  MODIS |   `r emo::ji("cross mark")`   |  `r emo::ji("white heavy check mark")` 
-| [`MODISTools`](https://github.com/ropensci/MODISTools)  |  MODIS  |   `r emo::ji("white heavy check mark")`   |   `r emo::ji("white heavy check mark")` 
-| [`smapr`](https://github.com/ropensci/smapr)      |  SMAP |   `r emo::ji("cross mark")` | `r emo::ji("cross mark")`  | `r emo::ji("cross mark")`
-| [`opendapr`](https://github.com/ptaconet/opendapr)      | MODIS, VIIRS, SMAP, GPM |  `r emo::ji("white heavy check mark")`  |   `r emo::ji("white heavy check mark")`  
-
-\* at the downloading phase
 
 <!--
 ## Citation
