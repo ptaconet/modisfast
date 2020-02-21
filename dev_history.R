@@ -90,8 +90,10 @@ usethis::use_git_ignore("config.yml")
 devtools::build_vignettes() # ne pas oublier d'avoir ajouté au préalable VignetteBuilder: knitr dans le DESCRIPTION file
 devtools::install(build_vignettes = TRUE)
 
-# to test build on windows
-#check_win()
+# to test build on windows and rhub
+# devtools::check_rhub()
+# devtools::check_win_oldrelease()
+# devtools::check_win_release()
 
 ## To build a website with home and vignettes
 usethis::use_package_doc()

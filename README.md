@@ -9,7 +9,7 @@
 [![Travis build
 status](https://travis-ci.org/ptaconet/opendapr.svg?branch=master)](https://travis-ci.org/ptaconet/opendapr)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/opendapr)](https://cran.r-project.org/package=opendapr)
-[![Github\_Status\_Badge](https://img.shields.io/badge/Github-0.0.9007-blue.svg)](https://github.com/ptaconet/opendapr)
+[![Github\_Status\_Badge](https://img.shields.io/badge/Github-0.1.0-blue.svg)](https://github.com/ptaconet/opendapr)
 <!-- badges: end -->
 
 opendapr is an R package that provides functions to **harmonize** and
@@ -22,16 +22,17 @@ using the [**OPeNDAP framework**](https://www.opendap.org/about).
 
 ***Harmonize ?***
 
-opendapr uses a single function to query the various data servers.
+opendapr uses a single function to query the various data servers, and
+output data are proposed in various formats (NetCDF, ASCII, JSON).
 
 ***Speed-up ?***
 
-opendapr uses the OPeNDAP (*Open-source Project for a Network Data
-Access Protocol*) abilities to download strictly the data that is needed
-: no more 1° x 1° MODIS tiles when our region of interest is only 100 km
-x 100 km wide \! This results in a reduction of the physical size of the
-data that is imported, and hence of the downloading time. In addition,
-opendapr enables to parallelize the download.
+opendapr uses the abilities offered by OPeNDAP (*Open-source Project for
+a Network Data Access Protocol*) to download strictly the data that is
+needed : no more 1° x 1° MODIS tiles when our region of interest is only
+100 km x 100 km wide \! This results in a reduction of the physical size
+of the data that is imported, and hence of the downloading time. In
+addition, opendapr enables to parallelize the download.
 
 [*Another package to download MODIS or SMAP data ?*](#other-packages)
 Yes. But opendapr acts a bit differently and hopefully helps if you :
@@ -1529,8 +1530,6 @@ Primary Productivity
 </td>
 
 <td style="text-align:left;">
-
-<https://dx.doi.org/10.5067/MODIS/MOD17A3.055>
 
 </td>
 
@@ -3245,28 +3244,44 @@ Surface reflectance
 
 ## Example
 
-Let’s say we want to download over the 50 km x 50 km wide region of
-interest (ROI) located in Northern Ivory Coast :
+Let’s say we want to download over the 50 km x 70 km wide region of
+interest located in Northern Ivory Coast (mapped above):
 
-  - a 40 days time series of [MODIS/Terra Land Surface
+  - a 30 days-long time series of [MODIS/Terra Land Surface
     Temperature/Emissivity Daily L3 Global 1km SIN
     Grid](https://dx.doi.org/10.5067/MODIS/MOD11A1.006)
-    (collection=“MOD11A1.006”)
-  - the same 40 days times series of [GPM IMERG Final Precipitation L3 1
-    day 0.1 degree x 0.1
+    (collection=“MOD11A1.006”) ;
+  - the same 30 days-long times series of [GPM IMERG Final Precipitation
+    L3 1 day 0.1 degree x 0.1
     degree](https://doi.org/10.5067/GPM/IMERGDF/DAY/06)
     (collection=“GPM\_L3/GPM\_3IMERGDF.06”)
 
-<!-- end list -->
+<details>
+
+<summary>Map of the region of interest (click to
+expand)</summary>
+
+<p>
+
+<img src="man/figures/README-plot_roi-1.png" width="100%" style="display: block; margin: auto auto auto 0;" />
+
+</p>
+
+</p>
+
+</details>
+
+We prepare the script : load the packages and login to EOSDIS Earthdata
+with our credentials (to create an account go to :
+<https://urs.earthdata.nasa.gov/>) .
 
 ``` r
-### Prepare script
 # Load the packages
 require(opendapr)
 require(sf)
 
 # Define ROI and time range of interest
-roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
+roi <- st_as_sf(data.frame(geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326)
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
 # Login to Earthdata servers with username and password. To create an account go to : https://urs.earthdata.nasa.gov/.
@@ -3275,7 +3290,7 @@ username <- Sys.getenv("earthdata_un")
 password <- Sys.getenv("earthdata_pw")
 log <- odr_login(credentials = c(username,password), source = "earthdata")
 #> Checking credentials...
-#> Successfull odr_login to earthdata
+#> Successfull login to earthdata
 ```
 
 Download the data in two steps :
@@ -3283,7 +3298,7 @@ Download the data in two steps :
 1.  Get the URLs with the function `odr_get_url()`;
 2.  Download the data with the function `odr_download_data()`.
 
-<!-- end list -->
+Let’s also see and how much the downloaded file weight.
 
 ``` r
 ## Get the URLs for MOD11A1.006
@@ -3327,29 +3342,35 @@ print(str(res_dl))
 #>  $ url       : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170103-S0000"| __truncated__ ...
 #>  $ destfile  : chr  "MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4" ...
 #>  $ fileDl    : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...
-#>  $ fileSize  : num  274915 60802 60817 60827 60794 ...
+#>  $ fileSize  : num  633387 60802 60817 60827 60794 ...
 #>  $ dlStatus  : num  3 3 3 3 3 3 3 3 3 3 ...
 #> NULL
+
+(tot_weight <- sum(res_dl$fileSize)/1000000)
+#> [1] 2.461542
 ```
 
-It is also possible to subset the bands to download with the parameter
+2.5 Mb in total \!
+
+We could also have subset the bands to download, using the parameter
 `variables` of the function `odr_get_url()`.
 
 To further import the data in R, have a look at the section [Important
 note regarding the further import of the data in
 R](#important-note-regarding-the-further-import-of-the-data-in-r) \!
 
-Simple or advanced data download and import workflows are provided in
-the vignettes `vignette("simple_workflow")` and
-`vignette("advanced_workflow")`.
+Simple or advanced data download and import workflows are provided
+respectively in the vignettes `vignette("opendapr1")` and
+`vignette("opendapr2")`.
 
 ## Important note regarding the further import of the data in R
 
 Various packages and related classes can be used to read the data
 downloaded through OPeNDAP. If `raster` is surely the most famous class
 for raster objects, many packages facilitate the use of spatiotemporal
-data cubes. For instance, MODIS or VIIRS products can be imported as a
-`stars` object from the excellent
+data cubes in formats such as those proposed through opendapr
+(e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as
+a `stars` object from the excellent
 [`stars`](https://cran.r-project.org/package=stars) package for data
 cubes manipulation. All the data can also be imported as `ncdf4` objects
 using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4)
@@ -3419,18 +3440,17 @@ smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = "SMAP/SPL3S
 
 ## Other packages
 
-Many packages enable to download the data that are proposed through
-opendapr. Above we list some of them, along with some of their
-characteristics
+Above are some packages that enable to download some of the data that
+are proposed through opendapr, along with some of their characteristics
 :
 
-| Package                                                |          Data           | Spatial subsetting\* | Dimensional subsetting\* | Image preprocessing |
-| :----------------------------------------------------- | :---------------------: | :------------------: | :----------------------: | :-----------------: |
-| [`MODIS`](https://github.com/MatMatt/MODIS)            |          MODIS          |          ❌           |            ❌             |          ✅          |
-| [`MODIStsp`](https://github.com/ropensci/MODIStsp)     |          MODIS          |          ❌           |            ✅             |          ✅          |
-| [`MODISTools`](https://github.com/ropensci/MODISTools) |          MODIS          |          ✅           |            ✅             |          ✅          |
-| [`smapr`](https://github.com/ropensci/smapr)           |          SMAP           |          ❌           |            ❌             |          ❌          |
-| [`opendapr`](https://github.com/ptaconet/opendapr)     | MODIS, VIIRS, SMAP, GPM |          ✅           |            ✅             |          ❌          |
+| Package                                                |          Data           | Spatial subsetting\* | Dimensional subsetting\* |
+| :----------------------------------------------------- | :---------------------: | :------------------: | :----------------------: |
+| [`MODIS`](https://github.com/MatMatt/MODIS)            |          MODIS          |          ❌           |            ❌             |
+| [`MODIStsp`](https://github.com/ropensci/MODIStsp)     |          MODIS          |          ❌           |            ✅             |
+| [`MODISTools`](https://github.com/ropensci/MODISTools) |          MODIS          |          ✅           |            ✅             |
+| [`smapr`](https://github.com/ropensci/smapr)           |          SMAP           |          ❌           |            ❌             |
+| [`opendapr`](https://github.com/ptaconet/opendapr)     | MODIS, VIIRS, SMAP, GPM |          ✅           |            ✅             |
 
 \* at the downloading phase
 
