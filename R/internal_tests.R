@@ -38,7 +38,7 @@
 #}
 
 #' @name .testLogin
-#' @title Test odr_login, else log
+#' @title Test login, else log
 #' @noRd
 
 .testLogin<-function(credentials=NULL){
@@ -46,7 +46,7 @@
   odr_login <- NULL
 
   if(!is.null(credentials) || is.null(getOption("earthdata_odr_login"))){
-    odr_login <- odr_login(credentials)
+    odr_login <- odr_login(credentials, source = "earthdata")
     return(odr_login)
   }
 
