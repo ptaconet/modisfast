@@ -3479,7 +3479,7 @@ motivated by the following reasons :
 
   - **Providing a simple and single way in R to download data stored on
     heterogeneous servers** : People that use Earth science data often
-    struggle with data access. In opendapr we propose an harmonized way
+    struggle with data access. In opendapr we propose a harmonized way
     to download data from various providers that have implemented access
     to their data through OPeNDAP.
   - **Fastening the data import phase**, especially for large time
@@ -3499,13 +3499,14 @@ the development of this package :
     work** : Downloading data has an impact on environment and to some
     extent contributes to climate change. By downloading only the data
     that is need (rather than e.g a whole MODIS tile, or a global SMAP
-    or GPM dataset) we somehow contribute to digital sobriety.
+    or GPM dataset) we somehow promote digital sobriety.
   - **Supporting the open-source-software movement** : The OPeNDAP is
     developed and advanced openly and collaboratively, by the non-profit
-    [OPeNDAP, Inc.](https://www.opendap.org/about) This data access
-    protocol is more and more used, by major Earth science data
-    providers (e.g. NASA or NOAA). Using OPeNDAP means supporting
-    methods and data access protocols that are open.
+    [OPeNDAP, Inc.](https://www.opendap.org/about) This open, powerfull
+    and standard data access protocol is more and more used, by major
+    Earth science data providers (e.g. NASA or NOAA). Using OPeNDAP
+    means supporting methods for data access protocols that are open,
+    build collaboratively and shared.
 
 ## Acknowledgment
 
