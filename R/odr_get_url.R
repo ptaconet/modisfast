@@ -148,7 +148,7 @@ odr_get_url<-function(collection,
 
   # test variables
   if(verbose){cat("Checking if specified variables exist for the collection specified...\n")}
-  available_variables <- opt_param$availableVariables$name
+  available_variables <- opt_param$availableVariables$name[which(opt_param$availableVariables$extractable_w_opendapr=="extractable")]
   if(is.null(variables)){
     variables <- opt_param$availableVariables$name[which(opt_param$availableVariables$extractable_w_opendapr=="extractable")]
   }

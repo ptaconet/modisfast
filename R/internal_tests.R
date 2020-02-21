@@ -24,7 +24,7 @@
 
  diff_vars <- NULL
  diff_vars <- setdiff(specified_variables,existing_variables)
- if(length(diff_vars)>0){stop("Specified variables do not exist for the specified collection. Use the function odr_list_variables to check which variables are available for the collection\n")}
+ if(length(diff_vars)>0){stop("Specified variables do not exist or are not extractable for the specified collection. Use the function odr_list_variables to check which variables are available and extractable for the collection\n")}
 
 }
 
@@ -46,7 +46,7 @@
   odr_login <- NULL
 
   if(!is.null(credentials) || is.null(getOption("earthdata_odr_login"))){
-    odr_login <- odr_login(credentials, source = "earthdata")
+    odr_login <- odr_login(credentials,source = "earthdata")
     return(odr_login)
   }
 

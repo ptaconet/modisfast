@@ -27,6 +27,9 @@ test_that("test if errors are sent back", {
   #expect_error(odr_get_url(collection = "MOD11A1v006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01"))),"The collection that you specified does not exist. Check get_collections_available() to see which collections are implemented\n")
   # output format is not specified
   expect_error(odr_get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01")), output_format = NA),"Specified output format is not valid. Please specify a valid output format \n")
+  # wrong variables specified
+  expect_error(odr_get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01")), variables = c("LST_Day_1km","not_a_good_var")),"Specified variables do not exist or are not extractable for the specified collection. Use the function odr_list_variables to check which variables are available and extractable for the collection\n")
+  expect_error(odr_get_url(collection = "MOD11A1.006", roi = roi, time_range = as.Date(c("2017-01-01","2017-02-01")), variables = c("LST_Day_1km","time")),"Specified variables do not exist or are not extractable for the specified collection. Use the function odr_list_variables to check which variables are available and extractable for the collection\n")
 
 })
 
