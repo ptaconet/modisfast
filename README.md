@@ -3234,6 +3234,47 @@ Surface reflectance
 
 </tr>
 
+<tr>
+
+<td style="text-align:left;">
+
+VNP46A1
+
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP Daily Gridded Day Night Band 500m Linear Lat Lon Grid Night
+
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+
+</td>
+
+<td style="text-align:left;">
+
+Night
+lights
+
+</td>
+
+<td style="text-align:left;">
+
+<https://doi.org/10.5067/VIIRS/VNP46A1.001>
+
+</td>
+
+<td style="text-align:left;">
+
+<https://ladsweb.modaps.eosdis.nasa.gov/opendap/hyrax/allData/5000/VNP46A1/contents.html>
+
+</td>
+
+</tr>
+
 </tbody>
 
 </table>
@@ -3398,10 +3439,12 @@ to import).
 
 ``` r
 require(raster)
+require(purrr)
 ## Function to import MODIS or VIIRS products as RasterLayer object
 .import_modis <- function(destfiles,variable){
   rasts <- destfiles %>%
-    raster::brick(varname = variable, crs = "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")
+    purrr::map(~raster::brick(.,varname="LST_Day_1km",crs="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"))
+  #%>% merge()
   return(rasts)
 }
 ```
@@ -3474,8 +3517,8 @@ Any contribution is welcome \!
 ## Context and other thoughts
 
 opendapr provides an entry point to some specific OPeNDAP servers
-(e.g. MODIS, VNP, GPM or SMAP). The development of the package was
-motivated by the following reasons :
+(e.g. MODIS, VNP, GPM or SMAP) via HTTPS. The development of the
+package was motivated by the following reasons :
 
   - **Providing a simple and single way in R to download data stored on
     heterogeneous servers** : People that use Earth science data often
