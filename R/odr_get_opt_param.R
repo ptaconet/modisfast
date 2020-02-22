@@ -100,7 +100,7 @@ odr_get_opt_param<-function(collection,roi,credentials=NULL){
     split(f = seq(nrow(.)))
 
   ### GMP and SMAP and SRTM
-  if (odap_coll_info$source %in% c("GPM","SMAP","SRTM")){
+  if ((odap_coll_info$source %in% c("GPM","SMAP","SRTM")) || odap_coll_info$provider=="NASA LAADS DAAC"){
 
     if (odap_coll_info$source=="GPM"){
       OpendapURL <- odap_coll_info$url_opendapexample
@@ -110,6 +110,9 @@ odr_get_opt_param<-function(collection,roi,credentials=NULL){
       odap_coll_info$dim_lat <- "y"
     } else if (odap_coll_info$source=="SRTM"){
 
+    } else if (odap_coll_info$provider=="NASA LAADS DAAC"){
+      modis_tile <- purrr::map(roi_div,~.getMODIStileNames(.))
+      OpendapURL<-paste0(odap_coll_info$url_opendapserver,odap_coll_info$collection,"/2013/019/",.getVNPladswebdataname(paste0(odap_coll_info$url_opendapserver,"/",odap_coll_info$collection,"/2013/019/"),modis_tile))
     }
 
     OpenDAPXVector <- .getVarVector(OpendapURL,odap_coll_info$dim_lon)
@@ -120,37 +123,39 @@ odr_get_opt_param<-function(collection,roi,credentials=NULL){
     list_roiSpatialBound <- purrr::map(roi_div_bboxes,~.odr_get_opt_param_singleROIfeature(OpenDAPYVector,OpenDAPXVector,.)$roiSpatialBound)
 
     ### MODIS
-  } else if (odap_coll_info$source %in% c("MODIS","VIIRS")){
+  } else if ((odap_coll_info$source %in% c("MODIS","VIIRS")) && odap_coll_info$provider!="NASA LAADS DAAC"){
 
     modis_tile <- purrr::map(roi_div,~.getMODIStileNames(.))
-    OpendapURL <- purrr::map(modis_tile,~purrr::map_chr(.,~paste0(odap_coll_info$url_opendapserver,collection,"/",.,".ncml")))
 
-    OpenDAPtimeVector<-purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_time)))
-    OpenDAPXVector<-purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_lon)))
-    OpenDAPYVector<-purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_lat)))
+     OpendapURL <- purrr::map(modis_tile,~purrr::map_chr(.,~paste0(odap_coll_info$url_opendapserver,collection,"/",.,".ncml")))
+
+     OpenDAPtimeVector<-purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_time)))
+     OpenDAPXVector<-purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_lon)))
+     OpenDAPYVector<-purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_lat)))
 
     #roi_div <- purrr::map(roi_div,~sf::st_bbox(.))
 
-    roi_div_bboxes <- roi_div %>%
-      purrr::map(.,~sf::st_transform(.,4326)) %>%
-      purrr::map(.,~sf::st_intersection(.,modis_tiles)) %>%
-      purrr::map(.,~sf::st_transform(.,odap_coll_info$crs)) %>%
-      purrr::map(.,~split(.,f = seq(nrow(.)))) %>%
-      purrr::modify_depth(.,2,~sf::st_bbox(.))
+      roi_div_bboxes <- roi_div %>%
+        purrr::map(.,~sf::st_transform(.,4326)) %>%
+        purrr::map(.,~sf::st_intersection(.,modis_tiles)) %>%
+        purrr::map(.,~sf::st_transform(.,odap_coll_info$crs)) %>%
+        purrr::map(.,~split(.,f = seq(nrow(.)))) %>%
+        purrr::modify_depth(.,2,~sf::st_bbox(.))
 
-    OpenDAPtimeVector <- purrr::flatten(OpenDAPtimeVector)
-    OpenDAPYVector <- purrr::flatten(OpenDAPYVector)
-    OpenDAPXVector <- purrr::flatten(OpenDAPXVector)
-    roi_div_bboxes <- purrr::flatten(roi_div_bboxes)
-    modis_tile <- purrr::flatten(modis_tile)
+      OpenDAPtimeVector <- purrr::flatten(OpenDAPtimeVector)
+      OpenDAPYVector <- purrr::flatten(OpenDAPYVector)
+     OpenDAPXVector <- purrr::flatten(OpenDAPXVector)
+     roi_div_bboxes <- purrr::flatten(roi_div_bboxes)
+     modis_tile <- purrr::flatten(modis_tile)
 
     list_roiSpatialIndexBound <- purrr::pmap(list(OpenDAPYVector,OpenDAPXVector,roi_div_bboxes),
-                                             ~.odr_get_opt_param_singleROIfeature(..1,..2,..3)$roiSpatialIndexBound
-    )
+                                             ~.odr_get_opt_param_singleROIfeature(..1,..2,..3)$roiSpatialIndexBound)
 
-    list_roiSpatialBound <- NULL
-  }
+    list_roiSpatialIndexBound <- purrr::map(list_roiSpatialIndexBound,~replace(.,. > 1199,1199))
+    list_roiSpatialIndexBound <- purrr::map(list_roiSpatialIndexBound,~replace(.,.<= 4,0))
 
+      list_roiSpatialBound <- NULL
+    }
 
   availableVariables <- odr_list_variables(collection)
 

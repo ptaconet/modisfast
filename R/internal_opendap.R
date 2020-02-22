@@ -64,6 +64,27 @@
 
 }
 
+#' @name .getVNPladswebdataname
+#' @title get VNPladsweb dataset name on the opendap server for a given modis tile
+#' @noRd
+
+.getVNPladswebdataname<-function(OpenDAPUrl,modis_tile,credentials=NULL){
+
+   lines <- dataset_name <- NULL
+
+  .testLogin(credentials)
+
+  httr::set_config(httr::authenticate(user=getOption("earthdata_user"), password=getOption("earthdata_pass"), type = "basic"))
+
+  lines <- readLines(paste0(OpenDAPUrl,"catalog.xml"))
+  dataset_name <- lines[which(grepl(modis_tile,lines))[1]] %>%
+    gsub("\"","",.) %>%
+    gsub(".*name=\\s*", "", .)
+
+  return(dataset_name)
+
+}
+
 
 #' @name .buildUrls
 #' @title build opendap URLs in function of the collection, time frame and roi of interest
@@ -283,3 +304,20 @@
 
 }
 
+#
+# # VNP46A1
+# time_range=as.Date(c("2015-01-01","2015-02-28"))
+# time_range=as.Date(time_range,origin="1970-01-01")
+#
+# datesToRetrieve<-seq(time_range[2],time_range[1],-1) %>%
+#   data.frame(stringsAsFactors = F) %>%
+#   purrr::set_names("date") %>%
+#   dplyr::mutate(date_character=substr(date,1,10)) %>%
+#   dplyr::mutate(year=format(date,'%Y')) %>%
+#   dplyr::mutate(dayofyear=lubridate::yday(date)) %>%
+#   dplyr::mutate(dayofyear=sprintf("%03d", dayofyear))
+#
+
+#urls<-datesToRetrieve %>%
+#  dplyr::mutate(product_name=purrr::map2_chr(.x=datesToRetrieve$year,.y=datesToRetrieve$dayofyear,.f=~.getVNPladswebdataname(paste0(odap_server,"/",collection,"/",.x,"/",.y,"/"),modis_tile))) %>%
+#  dplyr::mutate(url_product=paste0(odap_server,collection,"/",year,"/",month,"/",product_name,".",output_format))

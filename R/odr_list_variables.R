@@ -17,7 +17,7 @@
 #' @examples
 #'
 #' \donttest{
-#' # odr_login to Earthdata
+#' # login to Earthdata
 #' log <- odr_login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),source="earthdata")
 #'
 #' # Get the variables available for the collection MOD11A1.006
@@ -80,12 +80,14 @@ odr_list_variables<-function(collection,credentials=NULL){  # for a given collec
 
   tab <- tab %>%
     dplyr::mutate(extractable_w_opendapr=case_when(name %in% c(dim_lon,dim_lat,dim_time,dim_proj) ~ "automatically extracted",
-                                                   grepl(dim_lon,tab$indices) & grepl(dim_lat,tab$indices) & grepl(dim_time,tab$indices) ~ "extractable")
-                  )
-  tab$extractable_w_opendapr[which(is.na(tab$extractable_w_opendapr))] <- "not extractable"
+                                                   grepl(dim_lon,tab$indices) & grepl(dim_lat,tab$indices) & grepl(dim_time,tab$indices) & !is.na(dim_time) ~ "extractable",
+                                                   grepl(dim_lon,tab$indices) & grepl(dim_lat,tab$indices) & is.na(dim_time) ~ "extractable")
+    )
+
+   tab$extractable_w_opendapr[which(is.na(tab$extractable_w_opendapr))] <- "not extractable"
 
   if(opendapMetadata$source=="SMAP"){
-    tab$extractable_w_opendapr[which(tab$extractable_w_opendapr=="not extractable")] <- "extractable"
+   tab$extractable_w_opendapr[which(tab$extractable_w_opendapr=="not extractable")] <- "extractable"
   }
 
 

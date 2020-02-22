@@ -150,9 +150,10 @@ odr_get_url<-function(collection,
   if(verbose){cat("Checking if specified variables exist for the collection specified...\n")}
   available_variables <- opt_param$availableVariables$name[which(opt_param$availableVariables$extractable_w_opendapr=="extractable")]
   if(is.null(variables)){
-    variables <- opt_param$availableVariables$name[which(opt_param$availableVariables$extractable_w_opendapr=="extractable")]
+    variables <- available_variables
+  } else {
+    .testIfVarExists(variables,available_variables)
   }
-  .testIfVarExists(variables,available_variables)
 
   # build URLs
   if(verbose){cat("Building the opendap URLs...\n")}
