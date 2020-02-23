@@ -21,7 +21,7 @@
 
 
 
-.getMODIStileNames<-function(roi){
+.getMODIStileNames<-function(roi,type){
 
   . <- Name <- NULL
 
@@ -32,7 +32,12 @@
 
   options(warn=-1)
   #modis_tile = sf::read_sf("https://modis.ornl.gov/files/modis_sin.kmz") %>%
-  modis_tile <- modis_tiles %>%
+  if(type=="modis"){
+    tiling_system <- modis_tiles
+  } else if (type=="suomi"){
+    tiling_system <- suomi_tiles
+  }
+  modis_tile <- tiling_system %>%
     sf::st_intersection(roi) %>%
     dplyr::filter(sf::st_is(., "POLYGON")) %>%
     as.data.frame() %>%

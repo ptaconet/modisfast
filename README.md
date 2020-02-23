@@ -27,19 +27,27 @@ output data are proposed in various formats (NetCDF, ASCII, JSON).
 
 ***Speed-up ?***
 
-opendapr uses the abilities offered by OPeNDAP (*Open-source Project for
-a Network Data Access Protocol*) to download strictly the data that is
-needed : no more 1° x 1° MODIS tiles when our region of interest is only
-100 km x 100 km wide \! This results in a reduction of the physical size
-of the data that is imported, and hence of the downloading time. In
-addition, opendapr enables to parallelize the download.
+**opendapr** uses the abilities offered by the OPeNDAP (*Open-source
+Project for a Network Data Access Protocol*) to download a subset of
+data cube, along spatial, temporal or any other data dimension (depth,
+…). This way, it reduces downloading time and disk usage to their
+minimum : no more 1° x 1° MODIS tiles when your region of interest is
+only 100 km x 100 km wide \! Moreover, **opendapr** supports
+parallelized downloads.
 
-[*Another package to download MODIS or SMAP data ?*](#other-packages)
-Yes. But opendapr acts a bit differently and hopefully helps if you :
+Below is a comparison of opendapr with other packages available for
+downloading chunks of remote sensing
+data:
 
-  - are looking to import multiple kind of spatio-temporal Earth science
-    data in R (e.g. MODIS, SMAP, GPM),
-  - are concerned about downloading time and / or data storage.
+| Package                                                |          Data           | Spatial subsetting\* | Dimensional subsetting\* |
+| :----------------------------------------------------- | :---------------------: | :------------------: | :----------------------: |
+| [`opendapr`](https://github.com/ptaconet/opendapr)     | MODIS, VIIRS, SMAP, GPM |          ✅           |            ✅             |
+| [`MODIS`](https://github.com/MatMatt/MODIS)            |          MODIS          |          ❌           |            ❌             |
+| [`MODIStsp`](https://github.com/ropensci/MODIStsp)     |          MODIS          |          ❌           |            ✅             |
+| [`MODISTools`](https://github.com/ropensci/MODISTools) |          MODIS          |          ✅           |            ✅             |
+| [`smapr`](https://github.com/ropensci/smapr)           |          SMAP           |          ❌           |            ❌             |
+
+\* at the downloading phase
 
 ## Installation
 
@@ -51,8 +59,7 @@ install.packages("opendapr")
 ```
 -->
 
-You can install the development version from
-[GitHub](https://github.com/) with:
+The package can be installed with:
 
 ``` r
 # install.packages("devtools")
@@ -61,29 +68,25 @@ devtools::install_github("ptaconet/opendapr")
 
 Work is ongoing to publish the package on the CRAN.
 
-## How to use opendapr ?
+## Get Started
 
-Downloading the data with opendapr is a simple two-steps workflow :
+Downloading the data with **opendapr** is a simple two-steps workflow :
 
-1.  With the function **`odr_get_url()`**: Retrieve the URL(s) of the
-    data for a given collection, variables, time frame, region and
-    output data format of interest ;
+1.  With the function **`odr_get_url()`**, get the URL(s) of the data
+    for:
+
+<!-- end list -->
+
+  - a collection : see [next section](#coll-available),
+  - variables,
+  - region of interest (`sf`/`sfc` polygon),
+  - time range,
+  - output data format (netcdf, ascii, json)
+
+<!-- end list -->
+
 2.  With the function **`odr_download_data()`**: Download the data to
     your computer.
-
-The `odr_get_url()` function has the following input parameters that
-enable to select and filter the data of interest :
-
-  - `collection` : collection of interest (see [next
-    section](#which-products-are-available-for-download-through-opendapr-));
-  - `variables` : variables to retrieve for the collection of interest.
-    If not specified (default) all available variables will be extracted
-    ;
-  - `roi` : region of interest (`sf` or `sfc` POLYGON-type object) ;
-  - `time_range` : date(s) / time(s) of interest (single date / datetime
-    or time frame ) ;
-  - `output_format` : output format. Available options are : “nc4”
-    (default), “ascii”, “json”
 
 Additional functions include : login to EOSDIS Earthdata before querying
 the servers and downloading the data (`odr_login()`), list collection
@@ -92,25 +95,31 @@ available for each collection ( `odr_list_variables()` ).
 
 Have a look at the [example](#example) below for a simple use case \!
 
-## Which products are available for download through opendapr ?
+## Collections available in **opendapr**
 
-Currently opendapr enables to download data from four main collections :
+Currently **opendapr** supports data dowload from :
 
   - [MODIS land
-    products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/),
+    products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/)
     made available by the [NASA / USGS LP
     DAAC](https://lpdaac.usgs.gov/) (➡️ [source OPeNDAP
     server](https://opendap.cr.usgs.gov/opendap/hyrax/)) ;
   - [VIIRS land
-    products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/),
+    products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/)
     made available by the [NASA / USGS LP
     DAAC](https://lpdaac.usgs.gov/) (➡️ [source OPeNDAP
     server](https://opendap.cr.usgs.gov/opendap/hyrax/)) ;
-  - [Global Precipitation Measurement](https://pmm.nasa.gov/GPM) (GPM),
+  - [VIIRS land
+    products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/)
+    made available by the [NASA LAADS DAAC](https://lpdaac.usgs.gov/)
+    (➡️ [source OPeNDAP
+    server](https://ladsweb.modaps.eosdis.nasa.gov/opendap/hyrax/allData/5000/))
+    ;
+  - [Global Precipitation Measurement](https://pmm.nasa.gov/GPM) (GPM)
     made available by the [NASA / JAXA GES
     DISC](https://disc.gsfc.nasa.gov/) (➡️ [source OPeNDAP
     server](https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3)) ;
-  - [Soil Moisture Active-Passive](https://smap.jpl.nasa.gov/) (SMAP),
+  - [Soil Moisture Active-Passive](https://smap.jpl.nasa.gov/) (SMAP)
     made available by the [NASA NSIDC DAAC](https://nsidc.org/) (➡️
     [source OPeNDAP
     server](https://n5eil02u.ecs.nsidc.org/opendap/SMAP/))
@@ -178,7 +187,7 @@ url\_opendap\_server
 
 <td style="text-align:left;">
 
-GPM\_L3/GPM\_3IMERGDE.06
+GPM\_3IMERGDE.06
 
 </td>
 
@@ -218,7 +227,7 @@ Rainfall
 
 <td style="text-align:left;">
 
-GPM\_L3/GPM\_3IMERGDF.06
+GPM\_3IMERGDF.06
 
 </td>
 
@@ -258,7 +267,7 @@ Rainfall
 
 <td style="text-align:left;">
 
-GPM\_L3/GPM\_3IMERGDL.06
+GPM\_3IMERGDL.06
 
 </td>
 
@@ -298,7 +307,7 @@ Rainfall
 
 <td style="text-align:left;">
 
-GPM\_L3/GPM\_3IMERGHH.06
+GPM\_3IMERGHH.06
 
 </td>
 
@@ -338,7 +347,7 @@ Rainfall
 
 <td style="text-align:left;">
 
-GPM\_L3/GPM\_3IMERGHHE.06
+GPM\_3IMERGHHE.06
 
 </td>
 
@@ -378,7 +387,7 @@ Rainfall
 
 <td style="text-align:left;">
 
-GPM\_L3/GPM\_3IMERGHHL.06
+GPM\_3IMERGHHL.06
 
 </td>
 
@@ -418,7 +427,7 @@ Rainfall
 
 <td style="text-align:left;">
 
-GPM\_L3/GPM\_3IMERGM.06
+GPM\_3IMERGM.06
 
 </td>
 
@@ -2514,7 +2523,7 @@ Thermal Bands
 
 <td style="text-align:left;">
 
-SMAP/SPL3SMP\_E.003
+SPL3SMP\_E.003
 
 </td>
 
@@ -3256,7 +3265,7 @@ VIIRS
 
 <td style="text-align:left;">
 
-Night
+Nighttime
 lights
 
 </td>
@@ -3295,7 +3304,7 @@ interest located in Northern Ivory Coast (mapped above):
   - the same 30 days-long times series of [GPM IMERG Final Precipitation
     L3 1 day 0.1 degree x 0.1
     degree](https://doi.org/10.5067/GPM/IMERGDF/DAY/06)
-    (collection=“GPM\_L3/GPM\_3IMERGDF.06”)
+    (collection=“GPM\_3IMERGDF.06”)
 
 <details>
 
@@ -3349,9 +3358,9 @@ urls_mod11a1 <- odr_get_url(
   time_range = time_range
  )
 
-## Get the URLs for GPM_L3/GPM_3IMERGDF.06
+## Get the URLs for GPM_3IMERGDF.06
 urls_gpm <- odr_get_url(
-  collection = "GPM_L3/GPM_3IMERGDF.06",
+  collection = "GPM_3IMERGDF.06",
   roi = roi,
   time_range = time_range
  )
@@ -3369,7 +3378,7 @@ print(str(urls_gpm))
 #>  $ time_start: Date, format: "2017-01-01" "2017-01-02" ...
 #>  $ name      : chr  "3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170104-S000000-E235959.V06" ...
 #>  $ url       : chr  "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170103-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170104-S0000"| __truncated__ ...
-#>  $ destfile  : chr  "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170104-S000000-E235959.V06.nc4" ...
+#>  $ destfile  : chr  "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170104-S000000-E235959.V06.nc4" ...
 #> NULL
 
 ## Download the data. Destination file for each dataset is specified in the column "destfile" of the data.frames urls_mod11a1 and urls_gpm
@@ -3381,7 +3390,7 @@ print(str(res_dl))
 #>  $ time_start: Date, format: "2017-01-01" "2017-01-01" ...
 #>  $ name      : chr  "MOD11A1.006.2017001_2017030.h17v08" "3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06" ...
 #>  $ url       : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170103-S0000"| __truncated__ ...
-#>  $ destfile  : chr  "MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4" ...
+#>  $ destfile  : chr  "MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4" ...
 #>  $ fileDl    : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...
 #>  $ fileSize  : num  633387 60802 60817 60827 60794 ...
 #>  $ dlStatus  : num  3 3 3 3 3 3 3 3 3 3 ...
@@ -3440,11 +3449,18 @@ to import).
 ``` r
 require(raster)
 require(purrr)
-## Function to import MODIS or VIIRS products as RasterLayer object
-.import_modis <- function(destfiles,variable){
+## Function to import MODIS or VIIRS products as RasterLayer object. 
+# In case the ROI covers one single MODIS tile :
+.import_modis_onetile <- function(destfiles,variable){
   rasts <- destfiles %>%
-    purrr::map(~raster::brick(.,varname="LST_Day_1km",crs="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"))
-  #%>% merge()
+    raster::brick(.,varname=variable,crs="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")
+  return(rasts)
+}
+# In case the ROI covers multiple MODIS tiles :
+.import_modis_moretiles <- function(destfiles,variable){
+  rasts <- destfiles %>%
+    purrr::map(~raster::brick(.,varname=variable,crs="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")) %>%
+    do.call(merge,.)
   return(rasts)
 }
 ```
@@ -3480,22 +3496,6 @@ smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = "SMAP/SPL3S
   return(rasts)
 }
 ```
-
-## Other packages
-
-Above are some packages that enable to download some of the data that
-are proposed through opendapr, along with some of their characteristics
-:
-
-| Package                                                |          Data           | Spatial subsetting\* | Dimensional subsetting\* |
-| :----------------------------------------------------- | :---------------------: | :------------------: | :----------------------: |
-| [`MODIS`](https://github.com/MatMatt/MODIS)            |          MODIS          |          ❌           |            ❌             |
-| [`MODIStsp`](https://github.com/ropensci/MODIStsp)     |          MODIS          |          ❌           |            ✅             |
-| [`MODISTools`](https://github.com/ropensci/MODISTools) |          MODIS          |          ✅           |            ✅             |
-| [`smapr`](https://github.com/ropensci/smapr)           |          SMAP           |          ❌           |            ❌             |
-| [`opendapr`](https://github.com/ptaconet/opendapr)     | MODIS, VIIRS, SMAP, GPM |          ✅           |            ✅             |
-
-\* at the downloading phase
 
 <!--
 ## Citation

@@ -5,7 +5,7 @@
 #'
 #' @param collection string. mandatory. Collection of interest (see details of \link{odr_get_url}).
 #' @param variables string vector. optional. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted (see details of \link{odr_get_url}).
-#' @param roi object of class \code{sf} or \code{sfc}. mandatory. Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details of \link{odr_get_url}).
+#' @param roi object of class \code{sf} or \code{sfc}. mandatory. Region of interest. Must be POLYGON-type geometry composed of one single feature.
 #' @param time_range date(s) / POSIXlt of interest . mandatory. Single date/datetime or time frame : vector with start and end dates/times (see details).
 #' @param output_format string. Output data format. optional. Available options are : "nc4" (default), "ascii", "json"
 #' @param single_netcdf boolean. optional. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.
@@ -27,11 +27,9 @@
 #'
 #' Argument \code{variables} : For each collection, variables available can be retrieved with the function \link{odr_list_variables}
 #'
-#' Argument \code{roi} : The ROI can be composed of one or more features. In case of multiple features, data will be downloaded strictly over each feature.
-#'
 #' Argument \code{time_range} : Can be provided either as i) a single date (e.g. \code{as.Date("2017-01-01"))} or ii) a time frame provided as two bounding dates (starting and ending time) ( e.g. \code{as.Date(c("2010-01-01","2010-01-30"))}) or iii) a POSIXlt single time (e.g. \code{as.POSIXlt("2010-01-01 18:00:00")}) or iv) a POSIXlt time range (e.g. \code{as.POSIXlt(c("2010-01-01 18:00:00","2010-01-02 09:00:00"))}) for the half-hourly collection (GPM_3IMERGHH.06). If POSIXlt, times must be in UTC.
 #'
-#' Argument \code{single_netcdf} : for MODIS and VIIRS products : download the data as a single file encompassing the whole time frame (TRUE) or as multiple files : one for each date, which is the behavious for the other collections - GPM and SMAP) (FALSE) ?
+#' Argument \code{single_netcdf} : for MODIS and VIIRS products from LP DAAC: download the data as a single file encompassing the whole time frame (TRUE) or as multiple files : one for each date, which is the behavious for the other collections - GPM and SMAP) (FALSE) ?
 #'
 #' Argument \code{opt_param} : list of parameters related to the queried OPeNDAP server and the roi. See \link{odr_get_opt_param} for additional details. The parameter can be retrieved outside the function with the function \link{odr_get_opt_param}. If not provided, it will be automatically calculated within the \link{odr_get_url} function. However, providing it fastens the processing time.
 #' It might be particularly useful to precompute and provide it in case the function is used within a loop for the same ROI.
@@ -157,7 +155,7 @@ odr_get_url<-function(collection,
 
   # build URLs
   if(verbose){cat("Building the opendap URLs...\n")}
-  table_urls <- .buildUrls(collection,variables,roi,time_range,output_format,single_netcdf,opt_param,credentials)
+  table_urls <- .buildUrls(collection,variables,roi,time_range,output_format,single_netcdf,opt_param,credentials,verbose)
 
   table_urls <- table_urls %>%
     dplyr::mutate(name=stringr::str_replace(name,".*/","")) %>%

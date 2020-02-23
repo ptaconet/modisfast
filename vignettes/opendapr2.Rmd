@@ -45,7 +45,7 @@ We could use `for` loops or related stuff to do the job. However, this would not
 
 ## Setup the region and time range of interest
 
-First we prepare the script : define ROI and time frames (here, for the example, january of each year from 2016 to 2019)
+First we prepare the script : define ROI and time frames (here, for the example, the month of january for each year from 2016 to 2019)
 
 ```{r example_prepare, eval=NOT_CRAN}
 # Set ROI and time range of interest
@@ -143,12 +143,12 @@ Of course, we could loop over the `odr_get_url()` with the time ranges of intere
 
 Here is where the function `odr_get_opt_param()` comes into the game. For a given collection and ROI, this function queries the OPeNDAP server and retrieves the information that we were mentionning in the previous paragraph. This function is actually run within the `odr_get_url()` function, but its output can also be provided as input parameter `opt_param` of `odr_get_url()`. If `odr_get_url()` is queried multiple times for the same couple {collection, ROI}, it is hence more efficient to pre-compute only once the argument `opt_param` using `odr_get_opt_param()` and to further provide it to `odr_get_url()` within a `for` loop or e.g. a `purrr::map()` function.
 
-So when we have multiple time frames of interest, prior to executing `odr_get_url()` we retrieve the `opt_param` parameter for each collection and roi with `odr_get_opt_param()` :
+To summarize : when we have multiple time frames of interest, prior to executing `odr_get_url()` we retrieve the `opt_param` parameter for each collection and roi with `odr_get_opt_param()` :
 
 ```{r multiple_timeframes, eval=NOT_CRAN }
 opt_param_mod11a1 <- odr_get_opt_param("MOD11A1.006",roi)
-opt_param_gpm <- odr_get_opt_param("GPM_L3/GPM_3IMERGDF.06",roi)
-opt_param_smap <- odr_get_opt_param("SMAP/SPL3SMP_E.003",roi)
+opt_param_gpm <- odr_get_opt_param("GPM_3IMERGDF.06",roi)
+opt_param_smap <- odr_get_opt_param("SPL3SMP_E.003",roi)
 ```
 
 And we get our URLs, using a `purrr::map()` function over our time frames of interest and setting the `opt_param` parameter in `odr_get_url()`  : 
@@ -163,7 +163,7 @@ urls_mod11a1 <- map(.x = time_ranges, ~odr_get_url(
   )
 
 urls_gpm <- map(.x = time_ranges, ~odr_get_url(
-  collection = "GPM_L3/GPM_3IMERGDF.06",
+  collection = "GPM_3IMERGDF.06",
   variables = c("precipitationCal","precipitationCal_cnt"),
   roi = roi,
   time_range = .x,
@@ -171,7 +171,7 @@ urls_gpm <- map(.x = time_ranges, ~odr_get_url(
 )
 
 urls_smap <- map(.x = time_ranges, ~odr_get_url(
-  collection = "SMAP/SPL3SMP_E.003",
+  collection = "SPL3SMP_E.003",
   variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture","Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag","Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm","Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),
   roi = roi,
   time_range = .x,

@@ -29,12 +29,19 @@
 
   dim<-NULL
 
+  if(!is.null(timeIndex)){
   dim<-variables %>%
     purrr::map(~paste0(.x,"[",timeIndex[1],":",timeIndex[2],"][",minLat,":",maxLat,"][",minLon,":",maxLon,"]")) %>%
     unlist() %>%
     paste(collapse=",") %>%
     paste0(",",odap_timeDimName,"[",timeIndex[1],":",timeIndex[2],"],",odap_latDimName,"[",minLat,":",maxLat,"],",odap_lonDimName,"[",minLon,":",maxLon,"]")
-
+  } else {
+    dim<-variables %>%
+      purrr::map(~paste0(.x,"[",minLat,":",maxLat,"][",minLon,":",maxLon,"]")) %>%
+      unlist() %>%
+      paste(collapse=",") %>%
+      paste0(",",odap_latDimName,"[",minLat,":",maxLat,"],",odap_lonDimName,"[",minLon,":",maxLon,"]")
+  }
   return(dim)
 }
 
@@ -68,15 +75,15 @@
 #' @title get VNPladsweb dataset name on the opendap server for a given modis tile
 #' @noRd
 
-.getVNPladswebdataname<-function(OpenDAPUrl,modis_tile,credentials=NULL){
+.getVNPladswebdataname<-function(lines,modis_tile,credentials=NULL){
 
-   lines <- dataset_name <- NULL
+   dataset_name <- NULL
 
   .testLogin(credentials)
 
   httr::set_config(httr::authenticate(user=getOption("earthdata_user"), password=getOption("earthdata_pass"), type = "basic"))
 
-  lines <- readLines(paste0(OpenDAPUrl,"catalog.xml"))
+  #lines <- readLines(paste0(OpenDAPUrl,"catalog.xml"))
   dataset_name <- lines[which(grepl(modis_tile,lines))[1]] %>%
     gsub("\"","",.) %>%
     gsub(".*name=\\s*", "", .)
@@ -92,7 +99,7 @@
 #' @importFrom lubridate year yday hour minute second floor_date
 #' @noRd
 
-.buildUrls<-function(collection,variables,roi,time_range,output_format="nc4",single_netcdf=TRUE,optionalsOpendap=NULL,credentials=NULL){
+.buildUrls<-function(collection,variables,roi,time_range,output_format="nc4",single_netcdf=TRUE,optionalsOpendap=NULL,credentials=NULL,verbose=FALSE){
 
   ideal_date <- date_closest_to_ideal_date <- index_opendap_closest_to_date <- dimensions_url <- hour_end <- date_character <- hour_start <- number_minutes_from_start_day <- year <- day <- product_name <- month <- x <- . <- url_product <- NULL
 
@@ -130,6 +137,8 @@
 
   if(odap_source %in% c("MODIS","VIIRS")){
 
+    if(odap_coll_info$provider=="NASA USGS LP DAAC"){
+
     .workflow_odr_get_url_modisvnp <- function(time_range,OpenDAPtimeVector,modis_tile,roiSpatialIndexBound){
       time_range <- as.Date(time_range,origin="1970-01-01")
 
@@ -166,18 +175,54 @@
                                   ~.workflow_odr_get_url_modisvnp(time_range,..1,..2,..3))
 
 
+  } else if (odap_coll_info$provider=="NASA LAADS DAAC"){
+
+     # e.g. VNP46A1
+    if(verbose){cat("Getting the URLs for this collection might take some time...\n")}
+     time_range=as.Date(time_range,origin="1970-01-01")
+
+     datesToRetrieve<-seq(time_range[2],time_range[1],-1) %>%
+       data.frame(stringsAsFactors = F) %>%
+       purrr::set_names("date") %>%
+       dplyr::mutate(date_character=substr(date,1,10)) %>%
+       dplyr::mutate(year=format(date,'%Y')) %>%
+       dplyr::mutate(dayofyear=lubridate::yday(date)) %>%
+       dplyr::mutate(dayofyear=sprintf("%03d", dayofyear))
+
+
+     a <- datesToRetrieve %>%
+       dplyr::mutate(lines=purrr::map2(.x=datesToRetrieve$year,.y=datesToRetrieve$dayofyear,.f=~readLines(paste0(odap_coll_info$url_opendapserver,"/",odap_coll_info$collection,"/",.x,"/",.y,"/","catalog.xml"))))
+
+     urls <- expand.grid(a$date, unlist(modis_tile),stringsAsFactors = F) %>%
+       dplyr::rename(date=Var1,modis_tile=Var2) %>%
+       dplyr::left_join(a,by="date") %>%
+       dplyr::mutate(product_name=purrr::map2_chr(lines,modis_tile,.f=~.getVNPladswebdataname(.x,.y))) %>%
+       dplyr::select(-lines) %>%
+       dplyr::mutate(url_product=paste0(odap_server,collection,"/",year,"/",dayofyear,"/",product_name,".",output_format))
+
+     ## will have to be finished....
+    dim<-purrr::map_chr(roiSpatialIndexBound,~.getOpenDapURL_dimensions(variables,NULL,.[1],.[2],.[3],.[4],NULL,odap_lonDimName,odap_latDimName))
+    dim<-data.frame(dim=dim,modis_tile=unlist(modis_tile),stringsAsFactors = F)
+
+    table_urls <- urls %>%
+      dplyr::left_join(dim,by="modis_tile") %>%
+      dplyr::mutate(url=paste0(url_product,"?",dim)) %>%
+      dplyr::mutate(name=product_name)
+
+  }
+
+    } else if (odap_source=="GPM"){
+
     ############################################
     ##############  GPM   ######################
     ############################################
 
-  } else if (odap_source=="GPM"){
-
     ##############  GPM_3IMERGHH.06   ######################
-    if(collection %in% c("GPM_L3/GPM_3IMERGHH.06","GPM_L3/GPM_3IMERGHHL.06","GPM_L3/GPM_3IMERGHHE.06")){
+    if(collection %in% c("GPM_3IMERGHH.06","GPM_3IMERGHHL.06","GPM_3IMERGHHE.06")){
 
-      if(collection=="GPM_L3/GPM_3IMERGHHL.06"){
+      if(collection=="GPM_3IMERGHHL.06"){
         indicatif<-"-L"
-      } else if (collection=="GPM_L3/GPM_3IMERGHHE.06"){
+      } else if (collection=="GPM_3IMERGHHE.06"){
         indicatif<-"-E"
       } else {
         indicatif<-NULL
@@ -203,11 +248,11 @@
         dplyr::mutate(url_product=paste0(odap_server,collection,"/",year,"/",day,"/",product_name,".HDF5.",output_format))
 
       ##############  GPM_3IMERGDF.06,GPM_3IMERGDL.06   ######################
-    } else if(collection %in% c("GPM_L3/GPM_3IMERGDF.06","GPM_L3/GPM_3IMERGDL.06","GPM_L3/GPM_3IMERGDE.06")){
+    } else if(collection %in% c("GPM_3IMERGDF.06","GPM_3IMERGDL.06","GPM_3IMERGDE.06")){
 
-      if(collection=="GPM_L3/GPM_3IMERGDL.06"){
+      if(collection=="GPM_3IMERGDL.06"){
         indicatif<-"-L"
-      } else if (collection=="GPM_L3/GPM_3IMERGDE.06"){
+      } else if (collection=="GPM_3IMERGDE.06"){
         indicatif<-"-E"
       } else {
         indicatif<-NULL
@@ -228,7 +273,7 @@
 
       ##############  GPM_3IMERGM.06   ######################
 
-    } else if(collection=="GPM_L3/GPM_3IMERGM.06"){
+    } else if(collection=="GPM_3IMERGM.06"){
 
       time_range=as.Date(time_range,origin="1970-01-01")
 
@@ -272,7 +317,7 @@
       dplyr::mutate(month=format(date,'%m')) %>%
       dplyr::mutate(day=format(date,'%d'))
 
-    if(collection=="SMAP/SPL3SMP_E.003"){
+    if(collection=="SPL3SMP_E.003"){
       urls<-datesToRetrieve %>%
         dplyr::mutate(product_name=paste0("SMAP_L3_SM_P_E_",gsub("-","",date_character),"_R16510_001")) %>%
         dplyr::mutate(url_product=paste0(odap_server,collection,"/",gsub("-",".",date_character),"/",product_name,".h5.",output_format))
@@ -303,21 +348,3 @@
   return(table_urls)
 
 }
-
-#
-# # VNP46A1
-# time_range=as.Date(c("2015-01-01","2015-02-28"))
-# time_range=as.Date(time_range,origin="1970-01-01")
-#
-# datesToRetrieve<-seq(time_range[2],time_range[1],-1) %>%
-#   data.frame(stringsAsFactors = F) %>%
-#   purrr::set_names("date") %>%
-#   dplyr::mutate(date_character=substr(date,1,10)) %>%
-#   dplyr::mutate(year=format(date,'%Y')) %>%
-#   dplyr::mutate(dayofyear=lubridate::yday(date)) %>%
-#   dplyr::mutate(dayofyear=sprintf("%03d", dayofyear))
-#
-
-#urls<-datesToRetrieve %>%
-#  dplyr::mutate(product_name=purrr::map2_chr(.x=datesToRetrieve$year,.y=datesToRetrieve$dayofyear,.f=~.getVNPladswebdataname(paste0(odap_server,"/",collection,"/",.x,"/",.y,"/"),modis_tile))) %>%
-#  dplyr::mutate(url_product=paste0(odap_server,collection,"/",year,"/",month,"/",product_name,".",output_format))

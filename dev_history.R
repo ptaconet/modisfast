@@ -70,7 +70,10 @@ opendapMetadata_internal <- read.csv("/home/ptaconet/opendapr/.data_collections.
 modis_tiles<-sf::read_sf("/home/ptaconet/Téléchargements/modis_sin.kmz")  %>% #https://modis.ornl.gov/files/modis_sin.kmz
   sf::st_zm(modis_tiles) %>%
   dplyr::select(Name,geometry)
-usethis::use_data(opendapMetadata_internal,modis_tiles, internal = TRUE,overwrite = TRUE)
+suomi_tiles<-sf::read_sf("/home/ptaconet/Téléchargements/vnp2tiles.gpkg")  %>%
+  sf::st_zm(suomi_tiles) %>%
+  dplyr::select(Name,geom)
+usethis::use_data(opendapMetadata_internal,modis_tiles,suomi_tiles, internal = TRUE,overwrite = TRUE)
 
 
 

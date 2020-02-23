@@ -32,9 +32,9 @@ require(purrr)
 
 In this example we want to download, import and plot over the 3500 km^2^ wide region of interest (mapped below) :
 
-- a 40 days time series of land surface temperature from [MODIS Terra LST](https://dx.doi.org/10.5067/MODIS/MOD11A1.006) (collection *MOD11A1.006*) (spatial resolution : 1 km ; temporal resolution : 1 day),
-- the same 40 days times series of precipitations from [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERGDF/DAY/06) (collection *GPM_L3/GPM_3IMERGDF.06*) (spatial resolution : 1° ; temporal resolution : 1 day)
-- the same 40 days times series of soil moisture from [SMAP Daily](https://doi.org/10.5067/T90W6VRLCBHI) (collection *SMAP/SPL3SMP_E.003*) (spatial resolution : 9 km ; temporal resolution : 2/3 days)
+- a 30 days-long time series of land surface temperature from [MODIS Terra LST](https://dx.doi.org/10.5067/MODIS/MOD11A1.006) (collection *MOD11A1.006*) (spatial resolution : 1 km ; temporal resolution : 1 day),
+- the same 30 days-long times series of precipitations from [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERGDF/DAY/06) (collection *GPM_L3/GPM_3IMERGDF.06*) (spatial resolution : 1° ; temporal resolution : 1 day)
+- the same 30 days-long times series of soil moisture from [SMAP Daily](https://doi.org/10.5067/T90W6VRLCBHI) (collection *SMAP/SPL3SMP_E.003*) (spatial resolution : 9 km ; temporal resolution : 2/3 days)
 
 ```{r, echo=F, fig.height=5, fig.width=3, eval=NOT_CRAN }
 require(mapview)
@@ -65,9 +65,9 @@ log <- odr_login(credentials = c(username,password), source = "earthdata")
 
 ## Get the OPeNDAP URLs of the data to download {#get-url}
 
-With the function `odr_get_url()`, we get the https URLs for our collections of interest (*MOD11A1.006*, *GPM_L3/GPM_3IMERGDF.06* and *SMAP/SPL3SMP_E.003*) given our ROI and time frame. 
+With the function `odr_get_url()`, we get the https URLs for our collections of interest (*MOD11A1.006*, *GPM_3IMERGDF.06* and *SPL3SMP_E.003*) given our ROI and time frame. 
 
-**Note on the use of the parameter `variables` of the function `odr_get_url()`** :
+**Note on the use of the parameter `variables` of the function `odr_get_url()` :**
 
 The collections generally contain several variables (sometimes called "dimensions", or "bands"). As an example, MODIS LST products contain one band for the day temperature ("LST_Day_1km"), one band for the night temperature ("LST_Night_1km"), etc. To get all the variables available for a given collection along with information for each of them (description, etc.), use the function `odr_list_variables()`. e.g. :
 
@@ -92,7 +92,7 @@ urls_mod11a1 <- odr_get_url(
 
 ## Get the URLs of GPM daily
 urls_gpm <- odr_get_url(
-  collection = "GPM_L3/GPM_3IMERGDF.06",
+  collection = "GPM_3IMERGDF.06",
   variables = c("precipitationCal","precipitationCal_cnt"),  # get the variables available with : odr_list_variables("GPM_L3/GPM_3IMERGDF.06")
   roi = roi,
   time_range = time_range
@@ -100,7 +100,7 @@ urls_gpm <- odr_get_url(
 
 ## Get the URLs of SMAP 3-days
 urls_smap <- odr_get_url(
-  collection = "SMAP/SPL3SMP_E.003",
+  collection = "SPL3SMP_E.003",
   variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture","Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag","Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm","Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),     # get the variables available with : odr_list_variables("SMAP/SPL3SMP_E.003")
   roi = roi,
   time_range = time_range

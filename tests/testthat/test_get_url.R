@@ -40,10 +40,10 @@ test_that("test if errors are sent back", {
 #for (i in 1:nrow(opendapr:::opendapMetadata_internal)){
 # collection_tested <- opendapr:::opendapMetadata_internal$collection[i]
 
-collection_tested <- c("GPM_L3/GPM_3IMERGDE.06","MCD12Q1.006","SMAP/SPL3SMP_E.003")
+collection_tested <- c("GPM_3IMERGDE.06","MCD12Q1.006","SPL3SMP_E.003")
 for (i in 1:length(collection_tested)){
 
-  if(collection_tested[i] %in% c("GPM_L3/GPM_3IMERGHHE.06","GPM_L3/GPM_3IMERGHHL.06","GPM_L3/GPM_3IMERGHH.06")){
+  if(collection_tested[i] %in% c("GPM_3IMERGHHE.06","GPM_3IMERGHHL.06","GPM_3IMERGHH.06")){
     time_range = as.POSIXlt(c("2017-01-01 12:00:00","2017-01-02 02:00:00"))
   } else {
     time_range = as.Date(c("2017-01-01","2017-02-01"))

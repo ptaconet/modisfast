@@ -1,5 +1,5 @@
 Package: opendapr
-Title: Harmonized and Optimized Download of Various Kinds of Spatio-Temporal Earth Science Data in R using the OPeNDAP Framework
+Title: Fast Download of many Earth Observation Data in R using the OPeNDAP Capacities
 Version: 0.1.0
 Authors@R: 
     person(given = "Paul",
