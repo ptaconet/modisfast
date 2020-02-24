@@ -54,10 +54,10 @@ access to Earth science data for R users in places where internet
 connection is slow or expensive and promotes digital sobriety for our
 research work.
 
-The OPeNDAP, over which the package builds, is developed and advanced
-openly and collaboratively, by the non-profit [OPeNDAP,
-Inc.](https://www.opendap.org/about). By using this data access
-protocol, opendapr support the open-source-software movement.
+The OPeNDAP, over which the package builds, is a project developed by
+the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about) and
+advanced openly and collaboratively. By using this data access protocol,
+opendapr support the open-source-software movement.
 
 ## Installation
 
@@ -3495,7 +3495,8 @@ the eponym tool in an open and collaborative way.
 
 We also thank the contributors that have tested the package, reviewed
 the documentation and brought valuable feedbacks to improve the package
-: [Florian de Boissieu](https://github.com/floriandeboissieu)
+: [Florian de Boissieu](https://github.com/floriandeboissieu), Julien
+Taconet,
 
 The initial development and first release of this package were financed
 by the [MIVEGEC](https://www.mivegec.ird.fr/en/) unit of the [French

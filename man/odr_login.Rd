@@ -11,7 +11,7 @@ odr_login(credentials, source, verbose = TRUE)
 
 \item{source}{source. See details}
 
-\item{verbose}{boolean. optional. Verbose (default FALSE)}
+\item{verbose}{boolean. optional. Verbose (default TRUE)}
 }
 \value{
 None.

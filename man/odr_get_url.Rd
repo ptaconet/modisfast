@@ -6,7 +6,7 @@
 \usage{
 odr_get_url(collection, variables = NULL, roi, time_range,
   output_format = "nc4", single_netcdf = TRUE, opt_param = NULL,
-  credentials = NULL, verbose = FALSE)
+  credentials = NULL, verbose = TRUE)
 }
 \arguments{
 \item{collection}{string. mandatory. Collection of interest (see details of \link{odr_get_url}).}
@@ -25,7 +25,7 @@ odr_get_url(collection, variables = NULL, roi, time_range,
 
 \item{credentials}{vector string of length 2 with username and password. optional.}
 
-\item{verbose}{boolean. optional. Verbose (default FALSE)}
+\item{verbose}{boolean. optional. Verbose (default TRUE)}
 }
 \value{
 a data.frame with one row for each dataset to download and 4 columns  :

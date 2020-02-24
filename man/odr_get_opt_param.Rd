@@ -4,7 +4,7 @@
 \alias{odr_get_opt_param}
 \title{Precompute the parameter \code{opt_param} of the function \link{odr_get_url}}
 \usage{
-odr_get_opt_param(collection, roi, credentials = NULL)
+odr_get_opt_param(collection, roi, credentials = NULL, verbose = TRUE)
 }
 \arguments{
 \item{collection}{string. mandatory. Collection of interest (see details of \link{odr_get_url}).}
@@ -12,13 +12,14 @@ odr_get_opt_param(collection, roi, credentials = NULL)
 \item{roi}{object of class \code{sf} or \code{sfc}. mandatory. Region of interest. Must be POLYGON-type geometry composed of one single feature.}
 
 \item{credentials}{vector string of length 2 with username and password. optional.}
+
+\item{verbose}{boolean. optional. Verbose (default TRUE)}
 }
 \value{
 a list with the following named objects :
 \describe{
  \item{roiSpatialIndexBound}{OPeNDAP indices for the spatial coordinates of the bounding box of the ROI (minLat, maxLat, minLon, maxLon)}
  \item{availableVariables}{Variables available for the collection of interest}
- \item{roiSpatialBound}{}
  \item{roiSpatialBound }{The spatial coordinates of the bounding box of the ROI expressed in the CRS of the collection}
  \item{OpenDAPXVector}{The X (longitude) vector}
  \item{OpenDAPYVector}{The Y (longitude) vector}

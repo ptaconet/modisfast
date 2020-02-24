@@ -101,7 +101,7 @@ odr_download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL
       parallel::stopCluster(cl)
     } else {
       for (i in 1:nrow(data_to_download)){
-        if(verbose){cat(i," over ", nrow(data_to_download),"\n")}
+        #if(verbose){cat(i," over ", nrow(data_to_download),"\n")}
         dl_func(url=data_to_download$url[i],output=data_to_download$destfile[i],username=username,password=password)
       }
     }

@@ -5,7 +5,7 @@
 \title{Download several datasets given their URLs and destination path}
 \usage{
 odr_download_data(df_to_dl, parallel = FALSE, credentials = NULL,
-  source = NULL, verbose = FALSE)
+  source = NULL, verbose = TRUE)
 }
 \arguments{
 \item{df_to_dl}{data.frame. Urls and destination files of dataset to download. Typically output of \link{odr_get_url}. See Details for the structure}
@@ -16,7 +16,7 @@ odr_download_data(df_to_dl, parallel = FALSE, credentials = NULL,
 
 \item{source}{source. See details}
 
-\item{verbose}{boolean. optional. Verbose (default FALSE)}
+\item{verbose}{boolean. optional. Verbose (default TRUE)}
 }
 \value{
 a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional columns are :
