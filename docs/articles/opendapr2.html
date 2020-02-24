@@ -54,7 +54,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/opendapr1.html">1. Simple workflow : Download and import data for a given region of interest and time frame</a>
+      <a href="../articles/opendapr1.html">1. Get started </a>
     </li>
     <li>
       <a href="../articles/opendapr2.html">2. Advanced use of `odr_get_url()`</a>
@@ -85,7 +85,7 @@
 </h1>
                         <h4 class="author">Paul Taconet</h4>
             
-            <h4 class="date">2020-02-20</h4>
+            <h4 class="date">2020-02-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ptaconet/opendapr/blob/master/vignettes/opendapr2.Rmd"><code>vignettes/opendapr2.Rmd</code></a></small>
       <div class="hidden name"><code>opendapr2.Rmd</code></div>
@@ -116,7 +116,7 @@
 <div id="setup-the-region-and-time-range-of-interest" class="section level2">
 <h2 class="hasAnchor">
 <a href="#setup-the-region-and-time-range-of-interest" class="anchor"></a>Setup the region and time range of interest</h2>
-<p>First we prepare the script : define ROI and time frames (here, for the example, january of each year from 2016 to 2019)</p>
+<p>First we prepare the script : define ROI and time frames (here, for the example, the month of january for each year from 2016 to 2019)</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># Set ROI and time range of interest</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">roi &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_as_sf">st_as_sf</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">geom=</span><span class="st">"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span>),<span class="dt">wkt=</span><span class="st">"geom"</span>,<span class="dt">crs =</span> <span class="dv">4326</span>)</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3">time_ranges &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"2016-01-01"</span>,<span class="st">"2016-01-31"</span>)),</a>
@@ -127,13 +127,13 @@
 <div id="login-to-eosdis-earthdata" class="section level2">
 <h2 class="hasAnchor">
 <a href="#login-to-eosdis-earthdata" class="anchor"></a>Login to EOSDIS Earthdata</h2>
-<p>And we odr_login to EOSDIS Earthdata with our credentials. To create an account go to : <a href="https://urs.earthdata.nasa.gov/" class="uri">https://urs.earthdata.nasa.gov/</a>.</p>
+<p>And we login to EOSDIS Earthdata with our credentials. To create an account go to : <a href="https://urs.earthdata.nasa.gov/" class="uri">https://urs.earthdata.nasa.gov/</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Login to Earthdata servers with username and password.</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">username &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.getenv">Sys.getenv</a></span>(<span class="st">"earthdata_un"</span>)</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">password &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.getenv">Sys.getenv</a></span>(<span class="st">"earthdata_pw"</span>)</a>
 <a class="sourceLine" id="cb3-4" data-line-number="4">log &lt;-<span class="st"> </span><span class="kw"><a href="../reference/odr_login.html">odr_login</a></span>(<span class="dt">credentials =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(username,password), <span class="dt">source =</span> <span class="st">"earthdata"</span>)</a>
 <a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; Checking credentials...</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; Successfull odr_login to earthdata</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; Successfull login to earthdata</span></a></code></pre></div>
 <!--
 ## Download data over multiple regions of interest
 
@@ -167,7 +167,7 @@ urls_mod11a1 <- odr_get_url(
 
 ## Get the URLs of GPM daily
 urls_gpm <- odr_get_url(
-  collection = "GPM_L3/GPM_3IMERGDF.06",
+  collection = "GPM_3IMERGDF.06",
   variables = c("precipitationCal","precipitationCal_cnt"),
   roi = roi,
   time_range = time_range
@@ -175,47 +175,17 @@ urls_gpm <- odr_get_url(
 
 ## Get the URLs of SMAP 3-days
 urls_smap <- odr_get_url(
-  collection = "SMAP/SPL3SMP_E.003",
+  collection = "SPL3SMP_E.003",
   variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture","Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag","Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm","Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),
   roi = roi,
   time_range = time_range
  )
 
 head(urls_mod11a1,3)
-#>   time_start                               name
-#> 1 2017-01-01 MOD11A1.006.2017001_2017030.h17v08
-#>                                                                                                                                                                                                                                                                                                                     url
-#> 1 https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projection,LST_Day_1km[6093:6122][55:140][512:560],LST_Night_1km[6093:6122][55:140][512:560],QC_Day[6093:6122][55:140][512:560],QC_Night[6093:6122][55:140][512:560],time[6093:6122],YDim[55:140],XDim[512:560]
-#>                                             destfile
-#> 1 MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4
 
 head(urls_gpm,3)
-#>   time_start                                              name
-#> 1 2017-01-01 3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06
-#> 2 2017-01-02 3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06
-#> 3 2017-01-03 3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06
-#>                                                                                                                                                                                                                                                                   url
-#> 1 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4.nc4?precipitationCal[0:0][1742:1746][989:996],precipitationCal_cnt[0:0][1742:1746][989:996],time[0:0],lon[1742:1746],lat[989:996]
-#> 2 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4.nc4?precipitationCal[0:0][1742:1746][989:996],precipitationCal_cnt[0:0][1742:1746][989:996],time[0:0],lon[1742:1746],lat[989:996]
-#> 3 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4.nc4?precipitationCal[0:0][1742:1746][989:996],precipitationCal_cnt[0:0][1742:1746][989:996],time[0:0],lon[1742:1746],lat[989:996]
-#>                                                                       destfile
-#> 1 GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4
-#> 2 GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4
-#> 3 GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4
 
 head(urls_smap,3)
-#>   time_start                               name
-#> 1 2017-01-01 SMAP_L3_SM_P_E_20170101_R16510_001
-#> 2 2017-01-02 SMAP_L3_SM_P_E_20170102_R16510_001
-#> 3 2017-01-03 SMAP_L3_SM_P_E_20170103_R16510_001
-#>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    url
-#> 1 https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2017.01.01/SMAP_L3_SM_P_E_20170101_R16510_001.h5.nc4?Soil_Moisture_Retrieval_Data_AM_soil_moisture[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_AM_longitude[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_AM_latitude[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_PM_longitude_pm[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_PM_latitude_pm[678:1:688][1866:1:1871]
-#> 2 https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2017.01.02/SMAP_L3_SM_P_E_20170102_R16510_001.h5.nc4?Soil_Moisture_Retrieval_Data_AM_soil_moisture[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_AM_longitude[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_AM_latitude[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_PM_longitude_pm[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_PM_latitude_pm[678:1:688][1866:1:1871]
-#> 3 https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2017.01.03/SMAP_L3_SM_P_E_20170103_R16510_001.h5.nc4?Soil_Moisture_Retrieval_Data_AM_soil_moisture[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_AM_longitude[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_AM_latitude[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_PM_longitude_pm[678:1:688][1866:1:1871],Soil_Moisture_Retrieval_Data_PM_latitude_pm[678:1:688][1866:1:1871]
-#>                                                    destfile
-#> 1 SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20170101_R16510_001.nc4
-#> 2 SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20170102_R16510_001.nc4
-#> 3 SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20170103_R16510_001.nc4
 ```
 
 We notice that in the 'name' and 'destfile' fields, we now have a '_1' and '_2' at the end of the name / destfile which correspond to the two features of the object `roi`.
@@ -238,10 +208,10 @@ print(str(res_dl))
 <a href="#get-url" class="anchor"></a>Get the OPeNDAP URLs of the data to download</h2>
 <p>Of course, we could loop over the <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> with the time ranges of interest, and get the data. However, the <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> function does query the OPeNDAP servers each time it is called. This query internally imports various data, including OPeNDAP time, latitude and longitude vectors, and this process takes some time. In case you loop over the function for the same ROI and multiple time frames of interest, it will import again and again the same data, which is quite useless.</p>
 <p>Here is where the function <code><a href="../reference/odr_get_opt_param.html">odr_get_opt_param()</a></code> comes into the game. For a given collection and ROI, this function queries the OPeNDAP server and retrieves the information that we were mentionning in the previous paragraph. This function is actually run within the <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> function, but its output can also be provided as input parameter <code>opt_param</code> of <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code>. If <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> is queried multiple times for the same couple {collection, ROI}, it is hence more efficient to pre-compute only once the argument <code>opt_param</code> using <code><a href="../reference/odr_get_opt_param.html">odr_get_opt_param()</a></code> and to further provide it to <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> within a <code>for</code> loop or e.g. a <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code> function.</p>
-<p>So when we have multiple time frames of interest, prior to executing <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> we retrieve the <code>opt_param</code> parameter for each collection and roi with <code><a href="../reference/odr_get_opt_param.html">odr_get_opt_param()</a></code> :</p>
+<p>To summarize : when we have multiple time frames of interest, prior to executing <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> we retrieve the <code>opt_param</code> parameter for each collection and roi with <code><a href="../reference/odr_get_opt_param.html">odr_get_opt_param()</a></code> :</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">opt_param_mod11a1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/odr_get_opt_param.html">odr_get_opt_param</a></span>(<span class="st">"MOD11A1.006"</span>,roi)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">opt_param_gpm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/odr_get_opt_param.html">odr_get_opt_param</a></span>(<span class="st">"GPM_L3/GPM_3IMERGDF.06"</span>,roi)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">opt_param_smap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/odr_get_opt_param.html">odr_get_opt_param</a></span>(<span class="st">"SMAP/SPL3SMP_E.003"</span>,roi)</a></code></pre></div>
+<a class="sourceLine" id="cb4-2" data-line-number="2">opt_param_gpm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/odr_get_opt_param.html">odr_get_opt_param</a></span>(<span class="st">"GPM_3IMERGDF.06"</span>,roi)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">opt_param_smap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/odr_get_opt_param.html">odr_get_opt_param</a></span>(<span class="st">"SPL3SMP_E.003"</span>,roi)</a></code></pre></div>
 <p>And we get our URLs, using a <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code> function over our time frames of interest and setting the <code>opt_param</code> parameter in <code><a href="../reference/odr_get_url.html">odr_get_url()</a></code> :</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">urls_mod11a1 &lt;-<span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="dt">.x =</span> time_ranges, <span class="op">~</span><span class="kw"><a href="../reference/odr_get_url.html">odr_get_url</a></span>(</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">  <span class="dt">collection =</span> <span class="st">"MOD11A1.006"</span>,</a>
@@ -252,7 +222,7 @@ print(str(res_dl))
 <a class="sourceLine" id="cb5-7" data-line-number="7">  )</a>
 <a class="sourceLine" id="cb5-8" data-line-number="8"></a>
 <a class="sourceLine" id="cb5-9" data-line-number="9">urls_gpm &lt;-<span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="dt">.x =</span> time_ranges, <span class="op">~</span><span class="kw"><a href="../reference/odr_get_url.html">odr_get_url</a></span>(</a>
-<a class="sourceLine" id="cb5-10" data-line-number="10">  <span class="dt">collection =</span> <span class="st">"GPM_L3/GPM_3IMERGDF.06"</span>,</a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">  <span class="dt">collection =</span> <span class="st">"GPM_3IMERGDF.06"</span>,</a>
 <a class="sourceLine" id="cb5-11" data-line-number="11">  <span class="dt">variables =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"precipitationCal"</span>,<span class="st">"precipitationCal_cnt"</span>),</a>
 <a class="sourceLine" id="cb5-12" data-line-number="12">  <span class="dt">roi =</span> roi,</a>
 <a class="sourceLine" id="cb5-13" data-line-number="13">  <span class="dt">time_range =</span> .x,</a>
@@ -260,7 +230,7 @@ print(str(res_dl))
 <a class="sourceLine" id="cb5-15" data-line-number="15">)</a>
 <a class="sourceLine" id="cb5-16" data-line-number="16"></a>
 <a class="sourceLine" id="cb5-17" data-line-number="17">urls_smap &lt;-<span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="dt">.x =</span> time_ranges, <span class="op">~</span><span class="kw"><a href="../reference/odr_get_url.html">odr_get_url</a></span>(</a>
-<a class="sourceLine" id="cb5-18" data-line-number="18">  <span class="dt">collection =</span> <span class="st">"SMAP/SPL3SMP_E.003"</span>,</a>
+<a class="sourceLine" id="cb5-18" data-line-number="18">  <span class="dt">collection =</span> <span class="st">"SPL3SMP_E.003"</span>,</a>
 <a class="sourceLine" id="cb5-19" data-line-number="19">  <span class="dt">variables =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Soil_Moisture_Retrieval_Data_AM_soil_moisture"</span>,<span class="st">"Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag"</span>,<span class="st">"Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm"</span>,<span class="st">"Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"</span>),</a>
 <a class="sourceLine" id="cb5-20" data-line-number="20">  <span class="dt">roi =</span> roi,</a>
 <a class="sourceLine" id="cb5-21" data-line-number="21">  <span class="dt">time_range =</span> .x,</a>
@@ -296,22 +266,22 @@ print(str(res_dl))
 <a class="sourceLine" id="cb5-51" data-line-number="51"><span class="co">#&gt;   ..$ time_start: Date[1:31], format: "2016-01-01" ...</span></a>
 <a class="sourceLine" id="cb5-52" data-line-number="52"><span class="co">#&gt;   ..$ name      : chr [1:31] "3B-DAY.MS.MRG.3IMERG.20160101-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20160102-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20160103-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20160104-S000000-E235959.V06" ...</span></a>
 <a class="sourceLine" id="cb5-53" data-line-number="53"><span class="co">#&gt;   ..$ url       : chr [1:31] "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2016/01/3B-DAY.MS.MRG.3IMERG.20160101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2016/01/3B-DAY.MS.MRG.3IMERG.20160102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2016/01/3B-DAY.MS.MRG.3IMERG.20160103-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2016/01/3B-DAY.MS.MRG.3IMERG.20160104-S0000"| __truncated__ ...</span></a>
-<a class="sourceLine" id="cb5-54" data-line-number="54"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20160101-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20160102-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20160103-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20160104-S000000-E235959.V06.nc4" ...</span></a>
+<a class="sourceLine" id="cb5-54" data-line-number="54"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20160101-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20160102-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20160103-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20160104-S000000-E235959.V06.nc4" ...</span></a>
 <a class="sourceLine" id="cb5-55" data-line-number="55"><span class="co">#&gt;  $ :'data.frame':    31 obs. of  4 variables:</span></a>
 <a class="sourceLine" id="cb5-56" data-line-number="56"><span class="co">#&gt;   ..$ time_start: Date[1:31], format: "2017-01-01" ...</span></a>
 <a class="sourceLine" id="cb5-57" data-line-number="57"><span class="co">#&gt;   ..$ name      : chr [1:31] "3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170104-S000000-E235959.V06" ...</span></a>
 <a class="sourceLine" id="cb5-58" data-line-number="58"><span class="co">#&gt;   ..$ url       : chr [1:31] "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170103-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170104-S0000"| __truncated__ ...</span></a>
-<a class="sourceLine" id="cb5-59" data-line-number="59"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170104-S000000-E235959.V06.nc4" ...</span></a>
+<a class="sourceLine" id="cb5-59" data-line-number="59"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170104-S000000-E235959.V06.nc4" ...</span></a>
 <a class="sourceLine" id="cb5-60" data-line-number="60"><span class="co">#&gt;  $ :'data.frame':    31 obs. of  4 variables:</span></a>
 <a class="sourceLine" id="cb5-61" data-line-number="61"><span class="co">#&gt;   ..$ time_start: Date[1:31], format: "2018-01-01" ...</span></a>
 <a class="sourceLine" id="cb5-62" data-line-number="62"><span class="co">#&gt;   ..$ name      : chr [1:31] "3B-DAY.MS.MRG.3IMERG.20180101-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20180102-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20180103-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20180104-S000000-E235959.V06" ...</span></a>
 <a class="sourceLine" id="cb5-63" data-line-number="63"><span class="co">#&gt;   ..$ url       : chr [1:31] "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2018/01/3B-DAY.MS.MRG.3IMERG.20180101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2018/01/3B-DAY.MS.MRG.3IMERG.20180102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2018/01/3B-DAY.MS.MRG.3IMERG.20180103-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2018/01/3B-DAY.MS.MRG.3IMERG.20180104-S0000"| __truncated__ ...</span></a>
-<a class="sourceLine" id="cb5-64" data-line-number="64"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20180101-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20180102-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20180103-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20180104-S000000-E235959.V06.nc4" ...</span></a>
+<a class="sourceLine" id="cb5-64" data-line-number="64"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20180101-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20180102-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20180103-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20180104-S000000-E235959.V06.nc4" ...</span></a>
 <a class="sourceLine" id="cb5-65" data-line-number="65"><span class="co">#&gt;  $ :'data.frame':    31 obs. of  4 variables:</span></a>
 <a class="sourceLine" id="cb5-66" data-line-number="66"><span class="co">#&gt;   ..$ time_start: Date[1:31], format: "2019-01-01" ...</span></a>
 <a class="sourceLine" id="cb5-67" data-line-number="67"><span class="co">#&gt;   ..$ name      : chr [1:31] "3B-DAY.MS.MRG.3IMERG.20190101-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20190102-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20190103-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20190104-S000000-E235959.V06" ...</span></a>
 <a class="sourceLine" id="cb5-68" data-line-number="68"><span class="co">#&gt;   ..$ url       : chr [1:31] "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2019/01/3B-DAY.MS.MRG.3IMERG.20190101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2019/01/3B-DAY.MS.MRG.3IMERG.20190102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2019/01/3B-DAY.MS.MRG.3IMERG.20190103-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2019/01/3B-DAY.MS.MRG.3IMERG.20190104-S0000"| __truncated__ ...</span></a>
-<a class="sourceLine" id="cb5-69" data-line-number="69"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20190101-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20190102-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20190103-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20190104-S000000-E235959.V06.nc4" ...</span></a>
+<a class="sourceLine" id="cb5-69" data-line-number="69"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20190101-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20190102-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20190103-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20190104-S000000-E235959.V06.nc4" ...</span></a>
 <a class="sourceLine" id="cb5-70" data-line-number="70"></a>
 <a class="sourceLine" id="cb5-71" data-line-number="71"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(urls_smap)</a>
 <a class="sourceLine" id="cb5-72" data-line-number="72"><span class="co">#&gt; List of 4</span></a>
@@ -319,22 +289,22 @@ print(str(res_dl))
 <a class="sourceLine" id="cb5-74" data-line-number="74"><span class="co">#&gt;   ..$ time_start: Date[1:31], format: "2016-01-01" ...</span></a>
 <a class="sourceLine" id="cb5-75" data-line-number="75"><span class="co">#&gt;   ..$ name      : chr [1:31] "SMAP_L3_SM_P_E_20160101_R16510_001" "SMAP_L3_SM_P_E_20160102_R16510_001" "SMAP_L3_SM_P_E_20160103_R16510_001" "SMAP_L3_SM_P_E_20160104_R16510_001" ...</span></a>
 <a class="sourceLine" id="cb5-76" data-line-number="76"><span class="co">#&gt;   ..$ url       : chr [1:31] "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2016.01.01/SMAP_L3_SM_P_E_20160101_R16510_001.h5.nc4?"| __truncated__ "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2016.01.02/SMAP_L3_SM_P_E_20160102_R16510_001.h5.nc4?"| __truncated__ "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2016.01.03/SMAP_L3_SM_P_E_20160103_R16510_001.h5.nc4?"| __truncated__ "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2016.01.04/SMAP_L3_SM_P_E_20160104_R16510_001.h5.nc4?"| __truncated__ ...</span></a>
-<a class="sourceLine" id="cb5-77" data-line-number="77"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20160101_R16510_001.nc4" "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20160102_R16510_001.nc4" "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20160103_R16510_001.nc4" "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20160104_R16510_001.nc4" ...</span></a>
+<a class="sourceLine" id="cb5-77" data-line-number="77"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "SPL3SMP_E.003/SMAP_L3_SM_P_E_20160101_R16510_001.nc4" "SPL3SMP_E.003/SMAP_L3_SM_P_E_20160102_R16510_001.nc4" "SPL3SMP_E.003/SMAP_L3_SM_P_E_20160103_R16510_001.nc4" "SPL3SMP_E.003/SMAP_L3_SM_P_E_20160104_R16510_001.nc4" ...</span></a>
 <a class="sourceLine" id="cb5-78" data-line-number="78"><span class="co">#&gt;  $ :'data.frame':    31 obs. of  4 variables:</span></a>
 <a class="sourceLine" id="cb5-79" data-line-number="79"><span class="co">#&gt;   ..$ time_start: Date[1:31], format: "2017-01-01" ...</span></a>
 <a class="sourceLine" id="cb5-80" data-line-number="80"><span class="co">#&gt;   ..$ name      : chr [1:31] "SMAP_L3_SM_P_E_20170101_R16510_001" "SMAP_L3_SM_P_E_20170102_R16510_001" "SMAP_L3_SM_P_E_20170103_R16510_001" "SMAP_L3_SM_P_E_20170104_R16510_001" ...</span></a>
 <a class="sourceLine" id="cb5-81" data-line-number="81"><span class="co">#&gt;   ..$ url       : chr [1:31] "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2017.01.01/SMAP_L3_SM_P_E_20170101_R16510_001.h5.nc4?"| __truncated__ "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2017.01.02/SMAP_L3_SM_P_E_20170102_R16510_001.h5.nc4?"| __truncated__ "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2017.01.03/SMAP_L3_SM_P_E_20170103_R16510_001.h5.nc4?"| __truncated__ "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2017.01.04/SMAP_L3_SM_P_E_20170104_R16510_001.h5.nc4?"| __truncated__ ...</span></a>
-<a class="sourceLine" id="cb5-82" data-line-number="82"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20170101_R16510_001.nc4" "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20170102_R16510_001.nc4" "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20170103_R16510_001.nc4" "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20170104_R16510_001.nc4" ...</span></a>
+<a class="sourceLine" id="cb5-82" data-line-number="82"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "SPL3SMP_E.003/SMAP_L3_SM_P_E_20170101_R16510_001.nc4" "SPL3SMP_E.003/SMAP_L3_SM_P_E_20170102_R16510_001.nc4" "SPL3SMP_E.003/SMAP_L3_SM_P_E_20170103_R16510_001.nc4" "SPL3SMP_E.003/SMAP_L3_SM_P_E_20170104_R16510_001.nc4" ...</span></a>
 <a class="sourceLine" id="cb5-83" data-line-number="83"><span class="co">#&gt;  $ :'data.frame':    31 obs. of  4 variables:</span></a>
 <a class="sourceLine" id="cb5-84" data-line-number="84"><span class="co">#&gt;   ..$ time_start: Date[1:31], format: "2018-01-01" ...</span></a>
 <a class="sourceLine" id="cb5-85" data-line-number="85"><span class="co">#&gt;   ..$ name      : chr [1:31] "SMAP_L3_SM_P_E_20180101_R16510_001" "SMAP_L3_SM_P_E_20180102_R16510_001" "SMAP_L3_SM_P_E_20180103_R16510_001" "SMAP_L3_SM_P_E_20180104_R16510_001" ...</span></a>
 <a class="sourceLine" id="cb5-86" data-line-number="86"><span class="co">#&gt;   ..$ url       : chr [1:31] "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2018.01.01/SMAP_L3_SM_P_E_20180101_R16510_001.h5.nc4?"| __truncated__ "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2018.01.02/SMAP_L3_SM_P_E_20180102_R16510_001.h5.nc4?"| __truncated__ "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2018.01.03/SMAP_L3_SM_P_E_20180103_R16510_001.h5.nc4?"| __truncated__ "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2018.01.04/SMAP_L3_SM_P_E_20180104_R16510_001.h5.nc4?"| __truncated__ ...</span></a>
-<a class="sourceLine" id="cb5-87" data-line-number="87"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20180101_R16510_001.nc4" "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20180102_R16510_001.nc4" "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20180103_R16510_001.nc4" "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20180104_R16510_001.nc4" ...</span></a>
+<a class="sourceLine" id="cb5-87" data-line-number="87"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "SPL3SMP_E.003/SMAP_L3_SM_P_E_20180101_R16510_001.nc4" "SPL3SMP_E.003/SMAP_L3_SM_P_E_20180102_R16510_001.nc4" "SPL3SMP_E.003/SMAP_L3_SM_P_E_20180103_R16510_001.nc4" "SPL3SMP_E.003/SMAP_L3_SM_P_E_20180104_R16510_001.nc4" ...</span></a>
 <a class="sourceLine" id="cb5-88" data-line-number="88"><span class="co">#&gt;  $ :'data.frame':    31 obs. of  4 variables:</span></a>
 <a class="sourceLine" id="cb5-89" data-line-number="89"><span class="co">#&gt;   ..$ time_start: Date[1:31], format: "2019-01-01" ...</span></a>
 <a class="sourceLine" id="cb5-90" data-line-number="90"><span class="co">#&gt;   ..$ name      : chr [1:31] "SMAP_L3_SM_P_E_20190101_R16510_001" "SMAP_L3_SM_P_E_20190102_R16510_001" "SMAP_L3_SM_P_E_20190103_R16510_001" "SMAP_L3_SM_P_E_20190104_R16510_001" ...</span></a>
 <a class="sourceLine" id="cb5-91" data-line-number="91"><span class="co">#&gt;   ..$ url       : chr [1:31] "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2019.01.01/SMAP_L3_SM_P_E_20190101_R16510_001.h5.nc4?"| __truncated__ "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2019.01.02/SMAP_L3_SM_P_E_20190102_R16510_001.h5.nc4?"| __truncated__ "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2019.01.03/SMAP_L3_SM_P_E_20190103_R16510_001.h5.nc4?"| __truncated__ "https://n5eil02u.ecs.nsidc.org/opendap/SMAP/SPL3SMP_E.003/2019.01.04/SMAP_L3_SM_P_E_20190104_R16510_001.h5.nc4?"| __truncated__ ...</span></a>
-<a class="sourceLine" id="cb5-92" data-line-number="92"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20190101_R16510_001.nc4" "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20190102_R16510_001.nc4" "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20190103_R16510_001.nc4" "SMAP/SPL3SMP_E.003/SMAP_L3_SM_P_E_20190104_R16510_001.nc4" ...</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-92" data-line-number="92"><span class="co">#&gt;   ..$ destfile  : chr [1:31] "SPL3SMP_E.003/SMAP_L3_SM_P_E_20190101_R16510_001.nc4" "SPL3SMP_E.003/SMAP_L3_SM_P_E_20190102_R16510_001.nc4" "SPL3SMP_E.003/SMAP_L3_SM_P_E_20190103_R16510_001.nc4" "SPL3SMP_E.003/SMAP_L3_SM_P_E_20190104_R16510_001.nc4" ...</span></a></code></pre></div>
 <!--
 If we want to be convinced that this way of doing the things is quicker than not providing the `opt_param` parameter : 
 
@@ -383,20 +353,20 @@ identical(urls_mod11a1_notprov,urls_mod11a1_prov)
 <a class="sourceLine" id="cb6-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(res_dl))</a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; 'data.frame':    252 obs. of  7 variables:</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;  $ time_start: Date, format: "2016-01-01" "2017-01-01" ...</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;  $ name      : chr  "MOD11A1.006.2016001_2016031.h17v08" "MOD11A1.006.2017001_2017031.h17v08" "MOD11A1.006.2018001_2018031.h17v08" "MOD11A1.006.2019001_2019031.h17v08" ...</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;  $ url       : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ ...</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;  $ destfile  : chr  "MOD11A1.006/MOD11A1.006.2016001_2016031.h17v08.nc4" "MOD11A1.006/MOD11A1.006.2017001_2017031.h17v08.nc4" "MOD11A1.006/MOD11A1.006.2018001_2018031.h17v08.nc4" "MOD11A1.006/MOD11A1.006.2019001_2019031.h17v08.nc4" ...</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;  $ time_start: Date, format: "2016-01-01" "2016-01-02" ...</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;  $ name      : chr  "3B-DAY.MS.MRG.3IMERG.20160101-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20160102-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20160103-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20160104-S000000-E235959.V06" ...</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;  $ url       : chr  "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2016/01/3B-DAY.MS.MRG.3IMERG.20160101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2016/01/3B-DAY.MS.MRG.3IMERG.20160102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2016/01/3B-DAY.MS.MRG.3IMERG.20160103-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2016/01/3B-DAY.MS.MRG.3IMERG.20160104-S0000"| __truncated__ ...</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;  $ destfile  : chr  "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20160101-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20160102-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20160103-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20160104-S000000-E235959.V06.nc4" ...</span></a>
 <a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;  $ fileDl    : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;  $ fileSize  : num  272405 300110 325616 295798 34518 ...</span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;  $ dlStatus  : num  3 3 3 3 3 3 3 3 3 3 ...</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;  $ fileSize  : num  34518 34543 34510 34664 34669 ...</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;  $ dlStatus  : num  1 1 1 1 1 1 1 1 1 1 ...</span></a>
 <a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; NULL</span></a></code></pre></div>
 </div>
 <div id="import" class="section level2">
 <h2 class="hasAnchor">
 <a href="#import" class="anchor"></a>Import the data in R</h2>
 <p><code>stars</code> or <code>ncdf4</code> object are best adapted for these kind of spatiotemporal data. However, in this example we will show how to import them as lists of <code>RasterLayer</code> objects : one list for each time range.</p>
-<p>First, we write the functions to import the data as <code>RasterLayer</code> objects (check out <a href="https://ptaconet.github.io/opendapr/index.html#important-note-import">Important note regarding the further import of the data in R</a> in the README for additional information)</p>
+<p>First, we write the functions to import the data as <code>RasterLayer</code> objects (check out <a href="https://ptaconet.github.io/opendapr/articles/opendapr1.html#data_import_note">Important note regarding the further import of the data in R</a> in the <a href="https://ptaconet.github.io/opendapr/articles/opendapr1.html"><code><a href="../articles/opendapr1.html">vignette("opendapr1")</a></code></a> for additional information)</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">## Function to import MODIS or VIIRS data</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">.import_modis &lt;-<span class="st"> </span><span class="cf">function</span>(destfiles,variable){</a>
 <a class="sourceLine" id="cb7-3" data-line-number="3">  </a>
@@ -431,163 +401,166 @@ identical(urls_mod11a1_notprov,urls_mod11a1_prov)
 <a class="sourceLine" id="cb7-32" data-line-number="32">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(rasts)</a>
 <a class="sourceLine" id="cb7-33" data-line-number="33">}</a></code></pre></div>
 <p>We now use these functions to import the data (here, only 1 band is selected for each data collection). Output is a list of 4 elements (1 by time frame provided in <code>time_ranges</code> ). Each element is a RasterBrick containing 1 layer for each day (hence, here, 30 days).</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">modis_ts &lt;-<span class="st"> </span>urls_mod11a1 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span><span class="kw">.import_modis</span>(.<span class="op">$</span>destfile,<span class="st">"LST_Day_1km"</span>))</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">## or even better : as stars objects (will import all the bands, i.e. no need to select one band only)</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co"># modis_ts &lt;- urls_mod11a1 %&gt;%</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#   purrr::map(~stars::read_stars(.$destfile)) %&gt;%</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#   purrr::map(~st_set_crs(.,"+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"))</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">gpm_ts &lt;-<span class="st"> </span>urls_gpm <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="st">  </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span><span class="kw">.import_gpm</span>(.<span class="op">$</span>destfile,<span class="st">"precipitationCal"</span>))</a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">smap_sp_bound &lt;-<span class="st"> </span>opendapr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/opendapr/topics/odr_get_opt_param">odr_get_opt_param</a></span>(<span class="dt">roi =</span> roi, <span class="dt">collection =</span> <span class="st">"SMAP/SPL3SMP_E.003"</span>)<span class="op">$</span>roiSpatialBound<span class="op">$</span><span class="st">`</span><span class="dt">1</span><span class="st">`</span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12">smap_ts &lt;-<span class="st"> </span>urls_smap <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="st">  </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span><span class="kw">.import_smap</span>(.<span class="op">$</span>destfile,<span class="st">"Soil_Moisture_Retrieval_Data_AM_soil_moisture"</span>,smap_sp_bound))</a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(modis_ts)</a>
-<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt; class       : RasterBrick </span></a>
-<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt; dimensions  : 86, 49, 4214, 31  (nrow, ncol, ncell, nlayers)</span></a>
-<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></a>
-<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></a>
-<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs </span></a>
-<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt; data source : /home/ptaconet/opendapr/vignettes/MOD11A1.006/MOD11A1.006.2016001_2016031.h17v08.nc4 </span></a>
-<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt; names       : X2016.01.01, X2016.01.02, X2016.01.03, X2016.01.04, X2016.01.05, X2016.01.06, X2016.01.07, X2016.01.08, X2016.01.09, X2016.01.10, X2016.01.11, X2016.01.12, X2016.01.13, X2016.01.14, X2016.01.15, ... </span></a>
-<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt; Date        : 2016-01-01, 2016-01-31 (min, max)</span></a>
-<a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co">#&gt; varname     : LST_Day_1km </span></a>
-<a class="sourceLine" id="cb8-26" data-line-number="26"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-27" data-line-number="27"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-28" data-line-number="28"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb8-29" data-line-number="29"><span class="co">#&gt; class       : RasterBrick </span></a>
-<a class="sourceLine" id="cb8-30" data-line-number="30"><span class="co">#&gt; dimensions  : 86, 49, 4214, 31  (nrow, ncol, ncell, nlayers)</span></a>
-<a class="sourceLine" id="cb8-31" data-line-number="31"><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></a>
-<a class="sourceLine" id="cb8-32" data-line-number="32"><span class="co">#&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></a>
-<a class="sourceLine" id="cb8-33" data-line-number="33"><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs </span></a>
-<a class="sourceLine" id="cb8-34" data-line-number="34"><span class="co">#&gt; data source : /home/ptaconet/opendapr/vignettes/MOD11A1.006/MOD11A1.006.2017001_2017031.h17v08.nc4 </span></a>
-<a class="sourceLine" id="cb8-35" data-line-number="35"><span class="co">#&gt; names       : X2017.01.01, X2017.01.02, X2017.01.03, X2017.01.04, X2017.01.05, X2017.01.06, X2017.01.07, X2017.01.08, X2017.01.09, X2017.01.10, X2017.01.11, X2017.01.12, X2017.01.13, X2017.01.14, X2017.01.15, ... </span></a>
-<a class="sourceLine" id="cb8-36" data-line-number="36"><span class="co">#&gt; Date        : 2017-01-01, 2017-01-31 (min, max)</span></a>
-<a class="sourceLine" id="cb8-37" data-line-number="37"><span class="co">#&gt; varname     : LST_Day_1km </span></a>
-<a class="sourceLine" id="cb8-38" data-line-number="38"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-39" data-line-number="39"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-40" data-line-number="40"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb8-41" data-line-number="41"><span class="co">#&gt; class       : RasterBrick </span></a>
-<a class="sourceLine" id="cb8-42" data-line-number="42"><span class="co">#&gt; dimensions  : 86, 49, 4214, 31  (nrow, ncol, ncell, nlayers)</span></a>
-<a class="sourceLine" id="cb8-43" data-line-number="43"><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></a>
-<a class="sourceLine" id="cb8-44" data-line-number="44"><span class="co">#&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></a>
-<a class="sourceLine" id="cb8-45" data-line-number="45"><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs </span></a>
-<a class="sourceLine" id="cb8-46" data-line-number="46"><span class="co">#&gt; data source : /home/ptaconet/opendapr/vignettes/MOD11A1.006/MOD11A1.006.2018001_2018031.h17v08.nc4 </span></a>
-<a class="sourceLine" id="cb8-47" data-line-number="47"><span class="co">#&gt; names       : X2018.01.01, X2018.01.02, X2018.01.03, X2018.01.04, X2018.01.05, X2018.01.06, X2018.01.07, X2018.01.08, X2018.01.09, X2018.01.10, X2018.01.11, X2018.01.12, X2018.01.13, X2018.01.14, X2018.01.15, ... </span></a>
-<a class="sourceLine" id="cb8-48" data-line-number="48"><span class="co">#&gt; Date        : 2018-01-01, 2018-01-31 (min, max)</span></a>
-<a class="sourceLine" id="cb8-49" data-line-number="49"><span class="co">#&gt; varname     : LST_Day_1km </span></a>
-<a class="sourceLine" id="cb8-50" data-line-number="50"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-51" data-line-number="51"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-52" data-line-number="52"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb8-53" data-line-number="53"><span class="co">#&gt; class       : RasterBrick </span></a>
-<a class="sourceLine" id="cb8-54" data-line-number="54"><span class="co">#&gt; dimensions  : 86, 49, 4214, 31  (nrow, ncol, ncell, nlayers)</span></a>
-<a class="sourceLine" id="cb8-55" data-line-number="55"><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></a>
-<a class="sourceLine" id="cb8-56" data-line-number="56"><span class="co">#&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></a>
-<a class="sourceLine" id="cb8-57" data-line-number="57"><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs </span></a>
-<a class="sourceLine" id="cb8-58" data-line-number="58"><span class="co">#&gt; data source : /home/ptaconet/opendapr/vignettes/MOD11A1.006/MOD11A1.006.2019001_2019031.h17v08.nc4 </span></a>
-<a class="sourceLine" id="cb8-59" data-line-number="59"><span class="co">#&gt; names       : X2019.01.01, X2019.01.02, X2019.01.03, X2019.01.04, X2019.01.05, X2019.01.06, X2019.01.07, X2019.01.08, X2019.01.09, X2019.01.10, X2019.01.11, X2019.01.12, X2019.01.13, X2019.01.14, X2019.01.15, ... </span></a>
-<a class="sourceLine" id="cb8-60" data-line-number="60"><span class="co">#&gt; Date        : 2019-01-01, 2019-01-31 (min, max)</span></a>
-<a class="sourceLine" id="cb8-61" data-line-number="61"><span class="co">#&gt; varname     : LST_Day_1km</span></a>
-<a class="sourceLine" id="cb8-62" data-line-number="62"></a>
-<a class="sourceLine" id="cb8-63" data-line-number="63"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(gpm_ts)</a>
-<a class="sourceLine" id="cb8-64" data-line-number="64"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb8-65" data-line-number="65"><span class="co">#&gt; class       : RasterBrick </span></a>
-<a class="sourceLine" id="cb8-66" data-line-number="66"><span class="co">#&gt; dimensions  : 8, 5, 40, 31  (nrow, ncol, ncell, nlayers)</span></a>
-<a class="sourceLine" id="cb8-67" data-line-number="67"><span class="co">#&gt; resolution  : 0.1000023, 0.09999956  (x, y)</span></a>
-<a class="sourceLine" id="cb8-68" data-line-number="68"><span class="co">#&gt; extent      : -5.800004, -5.299993, 8.900002, 9.699998  (xmin, xmax, ymin, ymax)</span></a>
-<a class="sourceLine" id="cb8-69" data-line-number="69"><span class="co">#&gt; coord. ref. : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
-<a class="sourceLine" id="cb8-70" data-line-number="70"><span class="co">#&gt; data source : in memory</span></a>
-<a class="sourceLine" id="cb8-71" data-line-number="71"><span class="co">#&gt; names       :     layer.1,     layer.2,     layer.3,     layer.4,     layer.5,     layer.6,     layer.7,     layer.8,     layer.9,    layer.10,    layer.11,    layer.12,    layer.13,    layer.14,    layer.15, ... </span></a>
-<a class="sourceLine" id="cb8-72" data-line-number="72"><span class="co">#&gt; min values  : 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.020688403, 0.114505127, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, ... </span></a>
-<a class="sourceLine" id="cb8-73" data-line-number="73"><span class="co">#&gt; max values  : 0.023946110, 0.100000001, 0.000000000, 0.104326740, 0.802038670, 2.774286747, 0.485472620, 0.189618543, 0.014000000, 0.088715874, 0.000000000, 0.004668009, 0.000000000, 0.000000000, 0.012473024, ... </span></a>
-<a class="sourceLine" id="cb8-74" data-line-number="74"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-75" data-line-number="75"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-76" data-line-number="76"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb8-77" data-line-number="77"><span class="co">#&gt; class       : RasterBrick </span></a>
-<a class="sourceLine" id="cb8-78" data-line-number="78"><span class="co">#&gt; dimensions  : 8, 5, 40, 31  (nrow, ncol, ncell, nlayers)</span></a>
-<a class="sourceLine" id="cb8-79" data-line-number="79"><span class="co">#&gt; resolution  : 0.1000023, 0.09999956  (x, y)</span></a>
-<a class="sourceLine" id="cb8-80" data-line-number="80"><span class="co">#&gt; extent      : -5.800004, -5.299993, 8.900002, 9.699998  (xmin, xmax, ymin, ymax)</span></a>
-<a class="sourceLine" id="cb8-81" data-line-number="81"><span class="co">#&gt; coord. ref. : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
-<a class="sourceLine" id="cb8-82" data-line-number="82"><span class="co">#&gt; data source : in memory</span></a>
-<a class="sourceLine" id="cb8-83" data-line-number="83"><span class="co">#&gt; names       :     layer.1,     layer.2,     layer.3,     layer.4,     layer.5,     layer.6,     layer.7,     layer.8,     layer.9,    layer.10,    layer.11,    layer.12,    layer.13,    layer.14,    layer.15, ... </span></a>
-<a class="sourceLine" id="cb8-84" data-line-number="84"><span class="co">#&gt; min values  : 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.015777921, 0.000000000, 0.021967307, 0.002506131, 0.000000000, 0.000000000, ... </span></a>
-<a class="sourceLine" id="cb8-85" data-line-number="85"><span class="co">#&gt; max values  :  0.00000000,  1.00454104,  0.01239155,  0.00000000,  0.00000000,  0.00000000,  0.00000000,  0.02110096,  0.34920487,  0.42241478,  2.99069405,  5.54364347,  0.19833815,  0.21644105,  1.17732072, ... </span></a>
-<a class="sourceLine" id="cb8-86" data-line-number="86"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-87" data-line-number="87"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-88" data-line-number="88"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb8-89" data-line-number="89"><span class="co">#&gt; class       : RasterBrick </span></a>
-<a class="sourceLine" id="cb8-90" data-line-number="90"><span class="co">#&gt; dimensions  : 8, 5, 40, 31  (nrow, ncol, ncell, nlayers)</span></a>
-<a class="sourceLine" id="cb8-91" data-line-number="91"><span class="co">#&gt; resolution  : 0.1000023, 0.09999956  (x, y)</span></a>
-<a class="sourceLine" id="cb8-92" data-line-number="92"><span class="co">#&gt; extent      : -5.800004, -5.299993, 8.900002, 9.699998  (xmin, xmax, ymin, ymax)</span></a>
-<a class="sourceLine" id="cb8-93" data-line-number="93"><span class="co">#&gt; coord. ref. : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
-<a class="sourceLine" id="cb8-94" data-line-number="94"><span class="co">#&gt; data source : in memory</span></a>
-<a class="sourceLine" id="cb8-95" data-line-number="95"><span class="co">#&gt; names       :     layer.1,     layer.2,     layer.3,     layer.4,     layer.5,     layer.6,     layer.7,     layer.8,     layer.9,    layer.10,    layer.11,    layer.12,    layer.13,    layer.14,    layer.15, ... </span></a>
-<a class="sourceLine" id="cb8-96" data-line-number="96"><span class="co">#&gt; min values  :           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0, ... </span></a>
-<a class="sourceLine" id="cb8-97" data-line-number="97"><span class="co">#&gt; max values  : 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, ... </span></a>
-<a class="sourceLine" id="cb8-98" data-line-number="98"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-99" data-line-number="99"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-100" data-line-number="100"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb8-101" data-line-number="101"><span class="co">#&gt; class       : RasterBrick </span></a>
-<a class="sourceLine" id="cb8-102" data-line-number="102"><span class="co">#&gt; dimensions  : 8, 5, 40, 31  (nrow, ncol, ncell, nlayers)</span></a>
-<a class="sourceLine" id="cb8-103" data-line-number="103"><span class="co">#&gt; resolution  : 0.1000023, 0.09999956  (x, y)</span></a>
-<a class="sourceLine" id="cb8-104" data-line-number="104"><span class="co">#&gt; extent      : -5.800004, -5.299993, 8.900002, 9.699998  (xmin, xmax, ymin, ymax)</span></a>
-<a class="sourceLine" id="cb8-105" data-line-number="105"><span class="co">#&gt; coord. ref. : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
-<a class="sourceLine" id="cb8-106" data-line-number="106"><span class="co">#&gt; data source : in memory</span></a>
-<a class="sourceLine" id="cb8-107" data-line-number="107"><span class="co">#&gt; names       :     layer.1,     layer.2,     layer.3,     layer.4,     layer.5,     layer.6,     layer.7,     layer.8,     layer.9,    layer.10,    layer.11,    layer.12,    layer.13,    layer.14,    layer.15, ... </span></a>
-<a class="sourceLine" id="cb8-108" data-line-number="108"><span class="co">#&gt; min values  : 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, ... </span></a>
-<a class="sourceLine" id="cb8-109" data-line-number="109"><span class="co">#&gt; max values  :  0.19960466,  0.10788161,  0.00000000,  0.00000000,  0.73508704,  2.86901855,  0.48457938,  3.71840620,  1.08807325,  3.39184451,  0.12185285,  0.86521268,  2.74673152,  0.06515764,  0.61251777, ...</span></a>
-<a class="sourceLine" id="cb8-110" data-line-number="110"></a>
-<a class="sourceLine" id="cb8-111" data-line-number="111"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(smap_ts)</a>
-<a class="sourceLine" id="cb8-112" data-line-number="112"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb8-113" data-line-number="113"><span class="co">#&gt; class       : RasterBrick </span></a>
-<a class="sourceLine" id="cb8-114" data-line-number="114"><span class="co">#&gt; dimensions  : 11, 6, 66, 31  (nrow, ncol, ncell, nlayers)</span></a>
-<a class="sourceLine" id="cb8-115" data-line-number="115"><span class="co">#&gt; resolution  : 7506.713, 8189.135  (x, y)</span></a>
-<a class="sourceLine" id="cb8-116" data-line-number="116"><span class="co">#&gt; extent      : -563003.5, -517963.2, 1121503, 1211583  (xmin, xmax, ymin, ymax)</span></a>
-<a class="sourceLine" id="cb8-117" data-line-number="117"><span class="co">#&gt; coord. ref. : +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
-<a class="sourceLine" id="cb8-118" data-line-number="118"><span class="co">#&gt; data source : in memory</span></a>
-<a class="sourceLine" id="cb8-119" data-line-number="119"><span class="co">#&gt; names       :    layer.1,    layer.2,    layer.3,    layer.4,    layer.5,    layer.6,    layer.7,    layer.8,    layer.9,   layer.10,   layer.11,   layer.12,   layer.13,   layer.14,   layer.15, ... </span></a>
-<a class="sourceLine" id="cb8-120" data-line-number="120"><span class="co">#&gt; min values  :         NA,         NA, 0.08794813,         NA, 0.09045634, 0.09929898,         NA, 0.10024372,         NA,         NA, 0.09286496,         NA, 0.09519173, 0.10333401,         NA, ... </span></a>
-<a class="sourceLine" id="cb8-121" data-line-number="121"><span class="co">#&gt; max values  :         NA,         NA,  0.1536734,         NA,  0.1585532,  0.1305509,         NA,  0.1419851,         NA,         NA,  0.1425952,         NA,  0.1435617,  0.1323697,         NA, ... </span></a>
-<a class="sourceLine" id="cb8-122" data-line-number="122"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-123" data-line-number="123"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-124" data-line-number="124"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb8-125" data-line-number="125"><span class="co">#&gt; class       : RasterBrick </span></a>
-<a class="sourceLine" id="cb8-126" data-line-number="126"><span class="co">#&gt; dimensions  : 11, 6, 66, 31  (nrow, ncol, ncell, nlayers)</span></a>
-<a class="sourceLine" id="cb8-127" data-line-number="127"><span class="co">#&gt; resolution  : 7506.713, 8189.135  (x, y)</span></a>
-<a class="sourceLine" id="cb8-128" data-line-number="128"><span class="co">#&gt; extent      : -563003.5, -517963.2, 1121503, 1211583  (xmin, xmax, ymin, ymax)</span></a>
-<a class="sourceLine" id="cb8-129" data-line-number="129"><span class="co">#&gt; coord. ref. : +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
-<a class="sourceLine" id="cb8-130" data-line-number="130"><span class="co">#&gt; data source : in memory</span></a>
-<a class="sourceLine" id="cb8-131" data-line-number="131"><span class="co">#&gt; names       :    layer.1,    layer.2,    layer.3,    layer.4,    layer.5,    layer.6,    layer.7,    layer.8,    layer.9,   layer.10,   layer.11,   layer.12,   layer.13,   layer.14,   layer.15, ... </span></a>
-<a class="sourceLine" id="cb8-132" data-line-number="132"><span class="co">#&gt; min values  :         NA, 0.09996461,         NA,         NA, 0.09471568,         NA, 0.05590146,         NA,         NA, 0.09872495,         NA,         NA, 0.09351711,         NA, 0.06066480, ... </span></a>
-<a class="sourceLine" id="cb8-133" data-line-number="133"><span class="co">#&gt; max values  :         NA,  0.1452434,         NA,         NA,  0.1560785,         NA,  0.1505869,         NA,         NA,  0.1704942,         NA,         NA,  0.1503100,         NA,  0.1584005, ... </span></a>
-<a class="sourceLine" id="cb8-134" data-line-number="134"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-135" data-line-number="135"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-136" data-line-number="136"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb8-137" data-line-number="137"><span class="co">#&gt; class       : RasterBrick </span></a>
-<a class="sourceLine" id="cb8-138" data-line-number="138"><span class="co">#&gt; dimensions  : 11, 6, 66, 31  (nrow, ncol, ncell, nlayers)</span></a>
-<a class="sourceLine" id="cb8-139" data-line-number="139"><span class="co">#&gt; resolution  : 7506.713, 8189.135  (x, y)</span></a>
-<a class="sourceLine" id="cb8-140" data-line-number="140"><span class="co">#&gt; extent      : -563003.5, -517963.2, 1121503, 1211583  (xmin, xmax, ymin, ymax)</span></a>
-<a class="sourceLine" id="cb8-141" data-line-number="141"><span class="co">#&gt; coord. ref. : +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
-<a class="sourceLine" id="cb8-142" data-line-number="142"><span class="co">#&gt; data source : in memory</span></a>
-<a class="sourceLine" id="cb8-143" data-line-number="143"><span class="co">#&gt; names       :    layer.1,    layer.2,    layer.3,    layer.4,    layer.5,    layer.6,    layer.7,    layer.8,    layer.9,   layer.10,   layer.11,   layer.12,   layer.13,   layer.14,   layer.15, ... </span></a>
-<a class="sourceLine" id="cb8-144" data-line-number="144"><span class="co">#&gt; min values  :         NA, 0.10006880,         NA,         NA, 0.09495438,         NA,         NA, 0.09292481,         NA, 0.10110421,         NA,         NA, 0.08756919,         NA,         NA, ... </span></a>
-<a class="sourceLine" id="cb8-145" data-line-number="145"><span class="co">#&gt; max values  :         NA,  0.1684048,         NA,         NA,  0.1438731,         NA,         NA,  0.1462391,         NA,  0.1599983,         NA,         NA,  0.1463772,         NA,         NA, ... </span></a>
-<a class="sourceLine" id="cb8-146" data-line-number="146"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-147" data-line-number="147"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-148" data-line-number="148"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb8-149" data-line-number="149"><span class="co">#&gt; class       : RasterBrick </span></a>
-<a class="sourceLine" id="cb8-150" data-line-number="150"><span class="co">#&gt; dimensions  : 11, 6, 66, 31  (nrow, ncol, ncell, nlayers)</span></a>
-<a class="sourceLine" id="cb8-151" data-line-number="151"><span class="co">#&gt; resolution  : 7506.713, 8189.135  (x, y)</span></a>
-<a class="sourceLine" id="cb8-152" data-line-number="152"><span class="co">#&gt; extent      : -563003.5, -517963.2, 1121503, 1211583  (xmin, xmax, ymin, ymax)</span></a>
-<a class="sourceLine" id="cb8-153" data-line-number="153"><span class="co">#&gt; coord. ref. : +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
-<a class="sourceLine" id="cb8-154" data-line-number="154"><span class="co">#&gt; data source : in memory</span></a>
-<a class="sourceLine" id="cb8-155" data-line-number="155"><span class="co">#&gt; names       :    layer.1,    layer.2,    layer.3,    layer.4,    layer.5,    layer.6,    layer.7,    layer.8,    layer.9,   layer.10,   layer.11,   layer.12,   layer.13,   layer.14,   layer.15, ... </span></a>
-<a class="sourceLine" id="cb8-156" data-line-number="156"><span class="co">#&gt; min values  :         NA,         NA, 0.09937777,         NA, 0.09308220,         NA,         NA, 0.09426465,         NA,         NA, 0.10470568,         NA, 0.09455165,         NA,         NA, ... </span></a>
-<a class="sourceLine" id="cb8-157" data-line-number="157"><span class="co">#&gt; max values  :         NA,         NA,  0.1483180,         NA,  0.1420667,         NA,         NA,  0.1392520,         NA,         NA,  0.1505259,         NA,  0.1515075,         NA,         NA, ...</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># MODIS</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">modis_ts &lt;-<span class="st"> </span>urls_mod11a1 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="st">  </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span><span class="kw">.import_modis</span>(.<span class="op">$</span>destfile,<span class="st">"LST_Day_1km"</span>))</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">## or even better : as stars objects (will import all the bands, i.e. no need to select one band only)</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co"># modis_ts &lt;- urls_mod11a1 %&gt;%</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#   purrr::map(~stars::read_stars(.$destfile)) %&gt;%</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#   purrr::map(~st_set_crs(.,"+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"))</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co"># GPM</span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10">gpm_ts &lt;-<span class="st"> </span>urls_gpm <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="st">  </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span><span class="kw">.import_gpm</span>(.<span class="op">$</span>destfile,<span class="st">"precipitationCal"</span>))</a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co"># SMAP</span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14">smap_sp_bound &lt;-<span class="st"> </span>opendapr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/opendapr/topics/odr_get_opt_param">odr_get_opt_param</a></span>(<span class="dt">roi =</span> roi, <span class="dt">collection =</span> <span class="st">"SPL3SMP_E.003"</span>)<span class="op">$</span>roiSpatialBound<span class="op">$</span><span class="st">`</span><span class="dt">1</span><span class="st">`</span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15">smap_ts &lt;-<span class="st"> </span>urls_smap <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="st">  </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span><span class="kw">.import_smap</span>(.<span class="op">$</span>destfile,<span class="st">"Soil_Moisture_Retrieval_Data_AM_soil_moisture"</span>,smap_sp_bound))</a>
+<a class="sourceLine" id="cb8-17" data-line-number="17"></a>
+<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(modis_ts)</a>
+<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt; [[1]]</span></a>
+<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt; class       : RasterBrick </span></a>
+<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt; dimensions  : 86, 49, 4214, 31  (nrow, ncol, ncell, nlayers)</span></a>
+<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></a>
+<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></a>
+<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs </span></a>
+<a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co">#&gt; data source : /home/ptaconet/opendapr/vignettes/MOD11A1.006/MOD11A1.006.2016001_2016031.h17v08.nc4 </span></a>
+<a class="sourceLine" id="cb8-26" data-line-number="26"><span class="co">#&gt; names       : X2016.01.01, X2016.01.02, X2016.01.03, X2016.01.04, X2016.01.05, X2016.01.06, X2016.01.07, X2016.01.08, X2016.01.09, X2016.01.10, X2016.01.11, X2016.01.12, X2016.01.13, X2016.01.14, X2016.01.15, ... </span></a>
+<a class="sourceLine" id="cb8-27" data-line-number="27"><span class="co">#&gt; Date        : 2016-01-01, 2016-01-31 (min, max)</span></a>
+<a class="sourceLine" id="cb8-28" data-line-number="28"><span class="co">#&gt; varname     : LST_Day_1km </span></a>
+<a class="sourceLine" id="cb8-29" data-line-number="29"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-30" data-line-number="30"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-31" data-line-number="31"><span class="co">#&gt; [[2]]</span></a>
+<a class="sourceLine" id="cb8-32" data-line-number="32"><span class="co">#&gt; class       : RasterBrick </span></a>
+<a class="sourceLine" id="cb8-33" data-line-number="33"><span class="co">#&gt; dimensions  : 86, 49, 4214, 31  (nrow, ncol, ncell, nlayers)</span></a>
+<a class="sourceLine" id="cb8-34" data-line-number="34"><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></a>
+<a class="sourceLine" id="cb8-35" data-line-number="35"><span class="co">#&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></a>
+<a class="sourceLine" id="cb8-36" data-line-number="36"><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs </span></a>
+<a class="sourceLine" id="cb8-37" data-line-number="37"><span class="co">#&gt; data source : /home/ptaconet/opendapr/vignettes/MOD11A1.006/MOD11A1.006.2017001_2017031.h17v08.nc4 </span></a>
+<a class="sourceLine" id="cb8-38" data-line-number="38"><span class="co">#&gt; names       : X2017.01.01, X2017.01.02, X2017.01.03, X2017.01.04, X2017.01.05, X2017.01.06, X2017.01.07, X2017.01.08, X2017.01.09, X2017.01.10, X2017.01.11, X2017.01.12, X2017.01.13, X2017.01.14, X2017.01.15, ... </span></a>
+<a class="sourceLine" id="cb8-39" data-line-number="39"><span class="co">#&gt; Date        : 2017-01-01, 2017-01-31 (min, max)</span></a>
+<a class="sourceLine" id="cb8-40" data-line-number="40"><span class="co">#&gt; varname     : LST_Day_1km </span></a>
+<a class="sourceLine" id="cb8-41" data-line-number="41"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-42" data-line-number="42"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-43" data-line-number="43"><span class="co">#&gt; [[3]]</span></a>
+<a class="sourceLine" id="cb8-44" data-line-number="44"><span class="co">#&gt; class       : RasterBrick </span></a>
+<a class="sourceLine" id="cb8-45" data-line-number="45"><span class="co">#&gt; dimensions  : 86, 49, 4214, 31  (nrow, ncol, ncell, nlayers)</span></a>
+<a class="sourceLine" id="cb8-46" data-line-number="46"><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></a>
+<a class="sourceLine" id="cb8-47" data-line-number="47"><span class="co">#&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></a>
+<a class="sourceLine" id="cb8-48" data-line-number="48"><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs </span></a>
+<a class="sourceLine" id="cb8-49" data-line-number="49"><span class="co">#&gt; data source : /home/ptaconet/opendapr/vignettes/MOD11A1.006/MOD11A1.006.2018001_2018031.h17v08.nc4 </span></a>
+<a class="sourceLine" id="cb8-50" data-line-number="50"><span class="co">#&gt; names       : X2018.01.01, X2018.01.02, X2018.01.03, X2018.01.04, X2018.01.05, X2018.01.06, X2018.01.07, X2018.01.08, X2018.01.09, X2018.01.10, X2018.01.11, X2018.01.12, X2018.01.13, X2018.01.14, X2018.01.15, ... </span></a>
+<a class="sourceLine" id="cb8-51" data-line-number="51"><span class="co">#&gt; Date        : 2018-01-01, 2018-01-31 (min, max)</span></a>
+<a class="sourceLine" id="cb8-52" data-line-number="52"><span class="co">#&gt; varname     : LST_Day_1km </span></a>
+<a class="sourceLine" id="cb8-53" data-line-number="53"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-54" data-line-number="54"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-55" data-line-number="55"><span class="co">#&gt; [[4]]</span></a>
+<a class="sourceLine" id="cb8-56" data-line-number="56"><span class="co">#&gt; class       : RasterBrick </span></a>
+<a class="sourceLine" id="cb8-57" data-line-number="57"><span class="co">#&gt; dimensions  : 86, 49, 4214, 31  (nrow, ncol, ncell, nlayers)</span></a>
+<a class="sourceLine" id="cb8-58" data-line-number="58"><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></a>
+<a class="sourceLine" id="cb8-59" data-line-number="59"><span class="co">#&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></a>
+<a class="sourceLine" id="cb8-60" data-line-number="60"><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs </span></a>
+<a class="sourceLine" id="cb8-61" data-line-number="61"><span class="co">#&gt; data source : /home/ptaconet/opendapr/vignettes/MOD11A1.006/MOD11A1.006.2019001_2019031.h17v08.nc4 </span></a>
+<a class="sourceLine" id="cb8-62" data-line-number="62"><span class="co">#&gt; names       : X2019.01.01, X2019.01.02, X2019.01.03, X2019.01.04, X2019.01.05, X2019.01.06, X2019.01.07, X2019.01.08, X2019.01.09, X2019.01.10, X2019.01.11, X2019.01.12, X2019.01.13, X2019.01.14, X2019.01.15, ... </span></a>
+<a class="sourceLine" id="cb8-63" data-line-number="63"><span class="co">#&gt; Date        : 2019-01-01, 2019-01-31 (min, max)</span></a>
+<a class="sourceLine" id="cb8-64" data-line-number="64"><span class="co">#&gt; varname     : LST_Day_1km</span></a>
+<a class="sourceLine" id="cb8-65" data-line-number="65"></a>
+<a class="sourceLine" id="cb8-66" data-line-number="66"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(gpm_ts)</a>
+<a class="sourceLine" id="cb8-67" data-line-number="67"><span class="co">#&gt; [[1]]</span></a>
+<a class="sourceLine" id="cb8-68" data-line-number="68"><span class="co">#&gt; class       : RasterBrick </span></a>
+<a class="sourceLine" id="cb8-69" data-line-number="69"><span class="co">#&gt; dimensions  : 8, 5, 40, 31  (nrow, ncol, ncell, nlayers)</span></a>
+<a class="sourceLine" id="cb8-70" data-line-number="70"><span class="co">#&gt; resolution  : 0.1000023, 0.09999956  (x, y)</span></a>
+<a class="sourceLine" id="cb8-71" data-line-number="71"><span class="co">#&gt; extent      : -5.800004, -5.299993, 8.900002, 9.699998  (xmin, xmax, ymin, ymax)</span></a>
+<a class="sourceLine" id="cb8-72" data-line-number="72"><span class="co">#&gt; coord. ref. : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
+<a class="sourceLine" id="cb8-73" data-line-number="73"><span class="co">#&gt; data source : in memory</span></a>
+<a class="sourceLine" id="cb8-74" data-line-number="74"><span class="co">#&gt; names       :     layer.1,     layer.2,     layer.3,     layer.4,     layer.5,     layer.6,     layer.7,     layer.8,     layer.9,    layer.10,    layer.11,    layer.12,    layer.13,    layer.14,    layer.15, ... </span></a>
+<a class="sourceLine" id="cb8-75" data-line-number="75"><span class="co">#&gt; min values  : 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.020688403, 0.114505127, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, ... </span></a>
+<a class="sourceLine" id="cb8-76" data-line-number="76"><span class="co">#&gt; max values  : 0.023946110, 0.100000001, 0.000000000, 0.104326740, 0.802038670, 2.774286747, 0.485472620, 0.189618543, 0.014000000, 0.088715874, 0.000000000, 0.004668009, 0.000000000, 0.000000000, 0.012473024, ... </span></a>
+<a class="sourceLine" id="cb8-77" data-line-number="77"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-78" data-line-number="78"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-79" data-line-number="79"><span class="co">#&gt; [[2]]</span></a>
+<a class="sourceLine" id="cb8-80" data-line-number="80"><span class="co">#&gt; class       : RasterBrick </span></a>
+<a class="sourceLine" id="cb8-81" data-line-number="81"><span class="co">#&gt; dimensions  : 8, 5, 40, 31  (nrow, ncol, ncell, nlayers)</span></a>
+<a class="sourceLine" id="cb8-82" data-line-number="82"><span class="co">#&gt; resolution  : 0.1000023, 0.09999956  (x, y)</span></a>
+<a class="sourceLine" id="cb8-83" data-line-number="83"><span class="co">#&gt; extent      : -5.800004, -5.299993, 8.900002, 9.699998  (xmin, xmax, ymin, ymax)</span></a>
+<a class="sourceLine" id="cb8-84" data-line-number="84"><span class="co">#&gt; coord. ref. : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
+<a class="sourceLine" id="cb8-85" data-line-number="85"><span class="co">#&gt; data source : in memory</span></a>
+<a class="sourceLine" id="cb8-86" data-line-number="86"><span class="co">#&gt; names       :     layer.1,     layer.2,     layer.3,     layer.4,     layer.5,     layer.6,     layer.7,     layer.8,     layer.9,    layer.10,    layer.11,    layer.12,    layer.13,    layer.14,    layer.15, ... </span></a>
+<a class="sourceLine" id="cb8-87" data-line-number="87"><span class="co">#&gt; min values  : 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.015777921, 0.000000000, 0.021967307, 0.002506131, 0.000000000, 0.000000000, ... </span></a>
+<a class="sourceLine" id="cb8-88" data-line-number="88"><span class="co">#&gt; max values  :  0.00000000,  1.00454104,  0.01239155,  0.00000000,  0.00000000,  0.00000000,  0.00000000,  0.02110096,  0.34920487,  0.42241478,  2.99069405,  5.54364347,  0.19833815,  0.21644105,  1.17732072, ... </span></a>
+<a class="sourceLine" id="cb8-89" data-line-number="89"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-90" data-line-number="90"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-91" data-line-number="91"><span class="co">#&gt; [[3]]</span></a>
+<a class="sourceLine" id="cb8-92" data-line-number="92"><span class="co">#&gt; class       : RasterBrick </span></a>
+<a class="sourceLine" id="cb8-93" data-line-number="93"><span class="co">#&gt; dimensions  : 8, 5, 40, 31  (nrow, ncol, ncell, nlayers)</span></a>
+<a class="sourceLine" id="cb8-94" data-line-number="94"><span class="co">#&gt; resolution  : 0.1000023, 0.09999956  (x, y)</span></a>
+<a class="sourceLine" id="cb8-95" data-line-number="95"><span class="co">#&gt; extent      : -5.800004, -5.299993, 8.900002, 9.699998  (xmin, xmax, ymin, ymax)</span></a>
+<a class="sourceLine" id="cb8-96" data-line-number="96"><span class="co">#&gt; coord. ref. : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
+<a class="sourceLine" id="cb8-97" data-line-number="97"><span class="co">#&gt; data source : in memory</span></a>
+<a class="sourceLine" id="cb8-98" data-line-number="98"><span class="co">#&gt; names       :     layer.1,     layer.2,     layer.3,     layer.4,     layer.5,     layer.6,     layer.7,     layer.8,     layer.9,    layer.10,    layer.11,    layer.12,    layer.13,    layer.14,    layer.15, ... </span></a>
+<a class="sourceLine" id="cb8-99" data-line-number="99"><span class="co">#&gt; min values  :           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0, ... </span></a>
+<a class="sourceLine" id="cb8-100" data-line-number="100"><span class="co">#&gt; max values  : 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, ... </span></a>
+<a class="sourceLine" id="cb8-101" data-line-number="101"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-102" data-line-number="102"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-103" data-line-number="103"><span class="co">#&gt; [[4]]</span></a>
+<a class="sourceLine" id="cb8-104" data-line-number="104"><span class="co">#&gt; class       : RasterBrick </span></a>
+<a class="sourceLine" id="cb8-105" data-line-number="105"><span class="co">#&gt; dimensions  : 8, 5, 40, 31  (nrow, ncol, ncell, nlayers)</span></a>
+<a class="sourceLine" id="cb8-106" data-line-number="106"><span class="co">#&gt; resolution  : 0.1000023, 0.09999956  (x, y)</span></a>
+<a class="sourceLine" id="cb8-107" data-line-number="107"><span class="co">#&gt; extent      : -5.800004, -5.299993, 8.900002, 9.699998  (xmin, xmax, ymin, ymax)</span></a>
+<a class="sourceLine" id="cb8-108" data-line-number="108"><span class="co">#&gt; coord. ref. : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
+<a class="sourceLine" id="cb8-109" data-line-number="109"><span class="co">#&gt; data source : in memory</span></a>
+<a class="sourceLine" id="cb8-110" data-line-number="110"><span class="co">#&gt; names       :     layer.1,     layer.2,     layer.3,     layer.4,     layer.5,     layer.6,     layer.7,     layer.8,     layer.9,    layer.10,    layer.11,    layer.12,    layer.13,    layer.14,    layer.15, ... </span></a>
+<a class="sourceLine" id="cb8-111" data-line-number="111"><span class="co">#&gt; min values  : 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, ... </span></a>
+<a class="sourceLine" id="cb8-112" data-line-number="112"><span class="co">#&gt; max values  :  0.19960466,  0.10788161,  0.00000000,  0.00000000,  0.73508704,  2.86901855,  0.48457938,  3.71840620,  1.08807325,  3.39184451,  0.12185285,  0.86521268,  2.74673152,  0.06515764,  0.61251777, ...</span></a>
+<a class="sourceLine" id="cb8-113" data-line-number="113"></a>
+<a class="sourceLine" id="cb8-114" data-line-number="114"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(smap_ts)</a>
+<a class="sourceLine" id="cb8-115" data-line-number="115"><span class="co">#&gt; [[1]]</span></a>
+<a class="sourceLine" id="cb8-116" data-line-number="116"><span class="co">#&gt; class       : RasterBrick </span></a>
+<a class="sourceLine" id="cb8-117" data-line-number="117"><span class="co">#&gt; dimensions  : 11, 6, 66, 31  (nrow, ncol, ncell, nlayers)</span></a>
+<a class="sourceLine" id="cb8-118" data-line-number="118"><span class="co">#&gt; resolution  : 7506.713, 8189.135  (x, y)</span></a>
+<a class="sourceLine" id="cb8-119" data-line-number="119"><span class="co">#&gt; extent      : -563003.5, -517963.2, 1121503, 1211583  (xmin, xmax, ymin, ymax)</span></a>
+<a class="sourceLine" id="cb8-120" data-line-number="120"><span class="co">#&gt; coord. ref. : +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
+<a class="sourceLine" id="cb8-121" data-line-number="121"><span class="co">#&gt; data source : in memory</span></a>
+<a class="sourceLine" id="cb8-122" data-line-number="122"><span class="co">#&gt; names       :    layer.1,    layer.2,    layer.3,    layer.4,    layer.5,    layer.6,    layer.7,    layer.8,    layer.9,   layer.10,   layer.11,   layer.12,   layer.13,   layer.14,   layer.15, ... </span></a>
+<a class="sourceLine" id="cb8-123" data-line-number="123"><span class="co">#&gt; min values  :         NA,         NA, 0.08794813,         NA, 0.09045634, 0.09929898,         NA, 0.10024372,         NA,         NA, 0.09286496,         NA, 0.09519173, 0.10333401,         NA, ... </span></a>
+<a class="sourceLine" id="cb8-124" data-line-number="124"><span class="co">#&gt; max values  :         NA,         NA,  0.1536734,         NA,  0.1585532,  0.1305509,         NA,  0.1419851,         NA,         NA,  0.1425952,         NA,  0.1435617,  0.1323697,         NA, ... </span></a>
+<a class="sourceLine" id="cb8-125" data-line-number="125"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-126" data-line-number="126"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-127" data-line-number="127"><span class="co">#&gt; [[2]]</span></a>
+<a class="sourceLine" id="cb8-128" data-line-number="128"><span class="co">#&gt; class       : RasterBrick </span></a>
+<a class="sourceLine" id="cb8-129" data-line-number="129"><span class="co">#&gt; dimensions  : 11, 6, 66, 31  (nrow, ncol, ncell, nlayers)</span></a>
+<a class="sourceLine" id="cb8-130" data-line-number="130"><span class="co">#&gt; resolution  : 7506.713, 8189.135  (x, y)</span></a>
+<a class="sourceLine" id="cb8-131" data-line-number="131"><span class="co">#&gt; extent      : -563003.5, -517963.2, 1121503, 1211583  (xmin, xmax, ymin, ymax)</span></a>
+<a class="sourceLine" id="cb8-132" data-line-number="132"><span class="co">#&gt; coord. ref. : +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
+<a class="sourceLine" id="cb8-133" data-line-number="133"><span class="co">#&gt; data source : in memory</span></a>
+<a class="sourceLine" id="cb8-134" data-line-number="134"><span class="co">#&gt; names       :    layer.1,    layer.2,    layer.3,    layer.4,    layer.5,    layer.6,    layer.7,    layer.8,    layer.9,   layer.10,   layer.11,   layer.12,   layer.13,   layer.14,   layer.15, ... </span></a>
+<a class="sourceLine" id="cb8-135" data-line-number="135"><span class="co">#&gt; min values  :         NA, 0.09996461,         NA,         NA, 0.09471568,         NA, 0.05590146,         NA,         NA, 0.09872495,         NA,         NA, 0.09351711,         NA, 0.06066480, ... </span></a>
+<a class="sourceLine" id="cb8-136" data-line-number="136"><span class="co">#&gt; max values  :         NA,  0.1452434,         NA,         NA,  0.1560785,         NA,  0.1505869,         NA,         NA,  0.1704942,         NA,         NA,  0.1503100,         NA,  0.1584005, ... </span></a>
+<a class="sourceLine" id="cb8-137" data-line-number="137"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-138" data-line-number="138"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-139" data-line-number="139"><span class="co">#&gt; [[3]]</span></a>
+<a class="sourceLine" id="cb8-140" data-line-number="140"><span class="co">#&gt; class       : RasterBrick </span></a>
+<a class="sourceLine" id="cb8-141" data-line-number="141"><span class="co">#&gt; dimensions  : 11, 6, 66, 31  (nrow, ncol, ncell, nlayers)</span></a>
+<a class="sourceLine" id="cb8-142" data-line-number="142"><span class="co">#&gt; resolution  : 7506.713, 8189.135  (x, y)</span></a>
+<a class="sourceLine" id="cb8-143" data-line-number="143"><span class="co">#&gt; extent      : -563003.5, -517963.2, 1121503, 1211583  (xmin, xmax, ymin, ymax)</span></a>
+<a class="sourceLine" id="cb8-144" data-line-number="144"><span class="co">#&gt; coord. ref. : +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
+<a class="sourceLine" id="cb8-145" data-line-number="145"><span class="co">#&gt; data source : in memory</span></a>
+<a class="sourceLine" id="cb8-146" data-line-number="146"><span class="co">#&gt; names       :    layer.1,    layer.2,    layer.3,    layer.4,    layer.5,    layer.6,    layer.7,    layer.8,    layer.9,   layer.10,   layer.11,   layer.12,   layer.13,   layer.14,   layer.15, ... </span></a>
+<a class="sourceLine" id="cb8-147" data-line-number="147"><span class="co">#&gt; min values  :         NA, 0.10006880,         NA,         NA, 0.09495438,         NA,         NA, 0.09292481,         NA, 0.10110421,         NA,         NA, 0.08756919,         NA,         NA, ... </span></a>
+<a class="sourceLine" id="cb8-148" data-line-number="148"><span class="co">#&gt; max values  :         NA,  0.1684048,         NA,         NA,  0.1438731,         NA,         NA,  0.1462391,         NA,  0.1599983,         NA,         NA,  0.1463772,         NA,         NA, ... </span></a>
+<a class="sourceLine" id="cb8-149" data-line-number="149"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-150" data-line-number="150"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-151" data-line-number="151"><span class="co">#&gt; [[4]]</span></a>
+<a class="sourceLine" id="cb8-152" data-line-number="152"><span class="co">#&gt; class       : RasterBrick </span></a>
+<a class="sourceLine" id="cb8-153" data-line-number="153"><span class="co">#&gt; dimensions  : 11, 6, 66, 31  (nrow, ncol, ncell, nlayers)</span></a>
+<a class="sourceLine" id="cb8-154" data-line-number="154"><span class="co">#&gt; resolution  : 7506.713, 8189.135  (x, y)</span></a>
+<a class="sourceLine" id="cb8-155" data-line-number="155"><span class="co">#&gt; extent      : -563003.5, -517963.2, 1121503, 1211583  (xmin, xmax, ymin, ymax)</span></a>
+<a class="sourceLine" id="cb8-156" data-line-number="156"><span class="co">#&gt; coord. ref. : +proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 </span></a>
+<a class="sourceLine" id="cb8-157" data-line-number="157"><span class="co">#&gt; data source : in memory</span></a>
+<a class="sourceLine" id="cb8-158" data-line-number="158"><span class="co">#&gt; names       :    layer.1,    layer.2,    layer.3,    layer.4,    layer.5,    layer.6,    layer.7,    layer.8,    layer.9,   layer.10,   layer.11,   layer.12,   layer.13,   layer.14,   layer.15, ... </span></a>
+<a class="sourceLine" id="cb8-159" data-line-number="159"><span class="co">#&gt; min values  :         NA,         NA, 0.09937777,         NA, 0.09308220,         NA,         NA, 0.09426465,         NA,         NA, 0.10470568,         NA, 0.09455165,         NA,         NA, ... </span></a>
+<a class="sourceLine" id="cb8-160" data-line-number="160"><span class="co">#&gt; max values  :         NA,         NA,  0.1483180,         NA,  0.1420667,         NA,         NA,  0.1392520,         NA,         NA,  0.1505259,         NA,  0.1515075,         NA,         NA, ...</span></a></code></pre></div>
 </div>
   </div>
 

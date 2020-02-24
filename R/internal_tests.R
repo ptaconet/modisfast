@@ -57,7 +57,7 @@
 #' @noRd
 
 .testRoi<-function(roi){
-  if(!inherits(roi,c("sf","sfc")) || unique(sf::st_geometry_type(roi))!="POLYGON" || is.na(roi) || nrow(roi)>1 ){stop("Argument roi must be an object of class sf or sfc with one single POLYGON-type feature geometry")}
+  if(!inherits(roi,c("sf","sfc")) || unique(sf::st_geometry_type(roi))!="POLYGON" || is.na(roi) || (inherits(roi,"sf") && nrow(roi)>1 ) || (inherits(roi,"sfc") && length(roi)>1 ) ){stop("Argument roi must be an object of class sf or sfc with one single POLYGON-type feature geometry")}
 }
 
 #' @name .testTimeRange

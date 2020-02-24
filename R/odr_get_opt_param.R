@@ -60,7 +60,7 @@
 #'}
 
 
-odr_get_opt_param<-function(collection,roi,credentials=NULL){
+odr_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
 
   . <- odap_coll_info <- odap_source <- odap_server <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- odap_crs <- odap_urlExample <- modis_tile <- OpendapURL <- OpenDAPtimeVector <- OpenDAPXVector <- OpenDAPYVector <- roi_bbox <- Opendap_minLat <- Opendap_maxLat <- Opendap_minLon <- Opendap_maxLon <- roiSpatialIndexBound <- minLat <- maxLat <- minLon <- maxLon <- roiSpatialBound <- availableDimensions <- NULL
 
@@ -120,6 +120,7 @@ odr_get_opt_param<-function(collection,roi,credentials=NULL){
     ### MODIS
   } else if (odap_coll_info$source %in% c("MODIS","VIIRS")){
 
+    if(verbose){cat("Note : messages above ('although coordinates are longitude/latitude, st_intersection assumes that they are planar' and 'attribute variables are assumed to be spatially constant throughout all geometries') are not errors\n")}
 
     if (odap_coll_info$provider=="NASA USGS LP DAAC"){
      tiling <- modis_tiles

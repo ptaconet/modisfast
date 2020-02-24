@@ -89,7 +89,7 @@ mapview::mapview(roi,legend=F)
 
 Get the urls for MOD11A1.006, GPM_L3/GPM_3IMERGDF.06 and SMAP/SPL3SMP_E.003 collections for these 2 regions of interest and the time frame : 
 
-```{r odr_get_url, eval=NOT_CRAN}
+```{r odr_get_url, eval=F}
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
 ## Get the URLs of MODIS Terra LST daily
@@ -102,7 +102,7 @@ urls_mod11a1 <- odr_get_url(
 
 ## Get the URLs of GPM daily
 urls_gpm <- odr_get_url(
-  collection = "GPM_L3/GPM_3IMERGDF.06",
+  collection = "GPM_3IMERGDF.06",
   variables = c("precipitationCal","precipitationCal_cnt"),
   roi = roi,
   time_range = time_range
@@ -110,7 +110,7 @@ urls_gpm <- odr_get_url(
 
 ## Get the URLs of SMAP 3-days
 urls_smap <- odr_get_url(
-  collection = "SMAP/SPL3SMP_E.003",
+  collection = "SPL3SMP_E.003",
   variables = c("Soil_Moisture_Retrieval_Data_AM_soil_moisture","Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag","Soil_Moisture_Retrieval_Data_PM_soil_moisture_pm","Soil_Moisture_Retrieval_Data_PM_retrieval_qual_flag_pm"),
   roi = roi,
   time_range = time_range
@@ -235,7 +235,7 @@ print(str(res_dl))
 
 `stars` or `ncdf4` object are best adapted for these kind of spatiotemporal data. However, in this example we will show how to import them as lists of `RasterLayer` objects : one list for each time range.
 
-First, we write the functions to import the data as `RasterLayer` objects (check out [Important note regarding the further import of the data in R](https://ptaconet.github.io/opendapr/index.html#important-note-import) in the README for additional information)
+First, we write the functions to import the data as `RasterLayer` objects (check out [Important note regarding the further import of the data in R](https://ptaconet.github.io/opendapr/articles/opendapr1.html#data_import_note) in the [`vignette("opendapr1")`](https://ptaconet.github.io/opendapr/articles/opendapr1.html) for additional information)
 
 ```{r functions_import, eval=NOT_CRAN}
 ## Function to import MODIS or VIIRS data
@@ -276,6 +276,7 @@ First, we write the functions to import the data as `RasterLayer` objects (check
 We now use these functions to import the data (here, only 1 band is selected for each data collection). Output is a list of 4 elements (1 by time frame provided in `time_ranges` ). Each element is a RasterBrick containing 1 layer for each day (hence, here, 30 days).
 
 ```{r import, eval=NOT_CRAN}
+# MODIS
 modis_ts <- urls_mod11a1 %>%
   purrr::map(~.import_modis(.$destfile,"LST_Day_1km"))
 ## or even better : as stars objects (will import all the bands, i.e. no need to select one band only)
@@ -283,10 +284,12 @@ modis_ts <- urls_mod11a1 %>%
 #   purrr::map(~stars::read_stars(.$destfile)) %>%
 #   purrr::map(~st_set_crs(.,"+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"))
 
+# GPM
 gpm_ts <- urls_gpm %>%
   purrr::map(~.import_gpm(.$destfile,"precipitationCal"))
 
-smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
+# SMAP
+smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = "SPL3SMP_E.003")$roiSpatialBound$`1`
 smap_ts <- urls_smap %>%
   purrr::map(~.import_smap(.$destfile,"Soil_Moisture_Retrieval_Data_AM_soil_moisture",smap_sp_bound))
 

@@ -5,39 +5,39 @@
 
 <!-- badges: start -->
 
+<!--
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3)
-[![Travis build
-status](https://travis-ci.org/ptaconet/opendapr.svg?branch=master)](https://travis-ci.org/ptaconet/opendapr)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/opendapr)](https://cran.r-project.org/package=opendapr)
-[![Github\_Status\_Badge](https://img.shields.io/badge/Github-0.1.0-blue.svg)](https://github.com/ptaconet/opendapr)
+[![Travis build status](https://travis-ci.org/ptaconet/opendapr.svg?branch=master)](https://travis-ci.org/ptaconet/opendapr)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/opendapr)](https://cran.r-project.org/package=opendapr)
+[![Github_Status_Badge](https://img.shields.io/badge/Github-0.1.0-blue.svg)](https://github.com/ptaconet/opendapr)
 <!-- badges: end -->
 
-opendapr is an R package that provides functions to **harmonize** and
-**speed-up** the **download** of some well-known and widely-used
+**opendapr** is an R package that provides functions to **harmonize**
+and **speed-up** the **download** of some well-known and widely-used
 **spatiotemporal Earth science datacubes** (e.g.
 [MODIS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/),
 [VIIRS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/),
 [GPM](https://pmm.nasa.gov/GPM) or [SMAP](https://smap.jpl.nasa.gov/))
-using the [**OPeNDAP framework**](https://www.opendap.org/about).
+using the [**OPeNDAP framework**](https://www.opendap.org/about)
+(*Open-source Project for a Network Data Access Protocol*)
 
 ***Harmonize ?***
 
-opendapr uses a single function to query the various data servers, and
-output data are proposed in various formats (NetCDF, ASCII, JSON).
+**opendapr** proposes a single function to query the various data
+servers, and another single function to download the data.
 
 ***Speed-up ?***
 
-**opendapr** uses the abilities offered by the OPeNDAP (*Open-source
-Project for a Network Data Access Protocol*) to download a subset of
-data cube, along spatial, temporal or any other data dimension (depth,
-…). This way, it reduces downloading time and disk usage to their
-minimum : no more 1° x 1° MODIS tiles when your region of interest is
-only 100 km x 100 km wide \! Moreover, **opendapr** supports
-parallelized downloads.
+**opendapr** uses the abilities offered by the OPeNDAP to download a
+subset of data cube, along spatial, temporal or any other data dimension
+(depth, …). This way, it reduces downloading time and disk usage to
+their minimum : no more 1° x 1° MODIS tiles when your region of interest
+is only 100 km x 100 km wide \! Moreover, opendapr supports parallelized
+downloads.
 
 Below is a comparison of opendapr with other packages available for
-downloading chunks of remote sensing
-data:
+downloading chunks of remote sensing data
+:
 
 | Package                                                |          Data           | Spatial subsetting\* | Dimensional subsetting\* |
 | :----------------------------------------------------- | :---------------------: | :------------------: | :----------------------: |
@@ -48,6 +48,16 @@ data:
 | [`smapr`](https://github.com/ropensci/smapr)           |          SMAP           |          ❌           |            ❌             |
 
 \* at the downloading phase
+
+By enabling to download subsets of data cubes, opendapr facilites the
+access to Earth science data for R users in places where internet
+connection is slow or expensive and promotes digital sobriety for our
+research work.
+
+The OPeNDAP, over which the package builds, is developed and advanced
+openly and collaboratively, by the non-profit [OPeNDAP,
+Inc.](https://www.opendap.org/about). By using this data access
+protocol, opendapr support the open-source-software movement.
 
 ## Installation
 
@@ -68,36 +78,10 @@ devtools::install_github("ptaconet/opendapr")
 
 Work is ongoing to publish the package on the CRAN.
 
-## Get Started
+## Collections available in opendapr
 
-Downloading the data with **opendapr** is a simple two-steps workflow :
-
-1.  With the function **`odr_get_url()`**, get the URL(s) of the data
-    for:
-
-<!-- end list -->
-
-  - a collection : see [next section](#coll-available),
-  - variables,
-  - region of interest (`sf`/`sfc` polygon),
-  - time range,
-  - output data format (netcdf, ascii, json)
-
-<!-- end list -->
-
-2.  With the function **`odr_download_data()`**: Download the data to
-    your computer.
-
-Additional functions include : login to EOSDIS Earthdata before querying
-the servers and downloading the data (`odr_login()`), list collection
-available for download ( `odr_list_collections()` ), list variables
-available for each collection ( `odr_list_variables()` ).
-
-Have a look at the [example](#example) below for a simple use case \!
-
-## Collections available in **opendapr**
-
-Currently **opendapr** supports data dowload from :
+Currently **opendapr** supports download of 77 data collections,
+extracted from the following meta-collections :
 
   - [MODIS land
     products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/)
@@ -3292,40 +3276,56 @@ lights
 
 </details>
 
-## Example
+## Get Started
 
-Let’s say we want to download over the 50 km x 70 km wide region of
-interest located in Northern Ivory Coast (mapped above):
+Downloading the data with **opendapr** is a simple two-steps workflow :
 
-  - a 30 days-long time series of [MODIS/Terra Land Surface
-    Temperature/Emissivity Daily L3 Global 1km SIN
-    Grid](https://dx.doi.org/10.5067/MODIS/MOD11A1.006)
-    (collection=“MOD11A1.006”) ;
-  - the same 30 days-long times series of [GPM IMERG Final Precipitation
-    L3 1 day 0.1 degree x 0.1
-    degree](https://doi.org/10.5067/GPM/IMERGDF/DAY/06)
-    (collection=“GPM\_3IMERGDF.06”)
+  - With the function **`odr_get_url()`**, get the URL(s) of the data
+    for :
+    
+      - a collection : see [previous section](#coll-available),
+      - variables,
+      - region of interest,
+      - time range,
+      - output data format (netcdf, ascii, json)
 
-<details>
+  - Next, with the function **`odr_download_data()`** : download the
+    data to your computer.
 
-<summary>Map of the region of interest (click to
-expand)</summary>
+Additional functions include : list collection available for download (
+`odr_list_collections()` ), list variables available for each collection
+( `odr_list_variables()` ), login to EOSDIS Earthdata before querying
+the servers and downloading the data (`odr_login()`).
 
+**Have a look at the
+[`vignette("opendapr1")`](https://ptaconet.github.io/opendapr/articles/opendapr1.html)
+to get started with a simple example, and for a more advanced workflow
+see the
+[`vignette("opendapr2")`](https://ptaconet.github.io/opendapr/articles/opendapr2.html)
+\!**
+
+<!--
+
+## Example {#example}
+
+Let's say we want to download over the 50 km x 70 km wide region of interest located in Northern Ivory Coast (mapped above):
+
+- a 30 days-long time series of [MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid](https://dx.doi.org/10.5067/MODIS/MOD11A1.006) (collection="MOD11A1.006") ;
+- the same 30 days-long times series of [GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree](https://doi.org/10.5067/GPM/IMERGDF/DAY/06) (collection="GPM_3IMERGDF.06")
+
+<details><summary>Map of the region of interest (click to expand)</summary>
 <p>
 
-<img src="man/figures/README-plot_roi-1.png" width="100%" style="display: block; margin: auto auto auto 0;" />
+
 
 </p>
-
 </p>
-
 </details>
 
-We prepare the script : load the packages and login to EOSDIS Earthdata
-with our credentials (to create an account go to :
-<https://urs.earthdata.nasa.gov/>) .
+We prepare the script : load the packages and login to EOSDIS Earthdata with our credentials (to create an account go to : https://urs.earthdata.nasa.gov/) .
 
-``` r
+
+```r
 # Load the packages
 require(opendapr)
 require(sf)
@@ -3339,18 +3339,17 @@ time_range <- as.Date(c("2017-01-01","2017-01-30"))
 username <- Sys.getenv("earthdata_un") 
 password <- Sys.getenv("earthdata_pw")
 log <- odr_login(credentials = c(username,password), source = "earthdata")
-#> Checking credentials...
-#> Successfull login to earthdata
 ```
 
-Download the data in two steps :
+Download the data in two steps : 
 
-1.  Get the URLs with the function `odr_get_url()`;
-2.  Download the data with the function `odr_download_data()`.
+1. Get the URLs with the function `odr_get_url()`;
+2. Download the data with the function `odr_download_data()`.
 
-Let’s also see and how much the downloaded file weight.
+Let's also see how much the downloaded files weight.
 
-``` r
+
+```r
 ## Get the URLs for MOD11A1.006
 urls_mod11a1 <- odr_get_url(
   collection = "MOD11A1.006",
@@ -3366,87 +3365,41 @@ urls_gpm <- odr_get_url(
  )
 
 print(str(urls_mod11a1))
-#> 'data.frame':    1 obs. of  4 variables:
-#>  $ time_start: Date, format: "2017-01-01"
-#>  $ name      : chr "MOD11A1.006.2017001_2017030.h17v08"
-#>  $ url       : chr "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__
-#>  $ destfile  : chr "MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4"
-#> NULL
 
 print(str(urls_gpm))
-#> 'data.frame':    30 obs. of  4 variables:
-#>  $ time_start: Date, format: "2017-01-01" "2017-01-02" ...
-#>  $ name      : chr  "3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170104-S000000-E235959.V06" ...
-#>  $ url       : chr  "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170103-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170104-S0000"| __truncated__ ...
-#>  $ destfile  : chr  "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170104-S000000-E235959.V06.nc4" ...
-#> NULL
 
 ## Download the data. Destination file for each dataset is specified in the column "destfile" of the data.frames urls_mod11a1 and urls_gpm
 df_to_dl <- rbind(urls_mod11a1,urls_gpm)
 res_dl <- odr_download_data(df_to_dl,source="earthdata",parallel = TRUE)
 
 print(str(res_dl))
-#> 'data.frame':    31 obs. of  7 variables:
-#>  $ time_start: Date, format: "2017-01-01" "2017-01-01" ...
-#>  $ name      : chr  "MOD11A1.006.2017001_2017030.h17v08" "3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06" ...
-#>  $ url       : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170103-S0000"| __truncated__ ...
-#>  $ destfile  : chr  "MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4" "GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4" ...
-#>  $ fileDl    : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...
-#>  $ fileSize  : num  633387 60802 60817 60827 60794 ...
-#>  $ dlStatus  : num  3 3 3 3 3 3 3 3 3 3 ...
-#> NULL
 
 (tot_weight <- sum(res_dl$fileSize)/1000000)
-#> [1] 2.461542
+#`r round(tot_weight,1)` Mb in total !
+
 ```
 
-2.5 Mb in total \!
 
-We could also have subset the bands to download, using the parameter
-`variables` of the function `odr_get_url()`.
+We could also have subset the bands to download, using the parameter `variables` of the function `odr_get_url()`.
 
-To further import the data in R, have a look at the section [Important
-note regarding the further import of the data in
-R](#important-note-regarding-the-further-import-of-the-data-in-r) \!
+To further import the data in R, have a look at the section [Important note regarding the further import of the data in R](#important-note-regarding-the-further-import-of-the-data-in-r) ! 
 
-Simple or advanced data download and import workflows are provided
-respectively in the vignettes `vignette("opendapr1")` and
-`vignette("opendapr2")`.
+Simple or advanced data download and import workflows are provided respectively in the vignettes `vignette("opendapr1")` and `vignette("opendapr2")`.
 
-## Important note regarding the further import of the data in R
+## Important note regarding the further import of the data in R {#important-note-import}
 
-Various packages and related classes can be used to read the data
-downloaded through OPeNDAP. If `raster` is surely the most famous class
-for raster objects, many packages facilitate the use of spatiotemporal
-data cubes in formats such as those proposed through opendapr
-(e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as
-a `stars` object from the excellent
-[`stars`](https://cran.r-project.org/package=stars) package for data
-cubes manipulation. All the data can also be imported as `ncdf4` objects
-using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4)
-package, or `RasterLayer` of the
-[`raster`](https://cran.r-project.org/package=raster) package.
+Various packages and related classes can be used to read the data downloaded through OPeNDAP. If `raster` is surely the most famous class for raster objects, many packages facilitate the use of spatiotemporal data cubes in formats such as those proposed through opendapr (e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as a `stars` object from the excellent [`stars`](https://cran.r-project.org/package=stars) package for data cubes manipulation. All the data can also be imported as `ncdf4` objects using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4) package, or `RasterLayer` of the [`raster`](https://cran.r-project.org/package=raster) package.
 
-In any case, care must be taken when importing data that was downloaded
-through the OPeNDAP data providers servers. Depending on the collection,
-some “issues” were raised. These issues are independant from opendapr :
-they result most of time of a kind of lack of full implementation of the
-OPeNDAP framework by the data providers. These issues are :
+In any case, care must be taken when importing data that was downloaded through the OPeNDAP data providers servers. Depending on the collection, some "issues" were raised. These issues are independant from opendapr : they result most of time of a kind of lack of full implementation of the OPeNDAP framework by the data providers. These issues are :
 
-  - for MODIS and VNP collections : CRS has to be provided
-  - for GPM collections : CRS has to be provided + data have to be
-    flipped
-  - for SMAP collections : CRS + bounding coordinates of the data have
-    to be provided
+- for MODIS and VNP collections : CRS has to be provided
+- for GPM collections : CRS has to be provided + data have to be flipped
+- for SMAP collections : CRS + bounding coordinates of the data have to be provided
 
-These issues can easily be dealt at the import phase in R. The functions
-below includes the processings that have to be done at the data import
-phase in order to open the data as `raster` objects. (argument
-`destfiles` is the path to a dataset downloaded with opendapr - output
-of `odr_get_url()$destfile` - and `variable` is the name of a variable
-to import).
+These issues can easily be dealt at the import phase in R. The functions below includes the processings that have to be done at the data import phase in order to open the data as `raster` objects. (argument `destfiles` is the path to a dataset downloaded with opendapr - output of `odr_get_url()$destfile` - and `variable` is the name of a variable to import).
 
-``` r
+
+```r
 require(raster)
 require(purrr)
 ## Function to import MODIS or VIIRS products as RasterLayer object. 
@@ -3465,7 +3418,8 @@ require(purrr)
 }
 ```
 
-``` r
+
+```r
 require(raster)
 require(purrr)
 ## Function to import GPM products as RasterLayer object
@@ -3480,7 +3434,8 @@ require(purrr)
 }
 ```
 
-``` r
+
+```r
 require(raster)
 require(purrr)
 require(ncdf4)
@@ -3496,6 +3451,22 @@ smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = "SMAP/SPL3S
   return(rasts)
 }
 ```
+-->
+
+<!--
+## Objectives
+
+opendapr provides an entry point to some specific OPeNDAP servers (e.g. MODIS, VNP, GPM or SMAP) via HTTPS. The development of the package was motivated by the following reasons : 
+
+* **Providing a simple and single way in R to download data stored on heterogeneous servers** : People that use Earth science data often struggle with data access. In opendapr we propose a harmonized way to download data from various providers that have implemented access to their data through OPeNDAP.
+* **Fastening the data import phase**, especially for large time series analysis.
+
+Apart from these performance aspects, ethical considerations have driven the development of this package :
+
+* **Facilitating the access to Earth science data for R users in places where internet connection is slow or expensive** : Earth science products are generally huge files that can be quite difficult to download in places with slow internet connection, even more if large time series are needed. By enabling to download strictly the data that is needed, the products become more accessible in those places;
+* **Caring about the environmental digital impact of our research work** : Downloading data has an impact on environment and to some extent contributes to climate change. By downloading only the data that is need (rather than e.g a whole MODIS tile, or a global SMAP or GPM dataset) we somehow promote digital sobriety. 
+* **Supporting the open-source-software movement** : The OPeNDAP is developed and advanced openly and collaboratively, by the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about) This open, powerfull and standard data access protocol is more and more used, by major Earth science data providers (e.g. NASA or NOAA). Using OPeNDAP means supporting methods for data access protocols that are open, build collaboratively and shared.
+-->
 
 <!--
 ## Citation
@@ -3514,50 +3485,17 @@ Next developments may involve :
 
 Any contribution is welcome \!
 
-## Context and other thoughts
-
-opendapr provides an entry point to some specific OPeNDAP servers
-(e.g. MODIS, VNP, GPM or SMAP) via HTTPS. The development of the
-package was motivated by the following reasons :
-
-  - **Providing a simple and single way in R to download data stored on
-    heterogeneous servers** : People that use Earth science data often
-    struggle with data access. In opendapr we propose a harmonized way
-    to download data from various providers that have implemented access
-    to their data through OPeNDAP.
-  - **Fastening the data import phase**, especially for large time
-    series analysis.
-
-Apart from these performance aspects, ethical considerations have driven
-the development of this package :
-
-  - **Facilitating the access to Earth science data for R users in
-    places where internet connection is slow or expensive** : Earth
-    science products are generally huge files that can be quite
-    difficult to download in places with slow internet connection, even
-    more if large time series are needed. By enabling to download
-    strictly the data that is needed, the products become more
-    accessible in those places;
-  - **Caring about the environmental digital impact of our research
-    work** : Downloading data has an impact on environment and to some
-    extent contributes to climate change. By downloading only the data
-    that is need (rather than e.g a whole MODIS tile, or a global SMAP
-    or GPM dataset) we somehow promote digital sobriety.
-  - **Supporting the open-source-software movement** : The OPeNDAP is
-    developed and advanced openly and collaboratively, by the non-profit
-    [OPeNDAP, Inc.](https://www.opendap.org/about) This open, powerfull
-    and standard data access protocol is more and more used, by major
-    Earth science data providers (e.g. NASA or NOAA). Using OPeNDAP
-    means supporting methods for data access protocols that are open,
-    build collaboratively and shared.
-
-## Acknowledgment
+## Acknowledgments
 
 We thank NASA and its partners for making all their Earth science data
 freely available, and implementing open data access protocols such as
 OPeNDAP. opendapr heavily builds on top of the OPeNDAP, so we thank the
 non-profit [OPeNDAP, Inc.](https://www.opendap.org/about) for developing
 the eponym tool in an open and collaborative way.
+
+We also thank the contributors that have tested the package, reviewed
+the documentation and brought valuable feedbacks to improve the package
+: [Florian de Boissieu](https://github.com/floriandeboissieu)
 
 The initial development and first release of this package were financed
 by the [MIVEGEC](https://www.mivegec.ird.fr/en/) unit of the [French

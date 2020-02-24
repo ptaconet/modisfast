@@ -5,9 +5,9 @@
 .notes_articles.txt
 config.yml
 tests/testthat/data/
-GPM_L3/
+GPM_3IMERGDF.06/
 MOD11A1.006/
-SMAP/
+SPL3SMP_E.003/
 VNP46A1/
 Meta
 data

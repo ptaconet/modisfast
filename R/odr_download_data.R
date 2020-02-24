@@ -36,7 +36,7 @@
 #'
 #'
 
-odr_download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL,verbose=FALSE){
+odr_download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL,verbose=TRUE){
 
   fileSize <- destfile <- fileDl <- NULL
 
@@ -122,6 +122,7 @@ odr_download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL
   # 1 : download ok
   # 2 : download error
   # 3 : data already existing in output folder
+  if(verbose){cat("OK\n")}
 
   return(data_dl)
 }

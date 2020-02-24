@@ -9,7 +9,7 @@ odr_get_opt_param(collection, roi, credentials = NULL)
 \arguments{
 \item{collection}{string. mandatory. Collection of interest (see details of \link{odr_get_url}).}
 
-\item{roi}{object of class \code{sf} or \code{sfc}. mandatory. Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details of \link{odr_get_url}).}
+\item{roi}{object of class \code{sf} or \code{sfc}. mandatory. Region of interest. Must be POLYGON-type geometry composed of one single feature.}
 
 \item{credentials}{vector string of length 2 with username and password. optional.}
 }

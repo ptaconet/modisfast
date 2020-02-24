@@ -26,11 +26,11 @@
   . <- Name <- NULL
 
   .testRoi(roi)
+
   roi <- sf::st_transform(roi,4326) %>%
     sf::st_bbox() %>%
     sf::st_as_sfc()
 
-  options(warn=-1)
   #modis_tile = sf::read_sf("https://modis.ornl.gov/files/modis_sin.kmz") %>%
   if(type=="modis"){
     tiling_system <- modis_tiles
@@ -44,8 +44,6 @@
     dplyr::select(Name)
 
   modis_tile <- modis_tile$Name
-
-  options(warn=0)
 
     all_modis_tiles <- NULL
     for(i in 1:length(modis_tile)){

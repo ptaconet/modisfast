@@ -81,8 +81,8 @@ usethis::use_data(opendapMetadata_internal,modis_tiles,suomi_tiles, internal = T
 #dir.create("inst/extdata")
 #file.copy(roi_example,gsub("getRemoteData","opendapr",roi_example))
 
-roi_modis2tiles<-"/home/ptaconet/Documents/modis2tiles.gpkg"
-file.copy(roi_modis2tiles,gsub("Documents","opendapr/inst/extdata",roi_modis2tiles))
+#roi_modis2tiles<-"/home/ptaconet/Documents/modis2tiles.gpkg"
+#file.copy(roi_modis2tiles,gsub("Documents","opendapr/inst/extdata",roi_modis2tiles))
 
 ### To add a config file with username and password to usgs. More info : https://db.rstudio.com/best-practices/managing-credentials/
 file.create("config.yml")
@@ -100,7 +100,7 @@ devtools::install(build_vignettes = TRUE)
 
 ## To build a website with home and vignettes
 usethis::use_package_doc()
-usethis::use_tibble()
+#usethis::use_tibble()
 devtools::document()
 pkgdown::build_site()
 usethis::use_build_ignore("docs")

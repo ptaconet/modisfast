@@ -1,10 +1,10 @@
 ---
-title: "1. Simple workflow : Download and import data for a given region of interest and time frame"
+title: "1. Get started "
 author: "Paul Taconet"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Simple data import workflow}
+  %\VignetteIndexEntry{Get started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -32,9 +32,9 @@ require(purrr)
 
 In this example we want to download, import and plot over the 3500 km^2^ wide region of interest (mapped below) :
 
-- a 30 days-long time series of land surface temperature from [MODIS Terra LST](https://dx.doi.org/10.5067/MODIS/MOD11A1.006) (collection *MOD11A1.006*) (spatial resolution : 1 km ; temporal resolution : 1 day),
-- the same 30 days-long times series of precipitations from [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERGDF/DAY/06) (collection *GPM_L3/GPM_3IMERGDF.06*) (spatial resolution : 1° ; temporal resolution : 1 day)
-- the same 30 days-long times series of soil moisture from [SMAP Daily](https://doi.org/10.5067/T90W6VRLCBHI) (collection *SMAP/SPL3SMP_E.003*) (spatial resolution : 9 km ; temporal resolution : 2/3 days)
+- a 30 days-long time series of land surface temperature from [MODIS Terra LST](https://dx.doi.org/10.5067/MODIS/MOD11A1.006) (spatial resolution : 1 km ; temporal resolution : 1 day),
+- the same 30 days-long times series of precipitations from [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERGDF/DAY/06) (spatial resolution : 1° ; temporal resolution : 1 day)
+- the same 30 days-long times series of soil moisture from [SMAP Daily](https://doi.org/10.5067/T90W6VRLCBHI) (spatial resolution : 9 km ; temporal resolution : 2/3 days)
 
 ```{r, echo=F, fig.height=5, fig.width=3, eval=NOT_CRAN }
 require(mapview)
@@ -42,13 +42,28 @@ roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -
 mapview::mapview(roi,legend=F)
 ```
 
+## Check which collections are available 
+
+Before starting, let's identify our collections of interest among the collections that are available for download, using the function `odr_list_collections()` :
+
+```{r odr_list_collections, eval=NOT_CRAN}
+collections <- odr_list_collections()
+print(str(collections))
+```
+
+So our collections of interest are : 
+
+- *MOD11A1.006*
+- *GPM_3IMERGDF.06*
+- *SPL3SMP_E.003*
+
 ## Setup the region and time range of interest
 
 First we prepare the script : define the ROI and the time frame
 
 ```{r example_prepare, eval=NOT_CRAN}
 # Set ROI and time range of interest
-roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
+roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326)
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 ```
 
@@ -134,64 +149,114 @@ print(str(res_dl))
 
 ## Import the data in R {#import}
 
-We finally import the data in R. 
+Various packages and related classes can be used to read the data downloaded through OPeNDAP. If `raster` is surely the most famous class for raster objects, many packages facilitate the use of spatiotemporal data cubes in formats such as those proposed through opendapr (e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as a `stars` object from the excellent [`stars`](https://cran.r-project.org/package=stars) package for data cubes manipulation. All the data can also be imported as `ncdf4` objects using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4) package, or `RasterLayer` of the [`raster`](https://cran.r-project.org/package=raster) package.
 
-Caution ! Have a look at the section [Important note regarding the further import of the data in R](https://ptaconet.github.io/opendapr/index.html#important-note-import) of the README for additional information and important note on the data import phase in R !
+### Important note regarding the import of the data in R {#data_import_note}
 
-### Import MODIS / VNP {#import-modis-vnp}
+In any case, care must be taken when importing data that was downloaded through the OPeNDAP data providers servers. Depending on the collection, some "issues" were raised. These issues are independant from opendapr : they result most of time of a kind of lack of full implementation of the OPeNDAP framework by the data providers. These issues are :
 
-#### As a `RasterLayer` object
+- for MODIS and VIIRS collections : CRS has to be provided
+- for GPM collections : CRS has to be provided + data have to be flipped
+- for SMAP collections : CRS + bounding coordinates of the data have to be provided
+
+These issues can easily be dealt at the import phase in R. Below we propose some functions that include the processings that have to be done at the data import phase in order to open the data as `raster` objects. (argument `destfiles` is the path to a dataset downloaded with opendapr - output of `odr_get_url()$destfile` - and `variable` is the name of a variable to import).
+
+### Functions to import the data in R
+
+#### Import MODIS / VIIRS {#import-modis-vnp}
+
+As a `RasterLayer` object :
 
 ```{r import_modis_vnp_raster, eval=NOT_CRAN }
-# Import the MODIS time series as a rasterBrick object (1 rasterBrick for each dimension) :
-  (mod11a1_rast_day <- urls_mod11a1$destfile %>%
-  raster::brick(varname="LST_Day_1km",crs="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"))
+## Functions to import MODIS and VIIRS products as RasterLayer object
+# In case the ROI covers one single MODIS tile :
+require(raster)
+.import_modis_onetile <- function(destfiles,variable){
+  rasts <- destfiles %>%
+    raster::brick(.,varname=variable,crs="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")
+  return(rasts)
+}
 
-# The same can be done with the other variables (LST_Night_1km, etc.)
+# In case the ROI covers multiple MODIS tiles :
+.import_modis_moretiles <- function(destfiles,variable){
+  rasts <- destfiles %>%
+    purrr::map(~raster::brick(.,varname=variable,crs="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")) %>%
+    do.call(merge,.)
+  return(rasts)
+}
 ```
 
-#### As a `stars` object
+As a `stars` object :
 
 We can also import the same MODIS time series as a `stars` object. Here the interesting point is that all the dimensions are imported at once.
 
 ```{r import_modis_vnp_stars, eval=NOT_CRAN }
-(mod11a1_stars <- stars::read_stars(urls_mod11a1$destfile) %>% st_set_crs("+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"))
+## Functions to import MODIS and VIIRS products as stars object
+.import_modis_stars <- function(destfiles){
+  stars <- stars::read_stars(destfiles) %>% 
+    st_set_crs("+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")
+  return(stars)
+}
 # plot(mod11a1_stars)
 ```
 
-### Import GPM {#import-gpm}
+#### Import GPM {#import-gpm}
 
-#### As a `RasterLayer` object
+As a `RasterLayer` object :
 
 ```{r import_gpm, message=F, eval=NOT_CRAN}
-## Import the GPM time series as a rasterBrick object (1 rasterBrick for each dimension) :
-(gpm_rast_precipitationcal <- urls_gpm$destfile %>%
-  purrr::map(~raster(.,varname="precipitationCal",crs="+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 ")) %>%
-  raster::brick() %>%
-  raster::t() %>%
-  raster::flip("y") %>%
-  raster::flip("x"))
-
-# The same can be done with the other variables ("precipitationCal_cnt", etc.)
+## Function to import GPM products as RasterLayer object
+require(purrr)
+.import_gpm <- function(destfiles,variable){
+  rasts <- destfiles %>%
+    purrr::map(~raster(., varname = variable,crs = "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 ")) %>%
+    raster::brick() %>%
+    raster::t() %>%
+    raster::flip("y") %>%
+    raster::flip("x")
+  return(rasts)
+}
 ```
 
-### Import SMAP {#import-smap}
+#### Import SMAP {#import-smap}
 
-#### As a `RasterLayer` object
+As a `RasterLayer` object :
 
 We set-up the missing bounding coordinates. For this we use the function `odr_get_opt_param()`.
 
 ```{r import_smap, message=F, eval=NOT_CRAN}
-## Import the SMAP time series as a rasterBrick object (1 rasterBrick for each dimension) :
-smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
-  
-(smap_rast_sm_am <- urls_smap$destfile %>%
-  purrr::map(~ncdf4::nc_open(.)) %>%
-  purrr::map(~ncdf4::ncvar_get(., "Soil_Moisture_Retrieval_Data_AM_soil_moisture")) %>%
-  purrr::map(~raster(t(.), ymn=smap_sp_bound[1], ymx=smap_sp_bound[2], xmn=smap_sp_bound[3], xmx=smap_sp_bound[4], crs="+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")) %>%  # EPSG : 6933
-  raster::brick())
+## Function to import SMAP products as RasterLayer object
+require(purrr)
+require(ncdf4)
+require(raster)
 
-# The same can be done with the other variables (Soil_Moisture_Retrieval_Data_AM_retrieval_qual_flag, etc.)
+smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = "SPL3SMP_E.003")$roiSpatialBound$`1`
+
+.import_smap <- function(destfiles,variable,smap_sp_bound){
+ rasts <- destfiles %>%
+   purrr::map(~ncdf4::nc_open(.)) %>%
+   purrr::map(~ncdf4::ncvar_get(., "Soil_Moisture_Retrieval_Data_AM_soil_moisture")) %>%
+   purrr::map(~raster(t(.), ymn=smap_sp_bound[1], ymx=smap_sp_bound[2], xmn=smap_sp_bound[3], xmx=smap_sp_bound[4], crs="+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")) %>%  # EPSG : 6933
+   raster::brick()
+  return(rasts)
+}
+```
+
+#### Import the data from our example
+
+So let's import the data from our example, using the functions provided below : 
+
+```{r import_example, message=F, eval=NOT_CRAN}
+# import MOD11A1.006
+mod11a1_rast_day <- .import_modis_onetile(urls_mod11a1$destfile, "LST_Day_1km")
+# import GPM
+gpm_rast_precipitationcal <- .import_gpm(urls_gpm$destfile, "precipitationCal")
+# import SPL3SMP_E.003
+smap_rast_sm_am <- .import_smap(urls_smap$destfile, "Soil_Moisture_Retrieval_Data_AM_soil_moisture",smap_sp_bound)
+
+mod11a1_rast_day
+gpm_rast_precipitationcal
+smap_rast_sm_am
 ```
 
 ## Plot the data

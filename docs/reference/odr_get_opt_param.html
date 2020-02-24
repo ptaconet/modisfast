@@ -88,7 +88,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/opendapr1.html">1. Simple workflow : Download and import data for a given region of interest and time frame</a>
+      <a href="../articles/opendapr1.html">1. Get started </a>
     </li>
     <li>
       <a href="../articles/opendapr2.html">2. Advanced use of `odr_get_url()`</a>
@@ -138,7 +138,7 @@
     </tr>
     <tr>
       <th>roi</th>
-      <td><p>object of class <code>sf</code> or <code>sfc</code>. mandatory. Region of interest. Must be POLYGON-type geometry. Can be composed of several features (see details of <a href='odr_get_url.html'>odr_get_url</a>).</p></td>
+      <td><p>object of class <code>sf</code> or <code>sfc</code>. mandatory. Region of interest. Must be POLYGON-type geometry composed of one single feature.</p></td>
     </tr>
     <tr>
       <th>credentials</th>
@@ -174,7 +174,7 @@ This will save much time, as internal parameters will be calculated only once.</
 #&gt; <span class='message'>    is_null</span></div><div class='input'>
 <span class='co'># Login to Earthdata</span>
 <span class='no'>log</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='odr_login.html'>odr_login</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_un"</span>),<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_pw"</span>)),<span class='kw'>source</span><span class='kw'>=</span><span class='st'>"earthdata"</span>)</div><div class='output co'>#&gt; Checking credentials...
-#&gt; Successfull odr_login to earthdata </div><div class='input'>
+#&gt; Successfull login to earthdata </div><div class='input'>
 <span class='co'># Get the optional parameters for the collection MOD11A1.006 and the roi :</span>
 <span class='no'>roi</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/sf/topics/st_as_sf'>st_as_sf</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
 <span class='kw'>geom</span><span class='kw'>=</span><span class='st'>"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span>),
@@ -182,7 +182,7 @@ This will save much time, as internal parameters will be calculated only once.</
 
 <span class='no'>opt_param_mod11a1</span> <span class='kw'>&lt;-</span> <span class='fu'>odr_get_opt_param</span>(<span class='st'>"MOD11A1.006"</span>,<span class='no'>roi</span>)</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='warning'>Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/str'>str</a></span>(<span class='no'>opt_param_mod11a1</span>)</div><div class='output co'>#&gt; List of 7
 #&gt;  $ roiSpatialIndexBound:List of 1
-#&gt;   ..$ 1: int [1:4] 55 140 512 560
+#&gt;   ..$ 1: num [1:4] 55 140 512 560
 #&gt;  $ availableVariables  :'data.frame':	18 obs. of  6 variables:
 #&gt;   ..$ name                  : chr [1:18] "Latitude" "Longitude" "YDim" "XDim" ...
 #&gt;   ..$ long_name             : chr [1:18] "Latitude" "Longitude" "y coordinate of projection for grid MODIS_Grid_Daily_1km_LST" "x coordinate of projection for grid MODIS_Grid_Daily_1km_LST" ...
@@ -196,7 +196,7 @@ This will save much time, as internal parameters will be calculated only once.</
 #&gt;  $ OpenDAPYVector      :List of 1
 #&gt;   ..$ 1: num [1:1200] 1111951 1111024 1110097 1109171 1108244 ...
 #&gt;  $ OpenDAPtimeVector   :List of 1
-#&gt;   ..$ 1: num [1:7237] 54 55 56 57 58 59 60 61 62 63 ...
+#&gt;   ..$ 1: num [1:7238] 54 55 56 57 58 59 60 61 62 63 ...
 #&gt;  $ modis_tile          :List of 1
 #&gt;   ..$ 1: chr "h17v08"</div><div class='input'>
 <span class='co'># Now we can provide opt_param_mod11a1 as input parameter of the function odr_get_url().</span>

@@ -1,6 +1,6 @@
 *.html
 *.R
-/GPM_L3/*
-/SMAP/*
+/GPM_3IMERGDF.06/*
+/SPL3SMP_E.003/*
 /MOD11A1.006/*
 /VNP46A1/*

@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Harmonized and Optimized Download of Various Kinds of Spatio-Temporal Earth Science Data in R using the OPeNDAP Framework • opendapr</title>
+<title>Fast Download of many Earth Observation Data in R using the OPeNDAP Capacities • opendapr</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Harmonized and Optimized Download of Various Kinds of Spatio-Temporal Earth Science Data in R using the OPeNDAP Framework">
+<script src="pkgdown.js"></script><meta property="og:title" content="Fast Download of many Earth Observation Data in R using the OPeNDAP Capacities">
 <meta property="og:description" content="Provides functions to download various kinds of spatial-temporal Earth science datacubes in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) using the OPeNDAP framework.">
 <meta property="og:image" content="/logo.png">
 <meta name="twitter:card" content="summary">
@@ -54,7 +54,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/opendapr1.html">1. Simple workflow : Download and import data for a given region of interest and time frame</a>
+      <a href="articles/opendapr1.html">1. Get started </a>
     </li>
     <li>
       <a href="articles/opendapr2.html">2. Advanced use of `odr_get_url()`</a>
@@ -90,17 +90,61 @@
 <a href="#opendapr" class="anchor"></a>opendapr <img src="reference/figures/logo.png" align="right">
 </h1></div>
 <!-- badges: start -->
-
-<p>opendapr is an R package that provides functions to <strong>harmonize</strong> and <strong>speed-up</strong> the <strong>download</strong> of some well-known and widely-used <strong>spatiotemporal Earth science datacubes</strong> (e.g. <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/">MODIS</a>, <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/">VIIRS</a>, <a href="https://pmm.nasa.gov/GPM">GPM</a> or <a href="https://smap.jpl.nasa.gov/">SMAP</a>) using the <a href="https://www.opendap.org/about"><strong>OPeNDAP framework</strong></a>.</p>
+<!--
+[![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3)
+[![Travis build status](https://travis-ci.org/ptaconet/opendapr.svg?branch=master)](https://travis-ci.org/ptaconet/opendapr)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/opendapr)](https://cran.r-project.org/package=opendapr)
+[![Github_Status_Badge](https://img.shields.io/badge/Github-0.1.0-blue.svg)](https://github.com/ptaconet/opendapr)
+<!-- badges: end -->
+<p><strong>opendapr</strong> is an R package that provides functions to <strong>harmonize</strong> and <strong>speed-up</strong> the <strong>download</strong> of some well-known and widely-used <strong>spatiotemporal Earth science datacubes</strong> (e.g. <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/">MODIS</a>, <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/">VIIRS</a>, <a href="https://pmm.nasa.gov/GPM">GPM</a> or <a href="https://smap.jpl.nasa.gov/">SMAP</a>) using the <a href="https://www.opendap.org/about"><strong>OPeNDAP framework</strong></a> (<em>Open-source Project for a Network Data Access Protocol</em>)</p>
 <p><strong><em>Harmonize ?</em></strong></p>
-<p>opendapr uses a single function to query the various data servers, and output data are proposed in various formats (NetCDF, ASCII, JSON).</p>
+<p><strong>opendapr</strong> proposes a single function to query the various data servers, and another single function to download the data.</p>
 <p><strong><em>Speed-up ?</em></strong></p>
-<p>opendapr uses the abilities offered by OPeNDAP (<em>Open-source Project for a Network Data Access Protocol</em>) to download strictly the data that is needed : no more 1° x 1° MODIS tiles when our region of interest is only 100 km x 100 km wide ! This results in a reduction of the physical size of the data that is imported, and hence of the downloading time. In addition, opendapr enables to parallelize the download.</p>
-<p><a href="#other-packages"><em>Another package to download MODIS or SMAP data ?</em></a> Yes. But opendapr acts a bit differently and hopefully helps if you :</p>
-<ul>
-<li>are looking to import multiple kind of spatio-temporal Earth science data in R (e.g. MODIS, SMAP, GPM),</li>
-<li>are concerned about downloading time and / or data storage.</li>
-</ul>
+<p><strong>opendapr</strong> uses the abilities offered by the OPeNDAP to download a subset of data cube, along spatial, temporal or any other data dimension (depth, …). This way, it reduces downloading time and disk usage to their minimum : no more 1° x 1° MODIS tiles when your region of interest is only 100 km x 100 km wide ! Moreover, opendapr supports parallelized downloads.</p>
+<p>Below is a comparison of opendapr with other packages available for downloading chunks of remote sensing data :</p>
+<table class="table table">
+<thead><tr class="header">
+<th align="left">Package</th>
+<th align="center">Data</th>
+<th align="center">Spatial subsetting*</th>
+<th align="center">Dimensional subsetting*</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left"><a href="https://github.com/ptaconet/opendapr"><code>opendapr</code></a></td>
+<td align="center">MODIS, VIIRS, SMAP, GPM</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="https://github.com/MatMatt/MODIS"><code>MODIS</code></a></td>
+<td align="center">MODIS</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="https://github.com/ropensci/MODIStsp"><code>MODIStsp</code></a></td>
+<td align="center">MODIS</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="https://github.com/ropensci/MODISTools"><code>MODISTools</code></a></td>
+<td align="center">MODIS</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="https://github.com/ropensci/smapr"><code>smapr</code></a></td>
+<td align="center">SMAP</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+</tbody>
+</table>
+<p>* at the downloading phase</p>
+<p>By enabling to download subsets of data cubes, opendapr facilites the access to Earth science data for R users in places where internet connection is slow or expensive and promotes digital sobriety for our research work.</p>
+<p>The OPeNDAP, over which the package builds, is developed and advanced openly and collaboratively, by the non-profit <a href="https://www.opendap.org/about">OPeNDAP, Inc.</a>. By using this data access protocol, opendapr support the open-source-software movement.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -111,48 +155,26 @@ You can install the released version of opendapr from [CRAN](https://CRAN.R-proj
 install.packages("opendapr")
 ```
 -->
-<p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<p>The package can be installed with:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ptaconet/opendapr"</span>)</a></code></pre></div>
 <p>Work is ongoing to publish the package on the CRAN.</p>
 </div>
-<div id="how-to-use-opendapr" class="section level2">
-<h2 class="hasAnchor">
-<a href="#how-to-use-opendapr" class="anchor"></a>How to use opendapr ?</h2>
-<p>Downloading the data with opendapr is a simple two-steps workflow :</p>
-<ol style="list-style-type: decimal">
-<li>With the function <strong><code><a href="reference/odr_get_url.html">odr_get_url()</a></code></strong>: Retrieve the URL(s) of the data for a given collection, variables, time frame, region and output data format of interest ;</li>
-<li>With the function <strong><code><a href="reference/odr_download_data.html">odr_download_data()</a></code></strong>: Download the data to your computer.</li>
-</ol>
-<p>The <code><a href="reference/odr_get_url.html">odr_get_url()</a></code> function has the following input parameters that enable to select and filter the data of interest :</p>
-<ul>
-<li>
-<code>collection</code> : collection of interest (see <a href="#which-products-are-available-for-download-through-opendapr-">next section</a>);</li>
-<li>
-<code>variables</code> : variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted ;</li>
-<li>
-<code>roi</code> : region of interest (<code>sf</code> or <code>sfc</code> POLYGON-type object) ;</li>
-<li>
-<code>time_range</code> : date(s) / time(s) of interest (single date / datetime or time frame ) ;</li>
-<li>
-<code>output_format</code> : output format. Available options are : “nc4” (default), “ascii”, “json”</li>
-</ul>
-<p>Additional functions include : login to EOSDIS Earthdata before querying the servers and downloading the data (<code><a href="reference/odr_login.html">odr_login()</a></code>), list collection available for download ( <code><a href="reference/odr_list_collections.html">odr_list_collections()</a></code> ), list variables available for each collection ( <code><a href="reference/odr_list_variables.html">odr_list_variables()</a></code> ).</p>
-<p>Have a look at the <a href="#example">example</a> below for a simple use case !</p>
-</div>
 <div id="coll-available" class="section level2">
 <h2 class="hasAnchor">
-<a href="#coll-available" class="anchor"></a>Which products are available for download through opendapr ?</h2>
-<p>Currently opendapr enables to download data from four main collections :</p>
+<a href="#coll-available" class="anchor"></a>Collections available in opendapr</h2>
+<p>Currently <strong>opendapr</strong> supports download of 77 data collections, extracted from the following meta-collections :</p>
 <ul>
 <li>
-<a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/">MODIS land products</a>, made available by the <a href="https://lpdaac.usgs.gov/">NASA / USGS LP DAAC</a> (➡️ <a href="https://opendap.cr.usgs.gov/opendap/hyrax/">source OPeNDAP server</a>) ;</li>
+<a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/">MODIS land products</a> made available by the <a href="https://lpdaac.usgs.gov/">NASA / USGS LP DAAC</a> (➡️ <a href="https://opendap.cr.usgs.gov/opendap/hyrax/">source OPeNDAP server</a>) ;</li>
 <li>
-<a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/">VIIRS land products</a>, made available by the <a href="https://lpdaac.usgs.gov/">NASA / USGS LP DAAC</a> (➡️ <a href="https://opendap.cr.usgs.gov/opendap/hyrax/">source OPeNDAP server</a>) ;</li>
+<a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/">VIIRS land products</a> made available by the <a href="https://lpdaac.usgs.gov/">NASA / USGS LP DAAC</a> (➡️ <a href="https://opendap.cr.usgs.gov/opendap/hyrax/">source OPeNDAP server</a>) ;</li>
 <li>
-<a href="https://pmm.nasa.gov/GPM">Global Precipitation Measurement</a> (GPM), made available by the <a href="https://disc.gsfc.nasa.gov/">NASA / JAXA GES DISC</a> (➡️ <a href="https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3">source OPeNDAP server</a>) ;</li>
+<a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/">VIIRS land products</a> made available by the <a href="https://lpdaac.usgs.gov/">NASA LAADS DAAC</a> (➡️ <a href="https://ladsweb.modaps.eosdis.nasa.gov/opendap/hyrax/allData/5000/">source OPeNDAP server</a>) ;</li>
 <li>
-<a href="https://smap.jpl.nasa.gov/">Soil Moisture Active-Passive</a> (SMAP), made available by the <a href="https://nsidc.org/">NASA NSIDC DAAC</a> (➡️ <a href="https://n5eil02u.ecs.nsidc.org/opendap/SMAP/">source OPeNDAP server</a>)</li>
+<a href="https://pmm.nasa.gov/GPM">Global Precipitation Measurement</a> (GPM) made available by the <a href="https://disc.gsfc.nasa.gov/">NASA / JAXA GES DISC</a> (➡️ <a href="https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3">source OPeNDAP server</a>) ;</li>
+<li>
+<a href="https://smap.jpl.nasa.gov/">Soil Moisture Active-Passive</a> (SMAP) made available by the <a href="https://nsidc.org/">NASA NSIDC DAAC</a> (➡️ <a href="https://n5eil02u.ecs.nsidc.org/opendap/SMAP/">source OPeNDAP server</a>)</li>
 </ul>
 <p>Details of each product available for download are provided in the table above or through the function <code><a href="reference/odr_list_collections.html">odr_list_collections()</a></code>. Want more details on a specific collection ? Click on the “DOI” column !</p>
 <details><summary><b>Data collections available for download with opendapr (click to expand)</b></summary><p>
@@ -181,7 +203,7 @@ url_opendap_server
 <tbody>
 <tr>
 <td style="text-align:left;">
-GPM_L3/GPM_3IMERGDE.06
+GPM_3IMERGDE.06
 </td>
 <td style="text-align:left;">
 GPM IMERG Early Precipitation L3 1 day 0.1 degree x 0.1 degree V06
@@ -201,7 +223,7 @@ Rainfall
 </tr>
 <tr>
 <td style="text-align:left;">
-GPM_L3/GPM_3IMERGDF.06
+GPM_3IMERGDF.06
 </td>
 <td style="text-align:left;">
 GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V06
@@ -221,7 +243,7 @@ Rainfall
 </tr>
 <tr>
 <td style="text-align:left;">
-GPM_L3/GPM_3IMERGDL.06
+GPM_3IMERGDL.06
 </td>
 <td style="text-align:left;">
 GPM IMERG Late Precipitation L3 1 day 0.1 degree x 0.1 degree V06
@@ -241,7 +263,7 @@ Rainfall
 </tr>
 <tr>
 <td style="text-align:left;">
-GPM_L3/GPM_3IMERGHH.06
+GPM_3IMERGHH.06
 </td>
 <td style="text-align:left;">
 GPM IMERG Final Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
@@ -261,7 +283,7 @@ Rainfall
 </tr>
 <tr>
 <td style="text-align:left;">
-GPM_L3/GPM_3IMERGHHE.06
+GPM_3IMERGHHE.06
 </td>
 <td style="text-align:left;">
 GPM IMERG Early Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
@@ -281,7 +303,7 @@ Rainfall
 </tr>
 <tr>
 <td style="text-align:left;">
-GPM_L3/GPM_3IMERGHHL.06
+GPM_3IMERGHHL.06
 </td>
 <td style="text-align:left;">
 GPM IMERG Late Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
@@ -301,7 +323,7 @@ Rainfall
 </tr>
 <tr>
 <td style="text-align:left;">
-GPM_L3/GPM_3IMERGM.06
+GPM_3IMERGM.06
 </td>
 <td style="text-align:left;">
 GPM IMERG Final Precipitation L3 1 month 0.1 degree x 0.1 degree V06
@@ -1340,7 +1362,7 @@ Thermal Bands
 </tr>
 <tr>
 <td style="text-align:left;">
-SMAP/SPL3SMP_E.003
+SPL3SMP_E.003
 </td>
 <td style="text-align:left;">
 SMAP Enhanced L3 Radiometer Global Daily 9 km EASE-Grid Soil Moisture, Version 3
@@ -1698,186 +1720,210 @@ Surface reflectance
 <a href="https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA4.001/contents.html" class="uri">https://opendap.cr.usgs.gov/opendap/hyrax/VNP43MA4.001/contents.html</a>
 </td>
 </tr>
+<tr>
+<td style="text-align:left;">
+VNP46A1
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Daily Gridded Day Night Band 500m Linear Lat Lon Grid Night
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Nighttime lights
+</td>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP46A1.001" class="uri">https://doi.org/10.5067/VIIRS/VNP46A1.001</a>
+</td>
+<td style="text-align:left;">
+<a href="https://ladsweb.modaps.eosdis.nasa.gov/opendap/hyrax/allData/5000/VNP46A1/contents.html" class="uri">https://ladsweb.modaps.eosdis.nasa.gov/opendap/hyrax/allData/5000/VNP46A1/contents.html</a>
+</td>
+</tr>
 </tbody>
 </table></details>
 </div>
-<div id="example" class="section level2">
+<div id="get-started" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<p>Let’s say we want to download over the 50 km x 70 km wide region of interest located in Northern Ivory Coast (mapped above):</p>
+<a href="#get-started" class="anchor"></a>Get Started</h2>
+<p>Downloading the data with <strong>opendapr</strong> is a simple two-steps workflow :</p>
 <ul>
-<li>a 30 days-long time series of <a href="https://dx.doi.org/10.5067/MODIS/MOD11A1.006">MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid</a> (collection=“MOD11A1.006”) ;</li>
-<li>the same 30 days-long times series of <a href="https://doi.org/10.5067/GPM/IMERGDF/DAY/06">GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree</a> (collection=“GPM_L3/GPM_3IMERGDF.06”)</li>
+<li>
+<p>With the function <strong><code><a href="reference/odr_get_url.html">odr_get_url()</a></code></strong>, get the URL(s) of the data for :</p>
+<ul>
+<li>a collection : see <a href="#coll-available">previous section</a>,</li>
+<li>variables,</li>
+<li>region of interest,</li>
+<li>time range,</li>
+<li>output data format (netcdf, ascii, json)</li>
 </ul>
-<details><summary>Map of the region of interest (click to expand)</summary><p>
+</li>
+<li><p>Next, with the function <strong><code><a href="reference/odr_download_data.html">odr_download_data()</a></code></strong> : download the data to your computer.</p></li>
+</ul>
+<p>Additional functions include : list collection available for download ( <code><a href="reference/odr_list_collections.html">odr_list_collections()</a></code> ), list variables available for each collection ( <code><a href="reference/odr_list_variables.html">odr_list_variables()</a></code> ), login to EOSDIS Earthdata before querying the servers and downloading the data (<code><a href="reference/odr_login.html">odr_login()</a></code>).</p>
+<p><strong>Have a look at the <a href="https://ptaconet.github.io/opendapr/articles/opendapr1.html"><code><a href="articles/opendapr1.html">vignette("opendapr1")</a></code></a> to get started with a simple example, and for a more advanced workflow see the <a href="https://ptaconet.github.io/opendapr/articles/opendapr2.html"><code><a href="articles/opendapr2.html">vignette("opendapr2")</a></code></a> !</strong></p>
+<!--
+
+## Example {#example}
+
+Let's say we want to download over the 50 km x 70 km wide region of interest located in Northern Ivory Coast (mapped above):
+
+- a 30 days-long time series of [MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid](https://dx.doi.org/10.5067/MODIS/MOD11A1.006) (collection="MOD11A1.006") ;
+- the same 30 days-long times series of [GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree](https://doi.org/10.5067/GPM/IMERGDF/DAY/06) (collection="GPM_3IMERGDF.06")
+
+<details><summary>Map of the region of interest (click to expand)</summary>
+<p>
+
+
+
 </p>
-<p><img src="reference/figures/README-plot_roi-1.png" width="100%" style="display: block; margin: auto auto auto 0;"></p>
+</p>
+</details>
+
+We prepare the script : load the packages and login to EOSDIS Earthdata with our credentials (to create an account go to : https://urs.earthdata.nasa.gov/) .
 
 
-</details><p>We prepare the script : load the packages and login to EOSDIS Earthdata with our credentials (to create an account go to : <a href="https://urs.earthdata.nasa.gov/" class="uri">https://urs.earthdata.nasa.gov/</a>) .</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># Load the packages</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(opendapr)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(sf)</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co"># Define ROI and time range of interest</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">roi &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_as_sf">st_as_sf</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">geom =</span> <span class="st">"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span>), <span class="dt">wkt=</span><span class="st">"geom"</span>, <span class="dt">crs =</span> <span class="dv">4326</span>)</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">time_range &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"2017-01-01"</span>,<span class="st">"2017-01-30"</span>))</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co"># Login to Earthdata servers with username and password. To create an account go to : https://urs.earthdata.nasa.gov/.</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co"># Here we have stored our credentials in local environment variables</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">username &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.getenv">Sys.getenv</a></span>(<span class="st">"earthdata_un"</span>) </a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">password &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.getenv">Sys.getenv</a></span>(<span class="st">"earthdata_pw"</span>)</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">log &lt;-<span class="st"> </span><span class="kw"><a href="reference/odr_login.html">odr_login</a></span>(<span class="dt">credentials =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(username,password), <span class="dt">source =</span> <span class="st">"earthdata"</span>)</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#&gt; Checking credentials...</span></a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt; Successfull login to earthdata</span></a></code></pre></div>
-<p>Download the data in two steps :</p>
-<ol style="list-style-type: decimal">
-<li>Get the URLs with the function <code><a href="reference/odr_get_url.html">odr_get_url()</a></code>;</li>
-<li>Download the data with the function <code><a href="reference/odr_download_data.html">odr_download_data()</a></code>.</li>
-</ol>
-<p>Let’s also see and how much the downloaded file weight.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">## Get the URLs for MOD11A1.006</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">urls_mod11a1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/odr_get_url.html">odr_get_url</a></span>(</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dt">collection =</span> <span class="st">"MOD11A1.006"</span>,</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">roi =</span> roi,</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="dt">time_range =</span> time_range</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"> )</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">## Get the URLs for GPM_L3/GPM_3IMERGDF.06</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">urls_gpm &lt;-<span class="st"> </span><span class="kw"><a href="reference/odr_get_url.html">odr_get_url</a></span>(</a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">  <span class="dt">collection =</span> <span class="st">"GPM_L3/GPM_3IMERGDF.06"</span>,</a>
-<a class="sourceLine" id="cb3-11" data-line-number="11">  <span class="dt">roi =</span> roi,</a>
-<a class="sourceLine" id="cb3-12" data-line-number="12">  <span class="dt">time_range =</span> time_range</a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"> )</a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(urls_mod11a1))</a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; 'data.frame':    1 obs. of  4 variables:</span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt;  $ time_start: Date, format: "2017-01-01"</span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt;  $ name      : chr "MOD11A1.006.2017001_2017030.h17v08"</span></a>
-<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt;  $ url       : chr "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__</span></a>
-<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt;  $ destfile  : chr "MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4"</span></a>
-<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; NULL</span></a>
-<a class="sourceLine" id="cb3-22" data-line-number="22"></a>
-<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(urls_gpm))</a>
-<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt; 'data.frame':    30 obs. of  4 variables:</span></a>
-<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt;  $ time_start: Date, format: "2017-01-01" "2017-01-02" ...</span></a>
-<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt;  $ name      : chr  "3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170104-S000000-E235959.V06" ...</span></a>
-<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">#&gt;  $ url       : chr  "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170103-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170104-S0000"| __truncated__ ...</span></a>
-<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="co">#&gt;  $ destfile  : chr  "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170104-S000000-E235959.V06.nc4" ...</span></a>
-<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="co">#&gt; NULL</span></a>
-<a class="sourceLine" id="cb3-30" data-line-number="30"></a>
-<a class="sourceLine" id="cb3-31" data-line-number="31"><span class="co">## Download the data. Destination file for each dataset is specified in the column "destfile" of the data.frames urls_mod11a1 and urls_gpm</span></a>
-<a class="sourceLine" id="cb3-32" data-line-number="32">df_to_dl &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">rbind</a></span>(urls_mod11a1,urls_gpm)</a>
-<a class="sourceLine" id="cb3-33" data-line-number="33">res_dl &lt;-<span class="st"> </span><span class="kw"><a href="reference/odr_download_data.html">odr_download_data</a></span>(df_to_dl,<span class="dt">source=</span><span class="st">"earthdata"</span>,<span class="dt">parallel =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb3-34" data-line-number="34"></a>
-<a class="sourceLine" id="cb3-35" data-line-number="35"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(res_dl))</a>
-<a class="sourceLine" id="cb3-36" data-line-number="36"><span class="co">#&gt; 'data.frame':    31 obs. of  7 variables:</span></a>
-<a class="sourceLine" id="cb3-37" data-line-number="37"><span class="co">#&gt;  $ time_start: Date, format: "2017-01-01" "2017-01-01" ...</span></a>
-<a class="sourceLine" id="cb3-38" data-line-number="38"><span class="co">#&gt;  $ name      : chr  "MOD11A1.006.2017001_2017030.h17v08" "3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06" "3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06" ...</span></a>
-<a class="sourceLine" id="cb3-39" data-line-number="39"><span class="co">#&gt;  $ url       : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.06/2017/01/3B-DAY.MS.MRG.3IMERG.20170103-S0000"| __truncated__ ...</span></a>
-<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="co">#&gt;  $ destfile  : chr  "MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V06.nc4" "GPM_L3/GPM_3IMERGDF.06/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V06.nc4" ...</span></a>
-<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">#&gt;  $ fileDl    : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...</span></a>
-<a class="sourceLine" id="cb3-42" data-line-number="42"><span class="co">#&gt;  $ fileSize  : num  633387 60802 60817 60827 60794 ...</span></a>
-<a class="sourceLine" id="cb3-43" data-line-number="43"><span class="co">#&gt;  $ dlStatus  : num  3 3 3 3 3 3 3 3 3 3 ...</span></a>
-<a class="sourceLine" id="cb3-44" data-line-number="44"><span class="co">#&gt; NULL</span></a>
-<a class="sourceLine" id="cb3-45" data-line-number="45"></a>
-<a class="sourceLine" id="cb3-46" data-line-number="46">(tot_weight &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(res_dl<span class="op">$</span>fileSize)<span class="op">/</span><span class="dv">1000000</span>)</a>
-<a class="sourceLine" id="cb3-47" data-line-number="47"><span class="co">#&gt; [1] 2.461542</span></a></code></pre></div>
-<p>2.5 Mb in total !</p>
-<p>We could also have subset the bands to download, using the parameter <code>variables</code> of the function <code><a href="reference/odr_get_url.html">odr_get_url()</a></code>.</p>
-<p>To further import the data in R, have a look at the section <a href="#important-note-regarding-the-further-import-of-the-data-in-r">Important note regarding the further import of the data in R</a> !</p>
-<p>Simple or advanced data download and import workflows are provided respectively in the vignettes <code><a href="articles/opendapr1.html">vignette("opendapr1")</a></code> and <code><a href="articles/opendapr2.html">vignette("opendapr2")</a></code>.</p>
-</div>
-<div id="important-note-import" class="section level2">
-<h2 class="hasAnchor">
-<a href="#important-note-import" class="anchor"></a>Important note regarding the further import of the data in R</h2>
-<p>Various packages and related classes can be used to read the data downloaded through OPeNDAP. If <code>raster</code> is surely the most famous class for raster objects, many packages facilitate the use of spatiotemporal data cubes in formats such as those proposed through opendapr (e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as a <code>stars</code> object from the excellent <a href="https://cran.r-project.org/package=stars"><code>stars</code></a> package for data cubes manipulation. All the data can also be imported as <code>ncdf4</code> objects using e.g. the <a href="https://cran.r-project.org/package=ncdf4"><code>ncdf4</code></a> package, or <code>RasterLayer</code> of the <a href="https://cran.r-project.org/package=raster"><code>raster</code></a> package.</p>
-<p>In any case, care must be taken when importing data that was downloaded through the OPeNDAP data providers servers. Depending on the collection, some “issues” were raised. These issues are independant from opendapr : they result most of time of a kind of lack of full implementation of the OPeNDAP framework by the data providers. These issues are :</p>
-<ul>
-<li>for MODIS and VNP collections : CRS has to be provided</li>
-<li>for GPM collections : CRS has to be provided + data have to be flipped</li>
-<li>for SMAP collections : CRS + bounding coordinates of the data have to be provided</li>
-</ul>
-<p>These issues can easily be dealt at the import phase in R. The functions below includes the processings that have to be done at the data import phase in order to open the data as <code>raster</code> objects. (argument <code>destfiles</code> is the path to a dataset downloaded with opendapr - output of <code>odr_get_url()$destfile</code> - and <code>variable</code> is the name of a variable to import).</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(raster)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">## Function to import MODIS or VIIRS products as RasterLayer object</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">.import_modis &lt;-<span class="st"> </span><span class="cf">function</span>(destfiles,variable){</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">  rasts &lt;-<span class="st"> </span>destfiles <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">    </span>raster<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/brick">brick</a></span>(<span class="dt">varname =</span> variable, <span class="dt">crs =</span> <span class="st">"+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"</span>)</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(rasts)</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">}</a></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(raster)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(purrr)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">## Function to import GPM products as RasterLayer object</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">.import_gpm &lt;-<span class="st"> </span><span class="cf">function</span>(destfiles,variable){</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">  rasts &lt;-<span class="st"> </span>destfiles <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="st">    </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/raster">raster</a></span>(., <span class="dt">varname =</span> variable,<span class="dt">crs =</span> <span class="st">"+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 "</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="st">    </span>raster<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/brick">brick</a></span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="st">    </span>raster<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/transpose">t</a></span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="st">    </span>raster<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/flip">flip</a></span>(<span class="st">"y"</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="st">    </span>raster<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/flip">flip</a></span>(<span class="st">"x"</span>)</a>
-<a class="sourceLine" id="cb5-11" data-line-number="11">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(rasts)</a>
-<a class="sourceLine" id="cb5-12" data-line-number="12">}</a></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(raster)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(purrr)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(ncdf4)</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">## Function to import SMAP products as RasterLayer object</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">smap_sp_bound &lt;-<span class="st"> </span>opendapr<span class="op">::</span><span class="kw">odr_get_opt_param</span>(<span class="dt">roi =</span> roi, <span class="dt">collection =</span> <span class="st">"SMAP/SPL3SMP_E.003"</span>)<span class="op">$</span>roiSpatialBound<span class="op">$</span><span class="st">`</span><span class="dt">1</span><span class="st">`</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">.import_smap &lt;-<span class="st"> </span><span class="cf">function</span>(destfiles,variable,smap_sp_bound){</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"> rasts &lt;-<span class="st"> </span>destfiles <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="st">   </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span>ncdf4<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ncdf4/topics/nc_open">nc_open</a></span>(.)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="st">   </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span>ncdf4<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ncdf4/topics/ncvar_get">ncvar_get</a></span>(., <span class="st">"Soil_Moisture_Retrieval_Data_AM_soil_moisture"</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="st">   </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/raster">raster</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/transpose">t</a></span>(.), <span class="dt">ymn=</span>smap_sp_bound[<span class="dv">1</span>], <span class="dt">ymx=</span>smap_sp_bound[<span class="dv">2</span>], <span class="dt">xmn=</span>smap_sp_bound[<span class="dv">3</span>], <span class="dt">xmx=</span>smap_sp_bound[<span class="dv">4</span>], <span class="dt">crs=</span><span class="st">"+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"</span>)) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># EPSG : 6933</span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="st">   </span>raster<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/raster/topics/brick">brick</a></span>()</a>
-<a class="sourceLine" id="cb6-13" data-line-number="13">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(rasts)</a>
-<a class="sourceLine" id="cb6-14" data-line-number="14">}</a></code></pre></div>
-</div>
-<div id="other-packages" class="section level2">
-<h2 class="hasAnchor">
-<a href="#other-packages" class="anchor"></a>Other packages</h2>
-<p>Above are some packages that enable to download some of the data that are proposed through opendapr, along with some of their characteristics :</p>
-<table class="table table">
-<thead><tr class="header">
-<th align="left">Package</th>
-<th align="center">Data</th>
-<th align="center">Spatial subsetting*</th>
-<th align="center">Dimensional subsetting*</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left"><a href="https://github.com/MatMatt/MODIS"><code>MODIS</code></a></td>
-<td align="center">MODIS</td>
-<td align="center">❌</td>
-<td align="center">❌</td>
-</tr>
-<tr class="even">
-<td align="left"><a href="https://github.com/ropensci/MODIStsp"><code>MODIStsp</code></a></td>
-<td align="center">MODIS</td>
-<td align="center">❌</td>
-<td align="center">✅</td>
-</tr>
-<tr class="odd">
-<td align="left"><a href="https://github.com/ropensci/MODISTools"><code>MODISTools</code></a></td>
-<td align="center">MODIS</td>
-<td align="center">✅</td>
-<td align="center">✅</td>
-</tr>
-<tr class="even">
-<td align="left"><a href="https://github.com/ropensci/smapr"><code>smapr</code></a></td>
-<td align="center">SMAP</td>
-<td align="center">❌</td>
-<td align="center">❌</td>
-</tr>
-<tr class="odd">
-<td align="left"><a href="https://github.com/ptaconet/opendapr"><code>opendapr</code></a></td>
-<td align="center">MODIS, VIIRS, SMAP, GPM</td>
-<td align="center">✅</td>
-<td align="center">✅</td>
-</tr>
-</tbody>
-</table>
-<p>* at the downloading phase</p>
+```r
+# Load the packages
+require(opendapr)
+require(sf)
+
+# Define ROI and time range of interest
+roi <- st_as_sf(data.frame(geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326)
+time_range <- as.Date(c("2017-01-01","2017-01-30"))
+
+# Login to Earthdata servers with username and password. To create an account go to : https://urs.earthdata.nasa.gov/.
+# Here we have stored our credentials in local environment variables
+username <- Sys.getenv("earthdata_un") 
+password <- Sys.getenv("earthdata_pw")
+log <- odr_login(credentials = c(username,password), source = "earthdata")
+```
+
+Download the data in two steps : 
+
+1. Get the URLs with the function `odr_get_url()`;
+2. Download the data with the function `odr_download_data()`.
+
+Let's also see how much the downloaded files weight.
+
+
+```r
+## Get the URLs for MOD11A1.006
+urls_mod11a1 <- odr_get_url(
+  collection = "MOD11A1.006",
+  roi = roi,
+  time_range = time_range
+ )
+
+## Get the URLs for GPM_3IMERGDF.06
+urls_gpm <- odr_get_url(
+  collection = "GPM_3IMERGDF.06",
+  roi = roi,
+  time_range = time_range
+ )
+
+print(str(urls_mod11a1))
+
+print(str(urls_gpm))
+
+## Download the data. Destination file for each dataset is specified in the column "destfile" of the data.frames urls_mod11a1 and urls_gpm
+df_to_dl <- rbind(urls_mod11a1,urls_gpm)
+res_dl <- odr_download_data(df_to_dl,source="earthdata",parallel = TRUE)
+
+print(str(res_dl))
+
+(tot_weight <- sum(res_dl$fileSize)/1000000)
+#`r round(tot_weight,1)` Mb in total !
+
+```
+
+
+We could also have subset the bands to download, using the parameter `variables` of the function `odr_get_url()`.
+
+To further import the data in R, have a look at the section [Important note regarding the further import of the data in R](#important-note-regarding-the-further-import-of-the-data-in-r) ! 
+
+Simple or advanced data download and import workflows are provided respectively in the vignettes `vignette("opendapr1")` and `vignette("opendapr2")`.
+
+## Important note regarding the further import of the data in R {#important-note-import}
+
+Various packages and related classes can be used to read the data downloaded through OPeNDAP. If `raster` is surely the most famous class for raster objects, many packages facilitate the use of spatiotemporal data cubes in formats such as those proposed through opendapr (e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as a `stars` object from the excellent [`stars`](https://cran.r-project.org/package=stars) package for data cubes manipulation. All the data can also be imported as `ncdf4` objects using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4) package, or `RasterLayer` of the [`raster`](https://cran.r-project.org/package=raster) package.
+
+In any case, care must be taken when importing data that was downloaded through the OPeNDAP data providers servers. Depending on the collection, some "issues" were raised. These issues are independant from opendapr : they result most of time of a kind of lack of full implementation of the OPeNDAP framework by the data providers. These issues are :
+
+- for MODIS and VNP collections : CRS has to be provided
+- for GPM collections : CRS has to be provided + data have to be flipped
+- for SMAP collections : CRS + bounding coordinates of the data have to be provided
+
+These issues can easily be dealt at the import phase in R. The functions below includes the processings that have to be done at the data import phase in order to open the data as `raster` objects. (argument `destfiles` is the path to a dataset downloaded with opendapr - output of `odr_get_url()$destfile` - and `variable` is the name of a variable to import).
+
+
+```r
+require(raster)
+require(purrr)
+## Function to import MODIS or VIIRS products as RasterLayer object. 
+# In case the ROI covers one single MODIS tile :
+.import_modis_onetile <- function(destfiles,variable){
+  rasts <- destfiles %>%
+    raster::brick(.,varname=variable,crs="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")
+  return(rasts)
+}
+# In case the ROI covers multiple MODIS tiles :
+.import_modis_moretiles <- function(destfiles,variable){
+  rasts <- destfiles %>%
+    purrr::map(~raster::brick(.,varname=variable,crs="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")) %>%
+    do.call(merge,.)
+  return(rasts)
+}
+```
+
+
+```r
+require(raster)
+require(purrr)
+## Function to import GPM products as RasterLayer object
+.import_gpm <- function(destfiles,variable){
+  rasts <- destfiles %>%
+    purrr::map(~raster(., varname = variable,crs = "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 ")) %>%
+    raster::brick() %>%
+    raster::t() %>%
+    raster::flip("y") %>%
+    raster::flip("x")
+  return(rasts)
+}
+```
+
+
+```r
+require(raster)
+require(purrr)
+require(ncdf4)
+## Function to import SMAP products as RasterLayer object
+smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
+
+.import_smap <- function(destfiles,variable,smap_sp_bound){
+ rasts <- destfiles %>%
+   purrr::map(~ncdf4::nc_open(.)) %>%
+   purrr::map(~ncdf4::ncvar_get(., "Soil_Moisture_Retrieval_Data_AM_soil_moisture")) %>%
+   purrr::map(~raster(t(.), ymn=smap_sp_bound[1], ymx=smap_sp_bound[2], xmn=smap_sp_bound[3], xmx=smap_sp_bound[4], crs="+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")) %>%  # EPSG : 6933
+   raster::brick()
+  return(rasts)
+}
+```
+-->
+<!--
+## Objectives
+
+opendapr provides an entry point to some specific OPeNDAP servers (e.g. MODIS, VNP, GPM or SMAP) via HTTPS. The development of the package was motivated by the following reasons : 
+
+* **Providing a simple and single way in R to download data stored on heterogeneous servers** : People that use Earth science data often struggle with data access. In opendapr we propose a harmonized way to download data from various providers that have implemented access to their data through OPeNDAP.
+* **Fastening the data import phase**, especially for large time series analysis.
+
+Apart from these performance aspects, ethical considerations have driven the development of this package :
+
+* **Facilitating the access to Earth science data for R users in places where internet connection is slow or expensive** : Earth science products are generally huge files that can be quite difficult to download in places with slow internet connection, even more if large time series are needed. By enabling to download strictly the data that is needed, the products become more accessible in those places;
+* **Caring about the environmental digital impact of our research work** : Downloading data has an impact on environment and to some extent contributes to climate change. By downloading only the data that is need (rather than e.g a whole MODIS tile, or a global SMAP or GPM dataset) we somehow promote digital sobriety. 
+* **Supporting the open-source-software movement** : The OPeNDAP is developed and advanced openly and collaboratively, by the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about) This open, powerfull and standard data access protocol is more and more used, by major Earth science data providers (e.g. NASA or NOAA). Using OPeNDAP means supporting methods for data access protocols that are open, build collaboratively and shared.
+-->
 <!--
 ## Citation
 
@@ -1894,30 +1940,11 @@ We thank in advance people that use opendapr for citing it in their work / publi
 </ul>
 <p>Any contribution is welcome !</p>
 </div>
-<div id="context-and-other-thoughts" class="section level2">
+<div id="acknowledgments" class="section level2">
 <h2 class="hasAnchor">
-<a href="#context-and-other-thoughts" class="anchor"></a>Context and other thoughts</h2>
-<p>opendapr provides an entry point to some specific OPeNDAP servers (e.g. MODIS, VNP, GPM or SMAP). The development of the package was motivated by the following reasons :</p>
-<ul>
-<li>
-<strong>Providing a simple and single way in R to download data stored on heterogeneous servers</strong> : People that use Earth science data often struggle with data access. In opendapr we propose an harmonized way to download data from various providers that have implemented access to their data through OPeNDAP.</li>
-<li>
-<strong>Fastening the data import phase</strong>, especially for large time series analysis.</li>
-</ul>
-<p>Apart from these performance aspects, ethical considerations have driven the development of this package :</p>
-<ul>
-<li>
-<strong>Facilitating the access to Earth science data for R users in places where internet connection is slow or expensive</strong> : Earth science products are generally huge files that can be quite difficult to download in places with slow internet connection, even more if large time series are needed. By enabling to download strictly the data that is needed, the products become more accessible in those places;</li>
-<li>
-<strong>Caring about the environmental digital impact of our research work</strong> : Downloading data has an impact on environment and to some extent contributes to climate change. By downloading only the data that is need (rather than e.g a whole MODIS tile, or a global SMAP or GPM dataset) we somehow contribute to digital sobriety.</li>
-<li>
-<strong>Supporting the open-source-software movement</strong> : The OPeNDAP is developed and advanced openly and collaboratively, by the non-profit <a href="https://www.opendap.org/about">OPeNDAP, Inc.</a> This data access protocol is more and more used, by major Earth science data providers (e.g. NASA or NOAA). Using OPeNDAP means supporting methods and data access protocols that are open.</li>
-</ul>
-</div>
-<div id="acknowledgment" class="section level2">
-<h2 class="hasAnchor">
-<a href="#acknowledgment" class="anchor"></a>Acknowledgment</h2>
+<a href="#acknowledgments" class="anchor"></a>Acknowledgments</h2>
 <p>We thank NASA and its partners for making all their Earth science data freely available, and implementing open data access protocols such as OPeNDAP. opendapr heavily builds on top of the OPeNDAP, so we thank the non-profit <a href="https://www.opendap.org/about">OPeNDAP, Inc.</a> for developing the eponym tool in an open and collaborative way.</p>
+<p>We also thank the contributors that have tested the package, reviewed the documentation and brought valuable feedbacks to improve the package : <a href="https://github.com/floriandeboissieu">Florian de Boissieu</a></p>
 <p>The initial development and first release of this package were financed by the <a href="https://www.mivegec.ird.fr/en/">MIVEGEC</a> unit of the <a href="https://en.ird.fr/">French Research Institute for Sustainable Development</a>, as part of the <a href="https://burkina-faso.ird.fr/la-recherche/projets-de-recherche2/gestion-de-la-resistance-aux-insecticides-au-burkina-faso-et-en-cote-d-ivoire-recherche-sur-les-strategies-de-lutte-anti-vectorielle-react">REACT project</a>.</p>
 </div>
 </div>
@@ -1947,16 +1974,7 @@ We thank in advance people that use opendapr for citing it in their work / publi
 </ul>
 </div>
 
-      <div class="dev-status">
-<h2>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3"><img src="https://img.shields.io/badge/Licence-GPL--3-blue.svg" alt="licence"></a></li>
-<li><a href="https://travis-ci.org/ptaconet/opendapr"><img src="https://travis-ci.org/ptaconet/opendapr.svg?branch=master" alt="Travis build status"></a></li>
-<li><a href="https://cran.r-project.org/package=opendapr"><img src="http://www.r-pkg.org/badges/version/opendapr" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://github.com/ptaconet/opendapr"><img src="https://img.shields.io/badge/Github-0.1.0-blue.svg" alt="Github_Status_Badge"></a></li>
-</ul>
-</div>
-</div>
+      </div>
 
 </div>
 

@@ -21,7 +21,7 @@ Get the variables available for a given collection
 \examples{
 
 \donttest{
-# odr_login to Earthdata
+# login to Earthdata
 log <- odr_login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),source="earthdata")
 
 # Get the variables available for the collection MOD11A1.006

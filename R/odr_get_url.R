@@ -11,7 +11,7 @@
 #' @param single_netcdf boolean. optional. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.
 #' @param opt_param list of optional arguments. optional. (see details).
 #' @param credentials vector string of length 2 with username and password. optional.
-#' @param verbose boolean. optional. Verbose (default FALSE)
+#' @param verbose boolean. optional. Verbose (default TRUE)
 #'
 #' @return a data.frame with one row for each dataset to download and 4 columns  :
 #'  \describe{
@@ -82,8 +82,8 @@
 #' res_dl <- odr_download_data(opendap_urls_mod11a1)
 #'
 #' ### Import the data :
-#' ## Have a look at the README file for important details regarding the data import in R.
-#' ## README file : \url{https://ptaconet.github.io/opendapr/index.html#important-note-import}
+#' ## Have a look at vignette("opendapr1) for important details regarding the data import in R.
+#' ## \url{https://ptaconet.github.io/opendapr/articles/opendapr1.html#data_import_note}
 #' modis_crs <- "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
 #'
 #' ## open as a stars object (deals with multiple dimensions and time)
@@ -114,13 +114,13 @@ odr_get_url<-function(collection,
                  single_netcdf=TRUE,
                  opt_param=NULL,
                  credentials=NULL,
-                 verbose=FALSE){
+                 verbose=TRUE){
 
   existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName  <- . <- name <- destfile <- NULL
 
   ## tests :
   # collection
-  if(verbose){cat("Checking if specified collection exist and is implemented in the package...\n")}
+  #if(verbose){cat("Checking if specified collection exist and is implemented in the package...\n")}
   .testIfCollExists(collection)
   # roi
   .testRoi(roi)
@@ -139,13 +139,15 @@ odr_get_url<-function(collection,
   # credentials
   .testLogin(credentials)
 
+  if(verbose){cat("Building the URLs...\n")}
+
   if(is.null(opt_param)){
-    if(verbose){cat("Retrieving opendap arguments for the collection specified...\n")}
-    opt_param <- odr_get_opt_param(collection,roi)
+    #if(verbose){cat("Retrieving opendap arguments for the collection specified...\n")}
+    opt_param <- odr_get_opt_param(collection,roi,verbose=verbose)
   }
 
   # test variables
-  if(verbose){cat("Checking if specified variables exist for the collection specified...\n")}
+  #if(verbose){cat("Checking if specified variables exist for the collection specified...\n")}
   available_variables <- opt_param$availableVariables$name[which(opt_param$availableVariables$extractable_w_opendapr=="extractable")]
   if(is.null(variables)){
     variables <- available_variables
@@ -154,7 +156,6 @@ odr_get_url<-function(collection,
   }
 
   # build URLs
-  if(verbose){cat("Building the opendap URLs...\n")}
   table_urls <- .buildUrls(collection,variables,roi,time_range,output_format,single_netcdf,opt_param,credentials,verbose)
 
   table_urls <- table_urls %>%
@@ -167,6 +168,8 @@ odr_get_url<-function(collection,
     dplyr::arrange(date) %>%
     dplyr::select(date,name,url,destfile) %>%
     dplyr::rename(time_start = date)
+
+  if(verbose){cat("OK\n")}
 
   return(table_urls)
 
