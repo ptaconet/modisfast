@@ -73,7 +73,7 @@ The package can be installed with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("ptaconet/opendapr")
+devtools::install_github("ptaconet/opendapr", build_vignettes = T, build_manual = T)
 ```
 
 Work is ongoing to publish the package on the CRAN.
@@ -3283,7 +3283,8 @@ Downloading the data with **opendapr** is a simple two-steps workflow :
   - With the function **`odr_get_url()`**, get the URL(s) of the data
     for :
     
-      - a collection : see [previous section](#coll-available),
+      - a collection : see [previous
+        section](#collections-available-in-opendapr),
       - variables,
       - region of interest,
       - time range,
@@ -3496,7 +3497,7 @@ the eponym tool in an open and collaborative way.
 We also thank the contributors that have tested the package, reviewed
 the documentation and brought valuable feedbacks to improve the package
 : [Florian de Boissieu](https://github.com/floriandeboissieu), Julien
-Taconet,
+Taconet, [Nicolas Moiroux](https://github.com/Nmoiroux)
 
 The initial development and first release of this package were financed
 by the [MIVEGEC](https://www.mivegec.ird.fr/en/) unit of the [French

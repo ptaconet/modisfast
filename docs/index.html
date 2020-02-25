@@ -152,7 +152,7 @@ install.packages("opendapr")
 -->
 <p>The package can be installed with:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ptaconet/opendapr"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ptaconet/opendapr"</span>, <span class="dt">build_vignettes =</span> T, <span class="dt">build_manual =</span> T)</a></code></pre></div>
 <p>Work is ongoing to publish the package on the CRAN.</p>
 </div>
 <div id="coll-available" class="section level2">
@@ -1746,7 +1746,7 @@ Nighttime lights
 <li>
 <p>With the function <strong><code><a href="reference/odr_get_url.html">odr_get_url()</a></code></strong>, get the URL(s) of the data for :</p>
 <ul>
-<li>a collection : see <a href="#coll-available">previous section</a>,</li>
+<li>a collection : see <a href="#collections-available-in-opendapr">previous section</a>,</li>
 <li>variables,</li>
 <li>region of interest,</li>
 <li>time range,</li>
@@ -1939,7 +1939,7 @@ We thank in advance people that use opendapr for citing it in their work / publi
 <h2 class="hasAnchor">
 <a href="#acknowledgments" class="anchor"></a>Acknowledgments</h2>
 <p>We thank NASA and its partners for making all their Earth science data freely available, and implementing open data access protocols such as OPeNDAP. opendapr heavily builds on top of the OPeNDAP, so we thank the non-profit <a href="https://www.opendap.org/about">OPeNDAP, Inc.</a> for developing the eponym tool in an open and collaborative way.</p>
-<p>We also thank the contributors that have tested the package, reviewed the documentation and brought valuable feedbacks to improve the package : <a href="https://github.com/floriandeboissieu">Florian de Boissieu</a>, Julien Taconet,</p>
+<p>We also thank the contributors that have tested the package, reviewed the documentation and brought valuable feedbacks to improve the package : <a href="https://github.com/floriandeboissieu">Florian de Boissieu</a>, Julien Taconet, <a href="https://github.com/Nmoiroux">Nicolas Moiroux</a></p>
 <p>The initial development and first release of this package were financed by the <a href="https://www.mivegec.ird.fr/en/">MIVEGEC</a> unit of the <a href="https://en.ird.fr/">French Research Institute for Sustainable Development</a>, as part of the <a href="https://burkina-faso.ird.fr/la-recherche/projets-de-recherche2/gestion-de-la-resistance-aux-insecticides-au-burkina-faso-et-en-cote-d-ivoire-recherche-sur-les-strategies-de-lutte-anti-vectorielle-react">REACT project</a>.</p>
 </div>
 </div>

@@ -127,7 +127,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>odr_get_opt_param</span>(<span class='no'>collection</span>, <span class='no'>roi</span>, <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>odr_get_opt_param</span>(<span class='no'>collection</span>, <span class='no'>roi</span>, <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,6 +144,10 @@
       <th>credentials</th>
       <td><p>vector string of length 2 with username and password. optional.</p></td>
     </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>boolean. optional. Verbose (default TRUE)</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -151,7 +155,6 @@
     <p>a list with the following named objects :</p><dl class='dl-horizontal'>
  <dt>roiSpatialIndexBound</dt><dd><p>OPeNDAP indices for the spatial coordinates of the bounding box of the ROI (minLat, maxLat, minLon, maxLon)</p></dd>
  <dt>availableVariables</dt><dd><p>Variables available for the collection of interest</p></dd>
- <dt>roiSpatialBound</dt><dd><p></p></dd>
  <dt>roiSpatialBound </dt><dd><p>The spatial coordinates of the bounding box of the ROI expressed in the CRS of the collection</p></dd>
  <dt>OpenDAPXVector</dt><dd><p>The X (longitude) vector</p></dd>
  <dt>OpenDAPYVector</dt><dd><p>The Y (longitude) vector</p></dd>
@@ -180,7 +183,7 @@ This will save much time, as internal parameters will be calculated only once.</
 <span class='kw'>geom</span><span class='kw'>=</span><span class='st'>"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span>),
 <span class='kw'>wkt</span><span class='kw'>=</span><span class='st'>"geom"</span>,<span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
 
-<span class='no'>opt_param_mod11a1</span> <span class='kw'>&lt;-</span> <span class='fu'>odr_get_opt_param</span>(<span class='st'>"MOD11A1.006"</span>,<span class='no'>roi</span>)</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='warning'>Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/str'>str</a></span>(<span class='no'>opt_param_mod11a1</span>)</div><div class='output co'>#&gt; List of 7
+<span class='no'>opt_param_mod11a1</span> <span class='kw'>&lt;-</span> <span class='fu'>odr_get_opt_param</span>(<span class='st'>"MOD11A1.006"</span>,<span class='no'>roi</span>)</div><div class='output co'>#&gt; Note : messages above ('although coordinates are longitude/latitude, st_intersection assumes that they are planar' and 'attribute variables are assumed to be spatially constant throughout all geometries') are not errors</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='warning'>Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='warning'>Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/str'>str</a></span>(<span class='no'>opt_param_mod11a1</span>)</div><div class='output co'>#&gt; List of 7
 #&gt;  $ roiSpatialIndexBound:List of 1
 #&gt;   ..$ 1: num [1:4] 55 140 512 560
 #&gt;  $ availableVariables  :'data.frame':	18 obs. of  6 variables:
@@ -196,7 +199,7 @@ This will save much time, as internal parameters will be calculated only once.</
 #&gt;  $ OpenDAPYVector      :List of 1
 #&gt;   ..$ 1: num [1:1200] 1111951 1111024 1110097 1109171 1108244 ...
 #&gt;  $ OpenDAPtimeVector   :List of 1
-#&gt;   ..$ 1: num [1:7238] 54 55 56 57 58 59 60 61 62 63 ...
+#&gt;   ..$ 1: num [1:7243] 54 55 56 57 58 59 60 61 62 63 ...
 #&gt;  $ modis_tile          :List of 1
 #&gt;   ..$ 1: chr "h17v08"</div><div class='input'>
 <span class='co'># Now we can provide opt_param_mod11a1 as input parameter of the function odr_get_url().</span>
@@ -212,7 +215,14 @@ This will save much time, as internal parameters will be calculated only once.</
  <span class='kw'>roi</span> <span class='kw'>=</span> <span class='no'>roi</span>,
  <span class='kw'>time_range</span> <span class='kw'>=</span> <span class='no'>.x</span>,
  <span class='kw'>opt_param</span> <span class='kw'>=</span> <span class='no'>opt_param_mod11a1</span>)
-))</div><div class='output co'>#&gt; [[1]]
+))</div><div class='output co'>#&gt; Building the URLs...
+#&gt; OK
+#&gt; Building the URLs...
+#&gt; OK
+#&gt; Building the URLs...
+#&gt; OK
+#&gt; Building the URLs...
+#&gt; OK</div><div class='output co'>#&gt; [[1]]
 #&gt;   time_start                               name
 #&gt; 1 2016-01-01 MOD11A1.006.2016001_2016031.h17v08
 #&gt;                                                                                                                                                                                                                                                                                                                     url

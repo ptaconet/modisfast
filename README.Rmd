@@ -68,7 +68,7 @@ The package can be installed with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("ptaconet/opendapr")
+devtools::install_github("ptaconet/opendapr", build_vignettes = T, build_manual = T)
 ```
 Work is ongoing to publish the package on the CRAN. 
 
@@ -105,7 +105,7 @@ Downloading the data with **opendapr** is a simple two-steps workflow :
 
 * With the function **`odr_get_url()`**, get the URL(s) of the data for :
   
-  + a collection : see [previous section](#coll-available),
+  + a collection : see [previous section](#collections-available-in-opendapr),
   + variables,
   + region of interest,
   + time range,
@@ -308,6 +308,6 @@ Any contribution is welcome !
 
 We thank NASA and its partners for making all their Earth science data freely available, and implementing open data access protocols such as OPeNDAP. opendapr heavily builds on top of the OPeNDAP, so we thank the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about) for developing the eponym tool in an open and collaborative way.
 
-We also thank the contributors that have tested the package, reviewed the documentation and brought valuable feedbacks to improve the package : [Florian de Boissieu](https://github.com/floriandeboissieu), Julien Taconet, 
+We also thank the contributors that have tested the package, reviewed the documentation and brought valuable feedbacks to improve the package : [Florian de Boissieu](https://github.com/floriandeboissieu), Julien Taconet, [Nicolas Moiroux](https://github.com/Nmoiroux)
 
 The initial development and first release of this package were financed by the [MIVEGEC](https://www.mivegec.ird.fr/en/) unit of the [French Research Institute for Sustainable Development](https://en.ird.fr/), as part of the [REACT project](https://burkina-faso.ird.fr/la-recherche/projets-de-recherche2/gestion-de-la-resistance-aux-insecticides-au-burkina-faso-et-en-cote-d-ivoire-recherche-sur-les-strategies-de-lutte-anti-vectorielle-react). 

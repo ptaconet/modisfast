@@ -129,7 +129,7 @@
 
     <pre class="usage"><span class='fu'>odr_get_url</span>(<span class='no'>collection</span>, <span class='kw'>variables</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>roi</span>, <span class='no'>time_range</span>,
   <span class='kw'>output_format</span> <span class='kw'>=</span> <span class='st'>"nc4"</span>, <span class='kw'>single_netcdf</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>opt_param</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,7 +168,7 @@
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>boolean. optional. Verbose (default FALSE)</p></td>
+      <td><p>boolean. optional. Verbose (default TRUE)</p></td>
     </tr>
     </table>
     
@@ -197,13 +197,15 @@ It might be particularly useful to precompute and provide it in case the functio
     <pre class="examples"><div class='input'>
 </div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>sf</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>magrittr</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: magrittr</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘magrittr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:testthat’:</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>magrittr</span>)</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : magrittr</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attachement du package : ‘magrittr’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:purrr’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    equals, is_less_than, not</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>raster</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: raster</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: sp</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘raster’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:magrittr’:</span>
+#&gt; <span class='message'>    set_names</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:testthat’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    extract</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>stars</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: stars</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: abind</span></div><div class='input'>
+#&gt; <span class='message'>    equals, is_less_than, not</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>raster</span>)</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : raster</span></div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : sp</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attachement du package : ‘raster’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:magrittr’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    extract</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>stars</span>)</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : stars</span></div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : abind</span></div><div class='input'>
 <span class='co'>### First odr_login to EOSDIS Earthdata with username and password.</span>
 <span class='co'># To create an account go to : https://urs.earthdata.nasa.gov/.</span>
 <span class='no'>username</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Sys.getenv'>Sys.getenv</a></span>(<span class='st'>"earthdata_un"</span>)
@@ -227,7 +229,8 @@ It might be particularly useful to precompute and provide it in case the functio
 <span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"LST_Day_1km"</span>,<span class='st'>"LST_Night_1km"</span>),
 <span class='kw'>roi</span> <span class='kw'>=</span> <span class='no'>roi</span>,
 <span class='kw'>time_range</span> <span class='kw'>=</span> <span class='no'>time_range</span>
-))</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='warning'>Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></div><div class='output co'>#&gt;   time_start                               name
+))</div><div class='output co'>#&gt; Building the URLs...
+#&gt; Note : messages above ('although coordinates are longitude/latitude, st_intersection assumes that they are planar' and 'attribute variables are assumed to be spatially constant throughout all geometries') are not errors</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='warning'>Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='warning'>Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></div><div class='output co'>#&gt; OK</div><div class='output co'>#&gt;   time_start                               name
 #&gt; 1 2017-01-01 MOD11A1.006.2017001_2017030.h17v08
 #&gt;                                                                                                                                                                                                                                             url
 #&gt; 1 https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projection,LST_Day_1km[6093:6122][55:140][512:560],LST_Night_1km[6093:6122][55:140][512:560],time[6093:6122],YDim[55:140],XDim[512:560]
@@ -236,8 +239,8 @@ It might be particularly useful to precompute and provide it in case the functio
 
 <span class='co'>### Download the data :</span>
 
-<span class='no'>res_dl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='odr_download_data.html'>odr_download_data</a></span>(<span class='no'>opendap_urls_mod11a1</span>)
-
+<span class='no'>res_dl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='odr_download_data.html'>odr_download_data</a></span>(<span class='no'>opendap_urls_mod11a1</span>)</div><div class='output co'>#&gt; 1  datasets in total :  1  already downloaded and  0  datasets to download
+#&gt; OK</div><div class='input'>
 <span class='co'>### Import the data :</span>
 <span class='co'>## Have a look at vignette("opendapr1) for important details regarding the data import in R.</span>
 <span class='co'>## \url{https://ptaconet.github.io/opendapr/articles/opendapr1.html#data_import_note}</span>
@@ -267,7 +270,7 @@ It might be particularly useful to precompute and provide it in case the functio
 <span class='fu'><a href='https://www.rdocumentation.org/packages/stars/topics/plot'>plot</a></span>(<span class='no'>mod11a1_stars</span>)</div><div class='img'><img src='odr_get_url-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>## or open as a rasterBrick object (1 rasterBrick for each dimension)</span>
 
-(<span class='no'>mod11a1_rast_day</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/brick'>brick</a></span>(<span class='no'>opendap_urls_mod11a1</span>$<span class='no'>destfile</span>,<span class='kw'>varname</span><span class='kw'>=</span><span class='st'>"LST_Day_1km"</span>,<span class='kw'>crs</span><span class='kw'>=</span><span class='no'>modis_crs</span>))</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: ncdf4</span></div><div class='output co'>#&gt; class       : RasterBrick 
+(<span class='no'>mod11a1_rast_day</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/raster/topics/brick'>brick</a></span>(<span class='no'>opendap_urls_mod11a1</span>$<span class='no'>destfile</span>,<span class='kw'>varname</span><span class='kw'>=</span><span class='st'>"LST_Day_1km"</span>,<span class='kw'>crs</span><span class='kw'>=</span><span class='no'>modis_crs</span>))</div><div class='output co'>#&gt; <span class='message'>Le chargement a nécessité le package : ncdf4</span></div><div class='output co'>#&gt; class       : RasterBrick 
 #&gt; dimensions  : 86, 49, 4214, 30  (nrow, ncol, ncell, nlayers)
 #&gt; resolution  : 926.6254, 926.6254  (x, y)
 #&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)

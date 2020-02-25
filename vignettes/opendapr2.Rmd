@@ -20,16 +20,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, message=F}
-require(opendapr)
-require(sf)
-require(purrr)
-require(raster)
-require(ncdf4)
-require(magrittr)
-require(purrr)
-```
-
 In the `vignette("simple_workflow")`, we have imported data : 
 
 * from several collections (MOD11A1.006, GPM_L3/GPM_3IMERGDF.06, SMAP/SPL3SMP_E.003) ;
@@ -45,7 +35,16 @@ We could use `for` loops or related stuff to do the job. However, this would not
 
 ## Setup the region and time range of interest
 
-First we prepare the script : define ROI and time frames (here, for the example, the month of january for each year from 2016 to 2019)
+First we call the useful packages and we the script : define ROI and time frames (here, for the example, the month of january for each year from 2016 to 2019)
+
+```{r setup, message=F}
+require(opendapr)
+require(sf)
+require(purrr)
+require(raster)
+require(ncdf4)
+require(magrittr)
+```
 
 ```{r example_prepare, eval=NOT_CRAN}
 # Set ROI and time range of interest
@@ -60,13 +59,24 @@ time_ranges <- list(as.Date(c("2016-01-01","2016-01-31")),
 
 And we login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
 
-```{r odr_login, eval=NOT_CRAN}
-# Login to Earthdata servers with username and password.
+```{r eval=NOT_CRAN, echo=F,message=F }
 username <- Sys.getenv("earthdata_un")
 password <- Sys.getenv("earthdata_pw")
+log <- odr_login(credentials = c(username,password), source = "earthdata",verbose = F)
+```
+
+```{r odr_login, eval=NOT_CRAN}
+# Login to Earthdata servers with username and password. 
+username <- "earthdata_un"
+password <- "earthdata_pw"
 log <- odr_login(credentials = c(username,password), source = "earthdata")
 ```
 
+```{r eval=NOT_CRAN, echo=F,message=F }
+username <- Sys.getenv("earthdata_un")
+password <- Sys.getenv("earthdata_pw")
+log <- odr_login(credentials = c(username,password), source = "earthdata",verbose = F)
+```
 
 <!--
 ## Download data over multiple regions of interest

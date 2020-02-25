@@ -20,16 +20,6 @@ knitr::opts_chunk$set(
   )
 ```
 
-```{r setup, message=F}
-require(opendapr)
-require(sf)
-require(stars)
-require(raster)
-require(ncdf4)
-require(magrittr)
-require(purrr)
-```
-
 In this example we want to download, import and plot over the 3500 km^2^ wide region of interest (mapped below) :
 
 - a 30 days-long time series of land surface temperature from [MODIS Terra LST](https://dx.doi.org/10.5067/MODIS/MOD11A1.006) (spatial resolution : 1 km ; temporal resolution : 1 day),
@@ -38,7 +28,7 @@ In this example we want to download, import and plot over the 3500 km^2^ wide re
 
 ```{r, echo=F, fig.height=5, fig.width=3, eval=NOT_CRAN }
 require(mapview)
-roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
+roi <- sf::st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
 mapview::mapview(roi,legend=F)
 ```
 
@@ -47,7 +37,7 @@ mapview::mapview(roi,legend=F)
 Before starting, let's identify our collections of interest among the collections that are available for download, using the function `odr_list_collections()` :
 
 ```{r odr_list_collections, eval=NOT_CRAN}
-collections <- odr_list_collections()
+collections <- opendapr::odr_list_collections()
 print(str(collections))
 ```
 
@@ -59,7 +49,17 @@ So our collections of interest are :
 
 ## Setup the region and time range of interest
 
-First we prepare the script : define the ROI and the time frame
+First we call the useful packages and we define the ROI and the time frame.
+
+```{r setup, message=F}
+require(opendapr)
+require(sf)
+require(stars)
+require(raster)
+require(ncdf4)
+require(magrittr)
+require(purrr)
+```
 
 ```{r example_prepare, eval=NOT_CRAN}
 # Set ROI and time range of interest
@@ -71,11 +71,23 @@ time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
 And we login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
 
-```{r odr_login, eval=NOT_CRAN}
-# Login to Earthdata servers with username and password. Here we have stored our credentials in local environment variables
+```{r eval=NOT_CRAN, echo=F,message=F }
 username <- Sys.getenv("earthdata_un")
 password <- Sys.getenv("earthdata_pw")
+log <- odr_login(credentials = c(username,password), source = "earthdata",verbose = F)
+```
+
+```{r odr_login, eval=NOT_CRAN}
+# Login to Earthdata servers with username and password. 
+username <- "earthdata_un"
+password <- "earthdata_pw"
 log <- odr_login(credentials = c(username,password), source = "earthdata")
+```
+
+```{r eval=NOT_CRAN, echo=F,message=F }
+username <- Sys.getenv("earthdata_un")
+password <- Sys.getenv("earthdata_pw")
+log <- odr_login(credentials = c(username,password), source = "earthdata",verbose = F)
 ```
 
 ## Get the OPeNDAP URLs of the data to download {#get-url}
@@ -149,7 +161,9 @@ print(str(res_dl))
 
 ## Import the data in R {#import}
 
-Various packages and related classes can be used to read the data downloaded through OPeNDAP. If `raster` is surely the most famous class for raster objects, many packages facilitate the use of spatiotemporal data cubes in formats such as those proposed through opendapr (e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as a `stars` object from the excellent [`stars`](https://cran.r-project.org/package=stars) package for data cubes manipulation. All the data can also be imported as `ncdf4` objects using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4) package, or `RasterLayer` of the [`raster`](https://cran.r-project.org/package=raster) package.
+Importing the data in R goes beyond the scope of this package. However, here we provide some tips and tricks to do the job for further data analysis in R !
+
+Various packages and related classes can be used to read the datacubes downloaded through OPeNDAP (in NetCDF, ascii or json format). If `raster` is surely the most famous class for raster objects, many packages facilitate the use of spatiotemporal data cubes in formats such as those proposed through opendapr (e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as a `stars` object from the excellent [`stars`](https://cran.r-project.org/package=stars) package for data cubes manipulation. All the data can also be imported as `ncdf4` objects using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4) package, or `RasterLayer` of the [`raster`](https://cran.r-project.org/package=raster) package.
 
 ### Important note regarding the import of the data in R {#data_import_note}
 

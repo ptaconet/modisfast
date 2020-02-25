@@ -75,13 +75,9 @@
 #' @title get VNPladsweb dataset name on the opendap server for a given modis tile
 #' @noRd
 
-.getVNPladswebdataname<-function(lines,modis_tile,credentials=NULL){
+.getVNPladswebdataname<-function(lines,modis_tile){
 
-   dataset_name <- NULL
-
-  .testLogin(credentials)
-
-  httr::set_config(httr::authenticate(user=getOption("earthdata_user"), password=getOption("earthdata_pass"), type = "basic"))
+   dataset_name <- . <- NULL
 
   #lines <- readLines(paste0(OpenDAPUrl,"catalog.xml"))
   dataset_name <- lines[which(grepl(modis_tile,lines))[1]] %>%
@@ -101,7 +97,7 @@
 
 .buildUrls<-function(collection,variables,roi,time_range,output_format="nc4",single_netcdf=TRUE,optionalsOpendap=NULL,credentials=NULL,verbose=FALSE){
 
-  ideal_date <- date_closest_to_ideal_date <- index_opendap_closest_to_date <- dimensions_url <- hour_end <- date_character <- hour_start <- number_minutes_from_start_day <- year <- day <- product_name <- month <- x <- . <- url_product <- NULL
+  ideal_date <- date_closest_to_ideal_date <- index_opendap_closest_to_date <- dimensions_url <- hour_end <- date_character <- hour_start <- number_minutes_from_start_day <- year <- day <- product_name <- month <- x <- . <- url_product <- dayofyear <- Var1 <- Var2 <- lines <- NULL
 
   .testIfCollExists(collection)
   .testRoi(roi)
