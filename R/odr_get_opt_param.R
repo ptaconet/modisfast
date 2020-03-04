@@ -119,7 +119,7 @@ odr_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
     ### MODIS
   } else if (odap_coll_info$source %in% c("MODIS","VIIRS")){
 
-    if(verbose){cat("Note : messages above ('although coordinates are longitude/latitude, st_intersection assumes that they are planar' and 'attribute variables are assumed to be spatially constant throughout all geometries') are not errors\n")}
+    if(verbose){cat("Note : messages 'although coordinates are longitude/latitude, st_intersection assumes that they are planar' and 'attribute variables are assumed to be spatially constant throughout all geometries' are not errors\n")}
 
     if (odap_coll_info$provider=="NASA USGS LP DAAC"){
      tiling <- modis_tiles
@@ -155,11 +155,12 @@ odr_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
     list_roiSpatialIndexBound <- purrr::pmap(list(OpenDAPYVector,OpenDAPXVector,roi_div_bboxes),
                                              ~.odr_get_opt_param_singleROIfeature(..1,..2,..3)$roiSpatialIndexBound)
 
-    if (odap_coll_info$crs=="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"){
-      list_roiSpatialIndexBound <- purrr::map(list_roiSpatialIndexBound,~replace(.,. > 1199,1199))
-    } else if (odap_coll_info$crs=="+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"){
-      list_roiSpatialIndexBound <- purrr::map(list_roiSpatialIndexBound,~replace(.,. > 2399,2399))
-    }
+    #if (odap_coll_info$crs=="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"){
+      #list_roiSpatialIndexBound <- purrr::map(list_roiSpatialIndexBound,~replace(.,. > 1199,1199))
+      list_roiSpatialIndexBound <- purrr::map2(.x = list_roiSpatialIndexBound,.y = OpenDAPXVector , ~replace(.x,.x > length(.y),length(.y)))
+    #} else if (odap_coll_info$crs=="+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"){
+     # list_roiSpatialIndexBound <- purrr::map(list_roiSpatialIndexBound,~replace(.,. > 2399,2399))
+    #}
 
     list_roiSpatialIndexBound <- purrr::map(list_roiSpatialIndexBound,~replace(.,.<= 10,0))
 

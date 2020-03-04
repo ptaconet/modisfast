@@ -5,7 +5,7 @@
 #'
 #' @param collection string. mandatory. Collection of interest (see details of \link{odr_get_url}).
 #' @param variables string vector. optional. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted (see details of \link{odr_get_url}).
-#' @param roi object of class \code{sf} or \code{sfc}. mandatory. Region of interest. Must be POLYGON-type geometry composed of one single feature.
+#' @param roi object of class \code{sf}. mandatory. Region of interest. Must be POLYGON-type geometry composed of one single feature.
 #' @param time_range date(s) / POSIXlt of interest . mandatory. Single date/datetime or time frame : vector with start and end dates/times (see details).
 #' @param output_format string. Output data format. optional. Available options are : "nc4" (default), "ascii", "json"
 #' @param single_netcdf boolean. optional. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.
@@ -31,7 +31,7 @@
 #'
 #' Argument \code{single_netcdf} : for MODIS and VIIRS products from LP DAAC: download the data as a single file encompassing the whole time frame (TRUE) or as multiple files : one for each date, which is the behavious for the other collections - GPM and SMAP) (FALSE) ?
 #'
-#' Argument \code{opt_param} : list of parameters related to the queried OPeNDAP server and the roi. See \link{odr_get_opt_param} for additional details. The parameter can be retrieved outside the function with the function \link{odr_get_opt_param}. If not provided, it will be automatically calculated within the \link{odr_get_url} function. However, providing it fastens the processing time.
+#' Argument \code{opt_param} : list of parameters related to the queried OPeNDAP server and the roi. See \link{odr_get_opt_param} for additional details. The list can be retrieved outside the function with the function \link{odr_get_opt_param}. If not provided, it will be automatically calculated within the \link{odr_get_url} function. However, providing it fastens the processing time.
 #' It might be particularly useful to precompute and provide it in case the function is used within a loop for the same ROI.
 #'
 #' Argument \code{credentials} : Login to the OPeNDAP servers is required to use the function. odr_login can be done either within the function or outside with the function \link{odr_login}

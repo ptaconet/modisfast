@@ -28,12 +28,12 @@ Imports:
     stringr,
     rvest,
     utils,
-    parallel
+    parallel,
+    raster,
+    stars,
+    ncdf4
 Suggests: 
     testthat,
     knitr,
-    ncdf4,
-    raster,
-    stars,
     mapview,
     rmarkdown

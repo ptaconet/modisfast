@@ -13,7 +13,7 @@ odr_get_url(collection, variables = NULL, roi, time_range,
 
 \item{variables}{string vector. optional. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted (see details of \link{odr_get_url}).}
 
-\item{roi}{object of class \code{sf} or \code{sfc}. mandatory. Region of interest. Must be POLYGON-type geometry composed of one single feature.}
+\item{roi}{object of class \code{sf}. mandatory. Region of interest. Must be POLYGON-type geometry composed of one single feature.}
 
 \item{time_range}{date(s) / POSIXlt of interest . mandatory. Single date/datetime or time frame : vector with start and end dates/times (see details).}
 
@@ -48,7 +48,7 @@ Argument \code{time_range} : Can be provided either as i) a single date (e.g. \c
 
 Argument \code{single_netcdf} : for MODIS and VIIRS products from LP DAAC: download the data as a single file encompassing the whole time frame (TRUE) or as multiple files : one for each date, which is the behavious for the other collections - GPM and SMAP) (FALSE) ?
 
-Argument \code{opt_param} : list of parameters related to the queried OPeNDAP server and the roi. See \link{odr_get_opt_param} for additional details. The parameter can be retrieved outside the function with the function \link{odr_get_opt_param}. If not provided, it will be automatically calculated within the \link{odr_get_url} function. However, providing it fastens the processing time.
+Argument \code{opt_param} : list of parameters related to the queried OPeNDAP server and the roi. See \link{odr_get_opt_param} for additional details. The list can be retrieved outside the function with the function \link{odr_get_opt_param}. If not provided, it will be automatically calculated within the \link{odr_get_url} function. However, providing it fastens the processing time.
 It might be particularly useful to precompute and provide it in case the function is used within a loop for the same ROI.
 
 Argument \code{credentials} : Login to the OPeNDAP servers is required to use the function. odr_login can be done either within the function or outside with the function \link{odr_login}
