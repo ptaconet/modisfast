@@ -160,6 +160,8 @@ odr_get_url<-function(collection,
 
   table_urls <- table_urls %>%
     dplyr::mutate(name=stringr::str_replace(name,".*/","")) %>%
+    dplyr::mutate(url=gsub("\\[","%5B",url)) %>%
+    dplyr::mutate(url=gsub("\\]","%5D",url)) %>%
     dplyr::arrange(name) %>%
     transform(name = ifelse(duplicated(name) | duplicated(name, fromLast=TRUE),
                             paste(name, stats::ave(name, name, FUN=seq_along), sep='_'),

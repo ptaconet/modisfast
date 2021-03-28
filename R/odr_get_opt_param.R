@@ -157,7 +157,7 @@ odr_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
 
     #if (odap_coll_info$crs=="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"){
       #list_roiSpatialIndexBound <- purrr::map(list_roiSpatialIndexBound,~replace(.,. > 1199,1199))
-      list_roiSpatialIndexBound <- purrr::map2(.x = list_roiSpatialIndexBound,.y = OpenDAPXVector , ~replace(.x,.x > length(.y),length(.y)))
+      list_roiSpatialIndexBound <- purrr::map2(.x = list_roiSpatialIndexBound,.y = OpenDAPXVector , ~replace(.x,.x >= length(.y),length(.y)-1))
     #} else if (odap_coll_info$crs=="+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"){
      # list_roiSpatialIndexBound <- purrr::map(list_roiSpatialIndexBound,~replace(.,. > 2399,2399))
     #}

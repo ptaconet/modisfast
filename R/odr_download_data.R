@@ -9,6 +9,7 @@
 #' @inheritParams odr_login
 #' @param df_to_dl data.frame. Urls and destination files of dataset to download. Typically output of \link{odr_get_url}. See Details for the structure
 #' @param parallel boolean. Parallelize the download ? Default to FALSE
+#' @param min_filesize integer. minimum file size expected (in bites) for one file downloaded. If files downloaded are less that this value, the files will be downloaded again. Default 5000.
 #'
 #' @return a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional columns are :
 #' \describe{
@@ -36,7 +37,7 @@
 #'
 #'
 
-odr_download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL,verbose=TRUE){
+odr_download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL,verbose=TRUE,min_filesize=5000){
 
   fileSize <- destfile <- fileDl <- NULL
 
@@ -55,10 +56,10 @@ odr_download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL
   data_dl<-df_to_dl %>%
     dplyr::mutate(fileDl=file.exists(destfile)) %>%
     dplyr::mutate(fileSize=ifelse(fileDl==TRUE,file.size(destfile),NA)) %>%
-    dplyr::mutate(fileDl=ifelse(fileDl==TRUE & fileSize>=5000,TRUE,FALSE)) %>%
+    dplyr::mutate(fileDl=ifelse(fileDl==TRUE & fileSize>=min_filesize,TRUE,FALSE)) %>%
     dplyr::mutate(dlStatus=ifelse(fileDl==TRUE,3,NA))
 
-  file.remove(data_dl$destfile[which(data_dl$fileSize<=5000)])
+    file.remove(data_dl$destfile[which(data_dl$fileSize<=min_filesize)])
 
   # data already downloaded
   data_already_exist<-data_dl %>%
@@ -113,9 +114,10 @@ odr_download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL
     rbind(data_already_exist)
 
   # to deal with pb when not all the data are downloaded
-  data_downloaded <- dplyr::filter(data_dl,fileSize>=5000)
+  data_downloaded <- dplyr::filter(data_dl,fileSize>=min_filesize)
 
   if(!(identical(data_dl,data_downloaded))){
+    if(verbose){cat("Downloading again the datasets that were not properly downloaed (i.e. whose size is less than ",min_filesize,"...\n Caution : argument min_filesize is set to ",min_filesize," bites.")}
     odr_download_data(df_to_dl=df_to_dl,parallel=FALSE,credentials=credentials,source=source)
   }
 
