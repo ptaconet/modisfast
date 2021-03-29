@@ -22,33 +22,17 @@ renvoyer erreur ou warning si le fichier n'existe pas
 
 ⚠️ Package still under development \!
 
-R package to access various spatiotemporal Earth science data
-collections in R using the [OPeNDAP
-framework](https://www.opendap.org/about). Currently implemented data
-collections are
-[MODIS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/),
-[VIIRS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/),
-[GPM](https://pmm.nasa.gov/GPM) and [SMAP](https://smap.jpl.nasa.gov/)).
+<!--
+R package to access various spatiotemporal Earth science data collections in R using the [OPeNDAP framework](https://www.opendap.org/about). Currently implemented data collections are [MODIS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/), [VIIRS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/), [GPM](https://pmm.nasa.gov/GPM) and [SMAP](https://smap.jpl.nasa.gov/)). 
 
-Opendap (*Open-source Project for a Network Data Access Protocol*) is a
-data access protocol that enables to subset the data - spatially,
-temporally, etc. - directly at the downloading phase. Filters are
-provided directly within a http url. For example the following URL
-:
+Opendap (*Open-source Project for a Network Data Access Protocol*) is a data access protocol that enables to subset the data  - spatially, temporally, etc. - directly at the downloading phase. Filters are provided directly within a http url. For example the following URL : 
 
-[https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS\_Grid\_Daily\_1km\_LST\_eos\_cf\_projection,LST\_Day\_1km\[6093:6122\]\[55:140\]\[512:560\],LST\_Night\_1km\[6093:6122\]\[55:140\]\[512:560\],QC\_Day\[6093:6122\]\[55:140\]\[512:560\],QC\_Night\[6093:6122\]\[55:140\]\[512:560\],time\[6093:6122\],YDim\[55:140\],XDim\[512:560\]](https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projection,LST_Day_1km%5B6093:6122%5D%5B55:140%5D%5B512:560%5D,LST_Night_1km%5B6093:6122%5D%5B55:140%5D%5B512:560%5D,QC_Day%5B6093:6122%5D%5B55:140%5D%5B512:560%5D,QC_Night%5B6093:6122%5D%5B55:140%5D%5B512:560%5D,time%5B6093:6122%5D,YDim%5B55:140%5D,XDim%5B512:560%5D)
+https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projection,LST_Day_1km[6093:6122][55:140][512:560],LST_Night_1km[6093:6122][55:140][512:560],QC_Day[6093:6122][55:140][512:560],QC_Night[6093:6122][55:140][512:560],time[6093:6122],YDim[55:140],XDim[512:560]
 
-provides the MOD11A1.006 (MODIS/Terra Land Surface
-Temperature/Emissivity Daily L3 Global 1km SIN Grid V006) data in
-netCDF, subsetted for bands LST\_Day\_1km, LST\_Night\_1km, QC\_Day,
-QC\_Night, for each day between the 2017-01-01 and the 2017-01-30, and
-within the following bounding box (lon/lat): -5.41 8.84, -5.82 9.54.
+provides the MOD11A1.006 (MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid V006) data in netCDF, subsetted for bands LST_Day_1km, LST_Night_1km, QC_Day, QC_Night, for each day between the 2017-01-01 and the 2017-01-30, and within the following bounding box (lon/lat): -5.41 8.84, -5.82 9.54.
 
-This package enables to build OPeNDAP (https) URLs given input
-parameters such as a data collection, region and time range of interst .
-These URLs can then be used to either download the data to your
-workspace or computer, or access the datacube directly as an R object
-(of class `ndcf4`, `raster`, `stars`, etc.)
+This package enables to build OPeNDAP (https) URLs given input parameters such as a data collection, region and time range of interst . These URLs can then be used to either download the data to your workspace or computer, or access the datacube directly as an R object (of class `ndcf4`, `raster`, `stars`, etc.)
+-->
 
 **opendapr** is an R package that provides functions to **harmonize**
 and **speed-up** the **download** of some well-known and widely-used
