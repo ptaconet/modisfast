@@ -14,8 +14,13 @@ status](https://travis-ci.org/ptaconet/opendapr.svg?branch=master)](https://trav
 [![Github\_Status\_Badge](https://img.shields.io/badge/Github-0.1.0-blue.svg)](https://github.com/ptaconet/opendapr)
 <!-- badges: end -->
 
-ATTENTION A CHANGER : FUSEAUX HORAIRES POUR DONNEES GPM HALF HOURLY
-\!\!\!\!\!\!
+<!-- ATTENTION A CHANGER : FUSEAUX HORAIRES POUR DONNEES GPM HALF HOURLY !!!!!!
+
+AUSSI : min filesize (le fichier peut etre plus petit que 50 k.. e.g. titi)
+renvoyer erreur ou warning si le fichier n'existe pas
+-->
+
+⚠️ Package still under development \!
 
 R package to access various spatiotemporal Earth science data
 collections in R using the [OPeNDAP
