@@ -32,7 +32,7 @@ odr_login<-function(credentials,source,verbose=TRUE){
   if(verbose){cat("Checking credentials...\n")}
 
   if(source=="earthdata"){
-   x <- httr::GET(url = "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.006/h17v07.ncml.ascii?time",httr::authenticate(user=credentials[1], credentials[2]),config = list(maxredirs=-1)) # testing credentials must be improved...
+   x <- httr::GET(url = "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11_L2.061/MOD11_L2.061.ncml.ascii?time",httr::authenticate(user=credentials[1], credentials[2]),config = list(maxredirs=-1)) # testing credentials must be improved...
    httr::stop_for_status(x, "login to Earthdata. Check out username and password")
    httr::warn_for_status(x)
    options(earthdata_user=credentials[1])
