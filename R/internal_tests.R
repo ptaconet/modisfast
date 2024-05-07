@@ -66,7 +66,7 @@
 #' @noRd
 
 .testTimeRange<-function(time_range){
-  if(!inherits(time_range,"Date") && !inherits(time_range,"POSIXlt") || length(time_range)>2 || is.na(time_range)){stop("Argument time_range is not of class Date or POSIXlt or is not of length 1 or 2 \n")}
+  if(!inherits(time_range,"Date") && !inherits(time_range,"POSIXlt") || length(time_range)>2 || is.na(time_range[1]) || is.na(time_range[2])){stop("Argument time_range is not of class Date or POSIXlt or is not of length 1 or 2 \n")}
   if(length(time_range)==2 && time_range[1] > time_range[2]){stop("Time end is superior to time start in time_range argument \n")}
   }
 

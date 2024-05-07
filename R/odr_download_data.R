@@ -92,7 +92,10 @@ odr_download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL
       username <- password <- "no_auth"
     }
 
-    dl_func<-function(url,output,username,password) {httr::GET(url,httr::authenticate(username,password),httr::write_disk(output),httr::progress(),config = list(maxredirs=-1))}
+    dl_func<-function(url,output,username,password) {
+      u <- httr::GET(url)
+      httr::GET(u$url,httr::authenticate(username,password),httr::write_disk(output),httr::progress(),config = list(maxredirs=-1))
+      }
 
     if(verbose){cat("Downloading the data...\n")}
     if (parallel){
@@ -117,14 +120,14 @@ odr_download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL
   data_downloaded <- dplyr::filter(data_dl,fileSize>=min_filesize)
 
   if(!(identical(data_dl,data_downloaded))){
-    if(verbose){cat("Downloading again the datasets that were not properly downloaed (i.e. whose size is less than ",min_filesize,"...\n Caution : argument min_filesize is set to ",min_filesize," bites.")}
+    if(verbose){cat("Downloading again the datasets that were not properly downloaded...")}
     odr_download_data(df_to_dl=df_to_dl,parallel=FALSE,credentials=credentials,source=source)
   }
 
   # 1 : download ok
   # 2 : download error
   # 3 : data already existing in output folder
-  if(verbose){cat("OK\n")}
+  if(verbose){cat("Data were all properly downloaded\n")}
 
   return(data_dl)
 }

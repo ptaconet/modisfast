@@ -66,13 +66,11 @@ devtools::test() #reloads your code with load_all(), then runs all testthat test
 ## Ajouter manuellement dans le description file, la liste des packages dont dépend le package
 
 ## ci dessous, pour ajouter des données internes au package (ie non visibles par les utilisateurs)
-opendapMetadata_internal <- read.csv("/home/ptaconet/opendapr/.data_collections.csv",stringsAsFactors =F ) %>% arrange(collection)
-modis_tiles<-sf::read_sf("/home/ptaconet/Téléchargements/modis_sin.kmz")  %>% #https://modis.ornl.gov/files/modis_sin.kmz
+opendapMetadata_internal <- read.csv(".data_collections.csv",stringsAsFactors =F ) %>% arrange(collection)
+modis_tiles <- sf::read_sf(".modis_sin.kmz")  %>% #https://modis.ornl.gov/files/modis_sin.kmz
   sf::st_zm(modis_tiles) %>%
   dplyr::select(Name,geometry)
-suomi_tiles<-sf::read_sf("/home/ptaconet/Téléchargements/vnp2tiles.gpkg")  %>%
-  sf::st_zm(suomi_tiles) %>%
-  dplyr::select(Name,geom)
+suomi_tiles <- readRDS(".suomi_tiles.rda")
 usethis::use_data(opendapMetadata_internal,modis_tiles,suomi_tiles, internal = TRUE,overwrite = TRUE)
 
 

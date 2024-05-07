@@ -39,6 +39,7 @@ odr_list_variables<-function(collection,credentials=NULL){  # for a given collec
 
   InfoURL<-paste0(URL,".info")
   vector_response<-httr::GET(InfoURL)
+  vector_response<-httr::GET(vector_response$url)
   if(vector_response$status_code==400){ stop("Bad request\n")}
   vector_content<-httr::content(vector_response,"text",encoding="UTF-8")
   vector_html<-xml2::read_html(vector_content)
@@ -52,6 +53,7 @@ odr_list_variables<-function(collection,credentials=NULL){  # for a given collec
 
   DdsURL<-paste0(URL,".dds")
   vector_response<-httr::GET(DdsURL)
+  vector_response<-httr::GET(vector_response$url)
   vector<-httr::content(vector_response,"text",encoding="UTF-8")
   vector<-strsplit(vector,"\n")
   vector<-vector[[1]][-length(vector[[1]])]

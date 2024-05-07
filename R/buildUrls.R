@@ -123,12 +123,12 @@
     ##############  GPM   ######################
     ############################################
 
-    ##############  GPM_3IMERGHH.06   ######################
-    if(collection %in% c("GPM_3IMERGHH.06","GPM_3IMERGHHL.06","GPM_3IMERGHHE.06")){
+    ##############  GPM_3IMERGHH.06 and GPM_3IMERGHH.07  ######################
+    if(collection %in% c("GPM_3IMERGHH.06","GPM_3IMERGHHL.06","GPM_3IMERGHHE.06","GPM_3IMERGHH.07")){
 
-      if(collection=="GPM_3IMERGHHL.06"){
+      if(collection %in% c("GPM_3IMERGHHL.06")){
         indicatif<-"-L"
-      } else if (collection=="GPM_3IMERGHHE.06"){
+      } else if (collection %in% c("GPM_3IMERGHHE.06")){
         indicatif<-"-E"
       } else {
         indicatif<-NULL
@@ -150,15 +150,16 @@
         dplyr::mutate(number_minutes_from_start_day=sprintf("%04d",difftime(date,as.POSIXlt(paste0(as.Date(date)," 00:00:00"),tz="GMT"),units="mins")))
 
       urls<-datesToRetrieve %>%
-        dplyr::mutate(product_name=paste0("3B-HHR",indicatif,".MS.MRG.3IMERG.",gsub("-","",date_character),"-S",hour_start,"-E",hour_end,".",number_minutes_from_start_day,".V06B")) %>%
+        #dplyr::mutate(product_name=paste0("3B-HHR",indicatif,".MS.MRG.3IMERG.",gsub("-","",date_character),"-S",hour_start,"-E",hour_end,".",number_minutes_from_start_day,".V06B")) %>%
+        dplyr::mutate(product_name=paste0("3B-HHR",indicatif,".MS.MRG.3IMERG.",gsub("-","",date_character),"-S",hour_start,"-E",hour_end,".",number_minutes_from_start_day,".V0",substr(collection, nchar(collection), nchar(collection)),"B")) %>%
         dplyr::mutate(url_product=paste0(odap_server,collection,"/",year,"/",day,"/",product_name,".HDF5.",output_format))
 
       ##############  GPM_3IMERGDF.06,GPM_3IMERGDL.06   ######################
-    } else if(collection %in% c("GPM_3IMERGDF.06","GPM_3IMERGDL.06","GPM_3IMERGDE.06")){
+    } else if(collection %in% c("GPM_3IMERGDF.06","GPM_3IMERGDL.06","GPM_3IMERGDE.06","GPM_3IMERGDF.07")){
 
-      if(collection=="GPM_3IMERGDL.06"){
+      if(collection %in% c("GPM_3IMERGDL.06")){
         indicatif<-"-L"
-      } else if (collection=="GPM_3IMERGDE.06"){
+      } else if (collection %in% c("GPM_3IMERGDE.06")){
         indicatif<-"-E"
       } else {
         indicatif<-NULL
@@ -174,12 +175,13 @@
         dplyr::mutate(month=format(date,'%m'))
 
       urls<-datesToRetrieve %>%
-        dplyr::mutate(product_name=paste0("3B-DAY",indicatif,".MS.MRG.3IMERG.",gsub("-","",date_character),"-S000000-E235959.V06")) %>%
+        #dplyr::mutate(product_name=paste0("3B-DAY",indicatif,".MS.MRG.3IMERG.",gsub("-","",date_character),"-S000000-E235959.V06")) %>%
+        dplyr::mutate(product_name=paste0("3B-DAY",indicatif,".MS.MRG.3IMERG.",gsub("-","",date_character),"-S000000-E235959.V0",substr(collection, nchar(collection), nchar(collection)),ifelse(collection=="GPM_3IMERGDF.07","B",""))) %>%
         dplyr::mutate(url_product=paste0(odap_server,collection,"/",year,"/",month,"/",product_name,".nc4.",output_format))
 
       ##############  GPM_3IMERGM.06   ######################
 
-    } else if(collection=="GPM_3IMERGM.06"){
+    } else if(collection %in% c("GPM_3IMERGM.06","GPM_3IMERGM.07")){
 
       time_range=as.Date(time_range,origin="1970-01-01")
 
@@ -193,7 +195,8 @@
         dplyr::mutate(month=format(date,'%m'))
 
       urls<-datesToRetrieve %>%
-        dplyr::mutate(product_name=paste0("3B-MO.MS.MRG.3IMERG.",year,month,"01-S000000-E235959.",month,".V06B")) %>%
+        #dplyr::mutate(product_name=paste0("3B-MO.MS.MRG.3IMERG.",year,month,"01-S000000-E235959.",month,".V06B")) %>%
+        dplyr::mutate(product_name=paste0("3B-MO.MS.MRG.3IMERG.",year,month,"01-S000000-E235959.",month,".V0",substr(collection, nchar(collection), nchar(collection)),"B")) %>%
         dplyr::mutate(url_product=paste0(odap_server,collection,"/",year,"/",product_name,".HDF5.",output_format))
 
     }
