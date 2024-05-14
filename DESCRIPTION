@@ -5,8 +5,7 @@ Version: 0.1.0
 Authors@R: 
     person("Paul", "Taconet", , "paul.taconet@ird.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7429-7204"))
-Description: Provides functions to download MODIS and MODIS-like Earth
-    science datacubes in a time-saving and efficient way : by sampling it
+Description: Provides functions to download MODIS and MODIS-like datacubes in a time-saving and efficient way : by sampling it
     at the very downloading phase (spatially, temporally and
     dimensionally) using the OPeNDAP framework.
 License: GPL-3

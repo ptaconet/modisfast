@@ -134,7 +134,7 @@ et voilà !
 Want more examples of use of `modisfast` ? **Have a look at the
 [`vignette("get_started")`](https://ptaconet.github.io/modisfast/articles/get_started.html)
 to get started with a simple example, and see the
-[`vignette("advanced_use")`](https://ptaconet.github.io/modisfast/articles/advanced_use.html)
+[`vignette("modisfast2")`](https://ptaconet.github.io/modisfast/articles/modisfast2.html)
 for a more advanced workflow !**
 
 <!--
