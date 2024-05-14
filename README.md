@@ -89,9 +89,11 @@ First, define the variables of interest :
 # Load the packages
 library(modisfast)
 library(sf)
+
 # MODIS collections and variables (bands) of interest
 collection <- "MOD11A1.061"  # run mf_list_collections() for an exhaustive list of collections available
 variables <- c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night") # run mf_list_variables("MOD11A1.061") for an exhaustive list of variables available for the collection "MOD11A1.061"
+
 # ROI and time range of interest
 roi <- st_as_sf(data.frame(geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326) # a ROI of interest, format sf polygon
 roi_id <- "korhogo"  # a name for the area of interest
@@ -104,6 +106,7 @@ Then, download the data with `modisfast`:
 ## Login to Earthdata servers with your EOSDIS credentials. 
 # To create an account go to : https://urs.earthdata.nasa.gov/.
 log <- mf_login(credentials = c("username","password"))
+
 ## Get the URLs of the data 
 urls <- mf_get_url(
   collection = collection,
@@ -112,6 +115,7 @@ urls <- mf_get_url(
   roi_id = roi_id,
   time_range = time_range
  )
+
 ## Download the data. By default the data is downloaded in a file named 'roi/collection'
 res_dl <- mf_download_data(urls)
 ```

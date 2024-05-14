@@ -7,6 +7,9 @@ vignette: >
   %\VignetteIndexEntry{Get data on several regions or periods of interest at a glance}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+format:
+  html:
+    code-overflow: scroll
 ---
 
 ```{r, include = FALSE}
@@ -45,7 +48,7 @@ require(terra)
 require(magrittr)
 ```
 
-```{r example_prepare, eval=NOT_CRAN}
+```{r example_prepare, eval=T}
 roi_id <- "korhogo2"
 roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
 time_ranges <- list(as.Date(c("2016-01-01","2016-01-31")),
@@ -65,7 +68,7 @@ Here is where the function `mf_get_opt_param()` comes into the game. For a given
 
 **To summarize : when we have multiple time frames of interest, we first execute the function `mf_get_opt_param()`. Then, we execute the function `mf_get_url()`, passing the result of `mf_get_opt_param()` in the parameter `opt_param`.**
 
-```{r mf_get_url_multiple_timeframes, eval=NOT_CRAN}
+```{r mf_get_url_multiple_timeframes, eval=T}
 
 # first execute the function `mf_get_opt_param()`
 opt_param_mod11a1 <- mf_get_opt_param("MOD11A1.061",roi)
@@ -86,7 +89,7 @@ str(urls_mod11a1)
 
 ### Download and import the data in R {#download}
 
-```{r dl, eval=NOT_CRAN}
+```{r dl, eval=T}
 
 res_dl <- mf_download_data(urls_mod11a1)
 
