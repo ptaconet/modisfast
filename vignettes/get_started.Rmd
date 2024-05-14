@@ -1,0 +1,202 @@
+---
+title: "1. Get started "
+author: "Paul Taconet"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true") # vignette will not be executed when tested on the cran
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  purl = NOT_CRAN
+  )
+library(emo)
+```
+
+```{r setup, message=F}
+library(modisfast)
+library(sf)
+library(terra)
+library(magrittr)
+```
+
+In this example we want to download, import and plot over the 3500 km^2^ wide region of interest (mapped below) :
+
+- a 30 days-long time series of land surface temperature from [MODIS Terra LST](https://dx.doi.org/10.5067/MODIS/MOD11A1.061) (spatial resolution : 1 km ; temporal resolution : 1 day),
+- the same 30 days-long times series of precipitations from [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERGDF/DAY/07) (spatial resolution : 1° ; temporal resolution : 1 day)
+
+```{r, echo=F, fig.height=5, fig.width=3, eval=T }
+library(mapview)
+roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
+mapview::mapview(roi,legend=F)
+```
+
+## Check which collections are available 
+
+Before starting, let's identify our collections of interest among the collections that are available for download, using the function `mf_list_collections()` :
+
+```{r mf_list_collections, eval=T}
+collections <- mf_list_collections()
+print(str(collections))
+```
+
+So our collections of interest are : 
+
+- **MOD11A1.061** : MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid v061
+- **GPM_3IMERGDF.07** : GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V07
+
+## Setup the region and time range of interest
+
+First we prepare the script : define the ROI and the time frame
+
+```{r example_prepare, eval=T}
+# Set ROI and time range of interest
+roi_id <- "korhogo"
+roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326)
+time_range <- as.Date(c("2017-01-01","2017-01-30"))
+```
+
+## Login to EOSDIS Earthdata
+
+And we login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
+
+```{r eval=NOT_CRAN, echo=F,message=F }
+username <- Sys.getenv("earthdata_un")
+password <- Sys.getenv("earthdata_pw")
+log <- mf_login(credentials = c(username,password),verbose = F)
+```
+
+```{r mf_login, eval=NOT_CRAN}
+# Login to Earthdata servers with username and password. 
+username <- "earthdata_un"
+password <- "earthdata_pw"
+log <- mf_login(credentials = c(username,password))
+```
+
+```{r eval=NOT_CRAN, echo=F,message=F }
+username <- Sys.getenv("earthdata_un")
+password <- Sys.getenv("earthdata_pw")
+log <- mf_login(credentials = c(username,password),verbose = F)
+```
+
+## Get the URLs of the data to download {#get-url}
+
+With the function `mf_get_url()`, we get the https URLs for our collections of interest (*MOD11A1.061* and *GPM_3IMERGDF.07*) given our ROI and time frame. 
+
+`r emo::ji("right arrow")` For each collection, we can select a subset only of variables (sometimes called "dimensions", or "bands") that are of interest for us, through the parameter `variables`. By default, this parameter is set to `NULL`, which means that all the available variables for the specified collection are included. To get the variables available for a given collection along with information for each of them (description, etc.), use the function `mf_list_variables()`.
+
+<!-- `r emo::ji("right arrow")` **Note on the use of the parameter `variables` of the function `mf_get_url()` :** -->
+
+<!-- The collections generally contain several variables (sometimes called "dimensions", or "bands"). As an example, MODIS LST products contain one band for the day temperature ("LST_Day_1km"), one band for the night temperature ("LST_Night_1km"), etc. To get all the variables available for a given collection along with information for each of them (description, etc.), use the function `mf_list_variables()`. e.g. : -->
+
+<!-- ```{r mf_list_variables, eval=T} -->
+<!-- tail(mf_list_variables("MOD11A1.061")) -->
+<!-- ``` -->
+
+<!-- In `mf_get_url()`, the parameter `variables` enables to restrict the data to download to only specific variables. By default it is set to `NULL`, which means that all the available variables for the specified collection are downloaded. Specifying `variables` will make the data to download lighter.  -->
+
+<!-- **End Note** -->
+
+
+```{r mf_get_url, eval=T}
+## Get the URLs of MODIS Terra LST daily
+urls_mod11a1 <- mf_get_url(
+  collection = "MOD11A1.061",
+  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),  # get the available variables with : mf_list_variables("MOD11A1.061"), or set to NULL (default) to download all the variables
+  roi = roi,
+  roi_id = roi_id,
+  time_range = time_range
+ )
+
+## Get the URLs of GPM daily
+urls_gpm <- mf_get_url(
+  collection = "GPM_3IMERGDF.07",
+  variables = c("precipitation"),  # get the available variables with : mf_list_variables("GPM_3IMERGDF.07")
+  roi = roi,
+  roi_id = roi_id,
+  time_range = time_range
+ )
+
+nrow(urls_mod11a1)
+urls_mod11a1
+
+nrow(urls_gpm)
+head(urls_gpm,3)
+
+```
+
+## Download the data {#download}
+
+Now we download the data with the function `mf_download_data()`.
+
+The destination file for each dataset is specified in the column *destfile* of the dataframes *urls_mod11a1* and *urls_gpm*. A destination file is specified by default but it can of course be modified.
+
+Setting the argument `parallel` to `TRUE` will parallelize - therefore fasten - the download in case numerous datasets need to be downloaded.
+
+```{r mf_download_data, eval=T }
+
+# Hint : to fasten the download in case of multiple collections, bind them in a single data.frame (as shown below) before executing the function 'mf_download_data()' :
+df_to_dl <- rbind(urls_mod11a1,urls_gpm)
+
+# Then download the data
+res_dl <- mf_download_data(df_to_dl,parallel = TRUE)
+
+print(str(res_dl))
+```
+
+## Import the data in R {#import}
+
+Various packages and related classes can be used to read the data downloaded through OPeNDAP. If [`terra`](https://cran.r-project.org/package=terra) (successor of [`raster`](https://cran.r-project.org/package=raster)) is surely the most famous class for raster objects, many packages facilitate the use of spatiotemporal data cubes in formats such as those proposed through `modisfast` (e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as a `stars` object from the excellent [`stars`](https://cran.r-project.org/package=stars) package for data cubes manipulation. All the data can also be imported as `ncdf4` objects using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4) package.
+
+`r emo::ji("warning")` **Important warning regarding the use of the data after download through `modisfast`**
+
+Care must be taken when importing data that was downloaded through the OPeNDAP data providers servers. Depending on the collection, some "issues" were raised. These issues are independent from `modisfast` : they result most of time of a kind of lack of full implementation of the OPeNDAP framework by the data providers. These issues are :
+
+- for MODIS and VIIRS collections : CRS has to be provided
+- for GPM collections : CRS has to be provided + data have to be flipped
+
+**End warning**
+
+These issues can easily be dealt at the import phase in R using the function `mf_import_data()`. This function enables to open the data in R as a `SpatRaster` object (from the package [`terra`](https://cran.r-project.org/package=terra)) :
+
+```{r import_example, message=F, eval=T}
+# import MOD11A1.061
+modis_ts <- mf_import_data(file.path(roi_id,"MOD11A1.061"), collection_source = "MODIS")
+# import GPM
+gpm_ts <- mf_import_data(file.path(roi_id,"GPM_3IMERGDF.07"), collection_source = "GPM")
+
+modis_ts
+gpm_ts
+```
+
+## Plot the data
+
+Let's finally plot the data !
+
+(Note that only the first 16 dates are plotted here-under)
+
+```{r plot , fig.fullwidth = TRUE, fig.height = 10, fig.width = 9,fig.align = 'center', eval=T}
+# Land surface temperature
+terra::plot(modis_ts["LST_Day_1km"])
+# Precipitation
+terra::plot(gpm_ts["precipitation"])
+```
+
+```{r import_example, message=F, eval=T, echo=F}
+# import MOD11A1.061
+modis_ts <- mf_import_data(file.path(roi_id,"MOD11A1.061"), collection_source = "MODIS")
+# import GPM
+gpm_ts <- mf_import_data(file.path(roi_id,"GPM_3IMERGDF.07"), collection_source = "GPM")
+
+modis_ts
+gpm_ts
+```
+

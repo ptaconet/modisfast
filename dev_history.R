@@ -8,7 +8,7 @@ require(dplyr)
 ## and video here : http://www.user2019.fr/static/pres/t257651.zip
 
 ## create the package
-usethis::create_package("/home/ptaconet/opendapr")
+usethis::create_package("/home/ptaconet/modisfast")
 ## Manual step : Create a dev_history.R file that archives all the package history steps. Then copy it to the package folder.
 ## Then proceed :
 usethis::use_build_ignore("dev_history.R")
@@ -77,10 +77,10 @@ usethis::use_data(opendapMetadata_internal,modis_tiles,suomi_tiles, internal = T
 
 #roi_example<-"/home/ptaconet/getRemoteData/inst/extdata/roi_example.gpkg"
 #dir.create("inst/extdata")
-#file.copy(roi_example,gsub("getRemoteData","opendapr",roi_example))
+#file.copy(roi_example,gsub("getRemoteData","modisfast",roi_example))
 
 #roi_modis2tiles<-"/home/ptaconet/Documents/modis2tiles.gpkg"
-#file.copy(roi_modis2tiles,gsub("Documents","opendapr/inst/extdata",roi_modis2tiles))
+#file.copy(roi_modis2tiles,gsub("Documents","modisfast/inst/extdata",roi_modis2tiles))
 
 ### To add a config file with username and password to usgs. More info : https://db.rstudio.com/best-practices/managing-credentials/
 file.create("config.yml")

@@ -1,13 +1,13 @@
-#' @name odr_download_data
-#' @aliases odr_download_data
+#' @name mf_download_data
+#' @aliases mf_download_data
 #' @title  Download several datasets given their URLs and destination path
-#' @description This function enables to download datasets. In a data import workflow, this function is typically used after a call to the \link{odr_get_url} function. The output value of \link{odr_get_url} can be used as input of parameter \code{df_to_dl} of \link{odr_download_data}.
+#' @description This function enables to download datasets. In a data import workflow, this function is typically used after a call to the \link{mf_get_url} function. The output value of \link{mf_get_url} can be used as input of parameter \code{df_to_dl} of \link{mf_download_data}.
 #'
 #' The download can the parallelized.
 #'
-#' @inheritParams odr_get_url
-#' @inheritParams odr_login
-#' @param df_to_dl data.frame. Urls and destination files of dataset to download. Typically output of \link{odr_get_url}. See Details for the structure
+#' @inheritParams mf_get_url
+#' @inheritParams mf_login
+#' @param df_to_dl data.frame. Urls and destination files of dataset to download. Typically output of \link{mf_get_url}. See Details for the structure
 #' @param parallel boolean. Parallelize the download ? Default to FALSE
 #' @param min_filesize integer. minimum file size expected (in bites) for one file downloaded. If files downloaded are less that this value, the files will be downloaded again. Default 5000.
 #'
@@ -28,8 +28,8 @@
 #'
 #' Parameter \code{source} takes NULL as default value. Options are :
 #' \itemize{
-#' \item{ \code{NULL} : } {when no odr_login is required to download the data. }
-#' \item{ \code{"earthdata"} : } {to download data requiring a odr_login to EOSDIS Earthdata. To create an account go to : https://urs.earthdata.nasa.gov/  }
+#' \item{ \code{NULL} : } {when no mf_login is required to download the data. }
+#' \item{ \code{"earthdata"} : } {to download data requiring a mf_login to EOSDIS Earthdata. To create an account go to : https://urs.earthdata.nasa.gov/  }
 #'}
 #'
 #' @import dplyr parallel
@@ -37,7 +37,7 @@
 #'
 #'
 
-odr_download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL,verbose=TRUE,min_filesize=5000){
+mf_download_data<-function(df_to_dl,parallel=TRUE,credentials=NULL,source="earthdata",verbose=TRUE,min_filesize=5000){
 
   fileSize <- destfile <- fileDl <- NULL
 
@@ -121,7 +121,7 @@ odr_download_data<-function(df_to_dl,parallel=FALSE,credentials=NULL,source=NULL
 
   if(!(identical(data_dl,data_downloaded))){
     if(verbose){cat("Downloading again the datasets that were not properly downloaded...")}
-    odr_download_data(df_to_dl=df_to_dl,parallel=FALSE,credentials=credentials,source=source)
+    mf_download_data(df_to_dl=df_to_dl,parallel=FALSE,credentials=credentials,source=source)
   }
 
   # 1 : download ok

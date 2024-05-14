@@ -1,8 +1,8 @@
-#' @name odr_login
+#' @name mf_login
 #' @title Login to query servers and download data
 #' @description Login before querying data servers
 #'
-#' @inheritParams odr_get_url
+#' @inheritParams mf_get_url
 #' @param source source. See details
 #'
 #' @return None.
@@ -17,15 +17,15 @@
 #' Create an account to Earthdata here : \url{https://urs.earthdata.nasa.gov/}.
 #'
 #' @examples
-#' # odr_login to Earthdata
+#' # mf_login to Earthdata
 #' \donttest{
 #' username <- Sys.getenv("earthdata_un")
 #' password <- Sys.getenv("earthdata_pw")
-#' odr_login(credentials = c(username,password),source = "earthdata")
+#' mf_login(credentials = c(username,password),source = "earthdata")
 #' }
 #'
 
-odr_login<-function(credentials,source,verbose=TRUE){
+mf_login<-function(credentials,source="earthdata",verbose=TRUE){
 
   if(!inherits(credentials,"character") || length(credentials)!=2 ) {stop("credentials must be a vector character string of length 2 (username and password)\n")}
   .testInternetConnection()
@@ -39,7 +39,7 @@ odr_login<-function(credentials,source,verbose=TRUE){
    httr::warn_for_status(x)
    options(earthdata_user=credentials[1])
    options(earthdata_pass=credentials[2])
-   options(earthdata_odr_login=TRUE)
+   options(earthdata_mf_login=TRUE)
   }
   if(verbose){cat("Successfull login to",source,"\n")}
 

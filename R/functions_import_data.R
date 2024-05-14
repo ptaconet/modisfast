@@ -1,24 +1,26 @@
 #' @name .import_gpm
 #' @title Import data  source=="GPM"
 #' @noRd
-.import_gpm <- function(paths,variable,output){
+.import_gpm <- function(dir_path,output_class,proj_epsg){
 
-  if(output=="RasterBrick"){
+  if(output_class=="SpatRaster"){
 
-    rasts <- paths %>%
-      purrr::map(~raster::raster(., varname = variable, crs = "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+    files <- list.files(dir_path, full.names = T)
 
-    names_rasts <- purrr::map_chr(rasts, ~as.character(.@z[[1]]))
+    rasts <- terra::rast(files)
+    terra::crs(rasts) <- "epsg:4326"
 
     rasts <- rasts %>%
-      raster::brick() %>%
-      raster::t() %>%
-      raster::flip("y") %>%
-      raster::flip("x")
+      terra::t() %>%
+      terra::flip("vertical") %>%
+      terra::flip("horizontal")
 
-    names(rasts) <- names_rasts
+    if(proj_epsg != "4326"){
+      rasts <- terra::project(rasts,paste0("epsg:",proj_epsg))
+    }
 
-  } else if(output=="stars"){
+
+  } else if(output_class=="stars"){
     stop("stars output is not implemented yet for this collection")
     #a<-stars::read_stars(paths) %>%
     # st_set_crs(odap_coll_info$crs) %>% t() %>% flip("y")
@@ -29,73 +31,33 @@
 }
 
 
-#' @name .import_modis_viirs_laadsdaac
+#' @name .import_modis_viirs
 #' @title Import data  source in% c("VNP46A1") , provider=="NASA USGS LAADS DAAC"
 #' @noRd
-.import_modis_viirs_laadsdaac <- function(paths,variable,output){
+.import_modis_viirs <- function(dir_path,output_class,proj_epsg){
 
-  if(output=="RasterBrick"){
+  if(output_class=="SpatRaster"){
 
-      rasts <- paths %>%
-        purrr::map(~raster::raster(., varname = variable,crs = "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")) %>%
-        raster::brick()
+    files <- list.files(dir_path, full.names = T)
 
-      names_rasts <- paths %>%
-        purrr::map(~ncdf4::nc_open(.)) %>%
-        purrr::map(~ncdf4::ncatt_get(.,varid = 0,attname = "HDFEOS_GRIDS_VNP_Grid_DNB.RangeEndingDate")) %>%
-        purrr::map_chr(~pluck(.,"value"))
+    if(length(files)>1){
 
-      names(rasts) <- names_rasts
-
-
-  } else if (output=="stars"){
-    stop("stars output is not implemented yet for this collection")
-  }
-
-  return(rasts)
-}
-
-
-#' @name .import_modis_viirs_lpdaac
-#' @title Import data  source in% c("MODIS","VIIRS") , provider=="NASA USGS LP DAAC"
-#' @noRd
-.import_modis_viirs_lpdaac <- function(paths,variable,output){
-
-  . <- NULL
-
-  crs_modis <- "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
-
-  if(length(paths)>1){warning("Multiple paths provided. In case the paths are not from multiple tiles, an error will be sent back")}
-
-  if(output=="RasterBrick"){
-    if(length(paths)==1){
-      #rasts <- expand.grid(paths,variables,stringsAsFactors = F) %>%    # to import multiple variables at once
-      #  purrr::map2(.x=.$Var1,.y=.$Var2, .f=~brick(.x,varname=.y,crs=crs_modis)) %>%
-      #  set_names(variables)
-      rasts <- paths %>%    # multiple variables
-        raster::brick(.,varname=variable,crs=crs_modis)
-    } else {  # case of multiple modis tiles
-      rasts <- paths %>%
-        purrr::map(~raster::brick(.,varname=variable,crs=crs_modis))
-      names_rast <- names(rasts[[1]])
-      rasts <- rasts %>%  do.call(raster::merge,.)
-      names(rasts) <- names_rast
-    }
-  } else if (output=="stars"){
-    if(length(paths)==1){
-      rasts <- paths %>%
-        stars::read_stars(.) %>%
-        sf::st_set_crs(crs_modis)
+    rasts <- files %>%
+      purrr::map(~terra::rast(.)) %>%
+      do.call(terra::merge,.)
 
     } else {
-      stop("case of multiple tiles for this collection not implemented yet")
-      #TODO : stars output format for several modis tiles
-      #rasts <- df_data_to_import$destfile %>%
-      #  map(~stars::read_stars(.)) %>%
-      #  map(~st_set_crs(.,crs_modis)) %>%
-      #  do.call(c,.)
+
+      rasts <- terra::rast(files)
+
     }
 
+    terra::crs(rasts) <- "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
+
+    rasts <- terra::project(rasts,paste0("epsg:",proj_epsg))
+
+  } else if (output_class=="stars"){
+    stop("stars output is not implemented yet for this collection")
   }
 
   return(rasts)
@@ -105,18 +67,18 @@
 #' @name .import_smap
 #' @title Import data  source=="SMAP"
 #' @noRd
-.import_smap <- function(paths,collection,variable,roi,output,opt_param){
+.import_smap <- function(paths,collection,variable,roi,output_class,opt_param){
 
   smap_sp_bound <-  NULL
 
   if(is.null(roi) && is.null(opt_param)){stop("either roi or opt_param argument must be provided")}
 
-  if(output=="RasterBrick"){
+  if(output_class=="SpatRaster"){
 
     raster(paths[[1]],varname=variable) # outputs error if no variable is provided
 
     if(is.null(opt_param)){
-      smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = collection)$roiSpatialBound$`1`
+      smap_sp_bound <- modisfast::mf_get_opt_param(roi = roi, collection = collection)$roiSpatialBound$`1`
     } else {
       smap_sp_bound <- opt_param$roiSpatialBound$`1`
     }
@@ -137,7 +99,7 @@
 
     names(rasts) <- names_rasts
 
-  } else if(output=="stars"){
+  } else if(output_class=="stars"){
     stop("stars output is not implemented yet for this collection")
   }
 

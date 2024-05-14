@@ -3,17 +3,17 @@
 #' @title Get MODIS tile(s) intersecting a given ROI
 #' @description Get MODIS tile(s) intersecting a given ROI
 #'
-#' @inheritParams odr_get_url
+#' @inheritParams mf_get_url
 #'
 #' @return a character string vector with the MODIS tiles intersecting the ROI
 #'
 #' @details
 #'
-#' If the ROI is covering multiple MODIS tiles, consider splitting the ROI into multiple parts (1 for each MODIS tile) before executing the \code{odr_get_url} function.
-#' Then loop \code{odr_get_url} over each part. Check out the example for some tips on how to proceed.
+#' If the ROI is covering multiple MODIS tiles, consider splitting the ROI into multiple parts (1 for each MODIS tile) before executing the \code{mf_get_url} function.
+#' Then loop \code{mf_get_url} over each part. Check out the example for some tips on how to proceed.
 #'
 #' @note
-#' The function uses the MODIS tile gridding system available at https://modis.ornl.gov/files/modis_sin.kmz . The same dataset is available in the package through opendapr::modis_tiles
+#' The function uses the MODIS tile gridding system available at https://modis.ornl.gov/files/modis_sin.kmz . The same dataset is available in the package through modisfast::modis_tiles
 #'
 #' @importFrom magrittr %>%
 #' @import sf dplyr
@@ -37,6 +37,7 @@
   } else if (type=="suomi"){
     tiling_system <- suomi_tiles
   }
+
   modis_tile <- tiling_system %>%
     sf::st_intersection(roi) %>%
     dplyr::filter(sf::st_is(., "POLYGON")) %>%

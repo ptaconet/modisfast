@@ -10,7 +10,7 @@
   collection<-opendapMetadata_internal$collection[which(opendapMetadata_internal$collection==collection)]
 
   if(length(collection)==0){
-    stop("The collection that you specified does not exist. Check odr_list_collections() to see which collections are implemented\n")
+    stop("The collection that you specified does not exist. Check mf_list_collections() to see which collections are implemented\n")
   }
 
 }
@@ -24,7 +24,7 @@
 
  diff_vars <- NULL
  diff_vars <- setdiff(specified_variables,existing_variables)
- if(length(diff_vars)>0){stop("Specified variables do not exist or are not extractable for the specified collection. Use the function odr_list_variables to check which variables are available and extractable for the collection\n")}
+ if(length(diff_vars)>0){stop("Specified variables do not exist or are not extractable for the specified collection. Use the function mf_list_variables to check which variables are available and extractable for the collection\n")}
 
 }
 
@@ -32,7 +32,7 @@
 #  variables <- NULL
 #  .testIfCollExists(collection)
 #  .testLogin(credentials)
-#  variables <- odr_list_variables(collection,credentials)
+#  variables <- mf_list_variables(collection,credentials)
 #  variables <- variables$name
 #  .testIfVarExists2(variables,specified_variables)
 #}
@@ -43,11 +43,11 @@
 
 .testLogin<-function(credentials=NULL){
 
-  odr_login <- NULL
+  mf_login <- NULL
 
-  if(!is.null(credentials) || is.null(getOption("earthdata_odr_login"))){
-    odr_login <- odr_login(credentials,source = "earthdata")
-    return(odr_login)
+  if(!is.null(credentials) || is.null(getOption("earthdata_mf_login"))){
+    mf_login <- mf_login(credentials,source = "earthdata")
+    return(mf_login)
   }
 
 }

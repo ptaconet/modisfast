@@ -1,0 +1,128 @@
+---
+title: "2. Get data on several regions or periods of interest at a glance"
+author: "Paul Taconet"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get data on several regions or periods of interest at a glance}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true") # vignette will not be executed when tested on the cran
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  purl = NOT_CRAN
+)
+```
+
+In the `vignette("get_started")`, we have imported data : 
+
+* from several collections (MOD11A1.061 and GPM_L3/GPM_3IMERGDF.07) ;
+* over one single region of interest (ROI) ;
+* for one single time frame of interest (2017-01-01 to 2017-01-30).
+
+So far so good, but what if we need ***multiple regions of interest***, and / or ***multiple time frames of interest*** ? Those case are likely to happen, for instance : 
+
+* multiple time frames of interest : we have spatiotemporal sampling data - e.g. species occurrence - that were collected over a large time frame and we want to study how local past environmental / climatic conditions influence the occurrence ;
+* multiple regions of interest : we want to compare two areas in terms of their environmental or climatic conditions.
+
+We could use `for` loops or related stuff to do the job. However, this would not be very optimized. In this vignette, we explain why and we show how to optimize the data import **in the case of multiple time periods** or **multiple regions** of interest. Let's start ! 
+
+## The case of multiple time periods of interest
+
+First we load the useful packages, we define the ROI and time periods of interest (here, for the example, the month of January for each year from 2016 to 2019) and we login to EOSDIS Earthdata :
+
+```{r setup, message=F}
+require(modisfast)
+require(sf)
+require(purrr)
+require(terra)
+require(magrittr)
+```
+
+```{r example_prepare, eval=NOT_CRAN}
+roi_id <- "korhogo2"
+roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
+time_ranges <- list(as.Date(c("2016-01-01","2016-01-31")),
+                    as.Date(c("2017-01-01","2017-01-31")),
+                    as.Date(c("2018-01-01","2018-01-31")),
+                    as.Date(c("2019-01-01","2019-01-31")))
+
+log <- mf_login(credentials = c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
+
+```
+
+### Get the URLs of the data to download {#get-url}
+
+Of course, we could loop over the `mf_get_url()` with the time ranges of interest, and get the data. However, the `mf_get_url()` function does query the OPeNDAP servers each time it is called. This query internally imports various data, including OPeNDAP time, latitude and longitude vectors, and this process takes some time. In case you loop over the function for the same ROI and multiple time frames of interest, it will import again and again the same data, which is quite useless.
+
+Here is where the function `mf_get_opt_param()` comes into the game. For a given collection and ROI, this function queries the OPeNDAP server and retrieves the information that we were mentionning in the previous paragraph. This function is actually run within the `mf_get_url()` function, but its output can also be provided as input parameter `opt_param` of `mf_get_url()`. If `mf_get_url()` is queried multiple times for the same couple {collection, ROI}, it is hence more efficient to pre-compute only once the argument `opt_param` using `mf_get_opt_param()` and to further provide it to `mf_get_url()` within a `for` loop or e.g. a `purrr::map()` function.
+
+**To summarize : when we have multiple time frames of interest, we first execute the function `mf_get_opt_param()`. Then, we execute the function `mf_get_url()`, passing the result of `mf_get_opt_param()` in the parameter `opt_param`.**
+
+```{r mf_get_url_multiple_timeframes, eval=NOT_CRAN}
+
+# first execute the function `mf_get_opt_param()`
+opt_param_mod11a1 <- mf_get_opt_param("MOD11A1.061",roi)
+
+# then execute the function `mf_get_url()` passing the argument opt_param
+urls_mod11a1 <- purrr::map_dfr(time_ranges, ~mf_get_url( 
+  collection = "MOD11A1.061",
+  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
+  roi = roi,
+  roi_id = roi_id,
+  time_range = .,
+  opt_param = opt_param_mod11a1)
+  )
+
+str(urls_mod11a1)
+
+```
+
+### Download and import the data in R {#download}
+
+```{r dl, eval=NOT_CRAN}
+
+res_dl <- mf_download_data(urls_mod11a1)
+
+modis_ts <- mf_import_data(file.path(roi_id,"MOD11A1.061"), collection_source = "MODIS")
+
+modis_ts
+
+```
+
+## The case of multiple regions of interest
+
+The same philosophy stands for multiple regions of interest : 
+
+```{r, eval=F }
+
+# Define regions of interest and time range
+roi_id <- list("Korhogo","Diebougou")
+roi <- list(st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326),
+            st_as_sf(data.frame(geom="POLYGON ((-3.62 11.03, -3.13 11.04, -3.11 10.60, -3.60 10.60, -3.62 11.03))"), wkt="geom", crs = 4326)
+)  
+time_range <- as.Date(c("2017-01-01","2017-01-30"))
+
+# Execute the classical workflow
+urls_mod11a1 <- purrr::map2_dfr(roi,roi_id, ~mf_get_url(
+        collection = "MOD11A1.061",
+        variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
+        roi = .x,
+        roi_id = .y,
+        time_range = time_range,
+        opt_param = opt_param_mod11a1)
+    )
+
+res_dl <- mf_download_data(urls_mod11a1)
+
+modis_ts_korhogo <- mf_import_data("Korhogo/MOD11A1.061", collection_source = "MODIS")
+modis_ts_diebougou <- mf_import_data("Diebougou/MOD11A1.061", collection_source = "MODIS")
+
+```
+

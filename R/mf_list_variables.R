@@ -1,12 +1,12 @@
-#' @name odr_list_variables
-#' @aliases odr_list_variables
+#' @name mf_list_variables
+#' @aliases mf_list_variables
 #' @title Get informations related to the variables available for a given collection
 #' @description Get the variables available for a given collection
 #'
-#' @inheritParams odr_get_url
+#' @inheritParams mf_get_url
 #'
 #' @return A data.frame with the available variables for the collection, and a set of related information for each variable.
-#' The variables marked as "extractable" in the column "extractable_w_opendapr" can be provided as input parameter \code{variables} of the function \link{odr_get_url}
+#' The variables marked as "extractable" in the column "extractable_w_opendapr" can be provided as input parameter \code{variables} of the function \link{mf_get_url}
 #'
 #' @export
 #'
@@ -18,14 +18,14 @@
 #'
 #' \donttest{
 #' # login to Earthdata
-#' log <- odr_login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),source="earthdata")
+#' log <- mf_login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),source="earthdata")
 #'
 #' # Get the variables available for the collection MOD11A1.006
-#' (df_varinfo <- odr_list_variables("MOD11A1.006"))
+#' (df_varinfo <- mf_list_variables("MOD11A1.006"))
 #'}
 #'
 
-odr_list_variables<-function(collection,credentials=NULL){  # for a given collection, get the available variables and associated information
+mf_list_variables<-function(collection,credentials=NULL){  # for a given collection, get the available variables and associated information
 
   .testIfCollExists(collection)
   .testInternetConnection()
@@ -73,7 +73,7 @@ odr_list_variables<-function(collection,credentials=NULL){  # for a given collec
 
   tab<-dplyr::left_join(tab,variables_indices,by="name")
 
-  # add a column to specify whether the variable is extractable or not with opendapr
+  # add a column to specify whether the variable is extractable or not with modisfast
 
   dim_lon<-opendapMetadata$dim_lon
   dim_lat<-opendapMetadata$dim_lat
