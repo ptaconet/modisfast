@@ -33,7 +33,7 @@ In this example we want to download, import and plot over the 3500 km^2^ wide re
 - a 30 days-long time series of land surface temperature from [MODIS Terra LST](https://dx.doi.org/10.5067/MODIS/MOD11A1.061) (spatial resolution : 1 km ; temporal resolution : 1 day),
 - the same 30 days-long times series of precipitations from [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERGDF/DAY/07) (spatial resolution : 1° ; temporal resolution : 1 day)
 
-```{r, echo=F, fig.height=5, fig.width=3, eval=T }
+```{r, echo=F, fig.height=5, fig.width=3, eval=NOT_CRAN }
 library(mapview)
 roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
 mapview::mapview(roi,legend=F)
@@ -43,7 +43,7 @@ mapview::mapview(roi,legend=F)
 
 Before starting, let's identify our collections of interest among the collections that are available for download, using the function `mf_list_collections()` :
 
-```{r mf_list_collections, eval=T}
+```{r mf_list_collections, eval=NOT_CRAN}
 collections <- mf_list_collections()
 print(str(collections))
 ```
@@ -57,7 +57,7 @@ So our collections of interest are :
 
 First we prepare the script : define the ROI and the time frame
 
-```{r example_prepare, eval=T}
+```{r example_prepare, eval=NOT_CRAN}
 # Set ROI and time range of interest
 roi_id <- "korhogo"
 roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326)
@@ -68,20 +68,7 @@ time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
 And we login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
 
-```{r eval=NOT_CRAN, echo=F,message=F }
-username <- Sys.getenv("earthdata_un")
-password <- Sys.getenv("earthdata_pw")
-log <- mf_login(credentials = c(username,password),verbose = F)
-```
-
-```{r mf_login, eval=NOT_CRAN}
-# Login to Earthdata servers with username and password. 
-username <- "earthdata_un"
-password <- "earthdata_pw"
-log <- mf_login(credentials = c(username,password))
-```
-
-```{r eval=NOT_CRAN, echo=F,message=F }
+```{r eval=NOT_CRAN}
 username <- Sys.getenv("earthdata_un")
 password <- Sys.getenv("earthdata_pw")
 log <- mf_login(credentials = c(username,password),verbose = F)
@@ -106,7 +93,7 @@ With the function `mf_get_url()`, we get the https URLs for our collections of i
 <!-- **End Note** -->
 
 
-```{r mf_get_url, eval=T}
+```{r mf_get_url, eval=NOT_CRAN}
 ## Get the URLs of MODIS Terra LST daily
 urls_mod11a1 <- mf_get_url(
   collection = "MOD11A1.061",
@@ -141,7 +128,7 @@ The destination file for each dataset is specified in the column *destfile* of t
 
 Setting the argument `parallel` to `TRUE` will parallelize - therefore fasten - the download in case numerous datasets need to be downloaded.
 
-```{r mf_download_data, eval=T }
+```{r mf_download_data, eval=NOT_CRAN }
 
 # Hint : to fasten the download in case of multiple collections, bind them in a single data.frame (as shown below) before executing the function 'mf_download_data()' :
 df_to_dl <- rbind(urls_mod11a1,urls_gpm)
@@ -167,7 +154,7 @@ Care must be taken when importing data that was downloaded through the OPeNDAP d
 
 These issues can easily be dealt at the import phase in R using the function `mf_import_data()`. This function enables to open the data in R as a `SpatRaster` object (from the package [`terra`](https://cran.r-project.org/package=terra)) :
 
-```{r import_example, message=F, eval=T}
+```{r import_example, message=F, eval=NOT_CRAN}
 # import MOD11A1.061
 modis_ts <- mf_import_data(file.path(roi_id,"MOD11A1.061"), collection_source = "MODIS")
 # import GPM
@@ -183,20 +170,11 @@ Let's finally plot the data !
 
 (Note that only the first 16 dates are plotted here-under)
 
-```{r plot , fig.fullwidth = TRUE, fig.height = 10, fig.width = 9,fig.align = 'center', eval=T}
+```{r plot , fig.fullwidth = TRUE, fig.height = 10, fig.width = 9,fig.align = 'center', eval=NOT_CRAN}
 # Land surface temperature
 terra::plot(modis_ts["LST_Day_1km"])
 # Precipitation
 terra::plot(gpm_ts["precipitation"])
 ```
 
-```{r import_example, message=F, eval=T, echo=F}
-# import MOD11A1.061
-modis_ts <- mf_import_data(file.path(roi_id,"MOD11A1.061"), collection_source = "MODIS")
-# import GPM
-gpm_ts <- mf_import_data(file.path(roi_id,"GPM_3IMERGDF.07"), collection_source = "GPM")
-
-modis_ts
-gpm_ts
-```
 

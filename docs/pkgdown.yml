@@ -1,7 +1,8 @@
-pandoc: 2.3.1
-pkgdown: 1.3.0
+pandoc: 3.1.1
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
-  opendapr1: opendapr1.html
-  opendapr2: opendapr2.html
+  get_started: get_started.html
+  modisfast2: modisfast2.html
+last_built: 2024-05-14T14:54Z
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Build the URL(s) of the data to download — get_url • opendapr</title>
+<title>Build the URL(s) of the data to download — get_url • modisfast</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -64,7 +64,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">opendapr</a>
+        <a class="navbar-link" href="../index.html">modisfast</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
@@ -99,7 +99,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/ptaconet/opendapr">
+  <a href="https://github.com/ptaconet/modisfast">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -117,7 +117,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Build the URL(s) of the data to download</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ptaconet/opendapr/blob/master/R/get_url.R'><code>R/get_url.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/ptaconet/modisfast/blob/master/R/get_url.R'><code>R/get_url.R</code></a></small>
     <div class="hidden name"><code>get_url.Rd</code></div>
     </div>
 
@@ -243,7 +243,7 @@ It might be particularly useful to precompute and provide it in case the functio
 
 <span class='co'>### Import the data :</span>
 <span class='co'>## Have a look at the README file for important details regarding the data import in R.</span>
-<span class='co'>## README file : \url{https://ptaconet.github.io/opendapr/index.html#important-note-import}</span>
+<span class='co'>## README file : \url{https://ptaconet.github.io/modisfast/index.html#important-note-import}</span>
 <span class='no'>modis_crs</span> <span class='kw'>&lt;-</span> <span class='st'>"+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"</span>
 
 <span class='co'>## open as a stars object (deals with multiple dimensions and time)</span>
@@ -275,7 +275,7 @@ It might be particularly useful to precompute and provide it in case the functio
 #&gt; resolution  : 926.6254, 926.6254  (x, y)
 #&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)
 #&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs 
-#&gt; data source : /home/ptaconet/opendapr/docs/reference/MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4 
+#&gt; data source : /home/ptaconet/modisfast/docs/reference/MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4 
 #&gt; names       : X2017.01.01, X2017.01.02, X2017.01.03, X2017.01.04, X2017.01.05, X2017.01.06, X2017.01.07, X2017.01.08, X2017.01.09, X2017.01.10, X2017.01.11, X2017.01.12, X2017.01.13, X2017.01.14, X2017.01.15, ... 
 #&gt; Date        : 2017-01-01, 2017-01-30 (min, max)
 #&gt; varname     : LST_Day_1km 
@@ -284,7 +284,7 @@ It might be particularly useful to precompute and provide it in case the functio
 #&gt; resolution  : 926.6254, 926.6254  (x, y)
 #&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)
 #&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs 
-#&gt; data source : /home/ptaconet/opendapr/docs/reference/MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4 
+#&gt; data source : /home/ptaconet/modisfast/docs/reference/MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4 
 #&gt; names       : X2017.01.01, X2017.01.02, X2017.01.03, X2017.01.04, X2017.01.05, X2017.01.06, X2017.01.07, X2017.01.08, X2017.01.09, X2017.01.10, X2017.01.11, X2017.01.12, X2017.01.13, X2017.01.14, X2017.01.15, ... 
 #&gt; Date        : 2017-01-01, 2017-01-30 (min, max)
 #&gt; varname     : LST_Night_1km 

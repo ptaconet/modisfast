@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>1. Simple workflow : Download and import data for a given region of interest and time frame • opendapr</title>
+<title>1. Simple workflow : Download and import data for a given region of interest and time frame • modisfast</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
@@ -30,7 +30,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">opendapr</a>
+        <a class="navbar-link" href="../index.html">modisfast</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
@@ -64,7 +64,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ptaconet/opendapr">
+  <a href="https://github.com/ptaconet/modisfast">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -91,14 +91,14 @@
             
             <h4 class="date">2020-02-20</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/ptaconet/opendapr/blob/master/vignettes/simple_workflow.Rmd"><code>vignettes/simple_workflow.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ptaconet/modisfast/blob/master/vignettes/simple_workflow.Rmd"><code>vignettes/simple_workflow.Rmd</code></a></small>
       <div class="hidden name"><code>simple_workflow.Rmd</code></div>
 
     </div>
 
     
     
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(opendapr)</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(modisfast)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(sf)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(stars)</a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(raster)</a>
@@ -260,7 +260,7 @@
 <h2 class="hasAnchor">
 <a href="#import" class="anchor"></a>Import the data in R</h2>
 <p>We finally import the data in R.</p>
-<p>Caution ! Have a look at the section <a href="https://ptaconet.github.io/opendapr/index.html#important-note-import">Important note regarding the further import of the data in R</a> of the README for additional information and important note on the data import phase in R !</p>
+<p>Caution ! Have a look at the section <a href="https://ptaconet.github.io/modisfast/index.html#important-note-import">Important note regarding the further import of the data in R</a> of the README for additional information and important note on the data import phase in R !</p>
 <div id="import-modis-vnp" class="section level3">
 <h3 class="hasAnchor">
 <a href="#import-modis-vnp" class="anchor"></a>Import MODIS / VNP</h3>
@@ -275,7 +275,7 @@
 <a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></a>
 <a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; extent      : -637981.6, -593503.6, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></a>
 <a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs </span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; data source : /home/ptaconet/opendapr/vignettes/MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4 </span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; data source : /home/ptaconet/modisfast/vignettes/MOD11A1.006/MOD11A1.006.2017001_2017030.h17v08.nc4 </span></a>
 <a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; names       : X2017.01.01, X2017.01.02, X2017.01.03, X2017.01.04, X2017.01.05, X2017.01.06, X2017.01.07, X2017.01.08, X2017.01.09, X2017.01.10, X2017.01.11, X2017.01.12, X2017.01.13, X2017.01.14, X2017.01.15, ... </span></a>
 <a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; Date        : 2017-01-01, 2017-01-30 (min, max)</span></a>
 <a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; varname     : LST_Day_1km</span></a>
@@ -344,7 +344,7 @@
 <a href="#as-a-rasterlayer-object-2" class="anchor"></a>As a <code>RasterLayer</code> object</h4>
 <p>We set-up the missing bounding coordinates. For this we use the function <code><a href="../reference/get_optional_parameters.html">get_optional_parameters()</a></code>.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">## Import the SMAP time series as a rasterBrick object (1 rasterBrick for each dimension) :</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">smap_sp_bound &lt;-<span class="st"> </span>opendapr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/opendapr/topics/get_optional_parameters">get_optional_parameters</a></span>(<span class="dt">roi =</span> roi, <span class="dt">collection =</span> <span class="st">"SMAP/SPL3SMP_E.003"</span>)<span class="op">$</span>roiSpatialBound<span class="op">$</span><span class="st">`</span><span class="dt">1</span><span class="st">`</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">smap_sp_bound &lt;-<span class="st"> </span>modisfast<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/modisfast/topics/get_optional_parameters">get_optional_parameters</a></span>(<span class="dt">roi =</span> roi, <span class="dt">collection =</span> <span class="st">"SMAP/SPL3SMP_E.003"</span>)<span class="op">$</span>roiSpatialBound<span class="op">$</span><span class="st">`</span><span class="dt">1</span><span class="st">`</span></a>
 <a class="sourceLine" id="cb10-3" data-line-number="3">  </a>
 <a class="sourceLine" id="cb10-4" data-line-number="4">(smap_rast_sm_am &lt;-<span class="st"> </span>urls_smap<span class="op">$</span>destfile <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb10-5" data-line-number="5"><span class="st">  </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span>ncdf4<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ncdf4/topics/nc_open">nc_open</a></span>(.)) <span class="op">%&gt;%</span></a>
