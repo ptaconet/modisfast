@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fast Download of many Earth Observation Data in R using the OPeNDAP Capacities • opendapr</title>
+<title>Fast Download of many Earth Observation Data in R using the OPeNDAP Capacities • modisfast</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
@@ -30,7 +30,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">opendapr</a>
+        <a class="navbar-link" href="index.html">modisfast</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
@@ -57,14 +57,14 @@
       <a href="articles/opendapr1.html">1. Get started </a>
     </li>
     <li>
-      <a href="articles/opendapr2.html">2. Advanced use of `odr_get_url()`</a>
+      <a href="articles/opendapr2.html">2. Advanced use of `mf_get_url()`</a>
     </li>
   </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ptaconet/opendapr">
+  <a href="https://github.com/ptaconet/modisfast">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -85,18 +85,18 @@
     
     
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<div id="opendapr" class="section level1">
+<div id="modisfast" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#opendapr" class="anchor"></a>opendapr <img src="reference/figures/logo.png" align="right">
+<a href="#modisfast" class="anchor"></a>modisfast <img src="reference/figures/logo.png" align="right">
 </h1></div>
 <!-- badges: start -->
 
-<p><strong>opendapr</strong> is an R package that provides functions to <strong>harmonize</strong> and <strong>speed-up</strong> the <strong>download</strong> of some well-known and widely-used <strong>spatiotemporal Earth science datacubes</strong> (e.g. <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/">MODIS</a>, <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/">VIIRS</a>, <a href="https://pmm.nasa.gov/GPM">GPM</a> or <a href="https://smap.jpl.nasa.gov/">SMAP</a>) using the <a href="https://www.opendap.org/about"><strong>OPeNDAP framework</strong></a> (<em>Open-source Project for a Network Data Access Protocol</em>)</p>
+<p><strong>modisfast</strong> is an R package that provides functions to <strong>harmonize</strong> and <strong>speed-up</strong> the <strong>download</strong> of some well-known and widely-used <strong>spatiotemporal Earth science datacubes</strong> (e.g. <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/">MODIS</a>, <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/">VIIRS</a>, <a href="https://pmm.nasa.gov/GPM">GPM</a> or <a href="https://smap.jpl.nasa.gov/">SMAP</a>) using the <a href="https://www.opendap.org/about"><strong>OPeNDAP framework</strong></a> (<em>Open-source Project for a Network Data Access Protocol</em>)</p>
 <p><strong><em>Harmonize ?</em></strong></p>
-<p><strong>opendapr</strong> proposes a single function to query the various data servers, and another single function to download the data.</p>
+<p><strong>modisfast</strong> proposes a single function to query the various data servers, and another single function to download the data.</p>
 <p><strong><em>Speed-up ?</em></strong></p>
-<p><strong>opendapr</strong> uses the abilities offered by the OPeNDAP to download a subset of data cube, along spatial, temporal or any other data dimension (depth, …). This way, it reduces downloading time and disk usage to their minimum : no more 1° x 1° MODIS tiles when your region of interest is only 100 km x 100 km wide ! Moreover, opendapr supports parallelized downloads.</p>
-<p>Below is a comparison of opendapr with other packages available for downloading chunks of remote sensing data :</p>
+<p><strong>modisfast</strong> uses the abilities offered by the OPeNDAP to download a subset of data cube, along spatial, temporal or any other data dimension (depth, …). This way, it reduces downloading time and disk usage to their minimum : no more 1° x 1° MODIS tiles when your region of interest is only 100 km x 100 km wide ! Moreover, modisfast supports parallelized downloads.</p>
+<p>Below is a comparison of modisfast with other packages available for downloading chunks of remote sensing data :</p>
 <table class="table table">
 <thead><tr class="header">
 <th align="left">Package</th>
@@ -106,7 +106,7 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left"><a href="https://github.com/ptaconet/opendapr"><code>opendapr</code></a></td>
+<td align="left"><a href="https://github.com/ptaconet/modisfast"><code>modisfast</code></a></td>
 <td align="center">MODIS, VIIRS, SMAP, GPM</td>
 <td align="center">✅</td>
 <td align="center">✅</td>
@@ -138,27 +138,27 @@
 </tbody>
 </table>
 <p>* at the downloading phase</p>
-<p>By enabling to download subsets of data cubes, opendapr facilites the access to Earth science data for R users in places where internet connection is slow or expensive and promotes digital sobriety for our research work.</p>
-<p>The OPeNDAP, over which the package builds, is a project developed by the non-profit <a href="https://www.opendap.org/about">OPeNDAP, Inc.</a> and advanced openly and collaboratively. By using this data access protocol, opendapr support the open-source-software movement.</p>
+<p>By enabling to download subsets of data cubes, modisfast facilites the access to Earth science data for R users in places where internet connection is slow or expensive and promotes digital sobriety for our research work.</p>
+<p>The OPeNDAP, over which the package builds, is a project developed by the non-profit <a href="https://www.opendap.org/about">OPeNDAP, Inc.</a> and advanced openly and collaboratively. By using this data access protocol, modisfast support the open-source-software movement.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <!--
-You can install the released version of opendapr from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of modisfast from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-install.packages("opendapr")
+install.packages("modisfast")
 ```
 -->
 <p>The package can be installed with:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ptaconet/opendapr"</span>, <span class="dt">build_vignettes =</span> T, <span class="dt">build_manual =</span> T)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ptaconet/modisfast"</span>, <span class="dt">build_vignettes =</span> T, <span class="dt">build_manual =</span> T)</a></code></pre></div>
 <p>Work is ongoing to publish the package on the CRAN.</p>
 </div>
 <div id="coll-available" class="section level2">
 <h2 class="hasAnchor">
-<a href="#coll-available" class="anchor"></a>Collections available in opendapr</h2>
-<p>Currently <strong>opendapr</strong> supports download of 77 data collections, extracted from the following meta-collections :</p>
+<a href="#coll-available" class="anchor"></a>Collections available in modisfast</h2>
+<p>Currently <strong>modisfast</strong> supports download of 77 data collections, extracted from the following meta-collections :</p>
 <ul>
 <li>
 <a href="https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/">MODIS land products</a> made available by the <a href="https://lpdaac.usgs.gov/">NASA / USGS LP DAAC</a> (➡️ <a href="https://opendap.cr.usgs.gov/opendap/hyrax/">source OPeNDAP server</a>) ;</li>
@@ -171,8 +171,8 @@ install.packages("opendapr")
 <li>
 <a href="https://smap.jpl.nasa.gov/">Soil Moisture Active-Passive</a> (SMAP) made available by the <a href="https://nsidc.org/">NASA NSIDC DAAC</a> (➡️ <a href="https://n5eil02u.ecs.nsidc.org/opendap/SMAP/">source OPeNDAP server</a>)</li>
 </ul>
-<p>Details of each product available for download are provided in the table above or through the function <code><a href="reference/odr_list_collections.html">odr_list_collections()</a></code>. Want more details on a specific collection ? Click on the “DOI” column !</p>
-<details><summary><b>Data collections available for download with opendapr (click to expand)</b></summary><p>
+<p>Details of each product available for download are provided in the table above or through the function <code><a href="reference/mf_list_collections.html">mf_list_collections()</a></code>. Want more details on a specific collection ? Click on the “DOI” column !</p>
+<details><summary><b>Data collections available for download with modisfast (click to expand)</b></summary><p>
 </p>
 <table class="table table table">
 <thead><tr>
@@ -1741,22 +1741,22 @@ Nighttime lights
 <div id="get-started" class="section level2">
 <h2 class="hasAnchor">
 <a href="#get-started" class="anchor"></a>Get Started</h2>
-<p>Downloading the data with <strong>opendapr</strong> is a simple two-steps workflow :</p>
+<p>Downloading the data with <strong>modisfast</strong> is a simple two-steps workflow :</p>
 <ul>
 <li>
-<p>With the function <strong><code><a href="reference/odr_get_url.html">odr_get_url()</a></code></strong>, get the URL(s) of the data for :</p>
+<p>With the function <strong><code><a href="reference/mf_get_url.html">mf_get_url()</a></code></strong>, get the URL(s) of the data for :</p>
 <ul>
-<li>a collection : see <a href="#collections-available-in-opendapr">previous section</a>,</li>
+<li>a collection : see <a href="#collections-available-in-modisfast">previous section</a>,</li>
 <li>variables,</li>
 <li>region of interest,</li>
 <li>time range,</li>
 <li>output data format (netcdf, ascii, json)</li>
 </ul>
 </li>
-<li><p>Next, with the function <strong><code><a href="reference/odr_download_data.html">odr_download_data()</a></code></strong> : download the data to your computer.</p></li>
+<li><p>Next, with the function <strong><code><a href="reference/mf_download_data.html">mf_download_data()</a></code></strong> : download the data to your computer.</p></li>
 </ul>
-<p>Additional functions include : list collection available for download ( <code><a href="reference/odr_list_collections.html">odr_list_collections()</a></code> ), list variables available for each collection ( <code><a href="reference/odr_list_variables.html">odr_list_variables()</a></code> ), login to EOSDIS Earthdata before querying the servers and downloading the data (<code><a href="reference/odr_login.html">odr_login()</a></code>).</p>
-<p><strong>Have a look at the <a href="https://ptaconet.github.io/opendapr/articles/opendapr1.html"><code><a href="articles/opendapr1.html">vignette("opendapr1")</a></code></a> to get started with a simple example, and for a more advanced workflow see the <a href="https://ptaconet.github.io/opendapr/articles/opendapr2.html"><code><a href="articles/opendapr2.html">vignette("opendapr2")</a></code></a> !</strong></p>
+<p>Additional functions include : list collection available for download ( <code><a href="reference/mf_list_collections.html">mf_list_collections()</a></code> ), list variables available for each collection ( <code><a href="reference/mf_list_variables.html">mf_list_variables()</a></code> ), login to EOSDIS Earthdata before querying the servers and downloading the data (<code><a href="reference/mf_login.html">mf_login()</a></code>).</p>
+<p><strong>Have a look at the <a href="https://ptaconet.github.io/modisfast/articles/opendapr1.html"><code><a href="articles/opendapr1.html">vignette("opendapr1")</a></code></a> to get started with a simple example, and for a more advanced workflow see the <a href="https://ptaconet.github.io/modisfast/articles/opendapr2.html"><code><a href="articles/opendapr2.html">vignette("opendapr2")</a></code></a> !</strong></p>
 <!--
 
 ## Example {#example}
@@ -1780,7 +1780,7 @@ We prepare the script : load the packages and login to EOSDIS Earthdata with our
 
 ```r
 # Load the packages
-require(opendapr)
+require(modisfast)
 require(sf)
 
 # Define ROI and time range of interest
@@ -1791,27 +1791,27 @@ time_range <- as.Date(c("2017-01-01","2017-01-30"))
 # Here we have stored our credentials in local environment variables
 username <- Sys.getenv("earthdata_un") 
 password <- Sys.getenv("earthdata_pw")
-log <- odr_login(credentials = c(username,password), source = "earthdata")
+log <- mf_login(credentials = c(username,password), source = "earthdata")
 ```
 
 Download the data in two steps : 
 
-1. Get the URLs with the function `odr_get_url()`;
-2. Download the data with the function `odr_download_data()`.
+1. Get the URLs with the function `mf_get_url()`;
+2. Download the data with the function `mf_download_data()`.
 
 Let's also see how much the downloaded files weight.
 
 
 ```r
 ## Get the URLs for MOD11A1.006
-urls_mod11a1 <- odr_get_url(
+urls_mod11a1 <- mf_get_url(
   collection = "MOD11A1.006",
   roi = roi,
   time_range = time_range
  )
 
 ## Get the URLs for GPM_3IMERGDF.06
-urls_gpm <- odr_get_url(
+urls_gpm <- mf_get_url(
   collection = "GPM_3IMERGDF.06",
   roi = roi,
   time_range = time_range
@@ -1823,7 +1823,7 @@ print(str(urls_gpm))
 
 ## Download the data. Destination file for each dataset is specified in the column "destfile" of the data.frames urls_mod11a1 and urls_gpm
 df_to_dl <- rbind(urls_mod11a1,urls_gpm)
-res_dl <- odr_download_data(df_to_dl,source="earthdata",parallel = TRUE)
+res_dl <- mf_download_data(df_to_dl,source="earthdata",parallel = TRUE)
 
 print(str(res_dl))
 
@@ -1833,7 +1833,7 @@ print(str(res_dl))
 ```
 
 
-We could also have subset the bands to download, using the parameter `variables` of the function `odr_get_url()`.
+We could also have subset the bands to download, using the parameter `variables` of the function `mf_get_url()`.
 
 To further import the data in R, have a look at the section [Important note regarding the further import of the data in R](#important-note-regarding-the-further-import-of-the-data-in-r) ! 
 
@@ -1841,15 +1841,15 @@ Simple or advanced data download and import workflows are provided respectively 
 
 ## Important note regarding the further import of the data in R {#important-note-import}
 
-Various packages and related classes can be used to read the data downloaded through OPeNDAP. If `raster` is surely the most famous class for raster objects, many packages facilitate the use of spatiotemporal data cubes in formats such as those proposed through opendapr (e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as a `stars` object from the excellent [`stars`](https://cran.r-project.org/package=stars) package for data cubes manipulation. All the data can also be imported as `ncdf4` objects using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4) package, or `RasterLayer` of the [`raster`](https://cran.r-project.org/package=raster) package.
+Various packages and related classes can be used to read the data downloaded through OPeNDAP. If `raster` is surely the most famous class for raster objects, many packages facilitate the use of spatiotemporal data cubes in formats such as those proposed through modisfast (e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as a `stars` object from the excellent [`stars`](https://cran.r-project.org/package=stars) package for data cubes manipulation. All the data can also be imported as `ncdf4` objects using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4) package, or `RasterLayer` of the [`raster`](https://cran.r-project.org/package=raster) package.
 
-In any case, care must be taken when importing data that was downloaded through the OPeNDAP data providers servers. Depending on the collection, some "issues" were raised. These issues are independant from opendapr : they result most of time of a kind of lack of full implementation of the OPeNDAP framework by the data providers. These issues are :
+In any case, care must be taken when importing data that was downloaded through the OPeNDAP data providers servers. Depending on the collection, some "issues" were raised. These issues are independant from modisfast : they result most of time of a kind of lack of full implementation of the OPeNDAP framework by the data providers. These issues are :
 
 - for MODIS and VNP collections : CRS has to be provided
 - for GPM collections : CRS has to be provided + data have to be flipped
 - for SMAP collections : CRS + bounding coordinates of the data have to be provided
 
-These issues can easily be dealt at the import phase in R. The functions below includes the processings that have to be done at the data import phase in order to open the data as `raster` objects. (argument `destfiles` is the path to a dataset downloaded with opendapr - output of `odr_get_url()$destfile` - and `variable` is the name of a variable to import).
+These issues can easily be dealt at the import phase in R. The functions below includes the processings that have to be done at the data import phase in order to open the data as `raster` objects. (argument `destfiles` is the path to a dataset downloaded with modisfast - output of `mf_get_url()$destfile` - and `variable` is the name of a variable to import).
 
 
 ```r
@@ -1893,7 +1893,7 @@ require(raster)
 require(purrr)
 require(ncdf4)
 ## Function to import SMAP products as RasterLayer object
-smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
+smap_sp_bound <- modisfast::mf_get_opt_param(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
 
 .import_smap <- function(destfiles,variable,smap_sp_bound){
  rasts <- destfiles %>%
@@ -1908,9 +1908,9 @@ smap_sp_bound <- opendapr::odr_get_opt_param(roi = roi, collection = "SMAP/SPL3S
 <!--
 ## Objectives
 
-opendapr provides an entry point to some specific OPeNDAP servers (e.g. MODIS, VNP, GPM or SMAP) via HTTPS. The development of the package was motivated by the following reasons : 
+modisfast provides an entry point to some specific OPeNDAP servers (e.g. MODIS, VNP, GPM or SMAP) via HTTPS. The development of the package was motivated by the following reasons : 
 
-* **Providing a simple and single way in R to download data stored on heterogeneous servers** : People that use Earth science data often struggle with data access. In opendapr we propose a harmonized way to download data from various providers that have implemented access to their data through OPeNDAP.
+* **Providing a simple and single way in R to download data stored on heterogeneous servers** : People that use Earth science data often struggle with data access. In modisfast we propose a harmonized way to download data from various providers that have implemented access to their data through OPeNDAP.
 * **Fastening the data import phase**, especially for large time series analysis.
 
 Apart from these performance aspects, ethical considerations have driven the development of this package :
@@ -1922,7 +1922,7 @@ Apart from these performance aspects, ethical considerations have driven the dev
 <!--
 ## Citation
 
-We thank in advance people that use opendapr for citing it in their work / publication(s). For this, please use the citation provided at this link [zenodo link to add] or through `citation("opendapr")`.
+We thank in advance people that use modisfast for citing it in their work / publication(s). For this, please use the citation provided at this link [zenodo link to add] or through `citation("modisfast")`.
 -->
 </div>
 <div id="next-steps" class="section level2">
@@ -1938,7 +1938,7 @@ We thank in advance people that use opendapr for citing it in their work / publi
 <div id="acknowledgments" class="section level2">
 <h2 class="hasAnchor">
 <a href="#acknowledgments" class="anchor"></a>Acknowledgments</h2>
-<p>We thank NASA and its partners for making all their Earth science data freely available, and implementing open data access protocols such as OPeNDAP. opendapr heavily builds on top of the OPeNDAP, so we thank the non-profit <a href="https://www.opendap.org/about">OPeNDAP, Inc.</a> for developing the eponym tool in an open and collaborative way.</p>
+<p>We thank NASA and its partners for making all their Earth science data freely available, and implementing open data access protocols such as OPeNDAP. modisfast heavily builds on top of the OPeNDAP, so we thank the non-profit <a href="https://www.opendap.org/about">OPeNDAP, Inc.</a> for developing the eponym tool in an open and collaborative way.</p>
 <p>We also thank the contributors that have tested the package, reviewed the documentation and brought valuable feedbacks to improve the package : <a href="https://github.com/floriandeboissieu">Florian de Boissieu</a>, Julien Taconet, <a href="https://github.com/Nmoiroux">Nicolas Moiroux</a></p>
 <p>The initial development and first release of this package were financed by the <a href="https://www.mivegec.ird.fr/en/">MIVEGEC</a> unit of the <a href="https://en.ird.fr/">French Research Institute for Sustainable Development</a>, as part of the <a href="https://burkina-faso.ird.fr/la-recherche/projets-de-recherche2/gestion-de-la-resistance-aux-insecticides-au-burkina-faso-et-en-cote-d-ivoire-recherche-sur-les-strategies-de-lutte-anti-vectorielle-react">REACT project</a>.</p>
 </div>
@@ -1949,9 +1949,9 @@ We thank in advance people that use opendapr for citing it in their work / publi
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/ptaconet/opendapr">https://​github.com/​ptaconet/​opendapr</a>
+<li>Browse source code at <br><a href="https://github.com/ptaconet/modisfast">https://​github.com/​ptaconet/​modisfast</a>
 </li>
-<li>Report a bug at <br><a href="https://github.com/ptaconet/opendapr/issues">https://​github.com/​ptaconet/​opendapr/​issues</a>
+<li>Report a bug at <br><a href="https://github.com/ptaconet/modisfast/issues">https://​github.com/​ptaconet/​modisfast/​issues</a>
 </li>
 </ul>
 </div>
@@ -1973,9 +1973,9 @@ We thank in advance people that use opendapr for citing it in their work / publi
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.r-project.org/Licenses/GPL-3"><img src="https://img.shields.io/badge/Licence-GPL--3-blue.svg" alt="licence"></a></li>
-<li><a href="https://travis-ci.org/ptaconet/opendapr"><img src="https://travis-ci.org/ptaconet/opendapr.svg?branch=master" alt="Travis build status"></a></li>
-<li><a href="https://cran.r-project.org/package=opendapr"><img src="http://www.r-pkg.org/badges/version/opendapr" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://github.com/ptaconet/opendapr"><img src="https://img.shields.io/badge/Github-0.1.0-blue.svg" alt="Github_Status_Badge"></a></li>
+<li><a href="https://travis-ci.org/ptaconet/modisfast"><img src="https://travis-ci.org/ptaconet/modisfast.svg?branch=master" alt="Travis build status"></a></li>
+<li><a href="https://cran.r-project.org/package=modisfast"><img src="http://www.r-pkg.org/badges/version/modisfast" alt="CRAN_Status_Badge"></a></li>
+<li><a href="https://github.com/ptaconet/modisfast"><img src="https://img.shields.io/badge/Github-0.1.0-blue.svg" alt="Github_Status_Badge"></a></li>
 </ul>
 </div>
 </div>

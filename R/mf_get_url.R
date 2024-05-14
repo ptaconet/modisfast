@@ -49,8 +49,7 @@
 #'
 #' require(sf)
 #' require(magrittr)
-#' require(raster)
-#' require(stars)
+#' require(terra)
 #'
 #' ### First mf_login to EOSDIS Earthdata with username and password.
 #' # To create an account go to : https://urs.earthdata.nasa.gov/.

@@ -1,20 +1,15 @@
 #' @name mf_import_data
 #' @aliases mf_import_data
-#' @title Import the time series in R as a \code{SpatRaster} or a \code{stars} object
-#' @description Import a time series as a \code{SpatRaster} or a \code{stars} object
+#' @title Import the time series in R as a \code{SpatRaster} object
+#' @description Import a time series as a \code{SpatRaster}object
 #'
 #' @param dir_path string character vector. mandatory. The path to the local directory where the data are stored.
 #' @param collection_source character string. mandatory. The collection source (one of "MODIS", "VIIRS", "GPM")
-#' @param output_class character string. Output object class. "SpatRaster" or "stars". See Details.
+#' @param output_class character string. Output object class. Currently only "SpatRaster" implemented.
 #' @param proj_epsg character string. EPSG of the desired projection for the output raster (default : 4326)
-#'
-#' @details
-#' \code{output} : Currently "SpatRaster" implemented for all the collections and "stars" only for MODIS and VIIRS collections
 #'
 #' @import purrr
 #' @importFrom terra rast t merge flip
-#' @importFrom stars read_stars
-#' @importFrom ncdf4 nc_open ncvar_get
 #' @importFrom magrittr %>%
 #' @export
 #'
@@ -25,44 +20,32 @@
 #' require(sf)
 #' require(magrittr)
 #' require(terra)
-#' require(stars)
 #'
 #' username <- Sys.getenv("earthdata_un")
 #' password <- Sys.getenv("earthdata_pw")
-#' log <- mf_login(credentials = c(username,password), source = "earthdata")
+#' log <- mf_login(credentials = c(username,password))
 #'
-#' roi_name <- "korhogo
+#' roi_id <- "korhogo"
 #' roi = st_as_sf(data.frame(
 #' geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
 #' wkt="geom",crs = 4326)
 #'
 #' time_range = as.Date(c("2017-01-01","2017-01-30"))
 #'
-#' urls_mod11a1 <- mf_get_url(collection = "MOD11A1.006",
+#' urls_mod11a1 <- mf_get_url(collection = "MOD11A1.061",
 #' variables = c("LST_Day_1km","LST_Night_1km"),
 #' roi = roi,
-#' roi_name = roi_name,
+#' roi_id = roi_id,
 #' time_range = time_range
 #' )
 #'
 #' res_dl <- mf_download_data(urls_mod11a1)
 #'
-#' ## import as RasterBrick
-#' # here we import only the band LST_Day_1km
-#' (mod11a1_rast <- mf_import_data(df_data_to_import = urls_mod11a1,
-#' collection = "MOD11A1.006",
-#' variable = "LST_Day_1km",
-#' output_class = "RasterBrick"))
+#' ## import as terra::SpatRast
 #'
-#' ## import os stars
-#' # in a stars object, all the bands are imported, so no need to specify a variable
-#' (mod11a1_stars <- mf_import_data(df_data_to_import = urls_mod11a1,
-#' collection = "MOD11A1.006",
-#' output = "stars"))
+#' modis_ts <- mf_import_data(file.path(roi_id,"MOD11A1.061"), collection_source = "MODIS")
 #'
 #' plot(mod11a1_rast)
-#'
-#' plot(mod11a1_stars)
 #'
 #' }
 

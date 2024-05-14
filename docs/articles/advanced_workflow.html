@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2. Advanced use of <code><a href="../reference/get_url.html">get_url()</a></code> • opendapr</title>
+<title>2. Advanced use of <code><a href="../reference/get_url.html">get_url()</a></code> • modisfast</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
@@ -30,7 +30,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">opendapr</a>
+        <a class="navbar-link" href="../index.html">modisfast</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
@@ -64,7 +64,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ptaconet/opendapr">
+  <a href="https://github.com/ptaconet/modisfast">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -87,14 +87,14 @@
             
             <h4 class="date">2020-02-20</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/ptaconet/opendapr/blob/master/vignettes/advanced_workflow.Rmd"><code>vignettes/advanced_workflow.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ptaconet/modisfast/blob/master/vignettes/advanced_workflow.Rmd"><code>vignettes/advanced_workflow.Rmd</code></a></small>
       <div class="hidden name"><code>advanced_workflow.Rmd</code></div>
 
     </div>
 
     
     
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(opendapr)</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(modisfast)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(sf)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(purrr)</a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(raster)</a>
@@ -396,7 +396,7 @@ identical(urls_mod11a1_notprov,urls_mod11a1_prov)
 <h2 class="hasAnchor">
 <a href="#import" class="anchor"></a>Import the data in R</h2>
 <p><code>stars</code> or <code>ncdf4</code> object are best adapted for these kind of spatiotemporal data. However, in this example we will show how to import them as lists of <code>RasterLayer</code> objects : one list for each time range.</p>
-<p>First, we write the functions to import the data as <code>RasterLayer</code> objects (check out <a href="https://ptaconet.github.io/opendapr/index.html#important-note-import">Important note regarding the further import of the data in R</a> in the README for additional information)</p>
+<p>First, we write the functions to import the data as <code>RasterLayer</code> objects (check out <a href="https://ptaconet.github.io/modisfast/index.html#important-note-import">Important note regarding the further import of the data in R</a> in the README for additional information)</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">## Function to import MODIS or VIIRS data</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">.import_modis &lt;-<span class="st"> </span><span class="cf">function</span>(destfiles,variable){</a>
 <a class="sourceLine" id="cb7-3" data-line-number="3">  </a>
@@ -441,7 +441,7 @@ identical(urls_mod11a1_notprov,urls_mod11a1_prov)
 <a class="sourceLine" id="cb8-8" data-line-number="8">gpm_ts &lt;-<span class="st"> </span>urls_gpm <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb8-9" data-line-number="9"><span class="st">  </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span><span class="kw">.import_gpm</span>(.<span class="op">$</span>destfile,<span class="st">"precipitationCal"</span>))</a>
 <a class="sourceLine" id="cb8-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">smap_sp_bound &lt;-<span class="st"> </span>opendapr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/opendapr/topics/get_optional_parameters">get_optional_parameters</a></span>(<span class="dt">roi =</span> roi, <span class="dt">collection =</span> <span class="st">"SMAP/SPL3SMP_E.003"</span>)<span class="op">$</span>roiSpatialBound<span class="op">$</span><span class="st">`</span><span class="dt">1</span><span class="st">`</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11">smap_sp_bound &lt;-<span class="st"> </span>modisfast<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/modisfast/topics/get_optional_parameters">get_optional_parameters</a></span>(<span class="dt">roi =</span> roi, <span class="dt">collection =</span> <span class="st">"SMAP/SPL3SMP_E.003"</span>)<span class="op">$</span>roiSpatialBound<span class="op">$</span><span class="st">`</span><span class="dt">1</span><span class="st">`</span></a>
 <a class="sourceLine" id="cb8-12" data-line-number="12">smap_ts &lt;-<span class="st"> </span>urls_smap <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb8-13" data-line-number="13"><span class="st">  </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="op">~</span><span class="kw">.import_smap</span>(.<span class="op">$</span>destfile,<span class="st">"Soil_Moisture_Retrieval_Data_AM_soil_moisture"</span>,smap_sp_bound))</a>
 <a class="sourceLine" id="cb8-14" data-line-number="14"></a>
@@ -452,7 +452,7 @@ identical(urls_mod11a1_notprov,urls_mod11a1_prov)
 <a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></a>
 <a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></a>
 <a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs </span></a>
-<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt; data source : /home/ptaconet/opendapr/vignettes/MOD11A1.006/MOD11A1.006.2016001_2016031.h17v08.nc4 </span></a>
+<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt; data source : /home/ptaconet/modisfast/vignettes/MOD11A1.006/MOD11A1.006.2016001_2016031.h17v08.nc4 </span></a>
 <a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt; names       : X2016.01.01, X2016.01.02, X2016.01.03, X2016.01.04, X2016.01.05, X2016.01.06, X2016.01.07, X2016.01.08, X2016.01.09, X2016.01.10, X2016.01.11, X2016.01.12, X2016.01.13, X2016.01.14, X2016.01.15, ... </span></a>
 <a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt; Date        : 2016-01-01, 2016-01-31 (min, max)</span></a>
 <a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co">#&gt; varname     : LST_Day_1km </span></a>
@@ -464,7 +464,7 @@ identical(urls_mod11a1_notprov,urls_mod11a1_prov)
 <a class="sourceLine" id="cb8-31" data-line-number="31"><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></a>
 <a class="sourceLine" id="cb8-32" data-line-number="32"><span class="co">#&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></a>
 <a class="sourceLine" id="cb8-33" data-line-number="33"><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs </span></a>
-<a class="sourceLine" id="cb8-34" data-line-number="34"><span class="co">#&gt; data source : /home/ptaconet/opendapr/vignettes/MOD11A1.006/MOD11A1.006.2017001_2017031.h17v08.nc4 </span></a>
+<a class="sourceLine" id="cb8-34" data-line-number="34"><span class="co">#&gt; data source : /home/ptaconet/modisfast/vignettes/MOD11A1.006/MOD11A1.006.2017001_2017031.h17v08.nc4 </span></a>
 <a class="sourceLine" id="cb8-35" data-line-number="35"><span class="co">#&gt; names       : X2017.01.01, X2017.01.02, X2017.01.03, X2017.01.04, X2017.01.05, X2017.01.06, X2017.01.07, X2017.01.08, X2017.01.09, X2017.01.10, X2017.01.11, X2017.01.12, X2017.01.13, X2017.01.14, X2017.01.15, ... </span></a>
 <a class="sourceLine" id="cb8-36" data-line-number="36"><span class="co">#&gt; Date        : 2017-01-01, 2017-01-31 (min, max)</span></a>
 <a class="sourceLine" id="cb8-37" data-line-number="37"><span class="co">#&gt; varname     : LST_Day_1km </span></a>
@@ -476,7 +476,7 @@ identical(urls_mod11a1_notprov,urls_mod11a1_prov)
 <a class="sourceLine" id="cb8-43" data-line-number="43"><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></a>
 <a class="sourceLine" id="cb8-44" data-line-number="44"><span class="co">#&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></a>
 <a class="sourceLine" id="cb8-45" data-line-number="45"><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs </span></a>
-<a class="sourceLine" id="cb8-46" data-line-number="46"><span class="co">#&gt; data source : /home/ptaconet/opendapr/vignettes/MOD11A1.006/MOD11A1.006.2018001_2018031.h17v08.nc4 </span></a>
+<a class="sourceLine" id="cb8-46" data-line-number="46"><span class="co">#&gt; data source : /home/ptaconet/modisfast/vignettes/MOD11A1.006/MOD11A1.006.2018001_2018031.h17v08.nc4 </span></a>
 <a class="sourceLine" id="cb8-47" data-line-number="47"><span class="co">#&gt; names       : X2018.01.01, X2018.01.02, X2018.01.03, X2018.01.04, X2018.01.05, X2018.01.06, X2018.01.07, X2018.01.08, X2018.01.09, X2018.01.10, X2018.01.11, X2018.01.12, X2018.01.13, X2018.01.14, X2018.01.15, ... </span></a>
 <a class="sourceLine" id="cb8-48" data-line-number="48"><span class="co">#&gt; Date        : 2018-01-01, 2018-01-31 (min, max)</span></a>
 <a class="sourceLine" id="cb8-49" data-line-number="49"><span class="co">#&gt; varname     : LST_Day_1km </span></a>
@@ -488,7 +488,7 @@ identical(urls_mod11a1_notprov,urls_mod11a1_prov)
 <a class="sourceLine" id="cb8-55" data-line-number="55"><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></a>
 <a class="sourceLine" id="cb8-56" data-line-number="56"><span class="co">#&gt; extent      : -637981.6, -592577, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></a>
 <a class="sourceLine" id="cb8-57" data-line-number="57"><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs </span></a>
-<a class="sourceLine" id="cb8-58" data-line-number="58"><span class="co">#&gt; data source : /home/ptaconet/opendapr/vignettes/MOD11A1.006/MOD11A1.006.2019001_2019031.h17v08.nc4 </span></a>
+<a class="sourceLine" id="cb8-58" data-line-number="58"><span class="co">#&gt; data source : /home/ptaconet/modisfast/vignettes/MOD11A1.006/MOD11A1.006.2019001_2019031.h17v08.nc4 </span></a>
 <a class="sourceLine" id="cb8-59" data-line-number="59"><span class="co">#&gt; names       : X2019.01.01, X2019.01.02, X2019.01.03, X2019.01.04, X2019.01.05, X2019.01.06, X2019.01.07, X2019.01.08, X2019.01.09, X2019.01.10, X2019.01.11, X2019.01.12, X2019.01.13, X2019.01.14, X2019.01.15, ... </span></a>
 <a class="sourceLine" id="cb8-60" data-line-number="60"><span class="co">#&gt; Date        : 2019-01-01, 2019-01-31 (min, max)</span></a>
 <a class="sourceLine" id="cb8-61" data-line-number="61"><span class="co">#&gt; varname     : LST_Day_1km</span></a>

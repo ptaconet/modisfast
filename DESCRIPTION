@@ -1,37 +1,43 @@
 Package: modisfast
-Title: Fast and efficient access to MODIS (and MODIS-like) data in R using the OPeNDAP Capacities
+Title: Fast and efficient access to MODIS (and MODIS-like) data in R using
+    the OPeNDAP Capacities
 Version: 0.1.0
 Authors@R: 
-    person(given = "Paul",
-           family = "Taconet",
-           role = c("aut", "cre"),
-           email = "paul.taconet@ird.fr",
+    person("Paul", "Taconet", , "paul.taconet@ird.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7429-7204"))
-Description: Provides functions to download MODIS and MODIS-like Earth science datacubes in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) using the OPeNDAP framework.
+Description: Provides functions to download MODIS and MODIS-like Earth
+    science datacubes in a time-saving and efficient way : by sampling it
+    at the very downloading phase (spatially, temporally and
+    dimensionally) using the OPeNDAP framework.
 License: GPL-3
 URL: https://github.com/ptaconet/modisfast
 BugReports: https://github.com/ptaconet/modisfast/issues
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 6.1.1
-VignetteBuilder: knitr
-Depends: R (>= 2.10)
+Depends: 
+    R (>= 2.10)
 Imports: 
-    magrittr,
+    curl,
     dplyr,
     httr,
-    curl,
-    sf,
-    purrr,
     lubridate,
-    xml2,
-    stringr,
-    rvest,
-    utils,
+    magrittr,
+    ncdf4,
     parallel,
-    terra
+    purrr,
+    raster,
+    rvest,
+    sf,
+    stats,
+    stringr,
+    terra,
+    xml2
 Suggests: 
-    testthat,
+    emo,
     knitr,
     mapview,
-    rmarkdown
+    rmarkdown,
+    testthat
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.1
