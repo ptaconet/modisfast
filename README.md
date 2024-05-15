@@ -28,7 +28,7 @@ provides the MOD11A1.006 (MODIS/Terra Land Surface Temperature/Emissivity Daily 
 This package enables to build OPeNDAP (https) URLs given input parameters such as a data collection, region and time range of interst . These URLs can then be used to either download the data to your workspace or computer, or access the datacube directly as an R object (of class `ndcf4`, `raster`, `stars`, etc.)
 -->
 
-**`modisfast`** (former `opendapr`) is an R package that provides
+**`modisfast`** (formerly `opendapr`) is an R package that provides
 functions to **speed-up** the **download** of time-series data products
 derived from
 [**MODIS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/)
@@ -90,6 +90,7 @@ First, define the variables of interest :
 # Load the packages
 library(modisfast)
 library(sf)
+library(terra)
 
 # MODIS collections and variables (bands) of interest
 collection <- "MOD11A1.061"  # run mf_list_collections() for an exhaustive list of collections available
@@ -129,6 +130,8 @@ r <- mf_import_data(
   path = dirname(res_dl$destfile[1]),
   collection_source = "MODIS"
   )
+
+terra::plot(r)
 ```
 
 et voilà !
