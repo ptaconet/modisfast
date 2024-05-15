@@ -8,6 +8,7 @@
 #' @inheritParams mf_get_url
 #' @inheritParams mf_login
 #' @param df_to_dl data.frame. Urls and destination files of dataset to download. Typically output of \link{mf_get_url}. See Details for the structure
+#' @param path string. Target folder for the data to download. Default : \code{tempfile()}
 #' @param parallel boolean. Parallelize the download ? Default to FALSE
 #' @param min_filesize integer. minimum file size expected (in bites) for one file downloaded. If files downloaded are less that this value, the files will be downloaded again. Default 5000.
 #'
@@ -37,7 +38,7 @@
 #'
 #'
 
-mf_download_data<-function(df_to_dl,parallel=TRUE,credentials=NULL,source="earthdata",verbose=TRUE,min_filesize=5000){
+mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,credentials=NULL,source="earthdata",verbose=TRUE,min_filesize=5000){
 
   fileSize <- destfile <- fileDl <- NULL
 
@@ -46,11 +47,15 @@ mf_download_data<-function(df_to_dl,parallel=TRUE,credentials=NULL,source="earth
   if(!inherits(parallel,"logical")){stop("parallel argument must be boolean\n")}
   if(!is.null(source) && !inherits(source,"character")){stop("source argument must be either NULL or 'earthdata' \n")}
   if(!inherits(df_to_dl,"data.frame")){stop("df_to_dl argument must be a data.frame\n")}
-  if(!("url" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 2 columns named 'url' and 'destfile' \n")}
-  if(!("destfile" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 2 columns named 'url' and 'destfile' \n")}
+  if(!("url" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 2 columns named 'url', 'collection' and 'name' \n")}
+  if(!("collection" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 2 columns named 'url', 'collection' and 'name'\n")}
+  if(!("name" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 2 columns named 'url', 'collection' and 'name'\n")}
 
   .testInternetConnection()
 
+  df_to_dl$destfile <- file.path(path,df_to_dl$collection,df_to_dl$name)
+
+ # if(dir.exists(path)){warning("Target folder already exists\n")}
 
   # check which data is already downloaded
   data_dl<-df_to_dl %>%
@@ -105,7 +110,7 @@ mf_download_data<-function(df_to_dl,parallel=TRUE,credentials=NULL,source="earth
       parallel::stopCluster(cl)
     } else {
       for (i in 1:nrow(data_to_download)){
-        #if(verbose){cat(i," over ", nrow(data_to_download),"\n")}
+        if(verbose){cat("[",i," over ", nrow(data_to_download),"]\n")}
         dl_func(url=data_to_download$url[i],output=data_to_download$destfile[i],username=username,password=password)
       }
     }
@@ -120,14 +125,15 @@ mf_download_data<-function(df_to_dl,parallel=TRUE,credentials=NULL,source="earth
   data_downloaded <- dplyr::filter(data_dl,fileSize>=min_filesize)
 
   if(!(identical(data_dl,data_downloaded))){
-    if(verbose){cat("Downloading again the datasets that were not properly downloaded...")}
-    mf_download_data(df_to_dl=df_to_dl,parallel=FALSE,credentials=credentials,source=source)
-  }
+    if(verbose){cat("Only part of the data has been downloaded. Downloading the remaining datasets one by one...\n")}
+    mf_download_data(df_to_dl=df_to_dl,path=path,parallel=FALSE,credentials=credentials,source=source)
+  } else {
 
   # 1 : download ok
   # 2 : download error
   # 3 : data already existing in output folder
-  if(verbose){cat("Data were all properly downloaded\n")}
+    if(verbose){cat("\nData were all properly downloaded under the folder(s) ",paste(as.character(unique(dirname(df_to_dl$destfile))), collapse=" and "),"\n")}
+  }
 
   return(data_dl)
 }

@@ -5,14 +5,14 @@
 \title{Import the time series in R as a \code{SpatRaster} object}
 \usage{
 mf_import_data(
-  dir_path,
+  path,
   collection_source,
   output_class = "SpatRaster",
   proj_epsg = "4326"
 )
 }
 \arguments{
-\item{dir_path}{string character vector. mandatory. The path to the local directory where the data are stored.}
+\item{path}{string character vector. mandatory. The path to the local directory where the data are stroed.}
 
 \item{collection_source}{character string. mandatory. The collection source (one of "MODIS", "VIIRS", "GPM")}
 
@@ -31,11 +31,10 @@ require(sf)
 require(magrittr)
 require(terra)
 
-username <- Sys.getenv("earthdata_un")
-password <- Sys.getenv("earthdata_pw")
+username <- "earthdata_un"
+password <- "earthdata_pw"
 log <- mf_login(credentials = c(username,password))
 
-roi_id <- "korhogo"
 roi = st_as_sf(data.frame(
 geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
 wkt="geom",crs = 4326)
@@ -53,9 +52,9 @@ res_dl <- mf_download_data(urls_mod11a1)
 
 ## import as terra::SpatRast
 
-modis_ts <- mf_import_data(file.path(roi_id,"MOD11A1.061"), collection_source = "MODIS")
+modis_ts <- mf_import_data(dirname(res_dl$destfile[1]), collection_source = "MODIS")
 
-plot(mod11a1_rast)
+plot(modis_ts)
 
 }
 }

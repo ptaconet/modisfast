@@ -35,7 +35,7 @@
       <a href="../articles/get_started.html">1. Get started </a>
     </li>
     <li>
-      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest at a glance</a>
+      <a href="../articles/modisfast2.html">2. Get data on several periods of interest at a glance</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -67,7 +67,6 @@
 <span>  <span class="va">collection</span>,</span>
 <span>  variables <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">roi</span>,</span>
-<span>  <span class="va">roi_id</span>,</span>
 <span>  <span class="va">time_range</span>,</span>
 <span>  output_format <span class="op">=</span> <span class="st">"nc4"</span>,</span>
 <span>  single_netcdf <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -89,10 +88,6 @@
 
 <dt>roi</dt>
 <dd><p>object of class <code>sf</code>. mandatory. Area of region of interest. Must be POLYGON-type geometry composed of one single feature.</p></dd>
-
-
-<dt>roi_id</dt>
-<dd><p>string. mandatory. An identifier for the region of interest.</p></dd>
 
 
 <dt>time_range</dt>
@@ -174,69 +169,45 @@ It might be particularly useful to precompute and provide it in case the functio
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### First mf_login to EOSDIS Earthdata with username and password.</span></span></span>
 <span class="r-in"><span><span class="co"># To create an account go to : https://urs.earthdata.nasa.gov/.</span></span></span>
-<span class="r-in"><span><span class="va">username</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_un"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">password</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_pw"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="mf_login.html">mf_login</a></span><span class="op">(</span>credentials <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">username</span>,<span class="va">password</span><span class="op">)</span>, source <span class="op">=</span> <span class="st">"earthdata"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">username</span> <span class="op">&lt;-</span> <span class="st">"earthdata_un"</span></span></span>
+<span class="r-in"><span><span class="va">password</span> <span class="op">&lt;-</span> <span class="st">"earthdata_pw"</span></span></span>
+<span class="r-in"><span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="mf_login.html">mf_login</a></span><span class="op">(</span>credentials <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">username</span>,<span class="va">password</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Checking credentials...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Successfull login to earthdata </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in mf_login(credentials = c(username, password)):</span> Unauthorized (HTTP 401). Failed to login to Earthdata. Check out username and password. The service might also be unavailable (error 503)..</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Retrieve the URLs (OPeNDAP) to download the following datasets :</span></span></span>
-<span class="r-in"><span><span class="co"># MODIS Terra LST Daily (MOD11A1.006) (collection)</span></span></span>
+<span class="r-in"><span><span class="co"># MODIS Terra LST Daily (MOD11A1.061) (collection)</span></span></span>
 <span class="r-in"><span><span class="co"># Day + Night bands (LST_Day_1km,LST_Night_1km) (variables)</span></span></span>
 <span class="r-in"><span><span class="co"># over a 50km x 70km region of interest (roi)</span></span></span>
 <span class="r-in"><span><span class="co"># for the time frame 2017-01-01 to 2017-01-30 (30 days) (time_range)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">roi_id</span> <span class="op">=</span> <span class="st">"korhogo"</span></span></span>
-<span class="r-in"><span><span class="va">roi</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>geom<span class="op">=</span><span class="st">"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>wkt<span class="op">=</span><span class="st">"geom"</span>,crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">roi</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>geom<span class="op">=</span><span class="st">"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span><span class="op">)</span>,wkt<span class="op">=</span><span class="st">"geom"</span>,crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">time_range</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2017-01-01"</span>,<span class="st">"2017-01-30"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">############################################################</span></span></span>
-<span class="r-in"><span><span class="op">(</span><span class="va">opendap_urls_mod11a1</span> <span class="op">&lt;-</span> <span class="fu">mf_get_url</span><span class="op">(</span>collection <span class="op">=</span> <span class="st">"MOD11A1.006"</span>,</span></span>
+<span class="r-in"><span><span class="op">(</span><span class="va">urls_mod11a1</span> <span class="op">&lt;-</span> <span class="fu">mf_get_url</span><span class="op">(</span></span></span>
+<span class="r-in"><span>collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span>,</span></span>
 <span class="r-in"><span>variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LST_Day_1km"</span>,<span class="st">"LST_Night_1km"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>roi_id <span class="op">=</span> <span class="va">roi_id</span>,</span></span>
-<span class="r-in"><span>roi_sf <span class="op">=</span> <span class="va">roi_sf</span>,</span></span>
+<span class="r-in"><span>roi <span class="op">=</span> <span class="va">roi</span>,</span></span>
 <span class="r-in"><span>time_range <span class="op">=</span> <span class="va">time_range</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in mf_get_url(collection = "MOD11A1.006", variables = c("LST_Day_1km",     "LST_Night_1km"), roi_id = roi_id, roi_sf = roi_sf, time_range = time_range):</span> unused argument (roi_sf = roi_sf)</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in mf_login(credentials, source = "earthdata"):</span> credentials must be a vector character string of length 2 (username and password)</span>
 <span class="r-in"><span><span class="co">############################################################</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Download the data :</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">opendap_urls_mod11a1</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'opendap_urls_mod11a1' not found</span>
+<span class="r-in"><span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls_mod11a1</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'urls_mod11a1' not found</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">### Import the data :</span></span></span>
-<span class="r-in"><span><span class="co">## Have a look at vignette("opendapr1) for important details regarding the data import in R.</span></span></span>
-<span class="r-in"><span><span class="co">## \url{https://ptaconet.github.io/modisfast/articles/opendapr1.html#data_import_note}</span></span></span>
-<span class="r-in"><span><span class="va">modis_crs</span> <span class="op">&lt;-</span> <span class="st">"+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"</span></span></span>
+<span class="r-in"><span><span class="co">## import as terra::SpatRast</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## open as a stars object (deals with multiple dimensions and time)</span></span></span>
+<span class="r-in"><span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="mf_import_data.html">mf_import_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">res_dl</span><span class="op">$</span><span class="va">destfile</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, collection_source <span class="op">=</span> <span class="st">"MODIS"</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'res_dl' not found</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="op">(</span><span class="va">mod11a1_stars</span> <span class="op">&lt;-</span> <span class="fu">read_stars</span><span class="op">(</span><span class="va">opendap_urls_mod11a1</span><span class="op">$</span><span class="va">destfile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_set_crs</a></span><span class="op">(</span><span class="va">modis_crs</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in read_stars(opendap_urls_mod11a1$destfile):</span> could not find function "read_stars"</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod11a1_stars</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'mod11a1_stars' not found</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## or open as a rasterBrick object (1 rasterBrick for each dimension)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="op">(</span><span class="va">mod11a1_rast_day</span> <span class="op">&lt;-</span> <span class="fu">brick</span><span class="op">(</span><span class="va">opendap_urls_mod11a1</span><span class="op">$</span><span class="va">destfile</span>,varname<span class="op">=</span><span class="st">"LST_Day_1km"</span>,crs<span class="op">=</span><span class="va">modis_crs</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in brick(opendap_urls_mod11a1$destfile, varname = "LST_Day_1km",     crs = modis_crs):</span> could not find function "brick"</span>
-<span class="r-in"><span><span class="op">(</span><span class="va">mod11a1_rast_night</span> <span class="op">&lt;-</span> <span class="fu">brick</span><span class="op">(</span><span class="va">opendap_urls_mod11a1</span><span class="op">$</span><span class="va">destfile</span>,varname<span class="op">=</span><span class="st">"LST_Night_1km"</span>,crs<span class="op">=</span><span class="va">modis_crs</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in brick(opendap_urls_mod11a1$destfile, varname = "LST_Night_1km",     crs = modis_crs):</span> could not find function "brick"</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod11a1_rast_day</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'mod11a1_rast_day' not found</span>
-<span class="r-in"><span><span class="co"># Here the time dimension is set as the z dimension :</span></span></span>
-<span class="r-in"><span><span class="op">(</span><span class="fu">getZ</span><span class="op">(</span><span class="va">mod11a1_rast_day</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in getZ(mod11a1_rast_day):</span> could not find function "getZ"</span>
+<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis_ts</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'modis_ts' not found</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Check out the vignettes for additional examples and more complex data import workflows</span></span></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>

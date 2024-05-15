@@ -27,11 +27,11 @@ Current options for parameter \code{"source"} are :
 Create an account to Earthdata here : \url{https://urs.earthdata.nasa.gov/}.
 }
 \examples{
-# mf_login to Earthdata
+
 \donttest{
-username <- Sys.getenv("earthdata_un")
-password <- Sys.getenv("earthdata_pw")
-mf_login(credentials = c(username,password),source = "earthdata")
+username <- "earthdata_un"
+password <- "earthdata_pw"
+mf_login(credentials = c(username,password))
 }
 
 }

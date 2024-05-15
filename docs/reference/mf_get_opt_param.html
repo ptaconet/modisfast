@@ -35,7 +35,7 @@
       <a href="../articles/get_started.html">1. Get started </a>
     </li>
     <li>
-      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest at a glance</a>
+      <a href="../articles/modisfast2.html">2. Get data on several periods of interest at a glance</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -128,17 +128,19 @@ This will save much time, as internal parameters will be calculated only once.</
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: purrr</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Login to Earthdata</span></span></span>
-<span class="r-in"><span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="mf_login.html">mf_login</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_un"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_pw"</span><span class="op">)</span><span class="op">)</span>,source<span class="op">=</span><span class="st">"earthdata"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">username</span> <span class="op">&lt;-</span> <span class="st">"earthdata_un"</span></span></span>
+<span class="r-in"><span><span class="va">password</span> <span class="op">&lt;-</span> <span class="st">"earthdata_pw"</span></span></span>
+<span class="r-in"><span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="mf_login.html">mf_login</a></span><span class="op">(</span>credentials <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">username</span>,<span class="va">password</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Checking credentials...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Successfull login to earthdata </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in mf_login(credentials = c(username, password)):</span> Unauthorized (HTTP 401). Failed to login to Earthdata. Check out username and password. The service might also be unavailable (error 503)..</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Get the optional parameters for the collection MOD11A1.006 and the roi :</span></span></span>
+<span class="r-in"><span><span class="co"># Get the optional parameters for the collection MOD11A1.061 and the roi :</span></span></span>
 <span class="r-in"><span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>geom<span class="op">=</span><span class="st">"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>wkt<span class="op">=</span><span class="st">"geom"</span>,crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">opt_param_mod11a1</span> <span class="op">&lt;-</span> <span class="fu">mf_get_opt_param</span><span class="op">(</span><span class="st">"MOD11A1.006"</span>,<span class="va">roi</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .testIfCollExists(collection):</span> The collection that you specified does not exist. Check mf_list_collections() to see which collections are implemented</span>
+<span class="r-in"><span><span class="va">opt_param_mod11a1</span> <span class="op">&lt;-</span> <span class="fu">mf_get_opt_param</span><span class="op">(</span><span class="st">"MOD11A1.061"</span>,<span class="va">roi</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in mf_login(credentials, source = "earthdata"):</span> credentials must be a vector character string of length 2 (username and password)</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">opt_param_mod11a1</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'opt_param_mod11a1' not found</span>
 <span class="r-in"><span></span></span>
@@ -150,15 +152,15 @@ This will save much time, as internal parameters will be calculated only once.</
 <span class="r-in"><span>                   <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2019-01-01"</span>,<span class="st">"2019-01-31"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">(</span><span class="va">urls_mod11a1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span>.x <span class="op">=</span> <span class="va">time_ranges</span>, <span class="op">~</span><span class="fu"><a href="mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span> collection <span class="op">=</span> <span class="st">"MOD11A1.006"</span>,</span></span>
+<span class="r-in"><span> collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span>,</span></span>
 <span class="r-in"><span> variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LST_Day_1km"</span>,<span class="st">"LST_Night_1km"</span>,<span class="st">"QC_Day"</span>,<span class="st">"QC_Night"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span> roi <span class="op">=</span> <span class="va">roi</span>,</span></span>
 <span class="r-in"><span> time_range <span class="op">=</span> <span class="va">.x</span>,</span></span>
 <span class="r-in"><span> opt_param <span class="op">=</span> <span class="va">opt_param_mod11a1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in map(.x = time_ranges, ~mf_get_url(collection = "MOD11A1.006",     variables = c("LST_Day_1km", "LST_Night_1km", "QC_Day", "QC_Night"),     roi = roi, time_range = .x, opt_param = opt_param_mod11a1)):</span> <span style="color: #00BBBB;">ℹ</span> In index: 1.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error in `.testIfCollExists()`:</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> The collection that you specified does not exist. Check mf_list_collections() to see which collections are implemented</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in map(.x = time_ranges, ~mf_get_url(collection = "MOD11A1.061",     variables = c("LST_Day_1km", "LST_Night_1km", "QC_Day", "QC_Night"),     roi = roi, time_range = .x, opt_param = opt_param_mod11a1)):</span> <span style="color: #00BBBB;">ℹ</span> In index: 1.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error in `mf_login()`:</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> credentials must be a vector character string of length 2 (username and password)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>

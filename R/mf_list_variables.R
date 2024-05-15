@@ -18,10 +18,10 @@
 #'
 #' \donttest{
 #' # login to Earthdata
-#' log <- mf_login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),source="earthdata")
+#' log <- mf_login(c("earthdata_un","earthdata_pw"))
 #'
-#' # Get the variables available for the collection MOD11A1.006
-#' (df_varinfo <- mf_list_variables("MOD11A1.006"))
+#' # Get the variables available for the collection MOD11A1.061
+#' (df_varinfo <- mf_list_variables("MOD11A1.061"))
 #'}
 #'
 

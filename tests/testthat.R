@@ -1,4 +1,4 @@
 library(testthat)
-library(opendapr)
+library(modisfast)
 
-test_check("opendapr")
+test_check("modisfast")

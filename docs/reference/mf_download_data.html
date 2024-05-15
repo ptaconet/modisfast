@@ -36,7 +36,7 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
       <a href="../articles/get_started.html">1. Get started </a>
     </li>
     <li>
-      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest at a glance</a>
+      <a href="../articles/modisfast2.html">2. Get data on several periods of interest at a glance</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -67,6 +67,7 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mf_download_data</span><span class="op">(</span></span>
 <span>  <span class="va">df_to_dl</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"tmp"</span><span class="op">)</span>,</span>
 <span>  parallel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  credentials <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  source <span class="op">=</span> <span class="st">"earthdata"</span>,</span>
@@ -79,6 +80,10 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
     <h2>Arguments</h2>
     <dl><dt>df_to_dl</dt>
 <dd><p>data.frame. Urls and destination files of dataset to download. Typically output of <a href="mf_get_url.html">mf_get_url</a>. See Details for the structure</p></dd>
+
+
+<dt>path</dt>
+<dd><p>string. Target folder for the data to download. Default : <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile()</a></code></p></dd>
 
 
 <dt>parallel</dt>

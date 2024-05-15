@@ -31,14 +31,16 @@
 #' require(purrr)
 #'
 #' # Login to Earthdata
-#' log <- mf_login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")),source="earthdata")
+#' username <- "earthdata_un"
+#' password <- "earthdata_pw"
+#' log <- mf_login(credentials = c(username,password))
 #'
-#' # Get the optional parameters for the collection MOD11A1.006 and the roi :
+#' # Get the optional parameters for the collection MOD11A1.061 and the roi :
 #' roi <- st_as_sf(data.frame(
 #' geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
 #' wkt="geom",crs = 4326)
 #'
-#' opt_param_mod11a1 <- mf_get_opt_param("MOD11A1.006",roi)
+#' opt_param_mod11a1 <- mf_get_opt_param("MOD11A1.061",roi)
 #' str(opt_param_mod11a1)
 #'
 #' # Now we can provide opt_param_mod11a1 as input parameter of the function mf_get_url().
@@ -49,7 +51,7 @@
 #'                    as.Date(c("2019-01-01","2019-01-31")))
 #'
 #' (urls_mod11a1 <- map(.x = time_ranges, ~mf_get_url(
-#'  collection = "MOD11A1.006",
+#'  collection = "MOD11A1.061",
 #'  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
 #'  roi = roi,
 #'  time_range = .x,

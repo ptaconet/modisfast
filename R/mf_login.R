@@ -17,11 +17,11 @@
 #' Create an account to Earthdata here : \url{https://urs.earthdata.nasa.gov/}.
 #'
 #' @examples
-#' # mf_login to Earthdata
+#'
 #' \donttest{
-#' username <- Sys.getenv("earthdata_un")
-#' password <- Sys.getenv("earthdata_pw")
-#' mf_login(credentials = c(username,password),source = "earthdata")
+#' username <- "earthdata_un"
+#' password <- "earthdata_pw"
+#' mf_login(credentials = c(username,password))
 #' }
 #'
 
@@ -34,8 +34,8 @@ mf_login<-function(credentials,source="earthdata",verbose=TRUE){
   if(source=="earthdata"){
    #x <- httr::GET(url = "https://urs.earthdata.nasa.gov/oauth/authorize?app_type=401&client_id=W8DRh2DCZP0iOacUCdwB1g&response_type=code&redirect_uri=https%3A%2F%2Fopendap.cr.usgs.gov%2Fopendap%2Fhyrax%2Foauth2&state=aHR0cHM6Ly9vcGVuZGFwLmNyLnVzZ3MuZ292L29wZW5kYXAvaHlyYXgvTU9EMTFBMi4wNjEvaDE3djA3Lm5jbWwuYXNjaWk%2FdGltZQ",httr::authenticate(user=credentials[1], credentials[2]),config = list(maxredirs=-1)) # testing credentials must be improved...
    x <- httr::GET(url = "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.061/h17v07.ncml.ascii?time") # testing credentials must be improved...
-   x <- httr::GET(x$url,httr::authenticate(user="ptaconet", "HHKcue51!"),config = list(maxredirs=-1))
-   httr::stop_for_status(x, "login to Earthdata. Check out username and password")
+   x <- httr::GET(x$url,httr::authenticate(credentials[1], credentials[2]),config = list(maxredirs=-1))
+   httr::stop_for_status(x, "login to Earthdata. Check out username and password. The service might also be unavailable (error 503).")
    httr::warn_for_status(x)
    options(earthdata_user=credentials[1])
    options(earthdata_pass=credentials[2])

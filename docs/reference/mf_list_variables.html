@@ -35,7 +35,7 @@
       <a href="../articles/get_started.html">1. Get started </a>
     </li>
     <li>
-      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest at a glance</a>
+      <a href="../articles/modisfast2.html">2. Get data on several periods of interest at a glance</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -91,13 +91,13 @@ The variables marked as "extractable" in the column "extractable_w_opendapr" can
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># login to Earthdata</span></span></span>
-<span class="r-in"><span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="mf_login.html">mf_login</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_un"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_pw"</span><span class="op">)</span><span class="op">)</span>,source<span class="op">=</span><span class="st">"earthdata"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="mf_login.html">mf_login</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"earthdata_un"</span>,<span class="st">"earthdata_pw"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Checking credentials...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Successfull login to earthdata </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in mf_login(c("earthdata_un", "earthdata_pw")):</span> Unauthorized (HTTP 401). Failed to login to Earthdata. Check out username and password. The service might also be unavailable (error 503)..</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Get the variables available for the collection MOD11A1.006</span></span></span>
-<span class="r-in"><span><span class="op">(</span><span class="va">df_varinfo</span> <span class="op">&lt;-</span> <span class="fu">mf_list_variables</span><span class="op">(</span><span class="st">"MOD11A1.006"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .testIfCollExists(collection):</span> The collection that you specified does not exist. Check mf_list_collections() to see which collections are implemented</span>
+<span class="r-in"><span><span class="co"># Get the variables available for the collection MOD11A1.061</span></span></span>
+<span class="r-in"><span><span class="op">(</span><span class="va">df_varinfo</span> <span class="op">&lt;-</span> <span class="fu">mf_list_variables</span><span class="op">(</span><span class="st">"MOD11A1.061"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in mf_login(credentials, source = "earthdata"):</span> credentials must be a vector character string of length 2 (username and password)</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

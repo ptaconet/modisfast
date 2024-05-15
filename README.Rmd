@@ -38,7 +38,7 @@ https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid
 provides the MOD11A1.006 (MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid V006) data in netCDF, subsetted for bands LST_Day_1km, LST_Night_1km, QC_Day, QC_Night, for each day between the 2017-01-01 and the 2017-01-30, and within the following bounding box (lon/lat): -5.41 8.84, -5.82 9.54.
 This package enables to build OPeNDAP (https) URLs given input parameters such as a data collection, region and time range of interst . These URLs can then be used to either download the data to your workspace or computer, or access the datacube directly as an R object (of class `ndcf4`, `raster`, `stars`, etc.)
 -->
-**`modisfast`** is an R package that provides functions to **speed-up** the **download** of time-series data products derived from [**MODIS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/) and [**VIIRS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/) observations, as well as other widely-used satellite-derived environmental data (e.g. Global Precipitation Measurement Mission).
+**`modisfast`** (former `opendapr`) is an R package that provides functions to **speed-up** the **download** of time-series data products derived from [**MODIS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/) and [**VIIRS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/) observations, as well as other widely-used satellite-derived environmental data (e.g. Global Precipitation Measurement Mission).
 
 **`modisfast`** uses the abilities offered by the [OPeNDAP framework](https://www.opendap.org/about) (*Open-source Project for a Network Data Access Protocol*) to download a subset of data cube, along spatial, temporal or any other data dimension (depth, ...). This way, it reduces downloading time and disk usage to their minimum : no more 1° x 1° MODIS tiles when your region of interest is only 100 km x 100 km wide ! Moreover, modisfast supports parallelized downloads.
 
@@ -90,7 +90,6 @@ variables <- c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night") # run mf_list_
 
 # ROI and time range of interest
 roi <- st_as_sf(data.frame(geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326) # a ROI of interest, format sf polygon
-roi_id <- "korhogo"  # a name for the area of interest
 time_range <- as.Date(c("2017-01-01","2017-01-30"))  # a time range of interest
 
 ```
@@ -108,21 +107,20 @@ urls <- mf_get_url(
   collection = collection,
   variables = variables,
   roi = roi,
-  roi_id = roi_id,
   time_range = time_range
  )
 
-## Download the data. By default the data is downloaded in a file named 'roi/collection'
+## Download the data. By default the data is downloaded in a temporary directory
 res_dl <- mf_download_data(urls)
 
 ```
 
-And finally, open the data in R as a `terra::SpatRaster` object :
+And finally, open the data in R as a `terra::SpatRaster` object using the function `mf_import_data()` (see [here](https://ptaconet.github.io/modisfast/articles/get_started.html#warning-import) why you should use this function instead of use `terra::rast()`) :
 
 ```{r , eval = F, message=F}
 
 r <- mf_import_data(
-  dir_path = file.path(roi_id,collection), 
+  path = dirname(res_dl$destfile[1]),
   collection_source = "MODIS"
   )
 

@@ -6,6 +6,7 @@
 \usage{
 mf_download_data(
   df_to_dl,
+  path = tempfile("tmp"),
   parallel = TRUE,
   credentials = NULL,
   source = "earthdata",
@@ -15,6 +16,8 @@ mf_download_data(
 }
 \arguments{
 \item{df_to_dl}{data.frame. Urls and destination files of dataset to download. Typically output of \link{mf_get_url}. See Details for the structure}
+
+\item{path}{string. Target folder for the data to download. Default : \code{tempfile()}}
 
 \item{parallel}{boolean. Parallelize the download ? Default to FALSE}
 

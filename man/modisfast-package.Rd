@@ -4,7 +4,7 @@
 \name{modisfast-package}
 \alias{modisfast}
 \alias{modisfast-package}
-\title{modisfast: Fast and efficient access to MODIS (and MODIS-like) data in R using the OPeNDAP Capacities}
+\title{modisfast: Fast and efficient access to MODIS (and MODIS-like) data in R}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 

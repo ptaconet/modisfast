@@ -28,8 +28,9 @@ provides the MOD11A1.006 (MODIS/Terra Land Surface Temperature/Emissivity Daily 
 This package enables to build OPeNDAP (https) URLs given input parameters such as a data collection, region and time range of interst . These URLs can then be used to either download the data to your workspace or computer, or access the datacube directly as an R object (of class `ndcf4`, `raster`, `stars`, etc.)
 -->
 
-**`modisfast`** is an R package that provides functions to **speed-up**
-the **download** of time-series data products derived from
+**`modisfast`** (former `opendapr`) is an R package that provides
+functions to **speed-up** the **download** of time-series data products
+derived from
 [**MODIS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/)
 and
 [**VIIRS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/)
@@ -96,7 +97,6 @@ variables <- c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night") # run mf_list_
 
 # ROI and time range of interest
 roi <- st_as_sf(data.frame(geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326) # a ROI of interest, format sf polygon
-roi_id <- "korhogo"  # a name for the area of interest
 time_range <- as.Date(c("2017-01-01","2017-01-30"))  # a time range of interest
 ```
 
@@ -112,19 +112,21 @@ urls <- mf_get_url(
   collection = collection,
   variables = variables,
   roi = roi,
-  roi_id = roi_id,
   time_range = time_range
  )
 
-## Download the data. By default the data is downloaded in a file named 'roi/collection'
+## Download the data. By default the data is downloaded in a temporary directory
 res_dl <- mf_download_data(urls)
 ```
 
-And finally, open the data in R as a `terra::SpatRaster` object :
+And finally, open the data in R as a `terra::SpatRaster` object using
+the function `mf_import_data()` (see
+[here](https://ptaconet.github.io/modisfast/articles/get_started.html#warning-import)
+why you should use this function instead of use `terra::rast()`) :
 
 ``` r
 r <- mf_import_data(
-  dir_path = file.path(roi_id,collection), 
+  path = dirname(res_dl$destfile[1]),
   collection_source = "MODIS"
   )
 ```

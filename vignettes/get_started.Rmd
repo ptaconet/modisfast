@@ -28,7 +28,6 @@ library(emo)
 library(modisfast)
 library(sf)
 library(terra)
-library(magrittr)
 ```
 
 In this example we want to download, import and plot over the 3500 km^2^ wide region of interest (mapped below) :
@@ -42,7 +41,7 @@ roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -
 mapview::mapview(roi,legend=F)
 ```
 
-## Check which collections are available 
+### Check which collections are available 
 
 Before starting, let's identify our collections of interest among the collections that are available for download, using the function `mf_list_collections()` :
 
@@ -56,28 +55,46 @@ So our collections of interest are :
 - **MOD11A1.061** : MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid v061
 - **GPM_3IMERGDF.07** : GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V07
 
-## Setup the region and time range of interest
+### Setup the region and time range of interest
 
-First we prepare the script : define the ROI and the time frame
+First we prepare the script : define the ROI, the time frame, and the target data folder
 
 ```{r example_prepare, eval=T}
 # Set ROI and time range of interest
-roi_id <- "korhogo"
 roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326)
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
+target_fold <- "data_korhogo"
 ```
 
-## Login to EOSDIS Earthdata
+### Login to EOSDIS Earthdata
 
 And we login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
 
-```{r eval=T}
-username <- Sys.getenv("earthdata_un") # replace with your own Earthdata username
-password <- Sys.getenv("earthdata_pw")  # replace with your own Earthdata password
+```{r log1, eval=T, echo=F,message=F }
+username <- Sys.getenv("earthdata_un")
+password <- Sys.getenv("earthdata_pw")
+log <- mf_login(credentials = c(username,password),verbose = F)
+```
+
+```{r odr_login, eval=F}
+# Login to Earthdata servers with username and password. 
+username <- "earthdata_un"
+password <- "earthdata_pw"
 log <- mf_login(credentials = c(username,password))
 ```
 
-## Get the URLs of the data to download {#get-url}
+```{r log3, eval=T, echo=F,message=F }
+username <- Sys.getenv("earthdata_un")
+password <- Sys.getenv("earthdata_pw")
+log <- mf_login(credentials = c(username,password),verbose = F)
+```
+
+```{r eval=T, echo=F,message=F }
+unlink(target_fold, recursive = T)
+```
+
+
+### Get the URLs of the data to download {#get-url}
 
 With the function `mf_get_url()`, we get the https URLs for our collections of interest (*MOD11A1.061* and *GPM_3IMERGDF.07*) given our ROI and time frame. 
 
@@ -102,18 +119,14 @@ urls_mod11a1 <- mf_get_url(
   collection = "MOD11A1.061",
   variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),  # get the available variables with : mf_list_variables("MOD11A1.061"), or set to NULL (default) to download all the variables
   roi = roi,
-  roi_id = roi_id,
-  time_range = time_range
- )
+  time_range = time_range )
 
 ## Get the URLs of GPM daily
 urls_gpm <- mf_get_url(
   collection = "GPM_3IMERGDF.07",
   variables = c("precipitation"),  # get the available variables with : mf_list_variables("GPM_3IMERGDF.07")
   roi = roi,
-  roi_id = roi_id,
-  time_range = time_range
- )
+  time_range = time_range )
 
 nrow(urls_mod11a1)
 urls_mod11a1
@@ -123,7 +136,7 @@ head(urls_gpm,3)
 
 ```
 
-## Download the data {#download}
+### Download the data {#download}
 
 Now we download the data with the function `mf_download_data()`.
 
@@ -136,17 +149,19 @@ Setting the argument `parallel` to `TRUE` will parallelize - therefore fasten - 
 # Hint : to fasten the download in case of multiple collections, bind them in a single data.frame (as shown below) before executing the function 'mf_download_data()' :
 df_to_dl <- rbind(urls_mod11a1,urls_gpm)
 
-# Then download the data
-res_dl <- mf_download_data(df_to_dl,parallel = TRUE)
+# Then download the data (by default, in temp directory, but the target folder can be set in the function
+res_dl <- mf_download_data(df_to_dl, path = target_fold, parallel = TRUE)
 
 print(str(res_dl))
 ```
 
-## Import the data in R {#import}
+### Import the data in R {#import}
 
 Various packages and related classes can be used to read the data downloaded through OPeNDAP. If [`terra`](https://cran.r-project.org/package=terra) (successor of [`raster`](https://cran.r-project.org/package=raster)) is surely the most famous class for raster objects, many packages facilitate the use of spatiotemporal data cubes in formats such as those proposed through `modisfast` (e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as a `stars` object from the excellent [`stars`](https://cran.r-project.org/package=stars) package for data cubes manipulation. All the data can also be imported as `ncdf4` objects using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4) package.
 
-`r emo::ji("warning")` **Important warning regarding the use of the data after download through `modisfast`**
+`r emo::ji("warning")` 
+
+#### Important warning regarding the use of the data after download through `modisfast` {#warning-import}
 
 Care must be taken when importing data that was downloaded through the OPeNDAP data providers servers. Depending on the collection, some "issues" were raised. These issues are independent from `modisfast` : they result most of time of a kind of lack of full implementation of the OPeNDAP framework by the data providers. These issues are :
 
@@ -159,15 +174,17 @@ These issues can easily be dealt at the import phase in R using the function `mf
 
 ```{r import_example, message=F, eval=T}
 # import MOD11A1.061
-modis_ts <- mf_import_data(file.path(roi_id,"MOD11A1.061"), collection_source = "MODIS")
+modis_ts <- mf_import_data(path = file.path(target_fold,"MOD11A1.061"), 
+                           collection_source = "MODIS")
 # import GPM
-gpm_ts <- mf_import_data(file.path(roi_id,"GPM_3IMERGDF.07"), collection_source = "GPM")
+gpm_ts <- mf_import_data(path = file.path(target_fold,"GPM_3IMERGDF.07"), 
+                         collection_source = "GPM")
 
 modis_ts
 gpm_ts
 ```
 
-## Plot the data
+### Plot the data
 
 Let's finally plot the data !
 
