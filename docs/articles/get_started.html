@@ -61,7 +61,7 @@
       <a href="../articles/get_started.html">1. Get started </a>
     </li>
     <li>
-      <a href="../articles/modisfast2.html">2. Get data on several periods of interest at a glance</a>
+      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest at a glance</a>
     </li>
   </ul>
 </li>
@@ -97,7 +97,7 @@
                         <h4 data-toc-skip class="author">Paul
 Taconet</h4>
             
-            <h4 data-toc-skip class="date">2024-05-15</h4>
+            <h4 data-toc-skip class="date">2024-05-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ptaconet/modisfast/blob/HEAD/vignettes/get_started.Rmd" class="external-link"><code>vignettes/get_started.Rmd</code></a></small>
       <div class="hidden name"><code>get_started.Rmd</code></div>
@@ -171,12 +171,12 @@ Temperature/Emissivity Daily L3 Global 1km SIN Grid v061</li>
 <h3 id="setup-the-region-and-time-range-of-interest">Setup the region and time range of interest<a class="anchor" aria-label="anchor" href="#setup-the-region-and-time-range-of-interest"></a>
 </h3>
 <p>First we prepare the script : define the ROI, the time frame, and the
-target data folder</p>
+folder were the data will be downloaded :</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Set ROI and time range of interest</span></span>
-<span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>geom<span class="op">=</span><span class="st">"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span><span class="op">)</span>, wkt<span class="op">=</span><span class="st">"geom"</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
+<span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id<span class="op">=</span><span class="st">"Korhogo"</span>, geom<span class="op">=</span><span class="st">"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span><span class="op">)</span>, wkt<span class="op">=</span><span class="st">"geom"</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
 <span><span class="va">time_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2017-01-01"</span>,<span class="st">"2017-01-30"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">target_fold</span> <span class="op">&lt;-</span> <span class="st">"data_korhogo"</span></span></code></pre></div>
+<span><span class="va">target_fold</span> <span class="op">&lt;-</span> <span class="st">"env_data"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="login-to-eosdis-earthdata">Login to EOSDIS Earthdata<a class="anchor" aria-label="anchor" href="#login-to-eosdis-earthdata"></a>
@@ -218,7 +218,6 @@ each of them (description, etc.), use the function
 <span>  roi <span class="op">=</span> <span class="va">roi</span>,</span>
 <span>  time_range <span class="op">=</span> <span class="va">time_range</span> <span class="op">)</span></span>
 <span><span class="co">#&gt; Building the URLs...</span></span>
-<span><span class="co">#&gt; Note : message 'attribute variables are assumed to be spatially constant throughout all geometries' is not an error</span></span>
 <span><span class="co">#&gt; OK</span></span>
 <span></span>
 <span><span class="co">## Get the URLs of GPM daily</span></span>
@@ -233,18 +232,18 @@ each of them (description, etc.), use the function
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">urls_mod11a1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1</span></span>
 <span><span class="va">urls_mod11a1</span></span>
-<span><span class="co">#&gt;   time_start  collection                                   name</span></span>
-<span><span class="co">#&gt; 1 2017-01-01 MOD11A1.061 MOD11A1.061.2017001_2017030.h17v08.nc4</span></span>
+<span><span class="co">#&gt;    id_roi time_start  collection                                   name</span></span>
+<span><span class="co">#&gt; 1 Korhogo 2017-01-01 MOD11A1.061 MOD11A1.061.2017001_2017030.h17v08.nc4</span></span>
 <span><span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                                                 url</span></span>
 <span><span class="co">#&gt; 1 https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.061/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projection,LST_Day_1km%5B6087:6116%5D%5B55:140%5D%5B512:560%5D,LST_Night_1km%5B6087:6116%5D%5B55:140%5D%5B512:560%5D,QC_Day%5B6087:6116%5D%5B55:140%5D%5B512:560%5D,QC_Night%5B6087:6116%5D%5B55:140%5D%5B512:560%5D,time%5B6087:6116%5D,YDim%5B55:140%5D,XDim%5B512:560%5D</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">urls_gpm</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 30</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">urls_gpm</span>,<span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   time_start      collection</span></span>
-<span><span class="co">#&gt; 1 2017-01-01 GPM_3IMERGDF.07</span></span>
-<span><span class="co">#&gt; 2 2017-01-02 GPM_3IMERGDF.07</span></span>
-<span><span class="co">#&gt; 3 2017-01-03 GPM_3IMERGDF.07</span></span>
+<span><span class="co">#&gt;    id_roi time_start      collection</span></span>
+<span><span class="co">#&gt; 1 Korhogo 2017-01-01 GPM_3IMERGDF.07</span></span>
+<span><span class="co">#&gt; 2 Korhogo 2017-01-02 GPM_3IMERGDF.07</span></span>
+<span><span class="co">#&gt; 3 Korhogo 2017-01-03 GPM_3IMERGDF.07</span></span>
 <span><span class="co">#&gt;                                                     name</span></span>
 <span><span class="co">#&gt; 1 3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V07B.nc4</span></span>
 <span><span class="co">#&gt; 2 3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V07B.nc4</span></span>
@@ -275,26 +274,19 @@ need to be downloaded.</p>
 <span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">df_to_dl</span>, path <span class="op">=</span> <span class="va">target_fold</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 31  datasets in total :  0  already downloaded and  31  datasets to download</span></span>
 <span><span class="co">#&gt; Downloading the data...</span></span>
-<span><span class="co">#&gt; Only part of the data has been downloaded. Downloading the remaining datasets one by one...</span></span>
-<span><span class="co">#&gt; 31  datasets in total :  26  already downloaded and  5  datasets to download</span></span>
-<span><span class="co">#&gt; Downloading the data...</span></span>
-<span><span class="co">#&gt; [ 1  over  5 ]</span></span>
-<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%Downloading: 7.2 kB     Downloading: 7.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     [ 2  over  5 ]</span></span>
-<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%Downloading: 7.2 kB     Downloading: 7.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     [ 3  over  5 ]</span></span>
-<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%Downloading: 7.2 kB     Downloading: 7.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     [ 4  over  5 ]</span></span>
-<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%Downloading: 7.2 kB     Downloading: 7.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     [ 5  over  5 ]</span></span>
-<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%Downloading: 7.2 kB     Downloading: 7.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 33 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     Downloading: 36 kB     </span></span>
-<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  data_korhogo/MOD11A1.061 and data_korhogo/GPM_3IMERGDF.07</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  env_data/Korhogo/MOD11A1.061 and env_data/Korhogo/GPM_3IMERGDF.07</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res_dl</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'data.frame':    31 obs. of  8 variables:</span></span>
+<span><span class="co">#&gt; 'data.frame':    31 obs. of  9 variables:</span></span>
+<span><span class="co">#&gt;  $ id_roi    : chr  "Korhogo" "Korhogo" "Korhogo" "Korhogo" ...</span></span>
 <span><span class="co">#&gt;  $ time_start: Date, format: "2017-01-01" "2017-01-01" ...</span></span>
 <span><span class="co">#&gt;  $ collection: chr  "MOD11A1.061" "GPM_3IMERGDF.07" "GPM_3IMERGDF.07" "GPM_3IMERGDF.07" ...</span></span>
 <span><span class="co">#&gt;  $ name      : chr  "MOD11A1.061.2017001_2017030.h17v08.nc4" "3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V07B.nc4" "3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V07B.nc4" "3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V07B.nc4" ...</span></span>
 <span><span class="co">#&gt;  $ url       : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.061/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07/2017/01/3B-DAY.MS.MRG.3IMERG.20170101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07/2017/01/3B-DAY.MS.MRG.3IMERG.20170102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07/2017/01/3B-DAY.MS.MRG.3IMERG.20170103-S0000"| __truncated__ ...</span></span>
-<span><span class="co">#&gt;  $ destfile  : chr  "data_korhogo/MOD11A1.061/MOD11A1.061.2017001_2017030.h17v08.nc4" "data_korhogo/GPM_3IMERGDF.07/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V07B.nc4" "data_korhogo/GPM_3IMERGDF.07/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V07B.nc4" "data_korhogo/GPM_3IMERGDF.07/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V07B.nc4" ...</span></span>
+<span><span class="co">#&gt;  $ destfile  : chr  "env_data/Korhogo/MOD11A1.061/MOD11A1.061.2017001_2017030.h17v08.nc4" "env_data/Korhogo/GPM_3IMERGDF.07/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V07B.nc4" "env_data/Korhogo/GPM_3IMERGDF.07/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V07B.nc4" "env_data/Korhogo/GPM_3IMERGDF.07/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V07B.nc4" ...</span></span>
 <span><span class="co">#&gt;  $ fileDl    : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...</span></span>
-<span><span class="co">#&gt;  $ fileSize  : num  290746 35807 35817 35815 1580 ...</span></span>
+<span><span class="co">#&gt;  $ fileSize  : num  290746 35807 35817 35815 35809 ...</span></span>
 <span><span class="co">#&gt;  $ dlStatus  : num  1 1 1 1 1 1 1 1 1 1 ...</span></span>
 <span><span class="co">#&gt; NULL</span></span></code></pre></div>
 </div>
@@ -335,10 +327,10 @@ the data in R as a <code>SpatRaster</code> object (from the package <a href="htt
 :</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># import MOD11A1.061</span></span>
-<span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, </span>
+<span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"Korhogo"</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, </span>
 <span>                           collection_source <span class="op">=</span> <span class="st">"MODIS"</span><span class="op">)</span></span>
 <span><span class="co"># import GPM</span></span>
-<span><span class="va">gpm_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"GPM_3IMERGDF.07"</span><span class="op">)</span>, </span>
+<span><span class="va">gpm_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"Korhogo"</span>,<span class="st">"GPM_3IMERGDF.07"</span><span class="op">)</span>, </span>
 <span>                         collection_source <span class="op">=</span> <span class="st">"GPM"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">modis_ts</span></span>

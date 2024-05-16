@@ -21,7 +21,7 @@ mf_get_url(
 
 \item{variables}{string vector. optional. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted (see details of \link{mf_get_url}).}
 
-\item{roi}{object of class \code{sf}. mandatory. Area of region of interest. Must be POLYGON-type geometry composed of one single feature.}
+\item{roi}{object of class \code{sf}. mandatory. Area of region of interest. Must be a Simple feature collection with geometry type POLYGON, composed of one or several rows (i.e. one or several ROIs), and with at least two columns: 'id' (an identifier for the roi) and 'geom' (the geometry).}
 
 \item{time_range}{date(s) / POSIXlt of interest . mandatory. Single date/datetime or time frame : vector with start and end dates/times (see details).}
 
@@ -81,7 +81,11 @@ log <- mf_login(credentials = c(username,password))
 # over a 50km x 70km region of interest (roi)
 # for the time frame 2017-01-01 to 2017-01-30 (30 days) (time_range)
 
-roi = st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
+roi <- st_as_sf(data.frame(
+id = "roi_test",
+geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
+wkt="geom",crs = 4326)
+
 
 time_range = as.Date(c("2017-01-01","2017-01-30"))
 

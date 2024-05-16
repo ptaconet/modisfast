@@ -8,6 +8,7 @@ mf_download_data(
   df_to_dl,
   path = tempfile("tmp"),
   parallel = TRUE,
+  num_workers = parallel::detectCores() - 1,
   credentials = NULL,
   source = "earthdata",
   verbose = TRUE,
@@ -20,6 +21,8 @@ mf_download_data(
 \item{path}{string. Target folder for the data to download. Default : \code{tempfile()}}
 
 \item{parallel}{boolean. Parallelize the download ? Default to FALSE}
+
+\item{num_workers}{integer. Number of workers in case of parallel download. Default to number of workers available in the machine minus one.}
 
 \item{credentials}{vector string of length 2 with username and password. optional.}
 
@@ -45,8 +48,10 @@ The download can the parallelized.
 \details{
 Parameter \code{df_to_dl} must a data.frame with the following minimal structure :
 \describe{
+\item{id_roi}{An id for the ROI (character string)}
+\item{collection}{Collection (character string)}
+\item{name}{}
 \item{url}{URL of the source file (character string)}
-\item{destfile}{Destination file (character string)}
 }
 
 Parameter \code{source} takes NULL as default value. Options are :

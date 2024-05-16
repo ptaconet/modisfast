@@ -20,3 +20,10 @@
 ^docs$
 ^Meta$
 ^doc$
+^\.modis_sin\.kmz$
+^\.suomi_tiles\.rda$
+^data_korhogo$
+^dev$
+^pkgdown$
+^env_data$
+^env_data_2$

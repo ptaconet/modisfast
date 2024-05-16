@@ -32,6 +32,7 @@
   roiSpatialIndexBound <- optionalsOpendap$roiSpatialIndexBound
   roiSpatialBound <- optionalsOpendap$roiSpatialBound
   modis_tile <- optionalsOpendap$modis_tile
+  roiId <- optionalsOpendap$roiId
 
   if (length(time_range)==1){
     time_range <- c(time_range,time_range)
@@ -45,7 +46,7 @@
 
     if(odap_coll_info$provider=="NASA USGS LP DAAC"){
 
-      .workflow_mf_get_url_modisvnp <- function(time_range,OpenDAPtimeVector,modis_tile,roiSpatialIndexBound){
+      .workflow_mf_get_url_modisvnp <- function(time_range,OpenDAPtimeVector,modis_tile,roiSpatialIndexBound,roiId){
         time_range <- as.Date(time_range,origin="1970-01-01")
 
         revisit_time <- OpenDAPtimeVector[2]-OpenDAPtimeVector[1]
@@ -65,20 +66,20 @@
 
           name=paste0(collection,".",lubridate::year(min(timeIndices_of_interest$date_closest_to_ideal_date)),sprintf("%03d",lubridate::yday(min(timeIndices_of_interest$date_closest_to_ideal_date))),"_",lubridate::year(max(timeIndices_of_interest$date_closest_to_ideal_date)),sprintf("%03d",lubridate::yday(max(timeIndices_of_interest$date_closest_to_ideal_date))),".",modis_tile)
 
-          table_urls<-data.frame(date=min(timeIndices_of_interest$date_closest_to_ideal_date),name=name,url=url,stringsAsFactors = F)
+          table_urls<-data.frame(date=min(timeIndices_of_interest$date_closest_to_ideal_date),name=name,url=url,roi_id=roiId,stringsAsFactors = F)
         } else { # download data in multiple netcdf files (1/each time frame)
           table_urls<-timeIndices_of_interest %>%
             dplyr::mutate(dimensions_url=purrr::map(.x=index_opendap_closest_to_date,.f=~.getOpenDapURL_dimensions(variables,c(.x,.x),roiSpatialIndexBound[1],roiSpatialIndexBound[2],roiSpatialIndexBound[3],roiSpatialIndexBound[4],odap_timeDimName,odap_lonDimName,odap_latDimName))) %>%
             dplyr::mutate(url=paste0(odap_server,collection,"/",modis_tile,".ncml.",output_format,"?",odap_projDimName,",",dimensions_url))
 
-          table_urls<-data.frame(date=table_urls$date_closest_to_ideal_date,name=table_urls$name,url=table_urls$url,stringsAsFactors = F)
+          table_urls<-data.frame(date=table_urls$date_closest_to_ideal_date,name=table_urls$name,url=table_urls$url,roi_id=roiId,stringsAsFactors = F)
         }
 
         return(table_urls)
       }
 
-      table_urls <- purrr::pmap_dfr(list(OpenDAPtimeVector,modis_tile,roiSpatialIndexBound),
-                                    ~.workflow_mf_get_url_modisvnp(time_range,..1,..2,..3))
+      table_urls <- purrr::pmap_dfr(list(OpenDAPtimeVector,modis_tile,roiSpatialIndexBound,roiId),
+                                    ~.workflow_mf_get_url_modisvnp(time_range,..1,..2,..3,..4))
 
 
     } else if (odap_coll_info$provider=="NASA LAADS DAAC"){
@@ -207,7 +208,8 @@
     for(i in 1:length(dim)){
       th_table_urls<-urls %>%
         dplyr::mutate(url=paste0(url_product,"?",dim[i])) %>%
-        dplyr::mutate(name=product_name)
+        dplyr::mutate(name=product_name) %>%
+        dplyr::mutate(roi_id = roi$id[i])
       table_urls <- rbind(table_urls,th_table_urls)
     }
 

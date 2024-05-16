@@ -3,6 +3,8 @@
 .RData
 .data_collections.csv
 .notes_articles.txt
+.modis_sin.kmz
+.suomi_tiles.rda
 config.yml
 tests/testthat/data/
 GPM_3IMERGDF.06/
@@ -14,3 +16,9 @@ data
 doc
 /doc/
 /Meta/
+/data_korhogo/
+/pkgdown/
+vignettes/env_data/
+vignettes/env_data_2/
+env_data/
+env_data_2/

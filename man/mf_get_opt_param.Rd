@@ -9,7 +9,7 @@ mf_get_opt_param(collection, roi, credentials = NULL, verbose = TRUE)
 \arguments{
 \item{collection}{string. mandatory. Collection of interest (see details of \link{mf_get_url}).}
 
-\item{roi}{object of class \code{sf}. mandatory. Area of region of interest. Must be POLYGON-type geometry composed of one single feature.}
+\item{roi}{object of class \code{sf}. mandatory. Area of region of interest. Must be a Simple feature collection with geometry type POLYGON, composed of one or several rows (i.e. one or several ROIs), and with at least two columns: 'id' (an identifier for the roi) and 'geom' (the geometry).}
 
 \item{credentials}{vector string of length 2 with username and password. optional.}
 
@@ -47,6 +47,7 @@ log <- mf_login(credentials = c(username,password))
 
 # Get the optional parameters for the collection MOD11A1.061 and the roi :
 roi <- st_as_sf(data.frame(
+id = "roi_test",
 geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
 wkt="geom",crs = 4326)
 

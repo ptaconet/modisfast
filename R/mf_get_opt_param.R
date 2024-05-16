@@ -37,6 +37,7 @@
 #'
 #' # Get the optional parameters for the collection MOD11A1.061 and the roi :
 #' roi <- st_as_sf(data.frame(
+#' id = "roi_test",
 #' geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
 #' wkt="geom",crs = 4326)
 #'
@@ -117,24 +118,27 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
     roi_div_bboxes <- purrr::map(roi_div,~sf::st_bbox(.))
     list_roiSpatialIndexBound <- purrr::map(roi_div_bboxes,~.mf_get_opt_param_singleROIfeature(OpenDAPYVector,OpenDAPXVector,.)$roiSpatialIndexBound)
     list_roiSpatialBound <- purrr::map(roi_div_bboxes,~.mf_get_opt_param_singleROIfeature(OpenDAPYVector,OpenDAPXVector,.)$roiSpatialBound)
+    list_roi_id <- roi$id
 
     ### MODIS
   } else if (odap_coll_info$source %in% c("MODIS","VIIRS")){
 
-    if(verbose){cat("Note : message 'attribute variables are assumed to be spatially constant throughout all geometries' is not an error\n")}
-
     if (odap_coll_info$provider=="NASA USGS LP DAAC"){
      tiling <- modis_tiles
      modis_tile <- purrr::map(roi_div,~.getMODIStileNames(.,"modis"))
-     OpendapURL <- purrr::map(modis_tile,~purrr::map_chr(.,~paste0(odap_coll_info$url_opendapserver,collection,"/",.,".ncml")))
+     modis_tile_numbers <- purrr::map(modis_tile,purrr::pluck("all_modis_tiles"))
+     roi_ids <- purrr::map(modis_tile,purrr::pluck("roi_id"))
+     OpendapURL <- purrr::map(modis_tile_numbers,~purrr::map_chr(.,~paste0(odap_coll_info$url_opendapserver,collection,"/",.,".ncml")))
      OpenDAPtimeVector<-purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_time)))
      OpenDAPtimeVector <- purrr::flatten(OpenDAPtimeVector)
 
      } else if (odap_coll_info$provider=="NASA LAADS DAAC"){
        tiling <- suomi_tiles
        modis_tile <- purrr::map(roi_div,~.getMODIStileNames(.,"suomi"))
+       modis_tile_numbers <- purrr::map(modis_tile,purrr::pluck("all_modis_tiles"))
+       roi_ids <- purrr::map(modis_tile,purrr::pluck("roi_id"))
        lines <- readLines(paste0(odap_coll_info$url_opendapserver,"/",odap_coll_info$collection,"/2013/019/","catalog.xml"))
-       OpendapURL<-purrr::map(modis_tile,~purrr::map_chr(.,~paste0(odap_coll_info$url_opendapserver,odap_coll_info$collection,"/2013/019/",.getVNPladswebdataname(lines,.))))
+       OpendapURL<-purrr::map(modis_tile_numbers,~purrr::map_chr(.,~paste0(odap_coll_info$url_opendapserver,odap_coll_info$collection,"/2013/019/",.getVNPladswebdataname(lines,.))))
      }
 
      OpenDAPXVector<-purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_lon)))
@@ -142,7 +146,10 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
 
     #roi_div <- purrr::map(roi_div,~sf::st_bbox(.))
 
+     sf::st_agr(tiling) = "constant"
+
       roi_div_bboxes <- roi_div %>%
+        purrr::map(.,~sf::st_set_agr(.,"constant")) %>%
         purrr::map(.,~sf::st_transform(.,4326)) %>%
         purrr::map(.,~sf::st_intersection(.,tiling)) %>%
         purrr::map(.,~sf::st_transform(.,odap_coll_info$crs)) %>%
@@ -152,7 +159,9 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
       OpenDAPYVector <- purrr::flatten(OpenDAPYVector)
      OpenDAPXVector <- purrr::flatten(OpenDAPXVector)
      roi_div_bboxes <- purrr::flatten(roi_div_bboxes)
-     modis_tile <- purrr::flatten(modis_tile)
+     modis_tile <- purrr::flatten(modis_tile_numbers)
+     list_roi_id <- purrr::flatten(roi_ids)
+
 
     list_roiSpatialIndexBound <- purrr::pmap(list(OpenDAPYVector,OpenDAPXVector,roi_div_bboxes),
                                              ~.mf_get_opt_param_singleROIfeature(..1,..2,..3)$roiSpatialIndexBound)
@@ -171,7 +180,7 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
 
   availableVariables <- mf_list_variables(collection)
 
-  return(list(roiSpatialIndexBound = list_roiSpatialIndexBound, availableVariables = availableVariables, roiSpatialBound = list_roiSpatialBound, OpenDAPXVector = OpenDAPXVector, OpenDAPYVector = OpenDAPYVector, OpenDAPtimeVector = OpenDAPtimeVector, modis_tile = modis_tile))
+  return(list(roiSpatialIndexBound = list_roiSpatialIndexBound, availableVariables = availableVariables, roiSpatialBound = list_roiSpatialBound, OpenDAPXVector = OpenDAPXVector, OpenDAPYVector = OpenDAPYVector, OpenDAPtimeVector = OpenDAPtimeVector, modis_tile = modis_tile, roiId = list_roi_id))
 
 }
 

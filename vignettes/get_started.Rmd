@@ -57,13 +57,13 @@ So our collections of interest are :
 
 ### Setup the region and time range of interest
 
-First we prepare the script : define the ROI, the time frame, and the target data folder
+First we prepare the script : define the ROI, the time frame, and the folder were the data will be downloaded :
 
 ```{r example_prepare, eval=T}
 # Set ROI and time range of interest
-roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326)
+roi <- st_as_sf(data.frame(id="Korhogo", geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326)
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
-target_fold <- "data_korhogo"
+target_fold <- "env_data"
 ```
 
 ### Login to EOSDIS Earthdata
@@ -174,10 +174,10 @@ These issues can easily be dealt at the import phase in R using the function `mf
 
 ```{r import_example, message=F, eval=T}
 # import MOD11A1.061
-modis_ts <- mf_import_data(path = file.path(target_fold,"MOD11A1.061"), 
+modis_ts <- mf_import_data(path = file.path(target_fold,"Korhogo","MOD11A1.061"), 
                            collection_source = "MODIS")
 # import GPM
-gpm_ts <- mf_import_data(path = file.path(target_fold,"GPM_3IMERGDF.07"), 
+gpm_ts <- mf_import_data(path = file.path(target_fold,"Korhogo","GPM_3IMERGDF.07"), 
                          collection_source = "GPM")
 
 modis_ts

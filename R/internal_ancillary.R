@@ -27,9 +27,7 @@
 
   .testRoi(roi)
 
-  roi <- sf::st_transform(roi,4326) %>%
-    sf::st_bbox() %>%
-    sf::st_as_sfc()
+  roi_id <- roi$id
 
   #modis_tile = sf::read_sf("https://modis.ornl.gov/files/modis_sin.kmz") %>%
   if(type=="modis"){
@@ -37,6 +35,13 @@
   } else if (type=="suomi"){
     tiling_system <- suomi_tiles
   }
+
+  sf::st_agr(tiling_system) = "constant"
+  sf::st_agr(roi) = "constant"
+
+   roi <- sf::st_transform(roi,4326) %>%
+     sf::st_bbox() %>%
+     sf::st_as_sfc()
 
   modis_tile <- tiling_system %>%
     sf::st_intersection(roi) %>%
@@ -58,7 +63,9 @@
       th_modis_tile<-paste0(substr(th_modis_tile,1,4),"0",substr(th_modis_tile,5,5))
     }
     all_modis_tiles<-c(all_modis_tiles,th_modis_tile)
-  }
+    }
 
-  return(all_modis_tiles)
+    roi_id <- rep(roi_id,length(all_modis_tiles))
+
+  return(list(all_modis_tiles = all_modis_tiles, roi_id = roi_id))
 }

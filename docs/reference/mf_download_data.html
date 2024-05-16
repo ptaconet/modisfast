@@ -36,7 +36,7 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
       <a href="../articles/get_started.html">1. Get started </a>
     </li>
     <li>
-      <a href="../articles/modisfast2.html">2. Get data on several periods of interest at a glance</a>
+      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest at a glance</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -69,6 +69,7 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
 <span>  <span class="va">df_to_dl</span>,</span>
 <span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"tmp"</span><span class="op">)</span>,</span>
 <span>  parallel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  num_workers <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,</span>
 <span>  credentials <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  source <span class="op">=</span> <span class="st">"earthdata"</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -88,6 +89,10 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
 
 <dt>parallel</dt>
 <dd><p>boolean. Parallelize the download ? Default to FALSE</p></dd>
+
+
+<dt>num_workers</dt>
+<dd><p>integer. Number of workers in case of parallel download. Default to number of workers available in the machine minus one.</p></dd>
 
 
 <dt>credentials</dt>
@@ -126,8 +131,14 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
     <p>Parameter <code>df_to_dl</code> must a data.frame with the following minimal structure :</p><dl><dt>url</dt>
 <dd><p>URL of the source file (character string)</p></dd>
 
-<dt>destfile</dt>
-<dd><p>Destination file (character string)</p></dd>
+<dt>collection</dt>
+<dd><p>Collection (character string)</p></dd>
+
+<dt>name</dt>
+<dd></dd>
+
+<dt>id_roi</dt>
+<dd><p>An id for the ROI (character string)</p></dd>
 
 
 </dl><p>Parameter <code>source</code> takes NULL as default value. Options are :</p><ul><li><p><code>NULL</code> :  when no mf_login is required to download the data.</p></li>

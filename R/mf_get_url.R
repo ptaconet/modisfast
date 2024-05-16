@@ -5,7 +5,7 @@
 #'
 #' @param collection string. mandatory. Collection of interest (see details of \link{mf_get_url}).
 #' @param variables string vector. optional. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted (see details of \link{mf_get_url}).
-#' @param roi object of class \code{sf}. mandatory. Area of region of interest. Must be POLYGON-type geometry composed of one single feature.
+#' @param roi object of class \code{sf}. mandatory. Area of region of interest. Must be a Simple feature collection with geometry type POLYGON, composed of one or several rows (i.e. one or several ROIs), and with at least two columns: 'id' (an identifier for the roi) and 'geom' (the geometry).
 #' @param time_range date(s) / POSIXlt of interest . mandatory. Single date/datetime or time frame : vector with start and end dates/times (see details).
 #' @param output_format string. Output data format. optional. Available options are : "nc4" (default), "ascii", "json"
 #' @param single_netcdf boolean. optional. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.
@@ -62,7 +62,11 @@
 #' # over a 50km x 70km region of interest (roi)
 #' # for the time frame 2017-01-01 to 2017-01-30 (30 days) (time_range)
 #'
-#' roi = st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
+#' roi <- st_as_sf(data.frame(
+#' id = "roi_test",
+#' geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
+#' wkt="geom",crs = 4326)
+#'
 #'
 #' time_range = as.Date(c("2017-01-01","2017-01-30"))
 #'
@@ -119,8 +123,6 @@ mf_get_url<-function(collection,
   .testInternetConnection()
   # credentials
   .testLogin(credentials)
-  # roi_id already exists
-  #if(dir.exists(file.path(roi_id,collection))){stop("a directory named 'roi_id/collection' already exists in the current directory. Please provide another value for roi_id or choose another collection.\n")}
 
   if(verbose){cat("Building the URLs...\n")}
 
@@ -146,15 +148,14 @@ mf_get_url<-function(collection,
     dplyr::mutate(url=gsub("\\[","%5B",url)) %>%
     dplyr::mutate(url=gsub("\\]","%5D",url)) %>%
     dplyr::arrange(name) %>%
-    transform(name = ifelse(duplicated(name) | duplicated(name, fromLast=TRUE),
-                            paste(name, stats::ave(name, name, FUN=seq_along), sep='_'),
-                            name)) %>%
-    #dplyr::mutate(destfile=paste0(file.path(path,collection,.$name),".",output_format)) %>%
+    # transform(name = ifelse(duplicated(name) | duplicated(name, fromLast=TRUE),
+    #                         paste0(roi_id,"_",name), #paste(name, stats::ave(name, name, FUN=seq_along), sep='_'),
+    #                         name)) %>%
     dplyr::mutate(name=paste0(name,".",output_format)) %>%
-    dplyr::arrange(date) %>%
+    dplyr::arrange(roi_id,date) %>%
     dplyr::mutate(collection=collection) %>%
-    dplyr::select(date,collection,name,url) %>%
-    dplyr::rename(time_start = date)
+    dplyr::select(roi_id,date,collection,name,url) %>%
+    dplyr::rename(time_start = date,id_roi = roi_id)
 
   if(verbose){cat("OK\n")}
 

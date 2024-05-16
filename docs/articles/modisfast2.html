@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2. Get data on several periods of interest at a glance • modisfast</title>
+<title>2. Get data on several regions or periods of interest at a glance • modisfast</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="2. Get data on several periods of interest at a glance">
+<meta property="og:title" content="2. Get data on several regions or periods of interest at a glance">
 <meta property="og:description" content="modisfast">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -61,7 +61,7 @@
       <a href="../articles/get_started.html">1. Get started </a>
     </li>
     <li>
-      <a href="../articles/modisfast2.html">2. Get data on several periods of interest at a glance</a>
+      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest at a glance</a>
     </li>
   </ul>
 </li>
@@ -86,12 +86,12 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>2. Get data on several periods of interest at a
-glance</h1>
+      <h1 data-toc-skip>2. Get data on several regions or periods of
+interest at a glance</h1>
                         <h4 data-toc-skip class="author">Paul
 Taconet</h4>
             
-            <h4 data-toc-skip class="date">2024-05-15</h4>
+            <h4 data-toc-skip class="date">2024-05-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ptaconet/modisfast/blob/HEAD/vignettes/modisfast2.Rmd" class="external-link"><code>vignettes/modisfast2.Rmd</code></a></small>
       <div class="hidden name"><code>modisfast2.Rmd</code></div>
@@ -112,41 +112,91 @@ Taconet</h4>
 <li>for one single time frame of interest (2017-01-01 to
 2017-01-30).</li>
 </ul>
-<!-- So far so good, but what if we need ***multiple regions of interest***, and / or ***multiple time frames of interest*** ? Those case are likely to happen, for instance :  --><!-- * multiple time frames of interest : we have spatiotemporal sampling data - e.g. species occurrence - that were collected over a large time frame and we want to study how local past environmental / climatic conditions influence the occurrence ; --><!-- * multiple regions of interest : we want to compare two areas in terms of their environmental or climatic conditions. --><p>So far so good, but what if we need <strong><em>multiple time frames
-of interest</em></strong> ? This case are likely to happen, for instance
-: we have spatiotemporal sampling data - e.g. species occurrence - that
-were collected over a large time frame and we want to study how local
-past environmental / climatic conditions influence the occurrence.</p>
+<p>So far so good, but what if we need <strong><em>multiple regions of
+interest</em></strong>, and / or <strong><em>multiple time frames of
+interest</em></strong> ? Those case are likely to happen, for instance
+:</p>
+<ul>
+<li>multiple time frames of interest : we have spatiotemporal sampling
+data - e.g. species occurrence - that were collected over a large time
+frame and we want to study how local past environmental / climatic
+conditions influence the occurrence ;</li>
+<li>multiple regions of interest : we want to compare two areas in terms
+of their environmental or climatic conditions.</li>
+</ul>
 <p>We could use <code>for</code> loops or related stuff to do the job.
 However, this would not be very optimized. In this vignette, we explain
-why and we show how to <strong>optimize the data import in the case of
-multiple time periods over a ROI</strong>. Let’s start !</p>
+why and we show how to optimize the data import in the case of
+<strong>multiple regions</strong> or <strong>multiple time
+periods</strong> of interest. Let’s start !</p>
 </div>
 <div class="section level2">
-<h2 id="workflow">Workflow<a class="anchor" aria-label="anchor" href="#workflow"></a>
+<h2 id="get-data-over-multiple-regions-of-interest-at-a-glance">Get data over multiple regions of interest at a glance<a class="anchor" aria-label="anchor" href="#get-data-over-multiple-regions-of-interest-at-a-glance"></a>
 </h2>
-<p>First we load the useful packages, we define the ROI and time periods
-of interest (here, for the example, the month of January for each year
-from 2016 to 2019) and we login to EOSDIS Earthdata :</p>
+<p>It is very easy to get data over multiple regions of interest, as
+<code><a href="../reference/mf_get_url.html">mf_get_url()</a></code> naturally supports the setting up of various
+ROIs, as shown in the example below :</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ptaconet/modisfast" class="external-link">modisfast</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/" class="external-link">purrr</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>geom<span class="op">=</span><span class="st">"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span><span class="op">)</span>,wkt<span class="op">=</span><span class="st">"geom"</span>,crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Define multiple regions of interest</span></span>
+<span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Korhogo"</span>,<span class="st">"Diebougou"</span><span class="op">)</span>,</span>
+<span>                           geom<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span>,</span>
+<span>                                   <span class="st">"POLYGON ((-3.62 11.03, -3.13 11.04, -3.11 10.60, -3.60 10.60, -3.62 11.03))"</span></span>
+<span>                                   <span class="op">)</span><span class="op">)</span>,wkt<span class="op">=</span><span class="st">"geom"</span>,crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
+<span>                                   </span>
+<span><span class="va">time_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2017-01-01"</span>,<span class="st">"2017-01-30"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># define target folder</span></span>
+<span><span class="va">target_fold</span> <span class="op">&lt;-</span> <span class="st">"env_data_2"</span></span>
+<span></span>
+<span><span class="co"># and then execute the classical workflow</span></span>
+<span></span>
+<span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_login.html">mf_login</a></span><span class="op">(</span>credentials <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_un"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_pw"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Checking credentials...</span></span>
+<span><span class="co">#&gt; Successfull login to earthdata</span></span>
+<span></span>
+<span><span class="va">urls_mod11a1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span>
+<span>        collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span>,</span>
+<span>        variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LST_Day_1km"</span>,<span class="st">"LST_Night_1km"</span>,<span class="st">"QC_Day"</span>,<span class="st">"QC_Night"</span><span class="op">)</span>,</span>
+<span>        roi <span class="op">=</span> <span class="va">roi</span>,</span>
+<span>        time_range <span class="op">=</span> <span class="va">time_range</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Building the URLs...</span></span>
+<span><span class="co">#&gt; OK</span></span>
+<span></span>
+<span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls_mod11a1</span>, path <span class="op">=</span> <span class="va">target_fold</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 2  datasets in total :  0  already downloaded and  2  datasets to download</span></span>
+<span><span class="co">#&gt; Downloading the data...</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  env_data_2/Diebougou/MOD11A1.061 and env_data_2/Korhogo/MOD11A1.061</span></span>
+<span></span>
+<span><span class="va">modis_ts_korhogo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"Korhogo"</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, collection_source <span class="op">=</span> <span class="st">"MODIS"</span><span class="op">)</span></span>
+<span><span class="va">modis_ts_diebougou</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"Diebougou"</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, collection_source <span class="op">=</span> <span class="st">"MODIS"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="get-data-over-multiple-time-periods-of-interest-at-a-glance">Get data over multiple time periods of interest at a glance<a class="anchor" aria-label="anchor" href="#get-data-over-multiple-time-periods-of-interest-at-a-glance"></a>
+</h2>
+<p>Here, the things are just a bit more different, as explained in this
+example :</p>
+<p>We first setup the time ranges of interest (and as usual, the
+ROI)</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"Korhogo"</span>, geom<span class="op">=</span><span class="st">"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span><span class="op">)</span>,wkt<span class="op">=</span><span class="st">"geom"</span>,crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">time_ranges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2016-01-01"</span>,<span class="st">"2016-01-31"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                    <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2017-01-01"</span>,<span class="st">"2017-01-31"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                    <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2018-01-01"</span>,<span class="st">"2018-01-31"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                    <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2019-01-01"</span>,<span class="st">"2019-01-31"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">target_fold</span> <span class="op">&lt;-</span> <span class="st">"data_korhogo_2"</span></span>
+<span></span>
+<span><span class="va">target_fold</span> <span class="op">&lt;-</span> <span class="st">"env_data_2"</span></span>
 <span></span>
 <span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_login.html">mf_login</a></span><span class="op">(</span>credentials <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_un"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_pw"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Checking credentials...</span></span>
 <span><span class="co">#&gt; Successfull login to earthdata</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="get-url">Get the URLs of the data to download<a class="anchor" aria-label="anchor" href="#get-url"></a>
-</h3>
 <p>Of course, we could loop over the <code><a href="../reference/mf_get_url.html">mf_get_url()</a></code> with the
 time ranges of interest, and get the data. However, the
 <code><a href="../reference/mf_get_url.html">mf_get_url()</a></code> function does query the OPeNDAP servers each
@@ -172,11 +222,10 @@ we first execute the function <code><a href="../reference/mf_get_opt_param.html"
 execute the function <code><a href="../reference/mf_get_url.html">mf_get_url()</a></code>, passing the result of
 <code><a href="../reference/mf_get_opt_param.html">mf_get_opt_param()</a></code> in the parameter
 <code>opt_param</code>.</strong></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># first execute the function `mf_get_opt_param()`</span></span>
 <span><span class="va">opt_param_mod11a1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_opt_param.html">mf_get_opt_param</a></span><span class="op">(</span><span class="st">"MOD11A1.061"</span>,<span class="va">roi</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Note : message 'attribute variables are assumed to be spatially constant throughout all geometries' is not an error</span></span>
 <span></span>
 <span><span class="co"># then execute the function `mf_get_url()` passing the argument opt_param</span></span>
 <span><span class="va">urls_mod11a1</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html" class="external-link">map_dfr</a></span><span class="op">(</span><span class="va">time_ranges</span>, <span class="op">~</span><span class="fu"><a href="../reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span> </span>
@@ -196,24 +245,22 @@ execute the function <code><a href="../reference/mf_get_url.html">mf_get_url()</
 <span><span class="co">#&gt; OK</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">urls_mod11a1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'data.frame':    4 obs. of  4 variables:</span></span>
+<span><span class="co">#&gt; 'data.frame':    4 obs. of  5 variables:</span></span>
+<span><span class="co">#&gt;  $ id_roi    : chr  "Korhogo" "Korhogo" "Korhogo" "Korhogo"</span></span>
 <span><span class="co">#&gt;  $ time_start: Date, format: "2016-01-01" "2017-01-01" ...</span></span>
 <span><span class="co">#&gt;  $ collection: chr  "MOD11A1.061" "MOD11A1.061" "MOD11A1.061" "MOD11A1.061"</span></span>
 <span><span class="co">#&gt;  $ name      : chr  "MOD11A1.061.2016001_2016031.h17v08.nc4" "MOD11A1.061.2017001_2017031.h17v08.nc4" "MOD11A1.061.2018001_2018031.h17v08.nc4" "MOD11A1.061.2019001_2019031.h17v08.nc4"</span></span>
 <span><span class="co">#&gt;  $ url       : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.061/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.061/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.061/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.061/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="download">Download and import the data in R<a class="anchor" aria-label="anchor" href="#download"></a>
-</h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>Now, download and import the data in R :</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls_mod11a1</span>, path <span class="op">=</span> <span class="va">target_fold</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 4  datasets in total :  0  already downloaded and  4  datasets to download</span></span>
 <span><span class="co">#&gt; Downloading the data...</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  data_korhogo_2/MOD11A1.061</span></span>
+<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  env_data_2/Korhogo/MOD11A1.061</span></span>
 <span></span>
-<span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, collection_source <span class="op">=</span> <span class="st">"MODIS"</span><span class="op">)</span></span>
+<span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"Korhogo"</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, collection_source <span class="op">=</span> <span class="st">"MODIS"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">modis_ts</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>
@@ -226,27 +273,6 @@ execute the function <code><a href="../reference/mf_get_url.html">mf_get_url()</
 <span><span class="co">#&gt; min values  :    285.8285,    287.4483,    288.2661,     285.307,    288.3886,    288.1431, ... </span></span>
 <span><span class="co">#&gt; max values  :    295.6503,    294.3870,    295.9265,     293.285,    295.7804,    294.9189, ... </span></span>
 <span><span class="co">#&gt; time (days) : 2016-01-01 to 2016-01-31</span></span></code></pre></div>
-<!-- ## The case of multiple regions of interest -->
-<!-- The same philosophy applies for multiple regions of interest :  -->
-<!-- ```{r, eval=F } -->
-<!-- # Define regions of interest and time range -->
-<!-- roi <- list(st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326), -->
-<!--             st_as_sf(data.frame(geom="POLYGON ((-3.62 11.03, -3.13 11.04, -3.11 10.60, -3.60 10.60, -3.62 11.03))"), wkt="geom", crs = 4326) -->
-<!-- )   -->
-<!-- time_range <- as.Date(c("2017-01-01","2017-01-30")) -->
-<!-- # Execute the classical workflow -->
-<!-- urls_mod11a1 <- purrr::map_dfr(roi, ~mf_get_url( -->
-<!--         collection = "MOD11A1.061", -->
-<!--         variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"), -->
-<!--         roi = ., -->
-<!--         time_range = time_range, -->
-<!--         opt_param = opt_param_mod11a1) -->
-<!--     ) -->
-<!-- res_dl <- mf_download_data(urls_mod11a1) -->
-<!-- modis_ts_korhogo <- mf_import_data("Korhogo/MOD11A1.061", collection_source = "MODIS") -->
-<!-- modis_ts_diebougou <- mf_import_data("Diebougou/MOD11A1.061", collection_source = "MODIS") -->
-<!-- ``` -->
-</div>
 </div>
   </div>
 

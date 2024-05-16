@@ -4,11 +4,11 @@
 \name{modisfast-package}
 \alias{modisfast}
 \alias{modisfast-package}
-\title{modisfast: Fast and efficient access to MODIS (and MODIS-like) data in R}
+\title{modisfast: Fast and efficient access to MODIS data in R (and several other Earth datacubes sources)}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Provides functions to download MODIS and MODIS-like datacubes in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) using the OPeNDAP framework.
+Provides functions to download MODIS and several other Earth datacubes sources in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) trough the OPeNDAP framework.
 }
 \seealso{
 Useful links:

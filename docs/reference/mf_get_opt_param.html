@@ -35,7 +35,7 @@
       <a href="../articles/get_started.html">1. Get started </a>
     </li>
     <li>
-      <a href="../articles/modisfast2.html">2. Get data on several periods of interest at a glance</a>
+      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest at a glance</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -73,7 +73,7 @@
 
 
 <dt>roi</dt>
-<dd><p>object of class <code>sf</code>. mandatory. Area of region of interest. Must be POLYGON-type geometry composed of one single feature.</p></dd>
+<dd><p>object of class <code>sf</code>. mandatory. Area of region of interest. Must be a Simple feature collection with geometry type POLYGON, composed of one or several rows (i.e. one or several ROIs), and with at least two columns: 'id' (an identifier for the roi) and 'geom' (the geometry).</p></dd>
 
 
 <dt>credentials</dt>
@@ -136,6 +136,7 @@ This will save much time, as internal parameters will be calculated only once.</
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get the optional parameters for the collection MOD11A1.061 and the roi :</span></span></span>
 <span class="r-in"><span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>id <span class="op">=</span> <span class="st">"roi_test"</span>,</span></span>
 <span class="r-in"><span>geom<span class="op">=</span><span class="st">"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>wkt<span class="op">=</span><span class="st">"geom"</span>,crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>

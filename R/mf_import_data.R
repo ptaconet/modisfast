@@ -25,9 +25,12 @@
 #' password <- "earthdata_pw"
 #' log <- mf_login(credentials = c(username,password))
 #'
-#' roi = st_as_sf(data.frame(
+#' roi <- st_as_sf(data.frame(
+#' id = "roi_test",
 #' geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
 #' wkt="geom",crs = 4326)
+#'
+
 #'
 #' time_range = as.Date(c("2017-01-01","2017-01-30"))
 #'

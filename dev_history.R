@@ -66,7 +66,7 @@ devtools::test() #reloads your code with load_all(), then runs all testthat test
 ## Ajouter manuellement dans le description file, la liste des packages dont dépend le package
 
 ## ci dessous, pour ajouter des données internes au package (ie non visibles par les utilisateurs)
-opendapMetadata_internal <- read.csv(".data_collections.csv",stringsAsFactors =F ) %>% arrange(collection)
+opendapMetadata_internal <- read.csv(".data_collections.csv",stringsAsFactors =F ) %>% dplyr::arrange(collection)
 modis_tiles <- sf::read_sf(".modis_sin.kmz")  %>% #https://modis.ornl.gov/files/modis_sin.kmz
   sf::st_zm(modis_tiles) %>%
   dplyr::select(Name,geometry)
@@ -90,7 +90,7 @@ usethis::use_git_ignore("config.yml")
 ## To build vignettes
 devtools::build_vignettes() # ne pas oublier d'avoir ajouté au préalable VignetteBuilder: knitr dans le DESCRIPTION file
 devtools::install(build_vignettes = TRUE)
-
+devtools::install()
 # to test build on windows and rhub
 # devtools::check_rhub()
 # devtools::check_win_oldrelease()

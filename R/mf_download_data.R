@@ -10,6 +10,7 @@
 #' @param df_to_dl data.frame. Urls and destination files of dataset to download. Typically output of \link{mf_get_url}. See Details for the structure
 #' @param path string. Target folder for the data to download. Default : \code{tempfile()}
 #' @param parallel boolean. Parallelize the download ? Default to FALSE
+#' @param num_workers integer. Number of workers in case of parallel download. Default to number of workers available in the machine minus one.
 #' @param min_filesize integer. minimum file size expected (in bites) for one file downloaded. If files downloaded are less that this value, the files will be downloaded again. Default 5000.
 #'
 #' @return a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional columns are :
@@ -23,8 +24,10 @@
 #'
 #' Parameter \code{df_to_dl} must a data.frame with the following minimal structure :
 #' \describe{
+#' \item{id_roi}{An id for the ROI (character string)}
+#' \item{collection}{Collection (character string)}
+#' \item{name}{}
 #' \item{url}{URL of the source file (character string)}
-#' \item{destfile}{Destination file (character string)}
 #' }
 #'
 #' Parameter \code{source} takes NULL as default value. Options are :
@@ -38,7 +41,7 @@
 #'
 #'
 
-mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,credentials=NULL,source="earthdata",verbose=TRUE,min_filesize=5000){
+mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,num_workers=parallel::detectCores()-1,credentials=NULL,source="earthdata",verbose=TRUE,min_filesize=5000){
 
   fileSize <- destfile <- fileDl <- NULL
 
@@ -47,13 +50,15 @@ mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,credentia
   if(!inherits(parallel,"logical")){stop("parallel argument must be boolean\n")}
   if(!is.null(source) && !inherits(source,"character")){stop("source argument must be either NULL or 'earthdata' \n")}
   if(!inherits(df_to_dl,"data.frame")){stop("df_to_dl argument must be a data.frame\n")}
-  if(!("url" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 2 columns named 'url', 'collection' and 'name' \n")}
-  if(!("collection" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 2 columns named 'url', 'collection' and 'name'\n")}
-  if(!("name" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 2 columns named 'url', 'collection' and 'name'\n")}
+  if(!("url" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 4 columns named 'url', 'collection', 'name', and 'id_roi' \n")}
+  if(!("collection" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 4 columns named 'url', 'collection', 'name, and 'id_roi' '\n")}
+  if(!("name" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 4 columns named 'url', 'collection', 'name, and 'id_roi' '\n")}
+  if(!("id_roi" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 4 columns named 'url', 'collection', 'name, and 'id_roi' '\n")}
+  if(num_workers>parallel::detectCores()){stop("the number of workers that you set is greater than the number of available workers in your machine\n")}
 
   .testInternetConnection()
 
-  df_to_dl$destfile <- file.path(path,df_to_dl$collection,df_to_dl$name)
+  df_to_dl$destfile <- file.path(path,df_to_dl$id_roi,df_to_dl$collection,df_to_dl$name)
 
  # if(dir.exists(path)){warning("Target folder already exists\n")}
 
@@ -104,7 +109,7 @@ mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,credentia
 
     if(verbose){cat("Downloading the data...\n")}
     if (parallel){
-      cl <- parallel::makeCluster(parallel::detectCores())
+      cl <- parallel::makeCluster(num_workers)
       parallel::clusterMap(cl, dl_func, url=data_to_download$url,output=data_to_download$destfile,username=username,password=password,
                            .scheduling = 'dynamic')
       parallel::stopCluster(cl)
