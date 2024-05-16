@@ -113,11 +113,12 @@ Taconet</h4>
 <p>In this example we want to download, import and plot over the 3500
 km<sup>2</sup> wide region of interest (mapped below) :</p>
 <ul>
-<li>a 30 days-long time series of land surface temperature from <a href="https://dx.doi.org/10.5067/MODIS/MOD11A1.061" class="external-link">MODIS Terra LST</a>
-(spatial resolution : 1 km ; temporal resolution : 1 day),</li>
-<li>the same 30 days-long times series of precipitations from <a href="https://doi.org/10.5067/GPM/IMERGDF/DAY/07" class="external-link">Global Precipitation
-Measurement (GPM)</a> (spatial resolution : 1° ; temporal resolution : 1
-day)</li>
+<li>a 1 year-long time series of monthly NDVI from <a href="https://dx.doi.org/10.5067/MODIS/MOD13A3.061" class="external-link">MODIS Terra
+Vegetation indices</a> (spatial resolution : 1 km ; temporal resolution
+: 1 month),</li>
+<li>the same 1 year-long times series of monthly precipitations from <a href="https://doi.org/10.5067/GPM/IMERG/3B-MONTH/07" class="external-link">Global
+Precipitation Measurement (GPM)</a> (spatial resolution : 1° ; temporal
+resolution : 1 month)</li>
 </ul>
 <div class="leaflet html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:288px;height:480px;"></div>
 <script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"options":{"minZoom":1,"maxZoom":52,"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}},"preferCanvas":false,"bounceAtZoomLimits":false,"maxBounds":[[[-90,-370]],[[90,370]]]},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron","CartoDB.Positron","CartoDB.Positron",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["CartoDB.DarkMatter","CartoDB.DarkMatter","CartoDB.DarkMatter",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["OpenStreetMap","OpenStreetMap","OpenStreetMap",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["Esri.WorldImagery","Esri.WorldImagery","Esri.WorldImagery",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["OpenTopoMap","OpenTopoMap","OpenTopoMap",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"createMapPane","args":["polygon",420]},{"method":"addPolygons","args":[[[[{"lng":[-5.82,-5.42,-5.41,-5.81,-5.82],"lat":[9.539999999999999,9.550000000000001,8.84,8.84,9.539999999999999]}]]],null,"roi",{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}},"pane":"polygon","stroke":true,"color":"#333333","weight":0.5,"opacity":0.9,"fill":true,"fillColor":"#6666FF","fillOpacity":0.6,"smoothFactor":1,"noClip":false},"<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>1&emsp;<\/td><\/tr><tr><td>1<\/td><th>geom&emsp;<\/th><td>sfc_POLYGON&emsp;<\/td><\/tr><\/table><\/div>",{"maxWidth":800,"minWidth":50,"autoPan":true,"keepInView":false,"closeButton":true,"closeOnClick":true,"className":""},"1",{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},{"stroke":true,"weight":1,"opacity":0.9,"fillOpacity":0.84,"bringToFront":false,"sendToBack":false}]},{"method":"addScaleBar","args":[{"maxWidth":100,"metric":true,"imperial":true,"updateWhenIdle":true,"position":"bottomleft"}]},{"method":"addHomeButton","args":[-5.82,8.84,-5.41,9.550000000000001,true,"roi","Zoom to roi","<strong> roi <\/strong>","bottomright"]},{"method":"addLayersControl","args":[["CartoDB.Positron","CartoDB.DarkMatter","OpenStreetMap","Esri.WorldImagery","OpenTopoMap"],"roi",{"collapsed":true,"autoZIndex":true,"position":"topleft"}]}],"limits":{"lat":[8.84,9.550000000000001],"lng":[-5.82,-5.41]},"fitBounds":[8.84,-5.82,9.550000000000001,-5.41,[]]},"evals":[],"jsHooks":{"render":[{"code":"function(el, x, data) {\n  return (\n      function(el, x, data) {\n      // get the leaflet map\n      var map = this; //HTMLWidgets.find('#' + el.id);\n      // we need a new div element because we have to handle\n      // the mouseover output separately\n      // debugger;\n      function addElement () {\n      // generate new div Element\n      var newDiv = $(document.createElement('div'));\n      // append at end of leaflet htmlwidget container\n      $(el).append(newDiv);\n      //provide ID and style\n      newDiv.addClass('lnlt');\n      newDiv.css({\n      'position': 'relative',\n      'bottomleft':  '0px',\n      'background-color': 'rgba(255, 255, 255, 0.7)',\n      'box-shadow': '0 0 2px #bbb',\n      'background-clip': 'padding-box',\n      'margin': '0',\n      'padding-left': '5px',\n      'color': '#333',\n      'font': '9px/1.5 \"Helvetica Neue\", Arial, Helvetica, sans-serif',\n      'z-index': '700',\n      });\n      return newDiv;\n      }\n\n\n      // check for already existing lnlt class to not duplicate\n      var lnlt = $(el).find('.lnlt');\n\n      if(!lnlt.length) {\n      lnlt = addElement();\n\n      // grab the special div we generated in the beginning\n      // and put the mousmove output there\n\n      map.on('mousemove', function (e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                           ' lon: ' + (e.latlng.lng).toFixed(5) +\n                           ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                           ' | zoom: ' + map.getZoom() +\n                           ' | x: ' + L.CRS.EPSG3857.project(e.latlng).x.toFixed(0) +\n                           ' | y: ' + L.CRS.EPSG3857.project(e.latlng).y.toFixed(0) +\n                           ' | epsg: 3857 ' +\n                           ' | proj4: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs ');\n      } else {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      }\n      });\n\n      // remove the lnlt div when mouse leaves map\n      map.on('mouseout', function (e) {\n      var strip = document.querySelector('.lnlt');\n      if( strip !==null) strip.remove();\n      });\n\n      };\n\n      //$(el).keypress(67, function(e) {\n      map.on('preclick', function(e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      var txt = document.querySelector('.lnlt').textContent;\n      console.log(txt);\n      //txt.innerText.focus();\n      //txt.select();\n      setClipboardText('\"' + txt + '\"');\n      }\n      });\n\n      }\n      ).call(this.getMap(), el, x, data);\n}","data":null},{"code":"function(el, x, data) {\n  return (function(el,x,data){\n           var map = this;\n\n           map.on('keypress', function(e) {\n               console.log(e.originalEvent.code);\n               var key = e.originalEvent.code;\n               if (key === 'KeyE') {\n                   var bb = this.getBounds();\n                   var txt = JSON.stringify(bb);\n                   console.log(txt);\n\n                   setClipboardText('\\'' + txt + '\\'');\n               }\n           })\n        }).call(this.getMap(), el, x, data);\n}","data":null}]}}</script><div class="section level3">
@@ -155,16 +156,16 @@ collections that are available for download, using the function
 <span><span class="co">#&gt;  $ dim_lat                 : chr  "lat" "lat" "lat" "lat" ...</span></span>
 <span><span class="co">#&gt;  $ dim_time                : chr  "time" "time" "time" "time" ...</span></span>
 <span><span class="co">#&gt;  $ dim_proj                : chr  NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;  $ crs                     : chr  "+init=epsg:4326" "+init=epsg:4326" "+init=epsg:4326" "+init=epsg:4326" ...</span></span>
+<span><span class="co">#&gt;  $ crs                     : chr  "+proj=longlat +datum=WGS84 +no_defs +type=crs" "+proj=longlat +datum=WGS84 +no_defs +type=crs" "+proj=longlat +datum=WGS84 +no_defs +type=crs" "+proj=longlat +datum=WGS84 +no_defs +type=crs" ...</span></span>
 <span><span class="co">#&gt; NULL</span></span></code></pre></div>
 <p>So our collections of interest are :</p>
 <ul>
 <li>
-<strong>MOD11A1.061</strong> : MODIS/Terra Land Surface
-Temperature/Emissivity Daily L3 Global 1km SIN Grid v061</li>
+<strong>MOD13A3.061</strong> : MODIS/Terra Vegetation Indices
+Monthly L3 Global 1 km SIN Grid</li>
 <li>
-<strong>GPM_3IMERGDF.07</strong> : GPM IMERG Final Precipitation L3
-1 day 0.1 degree x 0.1 degree V07</li>
+<strong>GPM_3IMERGM.07</strong> : GPM IMERG Final Precipitation L3 1
+month 0.1 degree x 0.1 degree V07</li>
 </ul>
 </div>
 <div class="section level3">
@@ -175,7 +176,7 @@ folder were the data will be downloaded :</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Set ROI and time range of interest</span></span>
 <span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id<span class="op">=</span><span class="st">"Korhogo"</span>, geom<span class="op">=</span><span class="st">"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span><span class="op">)</span>, wkt<span class="op">=</span><span class="st">"geom"</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
-<span><span class="va">time_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2017-01-01"</span>,<span class="st">"2017-01-30"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">time_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2017-01-01"</span>,<span class="st">"2017-12-31"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">target_fold</span> <span class="op">&lt;-</span> <span class="st">"env_data"</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -213,8 +214,8 @@ each of them (description, etc.), use the function
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get the URLs of MODIS Terra LST daily</span></span>
 <span><span class="va">urls_mod11a1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span>
-<span>  collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span>,</span>
-<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LST_Day_1km"</span>,<span class="st">"LST_Night_1km"</span>,<span class="st">"QC_Day"</span>,<span class="st">"QC_Night"</span><span class="op">)</span>,  <span class="co"># get the available variables with : mf_list_variables("MOD11A1.061"), or set to NULL (default) to download all the variables</span></span>
+<span>  collection <span class="op">=</span> <span class="st">"MOD13A3.061"</span>,</span>
+<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_1_km_monthly_NDVI"</span>,<span class="st">"_1_km_monthly_EVI"</span>,<span class="st">"_1_km_monthly_VI_Quality"</span><span class="op">)</span>,  <span class="co"># get the available variables with : mf_list_variables("MOD13A3.061"), or set to NULL (default) to download all the variables</span></span>
 <span>  roi <span class="op">=</span> <span class="va">roi</span>,</span>
 <span>  time_range <span class="op">=</span> <span class="va">time_range</span> <span class="op">)</span></span>
 <span><span class="co">#&gt; Building the URLs...</span></span>
@@ -222,8 +223,8 @@ each of them (description, etc.), use the function
 <span></span>
 <span><span class="co">## Get the URLs of GPM daily</span></span>
 <span><span class="va">urls_gpm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span>
-<span>  collection <span class="op">=</span> <span class="st">"GPM_3IMERGDF.07"</span>,</span>
-<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"precipitation"</span><span class="op">)</span>,  <span class="co"># get the available variables with : mf_list_variables("GPM_3IMERGDF.07")</span></span>
+<span>  collection <span class="op">=</span> <span class="st">"GPM_3IMERGM.07"</span>,</span>
+<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"precipitation"</span><span class="op">)</span>,  <span class="co"># get the available variables with : mf_list_variables("GPM_3IMERGM.07")</span></span>
 <span>  roi <span class="op">=</span> <span class="va">roi</span>,</span>
 <span>  time_range <span class="op">=</span> <span class="va">time_range</span> <span class="op">)</span></span>
 <span><span class="co">#&gt; Building the URLs...</span></span>
@@ -233,25 +234,25 @@ each of them (description, etc.), use the function
 <span><span class="co">#&gt; [1] 1</span></span>
 <span><span class="va">urls_mod11a1</span></span>
 <span><span class="co">#&gt;    id_roi time_start  collection                                   name</span></span>
-<span><span class="co">#&gt; 1 Korhogo 2017-01-01 MOD11A1.061 MOD11A1.061.2017001_2017030.h17v08.nc4</span></span>
-<span><span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                                                 url</span></span>
-<span><span class="co">#&gt; 1 https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.061/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projection,LST_Day_1km%5B6087:6116%5D%5B55:140%5D%5B512:560%5D,LST_Night_1km%5B6087:6116%5D%5B55:140%5D%5B512:560%5D,QC_Day%5B6087:6116%5D%5B55:140%5D%5B512:560%5D,QC_Night%5B6087:6116%5D%5B55:140%5D%5B512:560%5D,time%5B6087:6116%5D,YDim%5B55:140%5D,XDim%5B512:560%5D</span></span>
+<span><span class="co">#&gt; 1 Korhogo 2017-01-01 MOD13A3.061 MOD13A3.061.2017001_2017335.h17v08.nc4</span></span>
+<span><span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                    url</span></span>
+<span><span class="co">#&gt; 1 https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A3.061/h17v08.ncml.nc4?MOD_Grid_monthly_1km_VI_eos_cf_projection,_1_km_monthly_NDVI%5B203:214%5D%5B55:140%5D%5B512:560%5D,_1_km_monthly_EVI%5B203:214%5D%5B55:140%5D%5B512:560%5D,_1_km_monthly_VI_Quality%5B203:214%5D%5B55:140%5D%5B512:560%5D,time%5B203:214%5D,YDim%5B55:140%5D,XDim%5B512:560%5D</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">urls_gpm</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 30</span></span>
+<span><span class="co">#&gt; [1] 12</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">urls_gpm</span>,<span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id_roi time_start      collection</span></span>
-<span><span class="co">#&gt; 1 Korhogo 2017-01-01 GPM_3IMERGDF.07</span></span>
-<span><span class="co">#&gt; 2 Korhogo 2017-01-02 GPM_3IMERGDF.07</span></span>
-<span><span class="co">#&gt; 3 Korhogo 2017-01-03 GPM_3IMERGDF.07</span></span>
-<span><span class="co">#&gt;                                                     name</span></span>
-<span><span class="co">#&gt; 1 3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V07B.nc4</span></span>
-<span><span class="co">#&gt; 2 3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V07B.nc4</span></span>
-<span><span class="co">#&gt; 3 3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V07B.nc4</span></span>
-<span><span class="co">#&gt;                                                                                                                                                                                                                                           url</span></span>
-<span><span class="co">#&gt; 1 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07/2017/01/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V07B.nc4.nc4?precipitation%5B0:0%5D%5B1742:1746%5D%5B989:996%5D,time%5B0:0%5D,lon%5B1742:1746%5D,lat%5B989:996%5D</span></span>
-<span><span class="co">#&gt; 2 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07/2017/01/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V07B.nc4.nc4?precipitation%5B0:0%5D%5B1742:1746%5D%5B989:996%5D,time%5B0:0%5D,lon%5B1742:1746%5D,lat%5B989:996%5D</span></span>
-<span><span class="co">#&gt; 3 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07/2017/01/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V07B.nc4.nc4?precipitation%5B0:0%5D%5B1742:1746%5D%5B989:996%5D,time%5B0:0%5D,lon%5B1742:1746%5D,lat%5B989:996%5D</span></span></code></pre></div>
+<span><span class="co">#&gt;    id_roi time_start     collection</span></span>
+<span><span class="co">#&gt; 1 Korhogo 2017-01-01 GPM_3IMERGM.07</span></span>
+<span><span class="co">#&gt; 2 Korhogo 2017-02-01 GPM_3IMERGM.07</span></span>
+<span><span class="co">#&gt; 3 Korhogo 2017-03-01 GPM_3IMERGM.07</span></span>
+<span><span class="co">#&gt;                                                       name</span></span>
+<span><span class="co">#&gt; 1 3B-MO.MS.MRG.3IMERG.20170101-S000000-E235959.01.V07B.nc4</span></span>
+<span><span class="co">#&gt; 2 3B-MO.MS.MRG.3IMERG.20170201-S000000-E235959.02.V07B.nc4</span></span>
+<span><span class="co">#&gt; 3 3B-MO.MS.MRG.3IMERG.20170301-S000000-E235959.03.V07B.nc4</span></span>
+<span><span class="co">#&gt;                                                                                                                                                                                                                                          url</span></span>
+<span><span class="co">#&gt; 1 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170101-S000000-E235959.01.V07B.HDF5.nc4?precipitation%5B0:0%5D%5B1742:1746%5D%5B989:996%5D,time%5B0:0%5D,lon%5B1742:1746%5D,lat%5B989:996%5D</span></span>
+<span><span class="co">#&gt; 2 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170201-S000000-E235959.02.V07B.HDF5.nc4?precipitation%5B0:0%5D%5B1742:1746%5D%5B989:996%5D,time%5B0:0%5D,lon%5B1742:1746%5D,lat%5B989:996%5D</span></span>
+<span><span class="co">#&gt; 3 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170301-S000000-E235959.03.V07B.HDF5.nc4?precipitation%5B0:0%5D%5B1742:1746%5D%5B989:996%5D,time%5B0:0%5D,lon%5B1742:1746%5D,lat%5B989:996%5D</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="download">Download the data<a class="anchor" aria-label="anchor" href="#download"></a>
@@ -272,21 +273,21 @@ need to be downloaded.</p>
 <span></span>
 <span><span class="co"># Then download the data (by default, in temp directory, but the target folder can be set in the function</span></span>
 <span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">df_to_dl</span>, path <span class="op">=</span> <span class="va">target_fold</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 31  datasets in total :  0  already downloaded and  31  datasets to download</span></span>
+<span><span class="co">#&gt; 13  datasets in total :  0  already downloaded and  13  datasets to download</span></span>
 <span><span class="co">#&gt; Downloading the data...</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  env_data/Korhogo/MOD11A1.061 and env_data/Korhogo/GPM_3IMERGDF.07</span></span>
+<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  env_data/Korhogo/MOD13A3.061 and env_data/Korhogo/GPM_3IMERGM.07</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res_dl</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'data.frame':    31 obs. of  9 variables:</span></span>
+<span><span class="co">#&gt; 'data.frame':    13 obs. of  9 variables:</span></span>
 <span><span class="co">#&gt;  $ id_roi    : chr  "Korhogo" "Korhogo" "Korhogo" "Korhogo" ...</span></span>
 <span><span class="co">#&gt;  $ time_start: Date, format: "2017-01-01" "2017-01-01" ...</span></span>
-<span><span class="co">#&gt;  $ collection: chr  "MOD11A1.061" "GPM_3IMERGDF.07" "GPM_3IMERGDF.07" "GPM_3IMERGDF.07" ...</span></span>
-<span><span class="co">#&gt;  $ name      : chr  "MOD11A1.061.2017001_2017030.h17v08.nc4" "3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V07B.nc4" "3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V07B.nc4" "3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V07B.nc4" ...</span></span>
-<span><span class="co">#&gt;  $ url       : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.061/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07/2017/01/3B-DAY.MS.MRG.3IMERG.20170101-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07/2017/01/3B-DAY.MS.MRG.3IMERG.20170102-S0000"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07/2017/01/3B-DAY.MS.MRG.3IMERG.20170103-S0000"| __truncated__ ...</span></span>
-<span><span class="co">#&gt;  $ destfile  : chr  "env_data/Korhogo/MOD11A1.061/MOD11A1.061.2017001_2017030.h17v08.nc4" "env_data/Korhogo/GPM_3IMERGDF.07/3B-DAY.MS.MRG.3IMERG.20170101-S000000-E235959.V07B.nc4" "env_data/Korhogo/GPM_3IMERGDF.07/3B-DAY.MS.MRG.3IMERG.20170102-S000000-E235959.V07B.nc4" "env_data/Korhogo/GPM_3IMERGDF.07/3B-DAY.MS.MRG.3IMERG.20170103-S000000-E235959.V07B.nc4" ...</span></span>
+<span><span class="co">#&gt;  $ collection: chr  "MOD13A3.061" "GPM_3IMERGM.07" "GPM_3IMERGM.07" "GPM_3IMERGM.07" ...</span></span>
+<span><span class="co">#&gt;  $ name      : chr  "MOD13A3.061.2017001_2017335.h17v08.nc4" "3B-MO.MS.MRG.3IMERG.20170101-S000000-E235959.01.V07B.nc4" "3B-MO.MS.MRG.3IMERG.20170201-S000000-E235959.02.V07B.nc4" "3B-MO.MS.MRG.3IMERG.20170301-S000000-E235959.03.V07B.nc4" ...</span></span>
+<span><span class="co">#&gt;  $ url       : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A3.061/h17v08.ncml.nc4?MOD_Grid_monthly_1km_VI_eos_cf_projection"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170101-S000000-E2"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170201-S000000-E2"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170301-S000000-E2"| __truncated__ ...</span></span>
+<span><span class="co">#&gt;  $ destfile  : chr  "env_data/Korhogo/MOD13A3.061/MOD13A3.061.2017001_2017335.h17v08.nc4" "env_data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170101-S000000-E235959.01.V07B.nc4" "env_data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170201-S000000-E235959.02.V07B.nc4" "env_data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170301-S000000-E235959.03.V07B.nc4" ...</span></span>
 <span><span class="co">#&gt;  $ fileDl    : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...</span></span>
-<span><span class="co">#&gt;  $ fileSize  : num  290746 35807 35817 35815 35809 ...</span></span>
+<span><span class="co">#&gt;  $ fileSize  : num  275420 26540 26495 26548 26560 ...</span></span>
 <span><span class="co">#&gt;  $ dlStatus  : num  1 1 1 1 1 1 1 1 1 1 ...</span></span>
 <span><span class="co">#&gt; NULL</span></span></code></pre></div>
 </div>
@@ -327,35 +328,36 @@ the data in R as a <code>SpatRaster</code> object (from the package <a href="htt
 :</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># import MOD11A1.061</span></span>
-<span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"Korhogo"</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, </span>
+<span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"Korhogo"</span>,<span class="st">"MOD13A3.061"</span><span class="op">)</span>, </span>
 <span>                           collection_source <span class="op">=</span> <span class="st">"MODIS"</span><span class="op">)</span></span>
 <span><span class="co"># import GPM</span></span>
-<span><span class="va">gpm_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"Korhogo"</span>,<span class="st">"GPM_3IMERGDF.07"</span><span class="op">)</span>, </span>
+<span><span class="va">gpm_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"Korhogo"</span>,<span class="st">"GPM_3IMERGM.07"</span><span class="op">)</span>, </span>
 <span>                         collection_source <span class="op">=</span> <span class="st">"GPM"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">modis_ts</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>
-<span><span class="co">#&gt; dimensions  : 85, 50, 120  (nrow, ncol, nlyr)</span></span>
+<span><span class="co">#&gt; dimensions  : 85, 50, 36  (nrow, ncol, nlyr)</span></span>
 <span><span class="co">#&gt; resolution  : 0.008417905, 0.008417905  (x, y)</span></span>
 <span><span class="co">#&gt; extent      : -5.818061, -5.397166, 8.830311, 9.545833  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; names       : LST_N~1km_1, LST_N~1km_2, LST_N~1km_3, LST_N~1km_4, LST_N~1km_5, LST_N~1km_6, ... </span></span>
-<span><span class="co">#&gt; min values  :    288.4254,      288.74,    288.7599,    285.3070,    288.3886,    288.1431, ... </span></span>
-<span><span class="co">#&gt; max values  :    295.6503,      290.96,    295.9265,    292.5913,    295.7804,    294.9189, ... </span></span>
-<span><span class="co">#&gt; time (days) : 2017-01-01 to 2017-01-30</span></span>
+<span><span class="co">#&gt; names       : _1_km~EVI_1, _1_km~EVI_2, _1_km~EVI_3, _1_km~EVI_4, _1_km~EVI_5, _1_km~EVI_6, ... </span></span>
+<span><span class="co">#&gt; min values  :   0.1066437,  0.09204187,  0.09887701,   0.1148908,   0.1416200,   0.1803910, ... </span></span>
+<span><span class="co">#&gt; max values  :   0.3284159,  0.33743730,  0.36026722,   0.4699891,   0.5490501,   0.5938588, ... </span></span>
+<span><span class="co">#&gt; unit        :         EVI,         EVI,         EVI,         EVI,         EVI,         EVI, ... </span></span>
+<span><span class="co">#&gt; time (days) : 2017-01-01 to 2017-12-01</span></span>
 <span><span class="va">gpm_ts</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>
-<span><span class="co">#&gt; dimensions  : 8, 5, 30  (nrow, ncol, nlyr)</span></span>
-<span><span class="co">#&gt; resolution  : 0.1, 0.1  (x, y)</span></span>
+<span><span class="co">#&gt; dimensions  : 8, 5, 12  (nrow, ncol, nlyr)</span></span>
+<span><span class="co">#&gt; resolution  : 0.1, 0.09999997  (x, y)</span></span>
 <span><span class="co">#&gt; extent      : -5.8, -5.3, 8.9, 9.7  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : precipitation (Daily mean precipitation rate (combined microwave-IR) estimate. Formerly precipitationCal.) </span></span>
+<span><span class="co">#&gt; varname     : precipitation </span></span>
 <span><span class="co">#&gt; names       : preci~ation, preci~ation, preci~ation, preci~ation, preci~ation, preci~ation, ... </span></span>
-<span><span class="co">#&gt; min values  :           0,        0.00,       0.000,           0,        0.00,           0, ... </span></span>
-<span><span class="co">#&gt; max values  :           0,        4.01,       2.445,           0,        0.39,           0, ... </span></span>
-<span><span class="co">#&gt; time (days) : 2017-01-01 to 2017-01-30</span></span></code></pre></div>
+<span><span class="co">#&gt; min values  :       0.010,       0.001,       0.035,       0.096,       0.097,       0.198, ... </span></span>
+<span><span class="co">#&gt; max values  :       0.071,       0.014,       0.071,       0.196,       0.142,       0.249, ... </span></span>
+<span><span class="co">#&gt; time        : 2017-01-01 to 2017-12-01 UTC</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -365,7 +367,7 @@ the data in R as a <code>SpatRaster</code> object (from the package <a href="htt
 <p>(Note that only the first 16 dates are plotted here-under)</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Land surface temperature</span></span>
-<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis_ts</span><span class="op">[</span><span class="st">"LST_Day_1km"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis_ts</span><span class="op">[</span><span class="st">"_1_km_monthly_NDVI"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="get_started_files/figure-html/plot%20-1.png" width="864" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Precipitation</span></span>

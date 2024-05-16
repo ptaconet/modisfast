@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 
 In the `vignette("get_started")`, we have imported data : 
 
-* from several collections (MOD11A1.061 and GPM_L3/GPM_3IMERGDF.07) ;
+* from several collections (MOD13A3.061 and GPM_3IMERGM.07) ;
 * over one single region of interest (ROI) ;
 * for one single time frame of interest (2017-01-01 to 2017-01-30).
 

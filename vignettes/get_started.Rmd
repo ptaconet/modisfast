@@ -32,8 +32,8 @@ library(terra)
 
 In this example we want to download, import and plot over the 3500 km^2^ wide region of interest (mapped below) :
 
-- a 30 days-long time series of land surface temperature from [MODIS Terra LST](https://dx.doi.org/10.5067/MODIS/MOD11A1.061) (spatial resolution : 1 km ; temporal resolution : 1 day),
-- the same 30 days-long times series of precipitations from [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERGDF/DAY/07) (spatial resolution : 1° ; temporal resolution : 1 day)
+- a 1 year-long time series of monthly NDVI from [MODIS Terra Vegetation indices](https://dx.doi.org/10.5067/MODIS/MOD13A3.061) (spatial resolution : 1 km ; temporal resolution : 1 month),
+- the same 1 year-long times series of monthly precipitations from [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERG/3B-MONTH/07) (spatial resolution : 1° ; temporal resolution : 1 month)
 
 ```{r, echo=F, fig.height=5, fig.width=3, eval=T }
 library(mapview)
@@ -52,8 +52,8 @@ print(str(collections))
 
 So our collections of interest are : 
 
-- **MOD11A1.061** : MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid v061
-- **GPM_3IMERGDF.07** : GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V07
+- **MOD13A3.061** : MODIS/Terra Vegetation Indices Monthly L3 Global 1 km SIN Grid
+- **GPM_3IMERGM.07** : GPM IMERG Final Precipitation L3 1 month 0.1 degree x 0.1 degree V07
 
 ### Setup the region and time range of interest
 
@@ -62,7 +62,7 @@ First we prepare the script : define the ROI, the time frame, and the folder wer
 ```{r example_prepare, eval=T}
 # Set ROI and time range of interest
 roi <- st_as_sf(data.frame(id="Korhogo", geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326)
-time_range <- as.Date(c("2017-01-01","2017-01-30"))
+time_range <- as.Date(c("2017-01-01","2017-12-31"))
 target_fold <- "env_data"
 ```
 
@@ -116,15 +116,15 @@ With the function `mf_get_url()`, we get the https URLs for our collections of i
 ```{r mf_get_url, eval=T}
 ## Get the URLs of MODIS Terra LST daily
 urls_mod11a1 <- mf_get_url(
-  collection = "MOD11A1.061",
-  variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),  # get the available variables with : mf_list_variables("MOD11A1.061"), or set to NULL (default) to download all the variables
+  collection = "MOD13A3.061",
+  variables = c("_1_km_monthly_NDVI","_1_km_monthly_EVI","_1_km_monthly_VI_Quality"),  # get the available variables with : mf_list_variables("MOD13A3.061"), or set to NULL (default) to download all the variables
   roi = roi,
   time_range = time_range )
 
 ## Get the URLs of GPM daily
 urls_gpm <- mf_get_url(
-  collection = "GPM_3IMERGDF.07",
-  variables = c("precipitation"),  # get the available variables with : mf_list_variables("GPM_3IMERGDF.07")
+  collection = "GPM_3IMERGM.07",
+  variables = c("precipitation"),  # get the available variables with : mf_list_variables("GPM_3IMERGM.07")
   roi = roi,
   time_range = time_range )
 
@@ -174,10 +174,10 @@ These issues can easily be dealt at the import phase in R using the function `mf
 
 ```{r import_example, message=F, eval=T}
 # import MOD11A1.061
-modis_ts <- mf_import_data(path = file.path(target_fold,"Korhogo","MOD11A1.061"), 
+modis_ts <- mf_import_data(path = file.path(target_fold,"Korhogo","MOD13A3.061"), 
                            collection_source = "MODIS")
 # import GPM
-gpm_ts <- mf_import_data(path = file.path(target_fold,"Korhogo","GPM_3IMERGDF.07"), 
+gpm_ts <- mf_import_data(path = file.path(target_fold,"Korhogo","GPM_3IMERGM.07"), 
                          collection_source = "GPM")
 
 modis_ts
@@ -192,7 +192,7 @@ Let's finally plot the data !
 
 ```{r plot , fig.fullwidth = TRUE, fig.height = 10, fig.width = 9,fig.align = 'center', eval=T}
 # Land surface temperature
-terra::plot(modis_ts["LST_Day_1km"])
+terra::plot(modis_ts["_1_km_monthly_NDVI"])
 # Precipitation
 terra::plot(gpm_ts["precipitation"])
 ```

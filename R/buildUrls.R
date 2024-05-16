@@ -187,7 +187,7 @@
       time_range=as.Date(time_range,origin="1970-01-01")
 
       datesToRetrieve<-seq(time_range[2],time_range[1],-1) %>%
-        lubridate::floor_date(x, unit = "month") %>%
+        lubridate::floor_date(., unit = "month") %>%
         unique() %>%
         data.frame(stringsAsFactors = F) %>%
         purrr::set_names("date") %>%

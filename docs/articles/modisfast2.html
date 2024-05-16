@@ -106,8 +106,7 @@ Taconet</h4>
 <p>In the <code><a href="../articles/get_started.html">vignette("get_started")</a></code>, we have imported data
 :</p>
 <ul>
-<li>from several collections (MOD11A1.061 and GPM_L3/GPM_3IMERGDF.07)
-;</li>
+<li>from several collections (MOD13A3.061 and GPM_3IMERGM.07) ;</li>
 <li>over one single region of interest (ROI) ;</li>
 <li>for one single time frame of interest (2017-01-01 to
 2017-01-30).</li>
@@ -222,12 +221,14 @@ we first execute the function <code><a href="../reference/mf_get_opt_param.html"
 execute the function <code><a href="../reference/mf_get_url.html">mf_get_url()</a></code>, passing the result of
 <code><a href="../reference/mf_get_opt_param.html">mf_get_opt_param()</a></code> in the parameter
 <code>opt_param</code>.</strong></p>
+<p>First execute the function <code><a href="../reference/mf_get_opt_param.html">mf_get_opt_param()</a></code> :</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="co"># first execute the function `mf_get_opt_param()`</span></span>
-<span><span class="va">opt_param_mod11a1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_opt_param.html">mf_get_opt_param</a></span><span class="op">(</span><span class="st">"MOD11A1.061"</span>,<span class="va">roi</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># then execute the function `mf_get_url()` passing the argument opt_param</span></span>
+<span><span class="va">opt_param_mod11a1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_opt_param.html">mf_get_opt_param</a></span><span class="op">(</span><span class="st">"MOD11A1.061"</span>,<span class="va">roi</span><span class="op">)</span></span></code></pre></div>
+<p>Then execute the function <code><a href="../reference/mf_get_url.html">mf_get_url()</a></code> passing the
+argument <code>opt_param</code> :</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="va">urls_mod11a1</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html" class="external-link">map_dfr</a></span><span class="op">(</span><span class="va">time_ranges</span>, <span class="op">~</span><span class="fu"><a href="../reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span> </span>
 <span>  collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span>,</span>
 <span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LST_Day_1km"</span>,<span class="st">"LST_Night_1km"</span>,<span class="st">"QC_Day"</span>,<span class="st">"QC_Night"</span><span class="op">)</span>,</span>
@@ -252,7 +253,7 @@ execute the function <code><a href="../reference/mf_get_url.html">mf_get_url()</
 <span><span class="co">#&gt;  $ name      : chr  "MOD11A1.061.2016001_2016031.h17v08.nc4" "MOD11A1.061.2017001_2017031.h17v08.nc4" "MOD11A1.061.2018001_2018031.h17v08.nc4" "MOD11A1.061.2019001_2019031.h17v08.nc4"</span></span>
 <span><span class="co">#&gt;  $ url       : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.061/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.061/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.061/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__ "https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.061/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projectio"| __truncated__</span></span></code></pre></div>
 <p>Now, download and import the data in R :</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls_mod11a1</span>, path <span class="op">=</span> <span class="va">target_fold</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 4  datasets in total :  0  already downloaded and  4  datasets to download</span></span>
