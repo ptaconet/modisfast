@@ -29,8 +29,8 @@ This package enables to build OPeNDAP (https) URLs given input parameters such a
 -->
 
 **`modisfast`** (formerly `opendapr`) is an R package that provides
-functions to **speed-up** the **download** of time-series data products
-derived from
+functions to **speed-up** the **download** of time-series raster data
+products derived from
 [**MODIS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/)
 and
 [**VIIRS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/)
@@ -39,11 +39,12 @@ environmental data (e.g. Global Precipitation Measurement Mission).
 
 **`modisfast`** uses the abilities offered by the [OPeNDAP
 framework](https://www.opendap.org/about) (*Open-source Project for a
-Network Data Access Protocol*) to download a subset of data cube, along
-spatial, temporal or any other data dimension (depth, …). This way, it
-reduces downloading time and disk usage to their minimum : no more 1° x
-1° MODIS tiles when your region of interest is only 100 km x 100 km wide
-! Moreover, modisfast supports parallelized downloads.
+Network Data Access Protocol*) to download a subset of Earth science
+data cube, along spatial, temporal or any other data dimension (depth,
+…). This way, it reduces downloading time and disk usage to their
+minimum : no more 1° x 1° MODIS tiles when your region of interest is
+only 100 km x 100 km wide ! Moreover, `modisfast` supports parallelized
+downloads.
 
 `modisfast` is hence particularly suited for retrieving MODIS or VIIRS
 data **over long time series** and **over areas**, rather than short
@@ -52,12 +53,13 @@ time series and points.
 Below is a comparison of modisfast with other packages available for
 downloading chunks of remote sensing data :
 
-| Package                                                |       Data        | Spatial subsetting\* | Dimensional subsetting\* |
-|:-------------------------------------------------------|:-----------------:|:--------------------:|:------------------------:|
-| [`modisfast`](https://github.com/ptaconet/modisfast)   | MODIS, VIIRS, GPM |          ✅          |            ✅            |
-| [`MODIS`](https://github.com/MatMatt/MODIS)            |       MODIS       |          ❌          |            ❌            |
-| [`MODIStsp`](https://github.com/ropensci/MODIStsp)     |       MODIS       |          ❌          |            ✅            |
-| [`MODISTools`](https://github.com/ropensci/MODISTools) |       MODIS       |          ✅          |            ✅            |
+| Package                                                  |                   Data                    | Temporal subsetting\* | Spatial subsetting\* | Dimensional subsetting\* |
+|:---------------------------------------------------------|:-----------------------------------------:|:---------------------:|:--------------------:|:------------------------:|
+| [`modisfast`](https://github.com/ptaconet/modisfast)     |             MODIS, VIIRS, GPM             |          ✅           |          ✅          |            ✅            |
+| [`MODIS`](https://github.com/MatMatt/MODIS)              |                   MODIS                   |          ✅           |          ❌          |            ❌            |
+| [`MODIStsp`](https://github.com/ropensci/MODIStsp)       |                   MODIS                   |          ✅           |          ❌          |            ✅            |
+| [`MODISTools`](https://github.com/ropensci/MODISTools)   | MODIS and VIIRS (but not all collections) |          ✅           |          ✅          |            ✅            |
+| [`appeears`](https://github.com/bluegreen-labs/appeears) |       MODIS, VIIRS, and many others       |          ✅           |          ✅          |            ✅            |
 
 \* at the downloading phase
 
@@ -73,8 +75,9 @@ install.packages("modisfast")
 The package can be installed with:
 
 ``` r
-# install.packages("devtools")
+if(!require(devtools)){install.package("devtools")}
 devtools::install_github("ptaconet/modisfast")
+library(modisfast)
 ```
 
 Work is ongoing to publish the package on the CRAN.
@@ -1966,7 +1969,7 @@ Any contribution is welcome !
 ## License and citation
 
 This package is licensed under a [GNU General Public License v3.0 or
-later](https://www.gnu.org/licenses/gpl-3.0.en.html) license.
+later](https://www.gnu.org/licenses/gpl-3.0-standalone.html) license.
 
 We thank in advance people that use `modisfast` for citing it in their
 work / publication(s). For this, please use the citation provided at
