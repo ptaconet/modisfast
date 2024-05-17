@@ -1963,6 +1963,15 @@ other OPeNDAP servers.
 
 Any contribution is welcome !
 
+## License and citation
+
+This package is licensed under a [GNU General Public License v3.0 or
+later](https://www.gnu.org/licenses/gpl-3.0.en.html) license.
+
+We thank in advance people that use `modisfast` for citing it in their
+work / publication(s). For this, please use the citation provided at
+`citation("modisfast")`.
+
 ## Acknowledgments
 
 We thank NASA and its partners for making all their Earth science data
