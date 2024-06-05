@@ -57,7 +57,8 @@
 #' @noRd
 
 .testRoi<-function(roi){
-  if(!inherits(roi,"sf") || as.character(unique(sf::st_geometry_type(roi)))!="POLYGON" || !("id" %in% colnames(roi)) || !("geom" %in% colnames(roi)) || length(which(is.na(roi$id))) || length(which(is.na(roi$geom)))){stop("Argument roi must be an object of class sf or sfc with POLYGON-type feature geometry and at least two columns : 'id' and 'geom' that must not be NULL or NA")}
+  #if(!inherits(roi,"sf") || as.character(unique(sf::st_geometry_type(roi)))!="POLYGON" || !("id" %in% colnames(roi)) || !("geom" %in% colnames(roi)) || length(which(is.na(roi$id))) || length(which(is.na(roi$geom)))){stop("Argument roi must be an object of class sf or sfc with POLYGON-type feature geometry and at least two columns : 'id' and 'geom' that must not be NULL or NA")}
+  if(!inherits(roi,"sf") || as.character(unique(sf::st_geometry_type(roi)))!="POLYGON" || !("id" %in% colnames(roi)) || length(which(is.na(roi$id))) ){stop("Argument roi must be an object of class sf or sfc with POLYGON-type feature geometry and at least two columns : 'id' and a geometry column that must not be NULL or NA")}
   }
 
 #' @name .testTimeRange

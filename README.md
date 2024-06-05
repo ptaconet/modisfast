@@ -84,10 +84,11 @@ Work is ongoing to publish the package on the CRAN.
 
 ## Get Started
 
-Accessing and opening MODIS data with `modisfast` is a simple workflow,
-as shown in the example below.
+Accessing and opening MODIS data with `modisfast` is a simple 3-steps
+workflow, as shown in the example below.
 
-First, define the variables of interest :
+First, define the variables of interest (including ROI, time frame,
+collection, and bands) :
 
 ``` r
 # Load the packages
@@ -95,20 +96,21 @@ library(modisfast)
 library(sf)
 library(terra)
 
-# MODIS collections and variables (bands) of interest
-collection <- "MOD11A2.061"  # run mf_list_collections() for an exhaustive list of collections available
-variables <- c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night") # run mf_list_variables("MOD11A2.061") for an exhaustive list of variables available for the collection "MOD11A1.062"
-
 # ROI and time range of interest
 roi <- st_as_sf(data.frame(id = "any_name", geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326) # a ROI of interest, format sf polygon
 time_range <- as.Date(c("2017-01-01","2017-06-01"))  # a time range of interest
+
+# MODIS collections and variables (bands) of interest
+collection <- "MOD11A2.061"  # run mf_list_collections() for an exhaustive list of collections available
+variables <- c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night") # run mf_list_variables("MOD11A2.061") for an exhaustive list of variables available for the collection "MOD11A1.062"
 ```
 
-Then, download the data with `modisfast`:
+Then, with `modisfast`, get the OPeNDAP URL of the data and download
+them :
 
 ``` r
 ## Login to Earthdata servers with your EOSDIS credentials. 
-# To create an account go to : https://urs.earthdata.nasa.gov/.
+# To create an account (free) go to : https://urs.earthdata.nasa.gov/.
 log <- mf_login(credentials = c("username","password"))
 
 ## Get the URLs of the data 
@@ -119,14 +121,15 @@ urls <- mf_get_url(
   time_range = time_range
  )
 
-## Download the data. By default the data is downloaded in a temporary directory
+## Download the data. By default the data is downloaded in a temporary directory, but you can specify a folder
 res_dl <- mf_download_data(urls)
 ```
 
 And finally, open the data in R as a `terra::SpatRaster` object using
 the function `mf_import_data()` (see
 [here](https://ptaconet.github.io/modisfast/articles/get_started.html#warning-import)
-why you should use this function instead of use `terra::rast()`) :
+why you should use this function, instead of the original
+`terra::rast()`, in the context of `modisfast`) :
 
 ``` r
 r <- mf_import_data(
@@ -136,6 +139,8 @@ r <- mf_import_data(
 
 terra::plot(r)
 ```
+
+![](.Rplot_readme.png)
 
 et voilà !
 

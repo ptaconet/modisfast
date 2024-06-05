@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .data_collections.csv
+.vignette_data.csv
 .notes_articles.txt
 .modis_sin.kmz
 .suomi_tiles.rda

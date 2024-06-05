@@ -3,6 +3,8 @@
 ^dev_history\.R$
 ^LICENSE\.md$
 ^README\.Rmd$
+^.Rplot_readme\.png$
+^.vignette_data\.csv$
 ^.data_collections\.csv$
 ^.data_collections_project\.csv$
 ^\.travis\.yml$

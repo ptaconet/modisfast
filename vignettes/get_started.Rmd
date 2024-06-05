@@ -114,7 +114,7 @@ With the function `mf_get_url()`, we get the https URLs for our collections of i
 
 
 ```{r mf_get_url, eval=T}
-## Get the URLs of MODIS Terra LST daily
+## Get the URLs of MODIS Vegetation indexes
 urls_mod11a1 <- mf_get_url(
   collection = "MOD13A3.061",
   variables = c("_1_km_monthly_NDVI","_1_km_monthly_EVI","_1_km_monthly_VI_Quality"),  # get the available variables with : mf_list_variables("MOD13A3.061"), or set to NULL (default) to download all the variables
@@ -159,7 +159,7 @@ print(str(res_dl))
 
 Various packages and related classes can be used to read the data downloaded through OPeNDAP. If [`terra`](https://cran.r-project.org/package=terra) (successor of [`raster`](https://cran.r-project.org/package=raster)) is surely the most famous class for raster objects, many packages facilitate the use of spatiotemporal data cubes in formats such as those proposed through `modisfast` (e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as a `stars` object from the excellent [`stars`](https://cran.r-project.org/package=stars) package for data cubes manipulation. All the data can also be imported as `ncdf4` objects using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4) package.
 
-`r emo::ji("warning")` 
+`r emo::ji("warning")` `r emo::ji("warning")` `r emo::ji("warning")` `r emo::ji("warning")` 
 
 #### Important warning regarding the use of the data after download through `modisfast` {#warning-import}
 

@@ -40,7 +40,7 @@
 
     files <- list.files(dir_path, full.names = T)
 
-    if(length(files)>1){
+    if(length(files)>1 & length(unique(substr(files,nchar(files)-9,nchar(files)-4)))>1 ){ # if there are multiple files (length(files)>1) but all with the same tile (length(unique(substr(files,nchar(files)-9,nchar(files)-4)))==1), we do not need to merge them
 
     rasts <- files %>%
       purrr::map(~terra::rast(.)) %>%

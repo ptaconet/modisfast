@@ -73,7 +73,8 @@ modis_tiles <- sf::read_sf(".modis_sin.kmz")  %>% #https://modis.ornl.gov/files/
 suomi_tiles <- readRDS(".suomi_tiles.rda")
 usethis::use_data(opendapMetadata_internal,modis_tiles,suomi_tiles, internal = TRUE,overwrite = TRUE)
 
-
+entomological_data <- read.csv(".vignette_data.csv")
+usethis::use_data(entomological_data, overwrite = T)
 
 #roi_example<-"/home/ptaconet/getRemoteData/inst/extdata/roi_example.gpkg"
 #dir.create("inst/extdata")
