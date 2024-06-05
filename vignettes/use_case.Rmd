@@ -1,0 +1,202 @@
+---
+title: "3. Full example - use case"
+author: "Paul Taconet"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Full example - use case}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+format:
+  html:
+    code-overflow: scroll
+---
+
+```{r, include = FALSE}
+NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true") # vignette will not be executed when tested on the cran
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  purl = NOT_CRAN
+)
+```
+
+## Introduction
+
+In this use case, we showcase how, starting with a simple table containing sampling-like information (geographical coordinates and dates), it is possible to retrieve meteorological or environmental data around each of these sampling points at chosen lags before the sampling dates.
+
+Here, let's say that we have a dataset containing abundances of mosquitoes vectors of malaria. These mosquitoes were periodically collected in several villages of a region of Northern Côte d'Ivoire during 1.5 years. In total, 8 entomological surveys took place in 32 villages of this area. In order to analyse the effects of temperature and rainfall on the abundance of these mosquitoes, we want to get the average temperature and cumulated rainfall for each collection point, in a 2-km radius buffer zone, one month before each collection date.
+
+*For information, the full 'real' dataset was [published in the GBIF](https://doi.org/10.15468/V8FVYN) and exhaustively described in [this data paper](https://doi.org/10.46471/gigabyte.83)).*
+
+## Set-up the parameters
+
+First we load the useful packages : 
+
+```{r setup, message=F}
+library(modisfast)
+library(sf)
+library(terra)
+library(purrr)
+library(dplyr)
+```
+
+Then, let's load the data and have a look at them :
+
+```{r eval=T}
+data(entomological_data)
+
+head(entomological_data)
+```
+
+- 'mission' is the number of the entomological survey, 
+- 'date' is the date of the survey
+- 'village' is a 3-digit code for the village of the survey
+- 'X' and 'Y' are longitude and latitude of the center of the village 
+- 'n' is the number of mosquitoes collected
+
+The first step is to convert this dataset as an `sf` POINT object, and then generate its bounding box (ie. area of interest) to get a POLYGON object (which is the input type for `modisfast`) :
+
+```{r eval=T}
+entomological_data <- entomological_data %>%
+  st_as_sf(coords = c("X", "Y"), crs = 4326) %>%
+  mutate(date = as.Date(date))
+
+roi <- st_bbox(entomological_data)
+
+```
+
+Since we will calculate the meteorological indicators in 2-km radius buffer zones, we need to enlarge a bit the ROI. Here, we enlarge it by 3000 m in all directions (N, S, W, E) and we give the ROI the name "Korhogo" (the name of the main city in the area) :
+
+```{r eval=T}
+# function expand_bbox() (Thanks @Chrisjb for the function)
+source("https://raw.githubusercontent.com/Chrisjb/basemapR/master/R/expand_bbox.R")
+
+roi <- roi %>%
+  expand_bbox(.,3000,3000) %>%
+  sf::st_as_sfc() %>%
+  sf::st_sf() 
+
+roi$name = "korhogo"
+
+```
+
+Next, we define the time range of interest. 
+
+Here we will first download the whole time series, and then (in step [3](#extract-data)) filter-out the specific dates for each collection point in the next step. So for download, we set the time range as the period going from 30 days before the first collection date to the last collection date.
+
+```{r eval=T}
+time_range <- c(min(entomological_data$date) - 30, max(entomological_data$date))
+
+time_range
+```
+
+## Download the meteorological data using `modisfast`
+
+We now download the data using `modisfast` : 
+
+- "MOD11A2.061" = MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 Global 1 km SIN Grid v061
+- "GPM_3IMERGDF.07" = GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V07
+
+```{r eval=T}
+log <- mf_login(credentials = c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
+
+urls_mod11a2 <- mf_get_url(
+  collection = "MOD11A2.061",
+  variables = c("LST_Day_1km","LST_Night_1km"),
+  roi = roi,
+  time_range = time_range )
+
+
+urls_gpm <- mf_get_url(
+  collection = "GPM_3IMERGDF.07",
+  variables = c("precipitation"), 
+  roi = roi,
+  time_range = time_range )
+
+
+res_dl_modis <- mf_download_data(urls_mod11a2)
+res_dl_gpm <- mf_download_data(urls_gpm)
+
+```
+
+And then we import it in R :
+
+```{r eval=T}
+# import MODIS
+modis_ts <- mf_import_data(path = dirname(res_dl_modis$destfile[1]), 
+                           collection_source = "MODIS")
+# import GPM
+gpm_ts <- mf_import_data(path = dirname(res_dl_gpm$destfile[1]), 
+                         collection_source = "GPM")
+
+```
+
+Our time series are here, let's finish the job now ! 
+
+## Extract the data in 2-km radius buffer areas and 1 month before each collection date {#extract-data}
+
+The last step is to extract the average temperature and cumulated rainfall for each collection point in a 2-km radius buffer zone, one month before each collection date.
+
+Below is some code for this - but feel free to adapt it, there are many ways of doing this, and the code suggested here may not be the best suited to your needs.
+
+```{r eval=T}
+
+# generate a 2-km radius buffer area around each collection point
+sp_buffer <- st_buffer(entomological_data, 2000) 
+
+# write a function that summarizes the data, given as input : 
+# - a buffer zone (within which the data will we summarized),
+# - a SpatRaster time series, 
+# - a layer of interest for this SpatRaster, 
+# - a time range of interest
+# - a function to summarize the data for the considered time frame
+
+fun_get_zonal_stat <- function(sp_buffer, raster_ts, variable, min_date, max_date, fun_summarize){
+  
+  r_sub <- terra::subset(raster_ts, time(raster_ts) >= min_date & time(raster_ts) <= max_date)
+  r_agg <- terra::app(r_sub[variable], fun_summarize, na.rm = T)
+  val <- terra::extract(r_agg, sp_buffer, fun = mean, ID = F, touches=TRUE, na.rm = T)
+  val <- as.numeric(val)
+  
+  return(val)
+}
+
+# split the dataset (needed for the execution of the function)
+sp_buffer_split <- split(sp_buffer, seq(nrow(sp_buffer))) 
+
+# execute the function to get vectors
+LST_1_month_bef <- purrr::map_dbl(sp_buffer_split, ~fun_get_zonal_stat(., modis_ts, "LST_Day_1km", .$date - 30, .$date, "mean"))
+rain_1_month_bef <- purrr::map_dbl(sp_buffer_split, ~fun_get_zonal_stat(., gpm_ts, "precipitation", .$date - 30, .$date, "sum"))
+
+# add columns in the original table (entomological_data) containing the extracted temperature and rainfall data
+entomological_data$LST_1_month_bef <- LST_1_month_bef
+entomological_data$rain_1_month_bef <- rain_1_month_bef
+```
+
+## Visualize the association between the abundance of mosquitoes and the meteorological variables
+
+We can now visualize the data : 
+
+```{r eval=T}
+
+library(ggplot2)
+
+# association between diurnal temperature and mosquito abundance
+ggplot(entomological_data,aes(x=LST_1_month_bef, y=n)) + geom_point() + geom_smooth()
+
+# association between rainfall and mosquito abundance
+ggplot(entomological_data,aes(x=rain_1_month_bef, y=n)) + geom_point() + geom_smooth()
+
+```
+
+We see that overall, there is :
+
+- a negative relationship between diurnal temperature and mosquito abundance (which makes sense : excessive temperatures might kill mosquitoes)
+- a positive relationship between rainfall and mosquito abundance (which makes sense too : rainfall creates puddles, which are breeding sites)
+
+Next steps could imply modeling the abundances of mosquitoes using these meteorological data, for explanation or prediction purposes. To go deeper, we could also extract data from more time frames, to better apprehend several aspects of the ecology of the vectors in the study area (eg. impact of meteorological variables at the different life stages of the mosquitoes). 
+
+You may see [this paper](https://doi.org/10.1186/s13071-021-04851-x ) and [this one](https://doi.org/10.31730/osf.io/jzxdw) for examples of full data mining works using such data. 
