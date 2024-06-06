@@ -1,0 +1,44 @@
+{
+    "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+    "type": "SoftwareSourceCode",
+    "applicationCategory": "Remote sensing",
+    "author": [
+        {
+            "id": "https://orcid.org/0000-0001-7429-7204",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "MIVEGEC, IRD, CNRS, Univ. Montpellier, Montpellier, France"
+            },
+            "email": "paul.taconet@ird.fr",
+            "familyName": "Taconet",
+            "givenName": "Paul"
+        }
+    ],
+    "codeRepository": "git+https://github.com/ptaconet/modisfast.git",
+    "dateCreated": "2020-01-01",
+    "description": "R package that provides functions to download MODIS and several other Earth datacubes sources in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) through the OPeNDAP framework.",
+    "downloadUrl": "https://github.com/ptaconet/modisfast/archive/refs/heads/master.zip",
+    "funder": {
+        "type": "Organization",
+        "name": "French Research Institute for Sustainable Development"
+    },
+    "keywords": [
+        "MODIS",
+        "earth datacube",
+        "R",
+        "opendap",
+        "VIIRS",
+        "earth science"
+    ],
+    "license": "https://spdx.org/licenses/GPL-3.0+",
+    "name": "modisfast",
+    "operatingSystem": [
+        "Linux",
+        "Windows",
+        "MacOS"
+    ],
+    "programmingLanguage": "R",
+    "relatedLink": "https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast",
+    "issueTracker": "https://github.com/ptaconet/modisfast/issues"
+}

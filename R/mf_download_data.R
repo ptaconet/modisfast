@@ -105,6 +105,7 @@ mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,num_worke
     dl_func<-function(url,output,username,password) {
       u <- httr::GET(url)
       httr::GET(u$url,httr::authenticate(username,password),httr::write_disk(output),httr::progress(),config = list(maxredirs=-1))
+      #GET(u$url, httr::write_disk(output), httr::progress(), config(maxredirs=-1, netrc = TRUE, netrc_file = netrc), set_cookies("LC" = "cookies"))
       }
 
     if(verbose){cat("Downloading the data...\n")}

@@ -22,6 +22,7 @@ library(emo)
 [![Travis build status](https://travis-ci.org/ptaconet/modisfast.svg?branch=master)](https://travis-ci.org/ptaconet/modisfast)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/modisfast)](https://cran.r-project.org/package=modisfast)
 [![Github_Status_Badge](https://img.shields.io/badge/Github-0.1.0-blue.svg)](https://github.com/ptaconet/modisfast)
+[![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/ptaconet/modisfast/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast)
 <!-- badges: end -->
 
 <!-- ATTENTION A CHANGER : FUSEAUX HORAIRES POUR DONNEES GPM HALF HOURLY !!!!!!
