@@ -4,6 +4,9 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/AUTHORS.html</loc>
+  </url>
+  <url>
     <loc>/LICENSE.html</loc>
   </url>
   <url>
@@ -14,6 +17,9 @@
   </url>
   <url>
     <loc>/articles/modisfast2.html</loc>
+  </url>
+  <url>
+    <loc>/articles/use_case.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>

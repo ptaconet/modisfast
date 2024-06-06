@@ -63,6 +63,9 @@
     <li>
       <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest at a glance</a>
     </li>
+    <li>
+      <a href="../articles/use_case.html">3. Full use case</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -97,7 +100,7 @@
                         <h4 data-toc-skip class="author">Paul
 Taconet</h4>
             
-            <h4 data-toc-skip class="date">2024-05-16</h4>
+            <h4 data-toc-skip class="date">2024-06-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ptaconet/modisfast/blob/HEAD/vignettes/get_started.Rmd" class="external-link"><code>vignettes/get_started.Rmd</code></a></small>
       <div class="hidden name"><code>get_started.Rmd</code></div>
@@ -212,7 +215,7 @@ each of them (description, etc.), use the function
 <!-- In `mf_get_url()`, the parameter `variables` enables to restrict the data to download to only specific variables. By default it is set to `NULL`, which means that all the available variables for the specified collection are downloaded. Specifying `variables` will make the data to download lighter.  -->
 <!-- **End Note** -->
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Get the URLs of MODIS Terra LST daily</span></span>
+<code class="sourceCode R"><span><span class="co">## Get the URLs of MODIS Vegetation indexes</span></span>
 <span><span class="va">urls_mod11a1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span>
 <span>  collection <span class="op">=</span> <span class="st">"MOD13A3.061"</span>,</span>
 <span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_1_km_monthly_NDVI"</span>,<span class="st">"_1_km_monthly_EVI"</span>,<span class="st">"_1_km_monthly_VI_Quality"</span><span class="op">)</span>,  <span class="co"># get the available variables with : mf_list_variables("MOD13A3.061"), or set to NULL (default) to download all the variables</span></span>
@@ -305,7 +308,7 @@ from the excellent <a href="https://cran.r-project.org/package=stars" class="ext
 package for data cubes manipulation. All the data can also be imported
 as <code>ncdf4</code> objects using e.g. the <a href="https://cran.r-project.org/package=ncdf4" class="external-link"><code>ncdf4</code></a>
 package.</p>
-<p>⚠️</p>
+<p>⚠️ ⚠️ ⚠️ ⚠️</p>
 <div class="section level4">
 <h4 id="warning-import">Important warning regarding the use of the data after download
 through <code>modisfast</code><a class="anchor" aria-label="anchor" href="#warning-import"></a>

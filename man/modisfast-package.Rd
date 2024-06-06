@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Provides functions to download MODIS and several other Earth datacubes sources in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) trough the OPeNDAP framework.
+Provides functions to download MODIS and several other Earth datacubes sources in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) through the OPeNDAP framework.
 }
 \seealso{
 Useful links:

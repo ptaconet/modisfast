@@ -4,5 +4,6 @@ pkgdown_sha: ~
 articles:
   get_started: get_started.html
   modisfast2: modisfast2.html
-last_built: 2024-05-16T14:26Z
+  use_case: use_case.html
+last_built: 2024-06-06T15:21Z
 

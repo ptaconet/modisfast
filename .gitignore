@@ -13,7 +13,6 @@ MOD11A1.006/
 SPL3SMP_E.003/
 VNP46A1/
 Meta
-data
 doc
 /doc/
 /Meta/
@@ -23,3 +22,4 @@ vignettes/env_data/
 vignettes/env_data_2/
 env_data/
 env_data_2/
+vignettes/data_use_case/

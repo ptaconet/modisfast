@@ -1,10 +1,10 @@
 ---
-title: "3. Full example - use case"
+title: "3. Full use case"
 author: "Paul Taconet"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Full example - use case}
+  %\VignetteIndexEntry{Full use case}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 format:
@@ -41,13 +41,12 @@ library(sf)
 library(terra)
 library(purrr)
 library(dplyr)
+library(ggplot2)
 ```
 
 Then, let's load the data and have a look at them :
 
 ```{r eval=T}
-data(entomological_data)
-
 head(entomological_data)
 ```
 
@@ -79,7 +78,7 @@ roi <- roi %>%
   sf::st_as_sfc() %>%
   sf::st_sf() 
 
-roi$name = "korhogo"
+roi$id = "korhogo"
 
 ```
 
@@ -117,8 +116,8 @@ urls_gpm <- mf_get_url(
   time_range = time_range )
 
 
-res_dl_modis <- mf_download_data(urls_mod11a2)
-res_dl_gpm <- mf_download_data(urls_gpm)
+res_dl_modis <- mf_download_data(urls_mod11a2, path = "data_use_case")
+res_dl_gpm <- mf_download_data(urls_gpm, path = "data_use_case")
 
 ```
 
@@ -132,6 +131,8 @@ modis_ts <- mf_import_data(path = dirname(res_dl_modis$destfile[1]),
 gpm_ts <- mf_import_data(path = dirname(res_dl_gpm$destfile[1]), 
                          collection_source = "GPM")
 
+plot(modis_ts)
+plot(gpm_ts)
 ```
 
 Our time series are here, let's finish the job now ! 
@@ -143,7 +144,6 @@ The last step is to extract the average temperature and cumulated rainfall for e
 Below is some code for this - but feel free to adapt it, there are many ways of doing this, and the code suggested here may not be the best suited to your needs.
 
 ```{r eval=T}
-
 # generate a 2-km radius buffer area around each collection point
 sp_buffer <- st_buffer(entomological_data, 2000) 
 
@@ -172,23 +172,21 @@ LST_1_month_bef <- purrr::map_dbl(sp_buffer_split, ~fun_get_zonal_stat(., modis_
 rain_1_month_bef <- purrr::map_dbl(sp_buffer_split, ~fun_get_zonal_stat(., gpm_ts, "precipitation", .$date - 30, .$date, "sum"))
 
 # add columns in the original table (entomological_data) containing the extracted temperature and rainfall data
-entomological_data$LST_1_month_bef <- LST_1_month_bef
+entomological_data$LST_1_month_bef <- LST_1_month_bef - 273.15  # the - 273.15  is to convert the temperature from kelvin to °C
 entomological_data$rain_1_month_bef <- rain_1_month_bef
+
+head(entomological_data)
 ```
 
-## Visualize the association between the abundance of mosquitoes and the meteorological variables
+## Visualize the association between the meteorological variables and the abundance of mosquitoes
 
 We can now visualize the data : 
 
 ```{r eval=T}
-
-library(ggplot2)
-
 # association between diurnal temperature and mosquito abundance
-ggplot(entomological_data,aes(x=LST_1_month_bef, y=n)) + geom_point() + geom_smooth()
-
+ggplot(entomological_data,aes(x=LST_1_month_bef, y=n)) + geom_point() + geom_smooth() + theme_bw() + labs(x="Average diurnal temperature\n1 month before collection", y = "Number of mosquitoes collected") 
 # association between rainfall and mosquito abundance
-ggplot(entomological_data,aes(x=rain_1_month_bef, y=n)) + geom_point() + geom_smooth()
+ggplot(entomological_data,aes(x=rain_1_month_bef, y=n)) + geom_point() + geom_smooth() + theme_bw() + labs(x="Cumulated rainfall\n1 month before collection", y = "Number of mosquitoes collected") 
 
 ```
 
@@ -196,6 +194,10 @@ We see that overall, there is :
 
 - a negative relationship between diurnal temperature and mosquito abundance (which makes sense : excessive temperatures might kill mosquitoes)
 - a positive relationship between rainfall and mosquito abundance (which makes sense too : rainfall creates puddles, which are breeding sites)
+
+There also seem to be non-linear relationships that could be further explored and explained.
+
+## Next steps in the analyses of the data
 
 Next steps could imply modeling the abundances of mosquitoes using these meteorological data, for explanation or prediction purposes. To go deeper, we could also extract data from more time frames, to better apprehend several aspects of the ecology of the vectors in the study area (eg. impact of meteorological variables at the different life stages of the mosquitoes). 
 

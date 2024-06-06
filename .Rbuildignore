@@ -18,7 +18,6 @@
 ^MOD11A1.006$
 ^SMAP$
 ^VNP46A1$
-^data$
 ^docs$
 ^Meta$
 ^doc$
@@ -29,3 +28,4 @@
 ^pkgdown$
 ^env_data$
 ^env_data_2$
+^vignettes/data_use_case$
