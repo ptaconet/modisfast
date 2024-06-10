@@ -81,8 +81,6 @@ devtools::install_github("ptaconet/modisfast")
 library(modisfast)
 ```
 
-Work is ongoing to publish the package on the CRAN.
-
 ## Get Started
 
 Accessing and opening MODIS data with `modisfast` is a simple 3-steps
@@ -1968,7 +1966,8 @@ be more suitable if your requirements differ. These include :
 ## Next steps
 
 Next developments may involve including access to more collections from
-other OPeNDAP servers.
+other OPeNDAP servers, and submitting the package to the CRAN and the
+[rOpenSci](https://ropensci.org/) archives.
 
 Any contribution is welcome !
 

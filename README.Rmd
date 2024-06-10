@@ -73,7 +73,6 @@ if(!require(devtools)){install.package("devtools")}
 devtools::install_github("ptaconet/modisfast")
 library(modisfast)
 ```
-Work is ongoing to publish the package on the CRAN. 
 
 ## Get Started 
 
@@ -336,7 +335,7 @@ There are other R packages available for accessing MODIS data, which may be more
 
 ## Next steps
 
-Next developments may involve including access to more collections from other OPeNDAP servers.
+Next developments may involve including access to more collections from other OPeNDAP servers, and submitting the package to the CRAN and the [rOpenSci](https://ropensci.org/) archives.
 
 Any contribution is welcome !
 
