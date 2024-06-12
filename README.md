@@ -10,7 +10,7 @@
 [![Travis build
 status](https://travis-ci.org/ptaconet/modisfast.svg?branch=master)](https://travis-ci.org/ptaconet/modisfast)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/modisfast)](https://cran.r-project.org/package=modisfast)
-[![Github_Status_Badge](https://img.shields.io/badge/Github-0.1.0-blue.svg)](https://github.com/ptaconet/modisfast)
+[![Github_Status_Badge](https://img.shields.io/badge/Github-1.0.0-blue.svg)](https://github.com/ptaconet/modisfast)
 [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/ptaconet/modisfast/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast)
 <!-- badges: end -->
 
@@ -43,9 +43,9 @@ framework](https://www.opendap.org/about) (*Open-source Project for a
 Network Data Access Protocol*) to download a subset of Earth science
 data cube, along spatial, temporal or any other data dimension (depth,
 …). This way, it reduces downloading time and disk usage to their
-minimum : no more 1° x 1° MODIS tiles when your region of interest is
-only 100 km x 100 km wide ! Moreover, `modisfast` supports parallelized
-downloads.
+minimum : no more 1° x 1° MODIS tiles with 10 bands when your region of
+interest is only 30 km x 30 km wide and you need 2 bands ! Moreover,
+`modisfast` enables parallel downloads of data.
 
 `modisfast` is hence particularly suited for retrieving MODIS or VIIRS
 data **over long time series** and **over areas**, rather than short
