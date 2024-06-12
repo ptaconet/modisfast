@@ -1,0 +1,18 @@
+citHeader("To cite modisfast in publications use:")
+
+bibentry(
+  key = "modisfast",
+  bibtype  = "Misc",
+  note  = "R package version 1.0.0",
+  TITLE = "modisfast : fast and efficient access to MODIS data with R",
+  AUTHOR = c(person("Paul", "Taconet"), person("Nicolas", "Moiroux")),
+  URL = "https://hal.science/hal-04603903",
+  YEAR = "2024",
+  MONTH = "Jun",
+  SWHID = "swh:1:dir:21b5ddcecb39e683c9f2fc5c135f23dc1b36fe28;origin=https://github.com/ptaconet/modisfast;visit=swh:1:snp:4064f0aae2b29808e9cbd096afaa495fd1360f78;anchor=swh:1:rev:9e5b2a456a0e1acd8ab34e6909424ae6c403150d",
+  REPOSITORY = "git+https://github.com/ptaconet/modisfast.git",
+  LICENSE = "https://spdx.org/licenses/GPL-3.0+",
+  KEYWORDS = "MODIS ; Earth datacube ; R ; OPeNDAP ; VIIRS ; Earth science",
+  HAL_ID = "hal-04603903",
+  HAL_VERSION = "v1",
+)
