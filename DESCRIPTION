@@ -1,6 +1,6 @@
 Package: modisfast
 Title: Fast and efficient access to MODIS data in R (and several other Earth datacubes sources)
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: 
     person("Paul", "Taconet", , "paul.taconet@ird.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7429-7204"))
