@@ -1977,8 +1977,12 @@ This package is licensed under a [GNU General Public License v3.0 or
 later](https://www.gnu.org/licenses/gpl-3.0-standalone.html) license.
 
 We thank in advance people that use `modisfast` for citing it in their
-work / publication(s). For this, please use the citation provided at
-`citation("modisfast")`.
+work / publication(s). For this, please use the following citation :
+
+*Paul Taconet, Nicolas Moiroux. ‘modisfast’ : fast and efficient access
+to MODIS data with R. 2024,
+[⟨swh:1:dir:21b5ddcecb39e683c9f2fc5c135f23dc1b36fe28;origin=https://github.com/ptaconet/modisfast;visit=swh:1:snp:4064f0aae2b29808e9cbd096afaa495fd1360f78;anchor=swh:1:rev:9e5b2a456a0e1acd8ab34e6909424ae6c403150d⟩.](https://archive.softwareheritage.org/browse/swh:1:dir:21b5ddcecb39e683c9f2fc5c135f23dc1b36fe28;origin=https://github.com/ptaconet/modisfast;visit=swh:1:snp:4064f0aae2b29808e9cbd096afaa495fd1360f78;anchor=swh:1:rev:9e5b2a456a0e1acd8ab34e6909424ae6c403150d)
+⟨hal-04603903⟩*
 
 ## Acknowledgments
 
