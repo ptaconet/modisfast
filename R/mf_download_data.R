@@ -36,7 +36,7 @@
 #' \item{ \code{"earthdata"} : } {to download data requiring a mf_login to EOSDIS Earthdata. To create an account go to : https://urs.earthdata.nasa.gov/  }
 #'}
 #'
-#' @import dplyr parallel
+#' @import dplyr parallel httr
 #' @export
 #'
 #'

@@ -110,7 +110,7 @@ them :
 ``` r
 ## Login to Earthdata servers with your EOSDIS credentials. 
 # To create an account (free) go to : https://urs.earthdata.nasa.gov/.
-log <- mf_login(credentials = c("username","password"))
+log <- mf_login(credentials = c("username","password"))  # set your own EOSDIS username and password
 
 ## Get the URLs of the data 
 urls <- mf_get_url(
@@ -1983,6 +1983,40 @@ work / publication(s). For this, please use the following citation :
 to MODIS data with R. 2024,
 [⟨swh:1:dir:21b5ddcecb39e683c9f2fc5c135f23dc1b36fe28;origin=https://github.com/ptaconet/modisfast;visit=swh:1:snp:4064f0aae2b29808e9cbd096afaa495fd1360f78;anchor=swh:1:rev:9e5b2a456a0e1acd8ab34e6909424ae6c403150d⟩.](https://archive.softwareheritage.org/browse/swh:1:dir:21b5ddcecb39e683c9f2fc5c135f23dc1b36fe28;origin=https://github.com/ptaconet/modisfast;visit=swh:1:snp:4064f0aae2b29808e9cbd096afaa495fd1360f78;anchor=swh:1:rev:9e5b2a456a0e1acd8ab34e6909424ae6c403150d)
 ⟨hal-04603903⟩*
+
+## Under the woods… how does `modisfast` work ?
+
+`modisfast` is an R wrapper for OPeNDAP (*Open-source Project for a
+Network Data Access Protocol*). When utilized by data providers, such as
+those managing many NASA datasets, OPeNDAP allows for subsetting
+portions of Earth observation cubes based on any dimension by specifying
+filters in a URL. `modisfast` facilitates this process by constructing
+the URL based on the spatial, temporal, and dimensional filters provided
+by the user in the function `mf_get_url()`.
+
+Let’s take an example to understand.
+
+The following URL ⬇️
+
+<https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.061/h17v08.ncml.nc4?MODIS_Grid_8Day_1km_LST_eos_cf_projection,LST_Day_1km%5B775:793>\]\[55:140\]\[512:560\],LST_Night_1km\[775:793\]\[55:140\]\[512:560\],QC_Day\[775:793\]\[55:140\]\[512:560\],QC_Night\[775:793\]\[55:140\]\[512:560\],time\[775:793\],YDim\[55:140\],XDim\[512:560\]
+
+provides a link to download the
+[MOD11A2.061](https://doi.org/10.5067/MODIS/MOD11A2.061) data in netCDF,
+subsetted for :
+
+- bands LST_Day_1km, LST_Night_1km, QC_Day, QC_Night ;
+- each available date between the 2017-01-01 and the 2017-06-01 ;
+- within the following bounding box (lon/lat): -5.41 8.84, -5.82 9.54.
+
+The indices within the `[]` refer to values encoding for the spatial and
+temporal filters.
+
+`modisfast` converts the spatial, temporal and dimensional filters
+provided by the user in the function `mf_get_url()` into the appropriate
+URLs. Subsequently, the function `mf_download_data()` allows for
+downloading the data using the
+[`httr`](https://cran.r-project.org/web/packages/httr/index.html) and
+`parallel` packages.
 
 ## Acknowledgments
 
