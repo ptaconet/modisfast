@@ -2011,9 +2011,10 @@ subsetted for :
 The indices within the `[]` refer to values encoding for the spatial and
 temporal filters.
 
-`modisfast` converts the spatial, temporal and dimensional filters
-provided by the user in the function `mf_get_url()` into the appropriate
-URLs. Subsequently, the function `mf_download_data()` allows for
+These OPeNDAP URLs are not trivial to build. `modisfast` converts the
+spatial, temporal and dimensional filters (R objects) provided by the
+user through the function `mf_get_url()` into the appropriate OPeNDAP
+URL(s). Subsequently, the function `mf_download_data()` allows for
 downloading the data using the
 [`httr`](https://cran.r-project.org/web/packages/httr/index.html) and
 `parallel` packages.
