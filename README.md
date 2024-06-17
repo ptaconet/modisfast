@@ -1998,7 +1998,7 @@ Let’s take an example to understand.
 
 The following URL ⬇️
 
-https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.061/h17v08.ncml.nc4?MODIS_Grid_8Day_1km_LST_eos_cf_projection,LST_Day_1km\[775:793\]\[55:140\]\[512:560\],LST_Night_1km\[775:793\]\[55:140\]\[512:560\],QC_Day\[775:793\]\[55:140\]\[512:560\],QC_Night\[775:793\]\[55:140\]\[512:560\],time\[775:793\],YDim\[55:140\],XDim\[512:560\]
+<https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.061/h17v08.ncml.nc4?MODIS_Grid_8Day_1km_LST_eos_cf_projection,LST_Day_1km%5B775:793>\]\[55:140\]\[512:560\],LST_Night_1km\[775:793\]\[55:140\]\[512:560\],QC_Day\[775:793\]\[55:140\]\[512:560\],QC_Night\[775:793\]\[55:140\]\[512:560\],time\[775:793\],YDim\[55:140\],XDim\[512:560\]
 
 provides a link to download the
 [MOD11A2.061](https://doi.org/10.5067/MODIS/MOD11A2.061) data in netCDF,
