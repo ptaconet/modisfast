@@ -2,14 +2,12 @@
 % Please edit documentation in R/mf_login.R
 \name{mf_login}
 \alias{mf_login}
-\title{Login to query servers and download data}
+\title{Login to EOSDIS EarthData account}
 \usage{
-mf_login(credentials, source = "earthdata", verbose = TRUE)
+mf_login(credentials, verbose = TRUE)
 }
 \arguments{
 \item{credentials}{vector string of length 2 with username and password. optional.}
-
-\item{source}{source. See details}
 
 \item{verbose}{boolean. optional. Verbose (default TRUE)}
 }
@@ -17,14 +15,10 @@ mf_login(credentials, source = "earthdata", verbose = TRUE)
 None.
 }
 \description{
-Login before querying data servers
+Login to EOSDIS EarthData before querying servers and download data
 }
 \details{
-Current options for parameter \code{"source"} are :
-\itemize{
-\item{"earthdata"}{ : to query and download MODIS, VNP, SMAP, GPM collections}
-}
-Create an account to Earthdata here : \url{https://urs.earthdata.nasa.gov/}.
+Create an account to EOSDIS EarthData here : \url{https://urs.earthdata.nasa.gov/}.
 }
 \examples{
 

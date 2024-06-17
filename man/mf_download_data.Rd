@@ -26,8 +26,6 @@ mf_download_data(
 
 \item{credentials}{vector string of length 2 with username and password. optional.}
 
-\item{source}{source. See details}
-
 \item{verbose}{boolean. optional. Verbose (default TRUE)}
 
 \item{min_filesize}{integer. minimum file size expected (in bites) for one file downloaded. If files downloaded are less that this value, the files will be downloaded again. Default 5000.}
@@ -52,11 +50,5 @@ Parameter \code{df_to_dl} must a data.frame with the following minimal structure
 \item{collection}{Collection (character string)}
 \item{name}{}
 \item{url}{URL of the source file (character string)}
-}
-
-Parameter \code{source} takes NULL as default value. Options are :
-\itemize{
-\item{ \code{NULL} : } {when no mf_login is required to download the data. }
-\item{ \code{"earthdata"} : } {to download data requiring a mf_login to EOSDIS Earthdata. To create an account go to : https://urs.earthdata.nasa.gov/  }
 }
 }

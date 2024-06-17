@@ -30,11 +30,6 @@
 #' \item{url}{URL of the source file (character string)}
 #' }
 #'
-#' Parameter \code{source} takes NULL as default value. Options are :
-#' \itemize{
-#' \item{ \code{NULL} : } {when no mf_login is required to download the data. }
-#' \item{ \code{"earthdata"} : } {to download data requiring a mf_login to EOSDIS Earthdata. To create an account go to : https://urs.earthdata.nasa.gov/  }
-#'}
 #'
 #' @import dplyr parallel httr
 #' @export
@@ -48,7 +43,7 @@ mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,num_worke
   # tests
   if(!inherits(verbose,"logical")){stop("verbose argument must be boolean\n")}
   if(!inherits(parallel,"logical")){stop("parallel argument must be boolean\n")}
-  if(!is.null(source) && !inherits(source,"character")){stop("source argument must be either NULL or 'earthdata' \n")}
+  #if(!is.null(source) && !inherits(source,"character")){stop("source argument must be either NULL or 'earthdata' \n")}
   if(!inherits(df_to_dl,"data.frame")){stop("df_to_dl argument must be a data.frame\n")}
   if(!("url" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 4 columns named 'url', 'collection', 'name', and 'id_roi' \n")}
   if(!("collection" %in% colnames(df_to_dl))){stop("df_to_dl argument must be a data.frame with at least 4 columns named 'url', 'collection', 'name, and 'id_roi' '\n")}

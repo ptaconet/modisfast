@@ -31,7 +31,7 @@ This package enables to build OPeNDAP (https) URLs given input parameters such a
 
 **`modisfast`** (formerly `opendapr`) is an R package that provides
 functions to **speed-up** the **download** of time-series raster data
-products derived from
+products derived from some
 [**MODIS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/)
 and
 [**VIIRS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/)
@@ -54,13 +54,13 @@ time series and points.
 Below is a comparison of modisfast with other packages available for
 downloading chunks of remote sensing data :
 
-| Package                                                  |                   Data                    | Temporal subsetting\* | Spatial subsetting\* | Dimensional subsetting\* |
-|:---------------------------------------------------------|:-----------------------------------------:|:---------------------:|:--------------------:|:------------------------:|
-| [`modisfast`](https://github.com/ptaconet/modisfast)     |             MODIS, VIIRS, GPM             |          ✅           |          ✅          |            ✅            |
-| [`MODIS`](https://github.com/MatMatt/MODIS)              |                   MODIS                   |          ✅           |          ❌          |            ❌            |
-| [`MODIStsp`](https://github.com/ropensci/MODIStsp)       |                   MODIS                   |          ✅           |          ❌          |            ✅            |
-| [`MODISTools`](https://github.com/ropensci/MODISTools)   | MODIS and VIIRS (but not all collections) |          ✅           |          ✅          |            ✅            |
-| [`appeears`](https://github.com/bluegreen-labs/appeears) |       MODIS, VIIRS, and many others       |          ✅           |          ✅          |            ✅            |
+| Package                                                  |                   Data                    | Temporal subsetting\* | Spatial subsetting\* | Dimensional subsetting\* | Speed |
+|:---------------------------------------------------------|:-----------------------------------------:|:---------------------:|:--------------------:|:------------------------:|:-----:|
+| [`modisfast`](https://github.com/ptaconet/modisfast)     |             MODIS, VIIRS, GPM             |          ✅           |          ✅          |            ✅            |  ✅   |
+| [`MODIS`](https://github.com/MatMatt/MODIS)              |                   MODIS                   |          ✅           |          ❌          |            ❌            |  ✅   |
+| [`MODIStsp`](https://github.com/ropensci/MODIStsp)       |                   MODIS                   |          ✅           |          ❌          |            ✅            |  ✅   |
+| [`MODISTools`](https://github.com/ropensci/MODISTools)   | MODIS and VIIRS (but not all collections) |          ✅           |          ✅          |            ✅            |  ✅   |
+| [`appeears`](https://github.com/bluegreen-labs/appeears) |       MODIS, VIIRS, and many others       |          ✅           |          ✅          |            ✅            |  ❌   |
 
 \* at the downloading phase
 
@@ -1998,7 +1998,7 @@ Let’s take an example to understand.
 
 The following URL ⬇️
 
-<https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.061/h17v08.ncml.nc4?MODIS_Grid_8Day_1km_LST_eos_cf_projection,LST_Day_1km%5B775:793>\]\[55:140\]\[512:560\],LST_Night_1km\[775:793\]\[55:140\]\[512:560\],QC_Day\[775:793\]\[55:140\]\[512:560\],QC_Night\[775:793\]\[55:140\]\[512:560\],time\[775:793\],YDim\[55:140\],XDim\[512:560\]
+https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.061/h17v08.ncml.nc4?MODIS_Grid_8Day_1km_LST_eos_cf_projection,LST_Day_1km\[775:793\]\[55:140\]\[512:560\],LST_Night_1km\[775:793\]\[55:140\]\[512:560\],QC_Day\[775:793\]\[55:140\]\[512:560\],QC_Night\[775:793\]\[55:140\]\[512:560\],time\[775:793\],YDim\[55:140\],XDim\[512:560\]
 
 provides a link to download the
 [MOD11A2.061](https://doi.org/10.5067/MODIS/MOD11A2.061) data in netCDF,
