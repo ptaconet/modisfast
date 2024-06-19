@@ -76,7 +76,7 @@ install.packages("modisfast")
 The package can be installed with:
 
 ``` r
-if(!require(devtools)){install.package("devtools")}
+if(!require(devtools)){install.packages("devtools")}
 devtools::install_github("ptaconet/modisfast")
 library(modisfast)
 ```
