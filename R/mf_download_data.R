@@ -139,7 +139,7 @@ mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,num_worke
   # write readme
   folders <- unique(dirname(df_to_dl$destfile))
   folders <- file.path(folders,"Readme.txt")
-  sentence <- "Use function modisfast::mf_import_data() to import the data in R."
+  sentence <- "Prefer the function modisfast::mf_import_data() to import the data in R ! See here why : https://ptaconet.github.io/modisfast/articles/get_started.html#warning-import"
   readme_files <- purrr::map(folders,~writeLines(sentence, .))
 
   return(data_dl)
