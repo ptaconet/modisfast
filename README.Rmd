@@ -88,7 +88,7 @@ library(sf)
 library(terra)
 
 # ROI and time range of interest
-roi <- st_as_sf(data.frame(id = "any_name", geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326) # a ROI of interest, format sf polygon
+roi <- st_as_sf(data.frame(id = "roi_id", geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326) # a ROI of interest, format sf polygon
 time_range <- as.Date(c("2017-01-01","2017-06-01"))  # a time range of interest
 
 # MODIS collections and variables (bands) of interest

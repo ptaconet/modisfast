@@ -38,7 +38,7 @@
 
 mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,num_workers=parallel::detectCores()-1,credentials=NULL,source="earthdata",verbose=TRUE,min_filesize=5000){
 
-  fileSize <- destfile <- fileDl <- NULL
+  fileSize <- destfile <- fileDl <- folders <- readme_files <- NULL
 
   # tests
   if(!inherits(verbose,"logical")){stop("verbose argument must be boolean\n")}
@@ -135,6 +135,12 @@ mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,num_worke
   # 3 : data already existing in output folder
     if(verbose){cat("\nData were all properly downloaded under the folder(s) ",paste(as.character(unique(dirname(df_to_dl$destfile))), collapse=" and "),"\n")}
   }
+
+  # write readme
+  folders <- unique(dirname(df_to_dl$destfile))
+  folders <- file.path(folders,"Readme.txt")
+  sentence <- "Use function modisfast::mf_import_data() to import the data in R."
+  readme_files <- purrr::map(folders,~writeLines(sentence, .))
 
   return(data_dl)
 }

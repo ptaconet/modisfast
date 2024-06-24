@@ -6,6 +6,7 @@
   if(output_class=="SpatRaster"){
 
     files <- list.files(dir_path, full.names = T)
+    files <- files[!grepl("readme", files, ignore.case = T)]
 
     rasts <- terra::rast(files)
     terra::crs(rasts) <- "epsg:4326"
@@ -39,6 +40,7 @@
   if(output_class=="SpatRaster"){
 
     files <- list.files(dir_path, full.names = T)
+    files <- files[!grepl("readme", files, ignore.case = T)]
 
     if(length(files)>1 & length(unique(substr(files,nchar(files)-9,nchar(files)-4)))>1 ){ # if there are multiple files (length(files)>1) but all with the same tile (length(unique(substr(files,nchar(files)-9,nchar(files)-4)))==1), we do not need to merge them
 

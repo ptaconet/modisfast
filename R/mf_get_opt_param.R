@@ -156,7 +156,7 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
         purrr::map(.,~split(.,f = seq(nrow(.)))) %>%
         purrr::modify_depth(.,2,~sf::st_bbox(.))
 
-      OpenDAPYVector <- purrr::flatten(OpenDAPYVector)
+     OpenDAPYVector <- purrr::flatten(OpenDAPYVector)
      OpenDAPXVector <- purrr::flatten(OpenDAPXVector)
      roi_div_bboxes <- purrr::flatten(roi_div_bboxes)
      modis_tile <- purrr::flatten(modis_tile_numbers)
@@ -173,7 +173,33 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
      # list_roiSpatialIndexBound <- purrr::map(list_roiSpatialIndexBound,~replace(.,. > 2399,2399))
     #}
 
-    list_roiSpatialIndexBound <- purrr::map(list_roiSpatialIndexBound,~replace(.,.<= 10,0))
+
+      list_roiSpatialIndexBound <- map2(list_roiSpatialIndexBound, OpenDAPXVector, ~ {
+        x <- .x
+        len <- length(.y)
+
+        x[1] <- ifelse(x[1] <= 20, 0, ifelse(x[1] >= len - 20, len - 20, x[1]))
+        x[2] <- ifelse(x[2] <= 20, 20, ifelse(x[2] >= len - 20, len - 1, x[2]))
+        x[3] <- ifelse(x[3] <= 20, 0, ifelse(x[3] >= len - 20, len - 20, x[3]))
+        x[4] <- ifelse(x[4] <= 20, 20, ifelse(x[4] >= len - 20, len - 1, x[4]))
+
+        return(x)
+      })
+
+      ## above is equal to :
+      # for(i in 1:length(list_roiSpatialIndexBound)){
+      #
+      #   if(list_roiSpatialIndexBound[[i]][1] <= 20){ list_roiSpatialIndexBound[[i]][1] = 0}
+      #   if(list_roiSpatialIndexBound[[i]][2] <= 20){ list_roiSpatialIndexBound[[i]][2] = 20}
+      #   if(list_roiSpatialIndexBound[[i]][3] <= 20){ list_roiSpatialIndexBound[[i]][3] = 0}
+      #   if(list_roiSpatialIndexBound[[i]][4] <= 20){ list_roiSpatialIndexBound[[i]][4] = 20}
+      #
+      #   if(list_roiSpatialIndexBound[[i]][1] >= length(OpenDAPXVector[[i]])-20){ list_roiSpatialIndexBound[[i]][1] = length(OpenDAPXVector[[i]])-20}
+      #   if(list_roiSpatialIndexBound[[i]][2] >= length(OpenDAPXVector[[i]])-20){ list_roiSpatialIndexBound[[i]][2] = length(OpenDAPXVector[[i]])-1}
+      #   if(list_roiSpatialIndexBound[[i]][3] >= length(OpenDAPXVector[[i]])-20){ list_roiSpatialIndexBound[[i]][3] = length(OpenDAPXVector[[i]])-20}
+      #   if(list_roiSpatialIndexBound[[i]][4] >= length(OpenDAPXVector[[i]])-20){ list_roiSpatialIndexBound[[i]][4] = length(OpenDAPXVector[[i]])-1}
+      #
+      # }
 
       list_roiSpatialBound <- NULL
     }
