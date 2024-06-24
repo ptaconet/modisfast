@@ -64,7 +64,7 @@
 
 mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
 
-  . <- odap_coll_info <- odap_source <- odap_server <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- odap_crs <- odap_urlExample <- modis_tile <- OpendapURL <- OpenDAPtimeVector <- OpenDAPXVector <- OpenDAPYVector <- roi_bbox <- Opendap_minLat <- Opendap_maxLat <- Opendap_minLon <- Opendap_maxLon <- roiSpatialIndexBound <- minLat <- maxLat <- minLon <- maxLon <- roiSpatialBound <- availableDimensions <- NULL
+  . <- odap_coll_info <- odap_source <- odap_server <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- odap_crs <- odap_urlExample <- modis_tile <- OpendapURL <- OpenDAPtimeVector <- OpenDAPXVector <- OpenDAPYVector <- roi_bbox <- Opendap_minLat <- Opendap_maxLat <- Opendap_minLon <- Opendap_maxLon <- roiSpatialIndexBound <- minLat <- maxLat <- minLon <- maxLon <- roiSpatialBound <- availableDimensions <- null_elements <- NULL
 
   OpenDAPtimeVector <- modis_tile <- NULL
 
@@ -131,6 +131,7 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
      OpendapURL <- purrr::map(modis_tile_numbers,~purrr::map_chr(.,~paste0(odap_coll_info$url_opendapserver,collection,"/",.,".ncml")))
      OpenDAPtimeVector<-purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_time)))
      OpenDAPtimeVector <- purrr::flatten(OpenDAPtimeVector)
+     OpenDAPtimeVector <- purrr::discard(OpenDAPtimeVector,is.null)
 
      } else if (odap_coll_info$provider=="NASA LAADS DAAC"){
        tiling <- suomi_tiles
@@ -162,6 +163,17 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
      modis_tile <- purrr::flatten(modis_tile_numbers)
      list_roi_id <- purrr::flatten(roi_ids)
 
+     null_elements <- which(lengths(OpenDAPYVector)==0)
+
+     if(length(null_elements)>0){
+      roi_div_bboxes <- roi_div_bboxes[-null_elements]
+      modis_tile <- modis_tile[-null_elements]
+      list_roi_id <- list_roi_id[-null_elements]
+     }
+
+     OpenDAPYVector <- purrr::discard(OpenDAPYVector,is.null)
+     OpenDAPXVector <- purrr::discard(OpenDAPXVector,is.null)
+
 
     list_roiSpatialIndexBound <- purrr::pmap(list(OpenDAPYVector,OpenDAPXVector,roi_div_bboxes),
                                              ~.mf_get_opt_param_singleROIfeature(..1,..2,..3)$roiSpatialIndexBound)
@@ -174,7 +186,7 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
     #}
 
 
-      list_roiSpatialIndexBound <- map2(list_roiSpatialIndexBound, OpenDAPXVector, ~ {
+      list_roiSpatialIndexBound <- purrr::map2(list_roiSpatialIndexBound, OpenDAPXVector, ~ {
         x <- .x
         len <- length(.y)
 

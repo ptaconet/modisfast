@@ -63,16 +63,18 @@
 
   vector_response<-httr::GET(vector_response$url)
 
+  if(vector_response$status_code!=404){
 
-  vector<-httr::content(vector_response,"text",encoding="UTF-8")
-  vector<-strsplit(vector,",")
-  vector<-vector[[1]]
-  vector<-stringr::str_replace(vector,"\\n","")
-  vector<-vector[-1]
-  vector<-as.numeric(vector)
+    vector<-httr::content(vector_response,"text",encoding="UTF-8")
+    vector<-strsplit(vector,",")
+    vector<-vector[[1]]
+    vector<-stringr::str_replace(vector,"\\n","")
+    vector<-vector[-1]
+    vector<-as.numeric(vector)
 
   return(vector)
 
+  }
 }
 
 #' @name .getVNPladswebdataname

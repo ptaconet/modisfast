@@ -131,6 +131,8 @@ mf_get_url<-function(collection,
     opt_param <- mf_get_opt_param(collection,roi,verbose=verbose)
   }
 
+  if(length(opt_param$roiSpatialIndexBound)==0){stop("Your ROI does not cover a region where there is any data. Please provide a correct ROI.")}
+
   # test variables
   #if(verbose){cat("Checking if specified variables exist for the collection specified...\n")}
   available_variables <- opt_param$availableVariables$name[which(opt_param$availableVariables$extractable_w_opendapr=="extractable")]
