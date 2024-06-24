@@ -6,7 +6,12 @@
 #' @param path string character vector. mandatory. The path to the local directory where the data are stroed.
 #' @param collection_source character string. mandatory. The collection source (one of "MODIS", "VIIRS", "GPM")
 #' @param output_class character string. Output object class. Currently only "SpatRaster" implemented.
-#' @param proj_epsg character string. EPSG of the desired projection for the output raster (default : 4326)
+#' @param proj_epsg numeric. EPSG of the desired projection for the output raster (default : source projection for the data)
+#'
+#'
+#' @note
+#'
+#' Reprojecting using the argument \code{proj_epsg} might take long over large ROIs.
 #'
 #' @import purrr
 #' @importFrom terra rast t merge flip
@@ -54,7 +59,7 @@
 mf_import_data <- function(path,
                            collection_source,
                            output_class = "SpatRaster",
-                           proj_epsg = "4326"){
+                           proj_epsg = NULL){
 
   rasts <- NULL
 

@@ -8,7 +8,7 @@ mf_import_data(
   path,
   collection_source,
   output_class = "SpatRaster",
-  proj_epsg = "4326"
+  proj_epsg = NULL
 )
 }
 \arguments{
@@ -18,10 +18,13 @@ mf_import_data(
 
 \item{output_class}{character string. Output object class. Currently only "SpatRaster" implemented.}
 
-\item{proj_epsg}{character string. EPSG of the desired projection for the output raster (default : 4326)}
+\item{proj_epsg}{numeric. EPSG of the desired projection for the output raster (default : source projection for the data)}
 }
 \description{
 Import a time series as a \code{SpatRaster}object
+}
+\note{
+Reprojecting using the argument \code{proj_epsg} might take long over large ROIs.
 }
 \examples{
 

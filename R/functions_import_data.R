@@ -16,8 +16,8 @@
       terra::flip("vertical") %>%
       terra::flip("horizontal")
 
-    if(proj_epsg != "4326"){
-      rasts <- terra::project(rasts,paste0("epsg:",proj_epsg))
+    if(!is.null(proj_epsg)){
+       rasts <- terra::project(rasts,paste0("epsg:",proj_epsg))
     }
 
 
@@ -44,9 +44,13 @@
 
     if(length(files)>1 & length(unique(substr(files,nchar(files)-9,nchar(files)-4)))>1 ){ # if there are multiple files (length(files)>1) but all with the same tile (length(unique(substr(files,nchar(files)-9,nchar(files)-4)))==1), we do not need to merge them
 
+    # rasts <- files %>%
+    #   purrr::map(~terra::rast(.)) %>%
+    #   do.call(terra::merge,.)
+
     rasts <- files %>%
-      purrr::map(~terra::rast(.)) %>%
-      do.call(terra::merge,.)
+      terra::sprc() %>%
+      terra::merge()
 
     } else {
 
@@ -56,7 +60,9 @@
 
     terra::crs(rasts) <- "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
 
-    rasts <- terra::project(rasts,paste0("epsg:",proj_epsg))
+    if(!is.null(proj_epsg)){
+     rasts <- terra::project(rasts,paste0("epsg:",proj_epsg))
+    }
 
   } else if (output_class=="stars"){
     stop("stars output is not implemented yet for this collection")
