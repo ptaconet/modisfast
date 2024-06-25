@@ -125,15 +125,16 @@ res_dl <- mf_download_data(urls)
 ```
 
 And finally, open the data in R as a `terra::SpatRaster` object using
-the function `mf_import_data()` (see
+the function `mf_import_data()` (⚠️ **see
 [here](https://ptaconet.github.io/modisfast/articles/get_started.html#warning-import)
 why you should use this function, instead of the original
-`terra::rast()`, in the context of `modisfast`) :
+`terra::rast()`, in the context of `modisfast`**) :
 
 ``` r
 r <- mf_import_data(
   path = dirname(res_dl$destfile[1]),
-  collection_source = "MODIS"
+  collection_source = "MODIS", 
+  proj_epsg = 4326
   )
 
 terra::plot(r)
