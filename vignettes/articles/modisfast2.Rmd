@@ -75,8 +75,8 @@ urls_mod11a1 <- mf_get_url(
 
 res_dl <- mf_download_data(urls_mod11a1, path = target_fold)
 
-modis_ts_korhogo <- mf_import_data(file.path(target_fold,"Korhogo","MOD11A1.061"), collection_source = "MODIS")
-modis_ts_diebougou <- mf_import_data(file.path(target_fold,"Diebougou","MOD11A1.061"), collection_source = "MODIS")
+modis_ts_korhogo <- mf_import_data(file.path(target_fold,"data","Korhogo","MOD11A1.061"), collection_source = "MODIS")
+modis_ts_diebougou <- mf_import_data(file.path(target_fold,"data","Diebougou","MOD11A1.061"), collection_source = "MODIS")
 
 ```
 

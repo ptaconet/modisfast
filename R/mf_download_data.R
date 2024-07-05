@@ -32,6 +32,7 @@
 #'
 #'
 #' @import dplyr parallel httr
+#' @importFrom utils write.csv
 #' @export
 #'
 #'
