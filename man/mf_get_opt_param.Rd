@@ -36,7 +36,7 @@ This will save much time, as internal parameters will be calculated only once.
 }
 \examples{
 
-\donttest{
+\dontrun{
 require(sf)
 require(purrr)
 

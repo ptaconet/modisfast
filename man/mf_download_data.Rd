@@ -10,7 +10,6 @@ mf_download_data(
   parallel = TRUE,
   num_workers = parallel::detectCores() - 1,
   credentials = NULL,
-  source = "earthdata",
   verbose = TRUE,
   min_filesize = 5000
 )

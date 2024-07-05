@@ -20,7 +20,7 @@ Get the variables available for a given collection
 }
 \examples{
 
-\donttest{
+\dontrun{
 # login to Earthdata
 log <- mf_login(c("earthdata_un","earthdata_pw"))
 

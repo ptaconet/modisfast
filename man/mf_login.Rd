@@ -22,7 +22,7 @@ Create an account to EOSDIS EarthData here : \url{https://urs.earthdata.nasa.gov
 }
 \examples{
 
-\donttest{
+\dontrun{
 username <- "earthdata_un"
 password <- "earthdata_pw"
 mf_login(credentials = c(username,password))

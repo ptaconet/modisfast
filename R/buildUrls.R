@@ -213,7 +213,41 @@
       table_urls <- rbind(table_urls,th_table_urls)
     }
 
-  }  ############################################
+  }
+
+  else if (odap_source=="CHIRPS"){
+
+    ############################################
+    ##############  CHIRPS   ######################
+    ############################################
+
+    time_range=as.Date(time_range,origin="1970-01-01")
+
+    datesToRetrieve<-seq(time_range[2],time_range[1],-1) %>%
+      data.frame(stringsAsFactors = F) %>%
+      purrr::set_names("date") %>%
+      dplyr::mutate(date_character=substr(date,1,10)) %>%
+      dplyr::mutate(year=format(date,'%Y')) %>%
+      dplyr::mutate(month=format(date,'%m'))
+
+    urls<-datesToRetrieve %>%
+      mutate(product_name = paste0("ucsb-chirps.",gsub("-","",date_character),"T000000Z.global.0.05deg.daily")) %>%
+      mutate(url_product = paste0("https://thredds.servirglobal.net/thredds/dodsC/climateserv/ucsb-chirps/global/0.05deg/daily/",product_name,".nc4.",output_format))
+
+    dim<-purrr::map_chr(roiSpatialIndexBound,~.getOpenDapURL_dimensions(variables,c(0,0),.[3],.[4],.[2],.[1],odap_timeDimName,odap_latDimName,odap_lonDimName))
+
+    table_urls<-NULL
+    for(i in 1:length(dim)){
+      th_table_urls<-urls %>%
+        dplyr::mutate(url=paste0(url_product,"?",dim[i])) %>%
+        dplyr::mutate(name=product_name) %>%
+        dplyr::mutate(roi_id = roi$id[i])
+      table_urls <- rbind(table_urls,th_table_urls)
+    }
+
+  }
+
+  ############################################
   ##############  SMAP   ######################
   ############################################
   else if (odap_source=="SMAP"){

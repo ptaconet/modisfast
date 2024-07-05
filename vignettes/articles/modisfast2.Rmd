@@ -13,7 +13,7 @@ format:
 ---
 
 ```{r, include = FALSE}
-NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true") # vignette will not be executed when tested on the cran
+NOT_CRAN <- !identical(tolower(Sys.getenv("NOT_CRAN")), "true") # vignette will not be executed when tested on the cran
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -36,7 +36,6 @@ So far so good, but what if we need ***multiple regions of interest***, and / or
 * multiple time frames of interest : we have spatiotemporal sampling data - e.g. species occurrence - that were collected over a large time frame and we want to study how local past environmental / climatic conditions influence the occurrence ;
 * multiple regions of interest : we want to compare two areas in terms of their environmental or climatic conditions.
 
-
 We could use `for` loops or related stuff to do the job. However, this would not be very optimized. In this vignette, we explain why and we show how to optimize the data import in the case of **multiple regions** or **multiple time periods** of interest. Let's start ! 
 
 ## Get data over multiple regions of interest at a glance
@@ -51,7 +50,7 @@ library(purrr)
 ```
 
 
-```{r, eval=T }
+```{r, eval=NOT_CRAN }
 
 # Define multiple regions of interest
 roi <- st_as_sf(data.frame(id=c("Korhogo","Diebougou"),
@@ -81,7 +80,7 @@ modis_ts_diebougou <- mf_import_data(file.path(target_fold,"Diebougou","MOD11A1.
 
 ```
 
-```{r eval=T, echo=F,message=F }
+```{r eval=NOT_CRAN, echo=F,message=F }
 unlink(target_fold, recursive = T)
 ```
 
@@ -91,7 +90,7 @@ Here, the things are just a bit more different, as explained in this example :
 
 We first setup the time ranges of interest (and as usual, the ROI)
 
-```{r example_prepare, eval=T}
+```{r example_prepare, eval=NOT_CRAN}
 roi <- st_as_sf(data.frame(id = "Korhogo", geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
 
 time_ranges <- list(as.Date(c("2016-01-01","2016-01-31")),
@@ -113,7 +112,7 @@ Here is where the function `mf_get_opt_param()` comes into the game. For a given
 
 First execute the function `mf_get_opt_param()` : 
 
-```{r mf_get_url_multiple_timeframes, eval=T}
+```{r mf_get_url_multiple_timeframes, eval=NOT_CRAN}
 
 opt_param_mod11a1 <- mf_get_opt_param("MOD11A1.061",roi)
 
@@ -121,7 +120,7 @@ opt_param_mod11a1 <- mf_get_opt_param("MOD11A1.061",roi)
 
 Then execute the function `mf_get_url()` passing the argument `opt_param` :
 
-```{r wf, eval=T}
+```{r wf, eval=NOT_CRAN}
 
 urls_mod11a1 <- purrr::map_dfr(time_ranges, ~mf_get_url( 
   collection = "MOD11A1.061",
@@ -137,7 +136,7 @@ str(urls_mod11a1)
 
 Now, download and import the data in R :
 
-```{r dl, eval=T}
+```{r dl, eval=NOT_CRAN}
 
 res_dl <- mf_download_data(urls_mod11a1, path = target_fold)
 

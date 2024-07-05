@@ -36,9 +36,11 @@
 #'
 #'
 
-mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,num_workers=parallel::detectCores()-1,credentials=NULL,source="earthdata",verbose=TRUE,min_filesize=5000){
+mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,num_workers=parallel::detectCores()-1,credentials=NULL,verbose=TRUE,min_filesize=5000){
 
-  fileSize <- destfile <- fileDl <- folders <- readme_files <- NULL
+  fileSize <- destfile <- fileDl <- folders <- readme_files <- source <-  NULL
+
+  source="earthdata"
 
   # tests
   if(!inherits(verbose,"logical")){stop("verbose argument must be boolean\n")}
@@ -53,7 +55,7 @@ mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,num_worke
 
   .testInternetConnection()
 
-  df_to_dl$destfile <- file.path(path,df_to_dl$id_roi,df_to_dl$collection,df_to_dl$name)
+  df_to_dl$destfile <- file.path(path,"data",df_to_dl$id_roi,df_to_dl$collection,df_to_dl$name)
 
  # if(dir.exists(path)){warning("Target folder already exists\n")}
 
@@ -127,20 +129,20 @@ mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,num_worke
 
   if(!(identical(data_dl,data_downloaded))){
     if(verbose){cat("Only part of the data has been downloaded. Downloading the remaining datasets one by one...\n")}
-    mf_download_data(df_to_dl=df_to_dl,path=path,parallel=FALSE,credentials=credentials,source=source)
+    mf_download_data(df_to_dl=df_to_dl,path=path,parallel=FALSE,credentials=credentials)#,source=source)
   } else {
 
   # 1 : download ok
   # 2 : download error
   # 3 : data already existing in output folder
-    if(verbose){cat("\nData were all properly downloaded under the folder(s) ",paste(as.character(unique(dirname(df_to_dl$destfile))), collapse=" and "),"\n")}
+    if(verbose){cat("\nData were all properly downloaded under the folder(s) ",paste(as.character(unique(dirname(df_to_dl$destfile))), collapse=" and "),"\n**To import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)**\n")}
   }
 
   # write readme
-  folders <- unique(dirname(df_to_dl$destfile))
-  folders <- file.path(folders,"Readme.txt")
-  sentence <- "Prefer the function modisfast::mf_import_data() to import the data in R ! See here why : https://ptaconet.github.io/modisfast/articles/get_started.html#warning-import"
-  readme_files <- purrr::map(folders,~writeLines(sentence, .))
+  sentence <- "Use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars() to import the data in R ! More info at help(mf_import_data)"
+  writeLines(sentence, file.path(path,"Readme.txt"))
+  # write csv dataset
+  write.csv(data_dl, file.path(path,"Summary_downloaded_data.csv"), row.names = F)
 
   return(data_dl)
 }

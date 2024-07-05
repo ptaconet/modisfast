@@ -16,7 +16,7 @@
 #' @import purrr dplyr httr
 #' @examples
 #'
-#' \donttest{
+#' \dontrun{
 #' # login to Earthdata
 #' log <- mf_login(c("earthdata_un","earthdata_pw"))
 #'
@@ -81,7 +81,7 @@ mf_list_variables<-function(collection,credentials=NULL){  # for a given collect
   dim_proj<-opendapMetadata$dim_proj
 
   tab <- tab %>%
-    dplyr::mutate(extractable_w_opendapr=case_when(name %in% c(dim_lon,dim_lat,dim_time,dim_proj) ~ "automatically extracted",
+    dplyr::mutate(extractable_w_opendapr=dplyr::case_when(name %in% c(dim_lon,dim_lat,dim_time,dim_proj) ~ "automatically extracted",
                                                    grepl(dim_lon,tab$indices) & grepl(dim_lat,tab$indices) & grepl(dim_time,tab$indices) & !is.na(dim_time) ~ "extractable",
                                                    grepl(dim_lon,tab$indices) & grepl(dim_lat,tab$indices) & is.na(dim_time) ~ "extractable")
     )

@@ -26,7 +26,7 @@
 #'
 #' @examples
 #'
-#' \donttest{
+#' \dontrun{
 #' require(sf)
 #' require(purrr)
 #'
@@ -102,9 +102,9 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
     split(f = seq(nrow(.)))
 
   ### GMP and SMAP and SRTM
-  if (odap_coll_info$source %in% c("GPM","SMAP","SRTM")){
+  if (odap_coll_info$source %in% c("GPM","SMAP","SRTM","CHIRPS")){
 
-    if (odap_coll_info$source=="GPM"){
+    if (odap_coll_info$source %in% c("GPM","CHIRPS")){
       OpendapURL <- odap_coll_info$url_opendapexample
     } else if (odap_coll_info$source=="SMAP"){
       OpendapURL <- "https://n5eil02u.ecs.nsidc.org/opendap/hyrax/SMAP/SPL4CMDL.004/2016.01.06/SMAP_L4_C_mdl_20160106T000000_Vv4040_001.h5"
@@ -129,7 +129,7 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
      modis_tile_numbers <- purrr::map(modis_tile,purrr::pluck("all_modis_tiles"))
      roi_ids <- purrr::map(modis_tile,purrr::pluck("roi_id"))
      OpendapURL <- purrr::map(modis_tile_numbers,~purrr::map_chr(.,~paste0(odap_coll_info$url_opendapserver,collection,"/",.,".ncml")))
-     OpenDAPtimeVector<-purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_time)))
+     OpenDAPtimeVector <- purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_time)))
      OpenDAPtimeVector <- purrr::flatten(OpenDAPtimeVector)
      OpenDAPtimeVector <- purrr::discard(OpenDAPtimeVector,is.null)
 
@@ -142,8 +142,8 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
        OpendapURL<-purrr::map(modis_tile_numbers,~purrr::map_chr(.,~paste0(odap_coll_info$url_opendapserver,odap_coll_info$collection,"/2013/019/",.getVNPladswebdataname(lines,.))))
      }
 
-     OpenDAPXVector<-purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_lon)))
-     OpenDAPYVector<-purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_lat)))
+     OpenDAPXVector <- purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_lon)))
+     OpenDAPYVector <- purrr::map(OpendapURL,~purrr::map(.,~.getVarVector(.,odap_coll_info$dim_lat)))
 
     #roi_div <- purrr::map(roi_div,~sf::st_bbox(.))
 
@@ -152,6 +152,9 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
       roi_div_bboxes <- roi_div %>%
         purrr::map(.,~sf::st_set_agr(.,"constant")) %>%
         purrr::map(.,~sf::st_transform(.,4326)) %>%
+        purrr::map(.,~sf::st_bbox(.)) %>%
+        purrr::map(.,~sf::st_as_sfc(.)) %>%
+        purrr::map(.,~sf::st_sf(.)) %>%
         purrr::map(.,~sf::st_intersection(.,tiling)) %>%
         purrr::map(.,~sf::st_transform(.,odap_coll_info$crs)) %>%
         purrr::map(.,~split(.,f = seq(nrow(.)))) %>%
@@ -186,6 +189,7 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
     #}
 
 
+      # 20 is an arbitrary threshold... could be 30 or more
       list_roiSpatialIndexBound <- purrr::map2(list_roiSpatialIndexBound, OpenDAPXVector, ~ {
         x <- .x
         len <- length(.y)

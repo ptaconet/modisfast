@@ -44,7 +44,7 @@
 #'
 #' @examples
 #'
-#' \donttest{
+#' \dontrun{
 #'
 #' require(sf)
 #' require(magrittr)
@@ -101,7 +101,7 @@ mf_get_url<-function(collection,
                  credentials=NULL,
                  verbose=TRUE){
 
-  existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName  <- . <- name <- destfile <- NULL
+  existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName  <- . <- name <- destfile <- roi_id <- NULL
 
   ## tests :
   # collection

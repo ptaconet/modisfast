@@ -86,8 +86,8 @@ library(modisfast)
 Accessing and opening MODIS data with `modisfast` is a simple 3-steps
 workflow, as shown in the example below.
 
-First, define the variables of interest (including ROI, time frame,
-collection, and bands) :
+**1/ First, define the variables of interest (ROI, time frame,
+collection, and bands) :**
 
 ``` r
 # Load the packages
@@ -104,8 +104,7 @@ collection <- "MOD11A2.061"  # run mf_list_collections() for an exhaustive list 
 variables <- c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night") # run mf_list_variables("MOD11A2.061") for an exhaustive list of variables available for the collection "MOD11A1.062"
 ```
 
-Then, with `modisfast`, get the OPeNDAP URL of the data and download
-them :
+**2/ Then, get the URL of the data and download them :**
 
 ``` r
 ## Login to Earthdata servers with your EOSDIS credentials. 
@@ -124,11 +123,11 @@ urls <- mf_get_url(
 res_dl <- mf_download_data(urls)
 ```
 
-And finally, open the data in R as a `terra::SpatRaster` object using
-the function `mf_import_data()` (⚠️ **see
+**3/ And finally, open the data in R as a `terra::SpatRaster` object
+using the function `mf_import_data()`** (⚠️ see
 [here](https://ptaconet.github.io/modisfast/articles/get_started.html#warning-import)
 why you should use this function, instead of the original
-`terra::rast()`, in the context of `modisfast`**) :
+`terra::rast()`, in the context of `modisfast`) :
 
 ``` r
 r <- mf_import_data(

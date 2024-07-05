@@ -2,33 +2,47 @@
 % Please edit documentation in R/mf_import_data.R
 \name{mf_import_data}
 \alias{mf_import_data}
-\title{Import the time series in R as a \code{SpatRaster} object}
+\title{Import datasets downlaoded using \code{modisfast} as a \code{terra::SpatRaster} object}
 \usage{
 mf_import_data(
   path,
   collection_source,
   output_class = "SpatRaster",
-  proj_epsg = NULL
+  proj_epsg = NULL,
+  vrt = FALSE
 )
 }
 \arguments{
-\item{path}{string character vector. mandatory. The path to the local directory where the data are stroed.}
+\item{path}{string character vector. mandatory. The path to the local directory where the data are strored.}
 
 \item{collection_source}{character string. mandatory. The collection source (one of "MODIS", "VIIRS", "GPM")}
 
 \item{output_class}{character string. Output object class. Currently only "SpatRaster" implemented.}
 
 \item{proj_epsg}{numeric. EPSG of the desired projection for the output raster (default : source projection for the data)}
+
+\item{vrt}{boolean. Import as SpatRast (FALSE, default) or virtual raster (TRUE, useful for very large files)}
+}
+\value{
+a \code{terra::SpatRast} object
 }
 \description{
-Import a time series as a \code{SpatRaster}object
+Import datasets downlaoded using \code{modisfast} as a \code{terra::SpatRaster} object
 }
 \note{
-Reprojecting using the argument \code{proj_epsg} might take long over large ROIs.
+Athough data could be imported with any netcdf-compliant R package (\code{terra}, \code{stars}, \code{ncdf4}, etc.), care must be taken when importing data that was downloaded through the OPeNDAP servers. In fact, depending on the collection, some “issues” were raised. These issues are independent from \code{modisfast} : they result most of time of a lack of full implementation of the OPeNDAP framework by the data providers. These issues are :
+\itemize{
+ \item{for MODIS and VIIRS collections : CRS has to be provided}
+ \item{for GPM collections : CRS has to be provided + data have to be flipped}
+}
+
+This function enables to "get rid" of these problems, by pre-processing the data.
+
+Also note that reprojecting over large ROIs using the argument \code{proj_epsg} might take long.
 }
 \examples{
 
-\donttest{
+\dontrun{
 
 require(sf)
 require(magrittr)

@@ -13,7 +13,7 @@
 #'
 #' @examples
 #'
-#' \donttest{
+#' \dontrun{
 #' username <- "earthdata_un"
 #' password <- "earthdata_pw"
 #' mf_login(credentials = c(username,password))

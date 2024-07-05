@@ -58,7 +58,8 @@ devtools::check()
 devtools::document()
 
 # For CRAN-like check
-devtools::check(args = c('--as-cran'))
+#devtools::check(args = c('--as-cran'))
+devtools::check(env_vars = c(NOT_CRAN = "false"))
 
 #then :
 devtools::install(build_vignettes = TRUE)

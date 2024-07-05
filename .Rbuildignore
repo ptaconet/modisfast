@@ -17,6 +17,8 @@
 ^GPM_L3$
 ^MOD11A1.006$
 ^SMAP$
+^AUTHORS\.md$
+^codemeta\.json$
 ^VNP46A1$
 ^docs$
 ^Meta$
@@ -31,3 +33,4 @@
 ^vignettes/data_use_case$
 ^data_use_case$
 ^vignettes/env_data$
+^vignettes/articles$

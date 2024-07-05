@@ -63,7 +63,7 @@ Argument \code{credentials} : Login to the OPeNDAP servers is required to use th
 }
 \examples{
 
-\donttest{
+\dontrun{
 
 require(sf)
 require(magrittr)
