@@ -7,8 +7,6 @@
 <!-- badges: start -->
 
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3)
-[![Travis build
-status](https://travis-ci.org/ptaconet/modisfast.svg?branch=master)](https://app.travis-ci.com/ptaconet/modisfast)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/modisfast)](https://cran.r-project.org/package=modisfast)
 [![Github_Status_Badge](https://img.shields.io/badge/Github-0.9.0-blue.svg)](https://github.com/ptaconet/modisfast)
 [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/ptaconet/modisfast/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast)
