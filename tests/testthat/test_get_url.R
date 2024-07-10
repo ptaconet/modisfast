@@ -25,7 +25,7 @@ test_that("test if errors are sent back", {
   skip_on_travis()
   log <- mf_login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
   # wrong type for roi
-  expect_error(mf_get_url(collection = "MOD11A1.061", roi = "not_a_sf_object", time_range = as.Date(c("2017-01-01","2017-02-01"))),"Argument roi must be an object of class sf or sfc with POLYGON-type feature geometry and at least two columns : 'id' and 'geom' that must not be NULL or NA")
+  expect_error(mf_get_url(collection = "MOD11A1.061", roi = "not_a_sf_object", time_range = as.Date(c("2017-01-01","2017-02-01"))),"Argument roi must be an object of class sf or sfc with POLYGON-type feature geometry and at least two columns : 'id' and a geometry column that must not be NULL or NA")
  # wrong type for time range
   expect_error(mf_get_url(collection = "MOD11A1.061", roi = roi, time_range = c("2017-01-01","2017-02-01")),"Argument time_range is not of class Date or POSIXlt or is not of length 1 or 2 \n")
   # wrong dates
@@ -77,7 +77,7 @@ for (i in 1:length(collection_tested)){
     expect_named(opendap_urls, c("id_roi","time_start","collection","name","url")) # column names are ok
     expect_gt(nrow(opendap_urls),0) # there is at least 1 row
 
-    res <- mf_download_data(opendap_urls, parallel = TRUE)
+    res <- mf_download_data(opendap_urls)
 
     expect_equal(unique(res$fileDl),TRUE) # all files have been downloaded
 

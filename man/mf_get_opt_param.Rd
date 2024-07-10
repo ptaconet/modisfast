@@ -11,7 +11,7 @@ mf_get_opt_param(collection, roi, credentials = NULL, verbose = TRUE)
 
 \item{roi}{object of class \code{sf}. mandatory. Area of region of interest. Must be a Simple feature collection with geometry type POLYGON, composed of one or several rows (i.e. one or several ROIs), and with at least two columns: 'id' (an identifier for the roi) and 'geom' (the geometry).}
 
-\item{credentials}{vector string of length 2 with username and password. optional.}
+\item{credentials}{vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.}
 
 \item{verbose}{boolean. optional. Verbose (default TRUE)}
 }
@@ -37,16 +37,13 @@ This will save much time, as internal parameters will be calculated only once.
 \examples{
 
 \dontrun{
-require(sf)
-require(purrr)
 
 # Login to Earthdata
-username <- "earthdata_un"
-password <- "earthdata_pw"
-log <- mf_login(credentials = c(username,password))
 
-# Get the optional parameters for the collection MOD11A1.061 and the roi :
-roi <- st_as_sf(data.frame(
+log <- mf_login(credentials = c("earthdata_un","earthdata_pw"))
+
+# Get the optional parameters for the collection MOD11A1.061 and the following roi :
+roi <- sf::st_as_sf(data.frame(
 id = "roi_test",
 geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
 wkt="geom",crs = 4326)

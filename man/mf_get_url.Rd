@@ -31,21 +31,22 @@ mf_get_url(
 
 \item{opt_param}{list of optional arguments. optional. (see details).}
 
-\item{credentials}{vector string of length 2 with username and password. optional.}
+\item{credentials}{vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.}
 
 \item{verbose}{boolean. optional. Verbose (default TRUE)}
 }
 \value{
-a data.frame with one row for each dataset to download and 4 columns  :
+a data.frame with one row for each dataset to download and 4 columns :
  \describe{
+ \item{id_roi}{Identifier of the ROI}
  \item{time_start}{Start Date/time for the dataset}
+ \item{collection}{Name of the collection}
  \item{name}{Indicative name for the dataset}
  \item{url}{https URL (OPeNDAP) of the dataset}
- \item{destfile}{Indicative destination file for the dataset}
  }
 }
 \description{
-This is the main function of the package. It enables to build the URL(s) of the spatiotemporal datacube to download, given a collection, variables, region and time range of interest.
+This is the main function of the package. It enables to build the OPeNDAP URL(s) of the spatiotemporal datacube to download, given a collection, variables, region and time range of interest.
 }
 \details{
 Argument \code{collection} : Collections available can be retrieved with the function \link{mf_list_collections}
@@ -56,56 +57,51 @@ Argument \code{time_range} : Can be provided either as i) a single date (e.g. \c
 
 Argument \code{single_netcdf} : for MODIS and VIIRS products from LP DAAC: download the data as a single file encompassing the whole time frame (TRUE) or as multiple files : one for each date, which is the behavious for the other collections - GPM and SMAP) (FALSE) ?
 
-Argument \code{opt_param} : list of parameters related to the queried OPeNDAP server and the roi. See \link{mf_get_opt_param} for additional details. The list can be retrieved outside the function with the function \link{mf_get_opt_param}. If not provided, it will be automatically calculated within the \link{mf_get_url} function. However, providing it fastens the processing time.
-It might be particularly useful to precompute and provide it in case the function is used within a loop for the same ROI.
+Argument \code{opt_param} : list of parameters related to the queried OPeNDAP server and the roi. See \link{mf_get_opt_param} for additional details. This list can be retrieved outside the function with the function \link{mf_get_opt_param}. If not provided, it will be automatically calculated within the \link{mf_get_url} function. However, providing it fastens the processing time.
+It might be particularly useful to precompute it with \link{mf_get_opt_param} in case the function is used within a loop for a single ROI.
 
-Argument \code{credentials} : Login to the OPeNDAP servers is required to use the function. mf_login can be done either within the function or outside with the function \link{mf_login}
+Argument \code{credentials} : Login to the OPeNDAP servers is required to use the function. Login can be done either within the function or outside with the function \link{mf_login}
 }
 \examples{
 
 \dontrun{
 
-require(sf)
-require(magrittr)
-require(terra)
-
-### First mf_login to EOSDIS Earthdata with username and password.
+### First login to EOSDIS Earthdata with username and password.
 # To create an account go to : https://urs.earthdata.nasa.gov/.
 username <- "earthdata_un"
 password <- "earthdata_pw"
 log <- mf_login(credentials = c(username,password))
 
-### Retrieve the URLs (OPeNDAP) to download the following datasets :
+### Get the URLs to download the following datasets :
 # MODIS Terra LST Daily (MOD11A1.061) (collection)
 # Day + Night bands (LST_Day_1km,LST_Night_1km) (variables)
 # over a 50km x 70km region of interest (roi)
 # for the time frame 2017-01-01 to 2017-01-30 (30 days) (time_range)
 
-roi <- st_as_sf(data.frame(
+roi <- sf::st_as_sf(data.frame(
 id = "roi_test",
 geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
 wkt="geom",crs = 4326)
 
-
 time_range = as.Date(c("2017-01-01","2017-01-30"))
 
-############################################################
 (urls_mod11a1 <- mf_get_url(
 collection = "MOD11A1.061",
 variables = c("LST_Day_1km","LST_Night_1km"),
 roi = roi,
 time_range = time_range
 ))
-############################################################
 
-### Download the data :
+## Download the data :
 
 res_dl <- mf_download_data(urls_mod11a1)
 
-## import as terra::SpatRast
+## Import as terra::SpatRast
 
-modis_ts <- mf_import_data(dirname(res_dl$destfile[1]), collection_source = "MODIS")
+modis_ts <- mf_import_data(dirname(res_dl$destfile[1]), collection = "MOD11A1.061")
 
-plot(modis_ts)
+## Plot the data
+
+terra::plot(modis_ts)
 }
 }

@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modisfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.0</span>
       </span>
     </div>
 
@@ -58,7 +58,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/get_started.html">1. Get started </a>
+      <a href="../articles/get_started.html">1. Get started</a>
     </li>
     <li>
       <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest at a glance</a>
@@ -94,9 +94,9 @@ interest at a glance</h1>
                         <h4 data-toc-skip class="author">Paul
 Taconet</h4>
             
-            <h4 data-toc-skip class="date">2024-06-06</h4>
+            <h4 data-toc-skip class="date">2024-07-09</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/ptaconet/modisfast/blob/HEAD/vignettes/modisfast2.Rmd" class="external-link"><code>vignettes/modisfast2.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ptaconet/modisfast/blob/HEAD/vignettes/articles/modisfast2.Rmd" class="external-link"><code>vignettes/articles/modisfast2.Rmd</code></a></small>
       <div class="hidden name"><code>modisfast2.Rmd</code></div>
 
     </div>
@@ -160,7 +160,7 @@ ROIs, as shown in the example below :</p>
 <span></span>
 <span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_login.html">mf_login</a></span><span class="op">(</span>credentials <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_un"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_pw"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Checking credentials...</span></span>
-<span><span class="co">#&gt; Successfull login to earthdata</span></span>
+<span><span class="co">#&gt; Successfull login to Earthdata</span></span>
 <span></span>
 <span><span class="va">urls_mod11a1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span>
 <span>        collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span>,</span>
@@ -170,14 +170,15 @@ ROIs, as shown in the example below :</p>
 <span><span class="co">#&gt; Building the URLs...</span></span>
 <span><span class="co">#&gt; OK</span></span>
 <span></span>
-<span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls_mod11a1</span>, path <span class="op">=</span> <span class="va">target_fold</span><span class="op">)</span></span>
+<span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls_mod11a1</span>, path <span class="op">=</span> <span class="va">target_fold</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 2  datasets in total :  0  already downloaded and  2  datasets to download</span></span>
 <span><span class="co">#&gt; Downloading the data...</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  env_data_2/Diebougou/MOD11A1.061 and env_data_2/Korhogo/MOD11A1.061</span></span>
+<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  env_data_2/data/Diebougou/MOD11A1.061 and env_data_2/data/Korhogo/MOD11A1.061 </span></span>
+<span><span class="co">#&gt; **To import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)**</span></span>
 <span></span>
-<span><span class="va">modis_ts_korhogo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"Korhogo"</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, collection_source <span class="op">=</span> <span class="st">"MODIS"</span><span class="op">)</span></span>
-<span><span class="va">modis_ts_diebougou</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"Diebougou"</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, collection_source <span class="op">=</span> <span class="st">"MODIS"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">modis_ts_korhogo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"data"</span>,<span class="st">"Korhogo"</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span><span class="op">)</span></span>
+<span><span class="va">modis_ts_diebougou</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"data"</span>,<span class="st">"Diebougou"</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="get-data-over-multiple-time-periods-of-interest-at-a-glance">Get data over multiple time periods of interest at a glance<a class="anchor" aria-label="anchor" href="#get-data-over-multiple-time-periods-of-interest-at-a-glance"></a>
@@ -198,7 +199,7 @@ ROI)</p>
 <span></span>
 <span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_login.html">mf_login</a></span><span class="op">(</span>credentials <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_un"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_pw"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Checking credentials...</span></span>
-<span><span class="co">#&gt; Successfull login to earthdata</span></span></code></pre></div>
+<span><span class="co">#&gt; Successfull login to Earthdata</span></span></code></pre></div>
 <p>Of course, we could loop over the <code><a href="../reference/mf_get_url.html">mf_get_url()</a></code> with the
 time ranges of interest, and get the data. However, the
 <code><a href="../reference/mf_get_url.html">mf_get_url()</a></code> function does query the OPeNDAP servers each
@@ -258,24 +259,31 @@ argument <code>opt_param</code> :</p>
 <p>Now, download and import the data in R :</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls_mod11a1</span>, path <span class="op">=</span> <span class="va">target_fold</span><span class="op">)</span></span>
+<span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls_mod11a1</span>, path <span class="op">=</span> <span class="va">target_fold</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 4  datasets in total :  0  already downloaded and  4  datasets to download</span></span>
 <span><span class="co">#&gt; Downloading the data...</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  env_data_2/Korhogo/MOD11A1.061</span></span>
+<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  env_data_2/data/Korhogo/MOD11A1.061 </span></span>
+<span><span class="co">#&gt; **To import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)**</span></span>
 <span></span>
-<span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"Korhogo"</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, collection_source <span class="op">=</span> <span class="st">"MODIS"</span><span class="op">)</span></span>
+<span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">res_dl</span><span class="op">$</span><span class="va">destfile</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">modis_ts</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>
-<span><span class="co">#&gt; dimensions  : 85, 50, 496  (nrow, ncol, nlyr)</span></span>
-<span><span class="co">#&gt; resolution  : 0.008417905, 0.008417905  (x, y)</span></span>
-<span><span class="co">#&gt; extent      : -5.818061, -5.397166, 8.830311, 9.545833  (xmin, xmax, ymin, ymax)</span></span>
-<span><span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326) </span></span>
-<span><span class="co">#&gt; source(s)   : memory</span></span>
+<span><span class="co">#&gt; dimensions  : 86, 51, 496  (nrow, ncol, nlyr)</span></span>
+<span><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></span>
+<span><span class="co">#&gt; extent      : -638908.2, -591650.3, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></span>
+<span><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs </span></span>
+<span><span class="co">#&gt; sources     : MOD11A1.061.2016001_2016031.h17v08.nc4:LST_Night_1km  (31 layers) </span></span>
+<span><span class="co">#&gt;               MOD11A1.061.2016001_2016031.h17v08.nc4:QC_Day  (31 layers) </span></span>
+<span><span class="co">#&gt;               MOD11A1.061.2016001_2016031.h17v08.nc4:QC_Night  (31 layers) </span></span>
+<span><span class="co">#&gt;               ... and 13 more source(s)</span></span>
+<span><span class="co">#&gt; varnames    : LST_Night_1km (Daily nighttime 1km grid Land-surface Temperature) </span></span>
+<span><span class="co">#&gt;               QC_Day (Quality control for daytime LST and emissivity) </span></span>
+<span><span class="co">#&gt;               QC_Night (Quality control for nighttime LST and emissivity) </span></span>
+<span><span class="co">#&gt;               ...</span></span>
 <span><span class="co">#&gt; names       : LST_N~1km_1, LST_N~1km_2, LST_N~1km_3, LST_N~1km_4, LST_N~1km_5, LST_N~1km_6, ... </span></span>
-<span><span class="co">#&gt; min values  :     285.640,         NaN,    288.2661,    285.8200,         NaN,         NaN, ... </span></span>
-<span><span class="co">#&gt; max values  :     295.341,         NaN,    294.6754,    290.4939,         NaN,         NaN, ... </span></span>
+<span><span class="co">#&gt; unit        :           K,           K,           K,           K,           K,           K, ... </span></span>
 <span><span class="co">#&gt; time (days) : 2016-01-01 to 2019-01-31</span></span></code></pre></div>
 </div>
   </div>

@@ -2,21 +2,21 @@
 % Please edit documentation in R/mf_list_variables.R
 \name{mf_list_variables}
 \alias{mf_list_variables}
-\title{Get informations related to the variables available for a given collection}
+\title{Get information for the variables (bands) available for a given collection}
 \usage{
 mf_list_variables(collection, credentials = NULL)
 }
 \arguments{
 \item{collection}{string. mandatory. Collection of interest (see details of \link{mf_get_url}).}
 
-\item{credentials}{vector string of length 2 with username and password. optional.}
+\item{credentials}{vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.}
 }
 \value{
-A data.frame with the available variables for the collection, and a set of related information for each variable.
+A data.frame with the variables available for the collection, and a set of related information for each variable.
 The variables marked as "extractable" in the column "extractable_w_opendapr" can be provided as input parameter \code{variables} of the function \link{mf_get_url}
 }
 \description{
-Get the variables available for a given collection
+Get the variables available for a given collection, along with a set of related information for each.
 }
 \examples{
 

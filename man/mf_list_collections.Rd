@@ -2,23 +2,23 @@
 % Please edit documentation in R/mf_list_collections.R
 \name{mf_list_collections}
 \alias{mf_list_collections}
-\title{Get the collections implemented in the package}
+\title{Get the collections available for download with the \code{modisfast} package}
 \usage{
 mf_list_collections()
 }
 \value{
-A data.frame with the available collections, and a set of related information. Main columns are :
+A data.frame with the collections available, and a set of related information for each one. Main columns are :
 \describe{
-  \item{collection}{Collections name}
+  \item{collection}{Collection short name}
   \item{source}{Data provider}
   \item{long_name}{Collection long name}
   \item{doi}{DOI of the collection}
-  \item{start_date}{Start date for the collection}
-  \item{url_opendapserver}{URL of the OPeNDAP server from which the data is extracted }
+  \item{start_date}{First available date for the collection}
+  \item{url_opendapserver}{URL of the OPeNDAP server of the data}
 }
 }
 \description{
-Get the collections implemented in the package and a set of related information
+Get the collections available for download using the package and a set of related information
 }
 \examples{
 

@@ -3,9 +3,9 @@
 #' @noRd
 .import_gpm <- function(dir_path,output_class,proj_epsg){
 
-  if(output_class=="SpatRaster"){
+  files <- list.files(dir_path, full.names = T)
 
-    files <- list.files(dir_path, full.names = T)
+  if(output_class=="SpatRaster"){
 
     rasts <- terra::rast(files)
 
@@ -22,9 +22,15 @@
 
 
   } else if(output_class=="stars"){
-    stop("stars output is not implemented yet for this collection")
-    #a<-stars::read_stars(paths) %>%
-    # st_set_crs(odap_coll_info$crs) %>% t() %>% flip("y")
+   stop("stars output is not implemented for this collection")
+    # rasts <- stars::read_stars(files) %>%
+    #   st_transform(4326) %>%
+    #   stars::t() %>%
+    #   stars::flip("y")
+
+    # if(!is.null(proj_epsg)){
+    #   rasts <- stars::st_transform(rasts,paste0("epsg:",proj_epsg))
+    # }
   }
 
   return(rasts)
@@ -37,9 +43,9 @@
 #' @noRd
 .import_modis_viirs <- function(dir_path,output_class,proj_epsg,vrt){
 
-  if(output_class=="SpatRaster"){
+  files <- list.files(dir_path, full.names = T)
 
-    files <- list.files(dir_path, full.names = T)
+  if(output_class=="SpatRaster"){
 
     if(length(files)>1 & length(unique(substr(files,nchar(files)-9,nchar(files)-4)))>1 ){ # if there are multiple files from differents tiles, we need to merge them
 
@@ -65,6 +71,7 @@
 
   } else if (output_class=="stars"){
     stop("stars output is not implemented yet for this collection")
+
   }
 
   return(rasts)

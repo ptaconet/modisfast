@@ -124,7 +124,7 @@ res_dl <- mf_download_data(urls)
 
 r <- mf_import_data(
   path = dirname(res_dl$destfile[1]),
-  collection_source = "MODIS", 
+  collection = collection, 
   proj_epsg = 4326
   )
 
@@ -138,129 +138,6 @@ terra::plot(r)
 et voilà ! 
 
 Want more examples of use of `modisfast` ? **Have a look at the [`vignette("get_started")`](https://ptaconet.github.io/modisfast/articles/get_started.html) to get started with a simple example, and see the [`vignette("modisfast2")`](https://ptaconet.github.io/modisfast/articles/modisfast2.html) for a more advanced workflow !**
-
-<!--
-## Example {#example}
-Let's say we want to download over the 50 km x 70 km wide region of interest located in Northern Ivory Coast (mapped above):
-- a 30 days-long time series of [MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid](https://dx.doi.org/10.5067/MODIS/MOD11A1.006) (collection="MOD11A1.006") ;
-- the same 30 days-long times series of [GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree](https://doi.org/10.5067/GPM/IMERGDF/DAY/06) (collection="GPM_3IMERGDF.06")
-<details><summary>Map of the region of interest (click to expand)</summary>
-<p>
-```{r plot_roi, eval = F, message=F,echo=F, fig.align = 'left'}
-require(tmap)
-require(tmaptools)
-roi <- sf::st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326)
-bbox <- sf::st_bbox(roi)
-bbox[1] <- bbox[1]-3
-bbox[2] <- bbox[2]-5
-bbox[3] <- bbox[3]+3
-bbox[4] <- bbox[4]+1
-bbox <- sf::st_as_sfc(bbox) %>% sf::st_sf()
-tmap_mode("plot")
-bg <- read_osm(bbox, ext=1.1, type="osm") ##  type="osm" "stamen-terrain" "bing"
-tm_shape(bg) + tm_rgb() + tm_shape(roi)  + tm_polygons(col = "red", alpha = 0.4)
-```
-</p>
-</p>
-</details>
-We prepare the script : load the packages and login to EOSDIS Earthdata with our credentials (to create an account go to : https://urs.earthdata.nasa.gov/) .
-```{r example_prepare, eval = F, message=F}
-# Load the packages
-require(modisfast)
-require(sf)
-# Define ROI and time range of interest
-roi <- st_as_sf(data.frame(geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326)
-time_range <- as.Date(c("2017-01-01","2017-01-30"))
-# Login to Earthdata servers with username and password. To create an account go to : https://urs.earthdata.nasa.gov/.
-# Here we have stored our credentials in local environment variables
-username <- Sys.getenv("earthdata_un") 
-password <- Sys.getenv("earthdata_pw")
-log <- mf_login(credentials = c(username,password), source = "earthdata")
-```
-Download the data in two steps : 
-1. Get the URLs with the function `mf_get_url()`;
-2. Download the data with the function `mf_download_data()`.
-Let's also see how much the downloaded files weight.
-```{r example_modis, eval = F, message=F,warning=F}
-## Get the URLs for MOD11A1.006
-urls_mod11a1 <- mf_get_url(
-  collection = "MOD11A1.006",
-  roi = roi,
-  time_range = time_range
- )
-## Get the URLs for GPM_3IMERGDF.06
-urls_gpm <- mf_get_url(
-  collection = "GPM_3IMERGDF.06",
-  roi = roi,
-  time_range = time_range
- )
-print(str(urls_mod11a1))
-print(str(urls_gpm))
-## Download the data. Destination file for each dataset is specified in the column "destfile" of the data.frames urls_mod11a1 and urls_gpm
-df_to_dl <- rbind(urls_mod11a1,urls_gpm)
-res_dl <- mf_download_data(df_to_dl,source="earthdata",parallel = TRUE)
-print(str(res_dl))
-(tot_weight <- sum(res_dl$fileSize)/1000000)
-#`r round(tot_weight,1)` Mb in total !
-```
-We could also have subset the bands to download, using the parameter `variables` of the function `mf_get_url()`.
-To further import the data in R, have a look at the section [Important note regarding the further import of the data in R](#important-note-regarding-the-further-import-of-the-data-in-r) ! 
-Simple or advanced data download and import workflows are provided respectively in the vignettes `vignette("opendapr1")` and `vignette("opendapr2")`.
-## Important note regarding the further import of the data in R {#important-note-import}
-Various packages and related classes can be used to read the data downloaded through OPeNDAP. If `raster` is surely the most famous class for raster objects, many packages facilitate the use of spatiotemporal data cubes in formats such as those proposed through modisfast (e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as a `stars` object from the excellent [`stars`](https://cran.r-project.org/package=stars) package for data cubes manipulation. All the data can also be imported as `ncdf4` objects using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4) package, or `RasterLayer` of the [`raster`](https://cran.r-project.org/package=raster) package.
-In any case, care must be taken when importing data that was downloaded through the OPeNDAP data providers servers. Depending on the collection, some "issues" were raised. These issues are independant from modisfast : they result most of time of a kind of lack of full implementation of the OPeNDAP framework by the data providers. These issues are :
-- for MODIS and VNP collections : CRS has to be provided
-- for GPM collections : CRS has to be provided + data have to be flipped
-- for SMAP collections : CRS + bounding coordinates of the data have to be provided
-These issues can easily be dealt at the import phase in R. The functions below includes the processings that have to be done at the data import phase in order to open the data as `raster` objects. (argument `destfiles` is the path to a dataset downloaded with modisfast - output of `mf_get_url()$destfile` - and `variable` is the name of a variable to import).
-```{r function_to_import_modis_vnp, eval=F }
-require(raster)
-require(purrr)
-## Function to import MODIS or VIIRS products as RasterLayer object. 
-# In case the ROI covers one single MODIS tile :
-.import_modis_onetile <- function(destfiles,variable){
-  rasts <- destfiles %>%
-    raster::brick(.,varname=variable,crs="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")
-  return(rasts)
-}
-# In case the ROI covers multiple MODIS tiles :
-.import_modis_moretiles <- function(destfiles,variable){
-  rasts <- destfiles %>%
-    purrr::map(~raster::brick(.,varname=variable,crs="+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")) %>%
-    do.call(merge,.)
-  return(rasts)
-}
-```
-```{r function_to_import_gpm, eval=F }
-require(raster)
-require(purrr)
-## Function to import GPM products as RasterLayer object
-.import_gpm <- function(destfiles,variable){
-  rasts <- destfiles %>%
-    purrr::map(~raster(., varname = variable,crs = "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 ")) %>%
-    raster::brick() %>%
-    raster::t() %>%
-    raster::flip("y") %>%
-    raster::flip("x")
-  return(rasts)
-}
-```
-```{r function_to_import_smap, eval=F }
-require(raster)
-require(purrr)
-require(ncdf4)
-## Function to import SMAP products as RasterLayer object
-smap_sp_bound <- modisfast::mf_get_opt_param(roi = roi, collection = "SMAP/SPL3SMP_E.003")$roiSpatialBound$`1`
-.import_smap <- function(destfiles,variable,smap_sp_bound){
- rasts <- destfiles %>%
-   purrr::map(~ncdf4::nc_open(.)) %>%
-   purrr::map(~ncdf4::ncvar_get(., "Soil_Moisture_Retrieval_Data_AM_soil_moisture")) %>%
-   purrr::map(~raster(t(.), ymn=smap_sp_bound[1], ymx=smap_sp_bound[2], xmn=smap_sp_bound[3], xmx=smap_sp_bound[4], crs="+proj=cea +lon_0=0 +lat_ts=30 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")) %>%  # EPSG : 6933
-   raster::brick()
-  return(rasts)
-}
-```
--->
 
 <!--
 ## Objectives

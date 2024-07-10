@@ -27,16 +27,13 @@
 #' @examples
 #'
 #' \dontrun{
-#' require(sf)
-#' require(purrr)
 #'
 #' # Login to Earthdata
-#' username <- "earthdata_un"
-#' password <- "earthdata_pw"
-#' log <- mf_login(credentials = c(username,password))
 #'
-#' # Get the optional parameters for the collection MOD11A1.061 and the roi :
-#' roi <- st_as_sf(data.frame(
+#' log <- mf_login(credentials = c("earthdata_un","earthdata_pw"))
+#'
+#' # Get the optional parameters for the collection MOD11A1.061 and the following roi :
+#' roi <- sf::st_as_sf(data.frame(
 #' id = "roi_test",
 #' geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
 #' wkt="geom",crs = 4326)

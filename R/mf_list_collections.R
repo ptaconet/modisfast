@@ -1,15 +1,15 @@
 #' @name mf_list_collections
-#' @title Get the collections implemented in the package
-#' @description Get the collections implemented in the package and a set of related information
+#' @title Get the collections available for download with the \code{modisfast} package
+#' @description Get the collections available for download using the package and a set of related information
 #'
-#' @return A data.frame with the available collections, and a set of related information. Main columns are :
+#' @return A data.frame with the collections available, and a set of related information for each one. Main columns are :
 #' \describe{
-#'   \item{collection}{Collections name}
+#'   \item{collection}{Collection short name}
 #'   \item{source}{Data provider}
 #'   \item{long_name}{Collection long name}
 #'   \item{doi}{DOI of the collection}
-#'   \item{start_date}{Start date for the collection}
-#'   \item{url_opendapserver}{URL of the OPeNDAP server from which the data is extracted }
+#'   \item{start_date}{First available date for the collection}
+#'   \item{url_opendapserver}{URL of the OPeNDAP server of the data}
 #'}
 #'
 #' @export

@@ -7,7 +7,7 @@
 mf_login(credentials, verbose = TRUE)
 }
 \arguments{
-\item{credentials}{vector string of length 2 with username and password. optional.}
+\item{credentials}{vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.}
 
 \item{verbose}{boolean. optional. Verbose (default TRUE)}
 }
@@ -18,7 +18,7 @@ None.
 Login to EOSDIS EarthData before querying servers and download data
 }
 \details{
-Create an account to EOSDIS EarthData here : \url{https://urs.earthdata.nasa.gov/}.
+An EOSDIS EarthDataaccount is mandatory to download the data. You can create a free account here : \url{https://urs.earthdata.nasa.gov/}.
 }
 \examples{
 

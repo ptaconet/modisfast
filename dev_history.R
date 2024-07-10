@@ -100,6 +100,10 @@ devtools::install()
 
 ## To build a website with home and vignettes
 usethis::use_package_doc()
+
+## To build a website with home and articles (not vignettes)
+pkgdown::build_articles()
+
 #usethis::use_tibble()
 devtools::document()
 pkgdown::build_site()

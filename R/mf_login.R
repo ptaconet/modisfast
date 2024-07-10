@@ -9,7 +9,7 @@
 #'
 #' @details
 #'
-#' Create an account to EOSDIS EarthData here : \url{https://urs.earthdata.nasa.gov/}.
+#' An EOSDIS EarthDataaccount is mandatory to download the data. You can create a free account here : \url{https://urs.earthdata.nasa.gov/}.
 #'
 #' @examples
 #'

@@ -8,10 +8,10 @@
 #' @inheritParams mf_get_url
 #' @inheritParams mf_login
 #' @param df_to_dl data.frame. Urls and destination files of dataset to download. Typically output of \link{mf_get_url}. See Details for the structure
-#' @param path string. Target folder for the data to download. Default : \code{tempfile()}
+#' @param path string. Target folder for the data to download. Default : temporary folder.
 #' @param parallel boolean. Parallelize the download ? Default to FALSE
 #' @param num_workers integer. Number of workers in case of parallel download. Default to number of workers available in the machine minus one.
-#' @param min_filesize integer. minimum file size expected (in bites) for one file downloaded. If files downloaded are less that this value, the files will be downloaded again. Default 5000.
+#' @param min_filesize integer. Minimum file size expected (in bites) for one file downloaded. If files downloaded are less that this value, the files will be downloaded again. Default 5000.
 #'
 #' @return a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional columns are :
 #' \describe{
@@ -22,22 +22,58 @@
 #'
 #' @details
 #'
-#' Parameter \code{df_to_dl} must a data.frame with the following minimal structure :
+#' Parameter \code{df_to_dl} must be a data.frame with the following minimal structure :
 #' \describe{
 #' \item{id_roi}{An id for the ROI (character string)}
 #' \item{collection}{Collection (character string)}
 #' \item{name}{}
-#' \item{url}{URL of the source file (character string)}
+#' \item{url}{URL of the file to download (character string)}
 #' }
 #'
-#'
 #' @import dplyr parallel httr
-#' @importFrom utils write.csv
+#' @importFrom utils write.csv URLdecode
 #' @export
 #'
+#' @examples
 #'
+#' \dontrun{
+#'
+#' ### Login to EOSDIS Earthdata with your username and password
+#' log <- mf_login(credentials = c("earthdata_un","earthdata_pw"))
+#'
+#' ### Set-up parameters of interest
+#' coll <- "MOD11A1.061"
+#'
+#' bands <- c("LST_Day_1km","LST_Night_1km")
+#'
+#' time_range <- as.Date(c("2017-01-01","2017-01-30"))
+#'
+#' roi <- sf::st_as_sf(data.frame(
+#' id = "roi_test",
+#' geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
+#' wkt="geom",crs = 4326)
+#'
+#' ### Get the URLs of the data
+#' (urls_mod11a1 <- mf_get_url(
+#' collection = coll,
+#' variables = bands,
+#' roi = roi,
+#' time_range = time_range
+#' ))
+#'
+#' ### Download the data
+#' res_dl <- mf_download_data(urls_mod11a1)
+#'
+#' ### Import the data as terra::SpatRast
+#' modis_ts <- mf_import_data(dirname(res_dl$destfile[1]), collection = coll)
+#'
+#' ### Plot the data
+#' terra::plot(modis_ts)
+#'
+#'}
 
-mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,num_workers=parallel::detectCores()-1,credentials=NULL,verbose=TRUE,min_filesize=5000){
+
+mf_download_data<-function(df_to_dl,path=tempfile("modisfast_"),parallel=FALSE,num_workers=parallel::detectCores()-1,credentials=NULL,verbose=TRUE,min_filesize=5000){
 
   fileSize <- destfile <- fileDl <- folders <- readme_files <- source <-  NULL
 
@@ -140,9 +176,13 @@ mf_download_data<-function(df_to_dl,path=tempfile("tmp"),parallel=TRUE,num_worke
   }
 
   # write readme
-  sentence <- "Use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars() to import the data in R ! More info at help(mf_import_data)"
+  sentence <- paste0("Query performed on the ",Sys.time(),"
+Use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars() to import the data in R ! More info at help(mf_import_data)
+See the file Summary_downloaded_data.csv for more information on the data downloaded"
+  )
   writeLines(sentence, file.path(path,"Readme.txt"))
   # write csv dataset
+  data_dl$url <- utils::URLdecode(data_dl$url)
   write.csv(data_dl, file.path(path,"Summary_downloaded_data.csv"), row.names = F)
 
   return(data_dl)

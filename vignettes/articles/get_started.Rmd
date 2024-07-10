@@ -1,10 +1,10 @@
 ---
-title: "1. Get started "
+title: "1. Get started"
 author: "Paul Taconet"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Get started}
+  %\VignetteIndexEntry{1. Get started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 format:
@@ -174,11 +174,11 @@ These issues can easily be dealt at the import phase in R using the function `mf
 
 ```{r import_example, message=F, eval=NOT_CRAN}
 # import MOD11A1.061
-modis_ts <- mf_import_data(path = file.path(target_fold,"Korhogo","MOD13A3.061"), 
-                           collection_source = "MODIS")
+modis_ts <- mf_import_data(path = file.path(target_fold,"data","Korhogo","MOD13A3.061"), 
+                           collection = "MOD13A3.061")
 # import GPM
-gpm_ts <- mf_import_data(path = file.path(target_fold,"Korhogo","GPM_3IMERGM.07"), 
-                         collection_source = "GPM")
+gpm_ts <- mf_import_data(path = file.path(target_fold,"data","Korhogo","GPM_3IMERGM.07"), 
+                         collection = "GPM_3IMERGM.07")
 
 modis_ts
 gpm_ts

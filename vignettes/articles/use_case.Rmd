@@ -4,7 +4,7 @@ author: "Paul Taconet"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Full use case}
+  %\VignetteIndexEntry{3. Full use case}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 format:
@@ -129,8 +129,8 @@ urls_gpm <- mf_get_url(
   time_range = time_range )
 
 
-res_dl_modis <- mf_download_data(urls_mod11a2, path = "data_use_case")
-res_dl_gpm <- mf_download_data(urls_gpm, path = "data_use_case")
+res_dl_modis <- mf_download_data(urls_mod11a2, path = "data_use_case", parallel = TRUE)
+res_dl_gpm <- mf_download_data(urls_gpm, path = "data_use_case", parallel = TRUE)
 
 ```
 
@@ -139,10 +139,10 @@ And then we import it in R :
 ```{r eval=NOT_CRAN}
 # import MODIS
 modis_ts <- mf_import_data(path = dirname(res_dl_modis$destfile[1]), 
-                           collection_source = "MODIS")
+                           collection = "MOD11A2.061")
 # import GPM
 gpm_ts <- mf_import_data(path = dirname(res_dl_gpm$destfile[1]), 
-                         collection_source = "GPM")
+                         collection = "GPM_3IMERGDF.07")
 
 plot(modis_ts)
 plot(gpm_ts)

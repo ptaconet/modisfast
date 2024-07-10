@@ -4,11 +4,11 @@
 \name{modisfast-package}
 \alias{modisfast}
 \alias{modisfast-package}
-\title{modisfast: Fast and efficient access to MODIS data in R (and several other Earth datacubes sources)}
+\title{modisfast: Fast and Efficient Access to 'MODIS' Earth Observation Data}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Provides functions to download MODIS and several other Earth datacubes sources in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally) through the OPeNDAP framework.
+Programmatic interface to several NASA Earth Observation 'OPeNDAP' servers (Open-source Project for a Network Data Access Protocol) (\url{https://www.opendap.org/}). Allows for easy downloads of 'MODIS' subsets, as well as other Earth Observation datacubes, in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally).
 }
 \seealso{
 Useful links:
@@ -19,7 +19,13 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Paul Taconet \email{paul.taconet@ird.fr} (\href{https://orcid.org/0000-0001-7429-7204}{ORCID})
+\strong{Maintainer}: Paul Taconet \email{paul.taconet@gmail.com} (\href{https://orcid.org/0000-0001-7429-7204}{ORCID}) [copyright holder]
+
+Other contributors:
+\itemize{
+  \item Nicolas Moiroux \email{nicolas.moiroux@ird.fr} (\href{https://orcid.org/0000-0001-6755-6167}{ORCID}) [funder]
+  \item French Research Institute for Sustainable Development, IRD [funder]
+}
 
 }
 \keyword{internal}
