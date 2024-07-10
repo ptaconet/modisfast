@@ -35,3 +35,4 @@
 ^vignettes/env_data$
 ^vignettes/articles$
 ^.github$
+^\.github$
