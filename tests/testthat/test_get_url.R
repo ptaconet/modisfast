@@ -22,7 +22,7 @@ roi <- st_as_sf(data.frame(id = "Korhogo",geom="POLYGON ((-5.82 9.54, -5.42 9.55
 ## test that errors are working
 test_that("test if errors are sent back", {
   skip_on_cran()
-  skip_on_travis()
+  skip_on_ci()
   log <- mf_login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
   # wrong type for roi
   expect_error(mf_get_url(collection = "MOD11A1.061", roi = "not_a_sf_object", time_range = as.Date(c("2017-01-01","2017-02-01"))),"Argument roi must be an object of class sf or sfc with POLYGON-type feature geometry and at least two columns : 'id' and a geometry column that must not be NULL or NA")
@@ -65,7 +65,7 @@ for (i in 1:length(collection_tested)){
 
   test_that(paste0(collection_tested[i]," is working"), {
     skip_on_cran()
-    skip_on_travis()
+    skip_on_ci()
     log <- mf_login(c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
 
     opendap_urls <- mf_get_url(collection = collection_tested[i],
