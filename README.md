@@ -8,7 +8,7 @@
 
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3)
 [![Travis build
-status](https://travis-ci.org/ptaconet/modisfast.svg?branch=master)](https://travis-ci.org/ptaconet/modisfast)
+status](https://travis-ci.org/ptaconet/modisfast.svg?branch=master)](https://app.travis-ci.com/ptaconet/modisfast)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/modisfast)](https://cran.r-project.org/package=modisfast)
 [![Github_Status_Badge](https://img.shields.io/badge/Github-1.0.0-blue.svg)](https://github.com/ptaconet/modisfast)
 [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/ptaconet/modisfast/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast)
@@ -57,7 +57,7 @@ downloading chunks of remote sensing data :
 | Package                                                  |                   Data                    | Temporal subsetting\* | Spatial subsetting\* | Dimensional subsetting\* |       Speed        |
 |:---------------------------------------------------------|:-----------------------------------------:|:---------------------:|:--------------------:|:------------------------:|:------------------:|
 | [`modisfast`](https://github.com/ptaconet/modisfast)     |             MODIS, VIIRS, GPM             |  :white_check_mark:   |  :white_check_mark:  |    :white_check_mark:    | :white_check_mark: |
-| [`MODIS`](https://github.com/MatMatt/MODIS)              |                   MODIS                   |  :white_check_mark:   |         :x:          |           :x:            | :white_check_mark: |
+| [`MODIS`](https://github.com/fdetsch/MODIS)              |                   MODIS                   |  :white_check_mark:   |         :x:          |           :x:            | :white_check_mark: |
 | [`MODIStsp`](https://github.com/ropensci/MODIStsp)       |                   MODIS                   |  :white_check_mark:   |         :x:          |    :white_check_mark:    | :white_check_mark: |
 | [`MODISTools`](https://github.com/ropensci/MODISTools)   | MODIS and VIIRS (but not all collections) |  :white_check_mark:   |  :white_check_mark:  |    :white_check_mark:    | :white_check_mark: |
 | [`appeears`](https://github.com/bluegreen-labs/appeears) |       MODIS, VIIRS, and many others       |  :white_check_mark:   |  :white_check_mark:  |    :white_check_mark:    |        :x:         |
@@ -183,10 +183,10 @@ extracted from the following meta-collections :
 In addition, `modisfast` supports download of the following
 satellite-derived environmental data :
 
-- [Global Precipitation Measurement](https://pmm.nasa.gov/GPM) (GPM)
-  made available by the [NASA / JAXA GES
+- [Global Precipitation Measurement](https://gpm.nasa.gov/missions/GPM)
+  (GPM) made available by the [NASA / JAXA GES
   DISC](https://disc.gsfc.nasa.gov/) (:arrow_right: [source OPeNDAP
-  server](https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3)).
+  server](https://gpm1.gesdisc.eosdis.nasa.gov/opendap/hyrax/GPM_L3/)).
 
 Details of each product available for download are provided in the
 tables above or through the function `mf_list_collections()`. Want more
@@ -1890,7 +1890,7 @@ Let’s take an example to understand.
 
 The following URL :arrow_down:
 
-<https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.061/h17v08.ncml.nc4?MODIS_Grid_8Day_1km_LST_eos_cf_projection,LST_Day_1km%5B775:793>\]\[55:140\]\[512:560\],LST_Night_1km\[775:793\]\[55:140\]\[512:560\],QC_Day\[775:793\]\[55:140\]\[512:560\],QC_Night\[775:793\]\[55:140\]\[512:560\],time\[775:793\],YDim\[55:140\],XDim\[512:560\]
+https<nolink>://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.061/h17v08.ncml.nc4?MODIS_Grid_8Day_1km_LST_eos_cf_projection,LST_Day_1km\[775:793\]\[55:140\]\[512:560\],LST_Night_1km\[775:793\]\[55:140\]\[512:560\],QC_Day\[775:793\]\[55:140\]\[512:560\],QC_Night\[775:793\]\[55:140\]\[512:560\],time\[775:793\],YDim\[55:140\],XDim\[512:560\]
 
 provides a link to download the
 [MOD11A2.061](https://doi.org/10.5067/MODIS/MOD11A2.061) data in netCDF,
@@ -1908,15 +1908,15 @@ spatial, temporal and dimensional filters (R objects) provided by the
 user through the function `mf_get_url()` into the appropriate OPeNDAP
 URL(s). Subsequently, the function `mf_download_data()` allows for
 downloading the data using the
-[`httr`](https://cran.r-project.org/web/packages/httr/index.html) and
-`parallel` packages.
+[`httr`](https://cran.r-project.org/package=httr) and `parallel`
+packages.
 
 ## Acknowledgments
 
 We thank NASA and its partners for making all their Earth science data
 freely available, and implementing open data access protocols such as
 OPeNDAP. `modisfast` heavily builds on top of the OPeNDAP, so we thank
-the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about) for
+the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about/) for
 developing the eponym tool in an open and collaborative way.
 
 We also thank the contributors that have tested the package, reviewed
@@ -1925,9 +1925,8 @@ the documentation and brought valuable feedbacks to improve the package
 Taconet, [Nicolas Moiroux](https://github.com/Nmoiroux)
 
 The initial development and first release of this package were financed
-by the [MIVEGEC](https://www.mivegec.ird.fr/en/) unit of the [French
-Research Institute for Sustainable Development](https://en.ird.fr/), as
-part of the REACT project.
+by the MIVEGEC unit of the [French Research Institute for Sustainable
+Development](https://en.ird.fr/), as part of the REACT project.
 
 By enabling to download subsets of data cubes, `modisfast` facilites the
 access to Earth science data for R users in places where internet
