@@ -10,7 +10,7 @@
 #' \describe{
 #'  \item{roiSpatialIndexBound}{OPeNDAP indices for the spatial coordinates of the bounding box of the ROI (minLat, maxLat, minLon, maxLon)}
 #'  \item{availableVariables}{Variables available for the collection of interest}
-#'  \item{roiSpatialBound }{The spatial coordinates of the bounding box of the ROI expressed in the CRS of the collection}
+#'  \item{roiSpatialBound}{The spatial coordinates of the bounding box of the ROI expressed in the CRS of the collection}
 #'  \item{OpenDAPXVector}{The X (longitude) vector}
 #'  \item{OpenDAPYVector}{The Y (longitude) vector}
 #'  \item{OpenDAPtimeVector}{The time vector, or NULL if the collection does not have a time vector}

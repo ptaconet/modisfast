@@ -1,7 +1,7 @@
 #' @name mf_get_url
 #' @aliases mf_get_url
 #' @title Build the URL(s) of the data to download
-#' @description This is the main function of the package. It enables to build the OPeNDAP URL(s) of the spatiotemporal datacube to download, given a collection, variables, region and time range of interest.
+#' @description Builds the OPeNDAP URL(s) of the spatiotemporal datacube to download, given a collection, variables, region and time range of interest.
 #'
 #' @param collection string. mandatory. Collection of interest (see details of \link{mf_get_url}).
 #' @param variables string vector. optional. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted (see details of \link{mf_get_url}).
@@ -13,13 +13,13 @@
 #' @param credentials vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.
 #' @param verbose boolean. optional. Verbose (default TRUE)
 #'
-#' @return a data.frame with one row for each dataset to download and 4 columns :
+#' @return a data.frame with one row for each dataset to download and 5 columns :
 #'  \describe{
 #'  \item{id_roi}{Identifier of the ROI}
 #'  \item{time_start}{Start Date/time for the dataset}
 #'  \item{collection}{Name of the collection}
 #'  \item{name}{Indicative name for the dataset}
-#'  \item{url}{https URL (OPeNDAP) of the dataset}
+#'  \item{url}{https OPeNDAP URL of the dataset}
 #'  }
 #'
 #' @details

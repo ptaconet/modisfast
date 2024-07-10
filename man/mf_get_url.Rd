@@ -36,17 +36,17 @@ mf_get_url(
 \item{verbose}{boolean. optional. Verbose (default TRUE)}
 }
 \value{
-a data.frame with one row for each dataset to download and 4 columns :
+a data.frame with one row for each dataset to download and 5 columns :
  \describe{
  \item{id_roi}{Identifier of the ROI}
  \item{time_start}{Start Date/time for the dataset}
  \item{collection}{Name of the collection}
  \item{name}{Indicative name for the dataset}
- \item{url}{https URL (OPeNDAP) of the dataset}
+ \item{url}{https OPeNDAP URL of the dataset}
  }
 }
 \description{
-This is the main function of the package. It enables to build the OPeNDAP URL(s) of the spatiotemporal datacube to download, given a collection, variables, region and time range of interest.
+Builds the OPeNDAP URL(s) of the spatiotemporal datacube to download, given a collection, variables, region and time range of interest.
 }
 \details{
 Argument \code{collection} : Collections available can be retrieved with the function \link{mf_list_collections}

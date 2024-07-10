@@ -22,7 +22,7 @@ renvoyer erreur ou warning si le fichier n'existe pas
 <!-- ⚠️ Package still under development ! -->
 
 <!--
-R package to access various spatiotemporal Earth science data collections in R using the [OPeNDAP framework](https://www.opendap.org/about). Currently implemented data collections are [MODIS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/), [VIIRS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/), [GPM](https://pmm.nasa.gov/GPM) and [SMAP](https://smap.jpl.nasa.gov/)). 
+R package to access various spatiotemporal Earth science data collections in R using the [OPeNDAP framework](https://www.opendap.org/about/). Currently implemented data collections are [MODIS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/), [VIIRS](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/), [GPM](https://pmm.nasa.gov/GPM) and [SMAP](https://smap.jpl.nasa.gov/)). 
 Opendap (*Open-source Project for a Network Data Access Protocol*) is a data access protocol that enables to subset the data  - spatially, temporally, etc. - directly at the downloading phase. Filters are provided directly within a http url. For example the following URL : 
 https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid_Daily_1km_LST_eos_cf_projection,LST_Day_1km[6093:6122][55:140][512:560],LST_Night_1km[6093:6122][55:140][512:560],QC_Day[6093:6122][55:140][512:560],QC_Night[6093:6122][55:140][512:560],time[6093:6122],YDim[55:140],XDim[512:560]
 provides the MOD11A1.006 (MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid V006) data in netCDF, subsetted for bands LST_Day_1km, LST_Night_1km, QC_Day, QC_Night, for each day between the 2017-01-01 and the 2017-01-30, and within the following bounding box (lon/lat): -5.41 8.84, -5.82 9.54.
@@ -39,7 +39,7 @@ observations, as well as other widely-used satellite-derived
 environmental data (e.g. Global Precipitation Measurement Mission).
 
 **`modisfast`** uses the abilities offered by the [OPeNDAP
-framework](https://www.opendap.org/about) (*Open-source Project for a
+framework](https://www.opendap.org/about/) (*Open-source Project for a
 Network Data Access Protocol*) to download a subset of Earth science
 data cube, along spatial, temporal or any other data dimension (depth,
 …). This way, it reduces downloading time and disk usage to their
@@ -157,7 +157,7 @@ modisfast provides an entry point to some specific OPeNDAP servers (e.g. MODIS, 
 Apart from these performance aspects, ethical considerations have driven the development of this package :
 * **Facilitating the access to Earth science data for R users in places where internet connection is slow or expensive** : Earth science products are generally huge files that can be quite difficult to download in places with slow internet connection, even more if large time series are needed. By enabling to download strictly the data that is needed, the products become more accessible in those places;
 * **Caring about the environmental digital impact of our research work** : Downloading data has an impact on environment and to some extent contributes to climate change. By downloading only the data that is need (rather than e.g a whole MODIS tile, or a global SMAP or GPM dataset) we somehow promote digital sobriety. 
-* **Supporting the open-source-software movement** : The OPeNDAP is developed and advanced openly and collaboratively, by the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about) This open, powerfull and standard data access protocol is more and more used, by major Earth science data providers (e.g. NASA or NOAA). Using OPeNDAP means supporting methods for data access protocols that are open, build collaboratively and shared.
+* **Supporting the open-source-software movement** : The OPeNDAP is developed and advanced openly and collaboratively, by the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about/) This open, powerfull and standard data access protocol is more and more used, by major Earth science data providers (e.g. NASA or NOAA). Using OPeNDAP means supporting methods for data access protocols that are open, build collaboratively and shared.
 -->
 <!--
 ## Citation
@@ -166,7 +166,7 @@ We thank in advance people that use `modisfast` for citing it in their work / pu
 
 ## Collections available in modisfast
 
-Currently `modisfast` supports download of 78 data collections,
+Currently `modisfast` supports download of 77 data collections,
 extracted from the following meta-collections :
 
 - [MODIS land
@@ -749,25 +749,6 @@ Primary Productivity
 </td>
 <td style="text-align:left;">
 <https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A2HGF.061/contents.html>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-MOD17A3.055
-</td>
-<td style="text-align:left;">
-MODIS/Terra Net Primary Production Yearly L4 Global 1 km SIN Grid
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Primary Productivity
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-<https://opendap.cr.usgs.gov/opendap/hyrax/MOD17A3.055/contents.html>
 </td>
 </tr>
 <tr>
@@ -1850,7 +1831,7 @@ series and points.
 There are other R packages available for accessing MODIS data, which may
 be more suitable if your requirements differ. These include :
 
-- [`MODIS`](https://github.com/MatMatt/MODIS)
+- [`MODIS`](https://github.com/fdetsch/MODIS)
 - [`MODIStsp`](https://github.com/ropensci/MODIStsp)
 - [`MODIStools`](https://github.com/ropensci/MODIStools)
 - [`appeears`](https://github.com/bluegreen-labs/appeears)
@@ -1934,6 +1915,6 @@ connection is slow or expensive and promotes digital sobriety for our
 research work.
 
 The OPeNDAP, over which the package builds, is a project developed by
-the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about) and
+the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about/) and
 advanced openly and collaboratively. By using this data access protocol,
 `modisfast` support the open-source-software movement.
