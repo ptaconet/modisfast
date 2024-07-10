@@ -36,3 +36,4 @@
 ^vignettes/articles$
 ^.github$
 ^\.github$
+^cran-comments\.md$
