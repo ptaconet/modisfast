@@ -21,7 +21,6 @@ knitr::opts_chunk$set(
   warning = FALSE,
   purl = NOT_CRAN
   )
-library(emo)
 ```
 
 ```{r setup, message=F}
@@ -98,7 +97,7 @@ unlink(target_fold, recursive = T)
 
 With the function `mf_get_url()`, we get the https URLs for our collections of interest (*MOD11A1.061* and *GPM_3IMERGDF.07*) given our ROI and time frame. 
 
-`r emo::ji("right arrow")` For each collection, we can select a subset only of variables (sometimes called "dimensions", or "bands") that are of interest for us, through the parameter `variables`. By default, this parameter is set to `NULL`, which means that all the available variables for the specified collection are included. To get the variables available for a given collection along with information for each of them (description, etc.), use the function `mf_list_variables()`.
+:arrow_right: For each collection, we can select a subset only of variables (sometimes called "dimensions", or "bands") that are of interest for us, through the parameter `variables`. By default, this parameter is set to `NULL`, which means that all the available variables for the specified collection are included. To get the variables available for a given collection along with information for each of them (description, etc.), use the function `mf_list_variables()`.
 
 <!-- `r emo::ji("right arrow")` **Note on the use of the parameter `variables` of the function `mf_get_url()` :** -->
 
@@ -159,7 +158,7 @@ print(str(res_dl))
 
 Various packages and related classes can be used to read the data downloaded through OPeNDAP. If [`terra`](https://cran.r-project.org/package=terra) (successor of [`raster`](https://cran.r-project.org/package=raster)) is surely the most famous class for raster objects, many packages facilitate the use of spatiotemporal data cubes in formats such as those proposed through `modisfast` (e.g. NetCDF). For instance, MODIS or VIIRS products can be imported as a `stars` object from the excellent [`stars`](https://cran.r-project.org/package=stars) package for data cubes manipulation. All the data can also be imported as `ncdf4` objects using e.g. the [`ncdf4`](https://cran.r-project.org/package=ncdf4) package.
 
-`r emo::ji("warning")` `r emo::ji("warning")` `r emo::ji("warning")` `r emo::ji("warning")` 
+:warning: :warning: :warning: :warning:
 
 #### Important warning regarding the use of the data after download through `modisfast` {#warning-import}
 

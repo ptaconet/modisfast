@@ -34,15 +34,12 @@ Imports:
     terra,
     xml2
 Suggests: 
-    emo,
     ggplot2,
     knitr,
     mapview,
     rmarkdown,
     spelling,
     testthat
-VignetteBuilder: 
-    knitr
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.1

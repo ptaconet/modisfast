@@ -54,13 +54,13 @@ time series and points.
 Below is a comparison of modisfast with other packages available for
 downloading chunks of remote sensing data :
 
-| Package                                                  |                   Data                    | Temporal subsetting\* | Spatial subsetting\* | Dimensional subsetting\* | Speed |
-|:---------------------------------------------------------|:-----------------------------------------:|:---------------------:|:--------------------:|:------------------------:|:-----:|
-| [`modisfast`](https://github.com/ptaconet/modisfast)     |             MODIS, VIIRS, GPM             |          ✅           |          ✅          |            ✅            |  ✅   |
-| [`MODIS`](https://github.com/MatMatt/MODIS)              |                   MODIS                   |          ✅           |          ❌          |            ❌            |  ✅   |
-| [`MODIStsp`](https://github.com/ropensci/MODIStsp)       |                   MODIS                   |          ✅           |          ❌          |            ✅            |  ✅   |
-| [`MODISTools`](https://github.com/ropensci/MODISTools)   | MODIS and VIIRS (but not all collections) |          ✅           |          ✅          |            ✅            |  ✅   |
-| [`appeears`](https://github.com/bluegreen-labs/appeears) |       MODIS, VIIRS, and many others       |          ✅           |          ✅          |            ✅            |  ❌   |
+| Package                                                  |                   Data                    | Temporal subsetting\* | Spatial subsetting\* | Dimensional subsetting\* |       Speed        |
+|:---------------------------------------------------------|:-----------------------------------------:|:---------------------:|:--------------------:|:------------------------:|:------------------:|
+| [`modisfast`](https://github.com/ptaconet/modisfast)     |             MODIS, VIIRS, GPM             |  :white_check_mark:   |  :white_check_mark:  |    :white_check_mark:    | :white_check_mark: |
+| [`MODIS`](https://github.com/MatMatt/MODIS)              |                   MODIS                   |  :white_check_mark:   |         :x:          |           :x:            | :white_check_mark: |
+| [`MODIStsp`](https://github.com/ropensci/MODIStsp)       |                   MODIS                   |  :white_check_mark:   |         :x:          |    :white_check_mark:    | :white_check_mark: |
+| [`MODISTools`](https://github.com/ropensci/MODISTools)   | MODIS and VIIRS (but not all collections) |  :white_check_mark:   |  :white_check_mark:  |    :white_check_mark:    | :white_check_mark: |
+| [`appeears`](https://github.com/bluegreen-labs/appeears) |       MODIS, VIIRS, and many others       |  :white_check_mark:   |  :white_check_mark:  |    :white_check_mark:    |        :x:         |
 
 \* at the downloading phase
 
@@ -124,7 +124,7 @@ res_dl <- mf_download_data(urls)
 ```
 
 **3/ And finally, open the data in R as a `terra::SpatRaster` object
-using the function `mf_import_data()`** (⚠️ see
+using the function `mf_import_data()`** (:warning: see
 [here](https://ptaconet.github.io/modisfast/articles/get_started.html#warning-import)
 why you should use this function, instead of the original
 `terra::rast()`, in the context of `modisfast`) :
@@ -172,12 +172,12 @@ extracted from the following meta-collections :
 - [MODIS land
   products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/)
   made available by the [NASA / USGS LP DAAC](https://lpdaac.usgs.gov/)
-  (➡️ [source OPeNDAP
+  (:arrow_right: [source OPeNDAP
   server](https://opendap.cr.usgs.gov/opendap/hyrax/)) ;
 - [VIIRS land
   products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/)
   made available by the [NASA / USGS LP DAAC](https://lpdaac.usgs.gov/)
-  (➡️ [source OPeNDAP
+  (:arrow_right: [source OPeNDAP
   server](https://opendap.cr.usgs.gov/opendap/hyrax/))
 
 In addition, `modisfast` supports download of the following
@@ -185,7 +185,7 @@ satellite-derived environmental data :
 
 - [Global Precipitation Measurement](https://pmm.nasa.gov/GPM) (GPM)
   made available by the [NASA / JAXA GES
-  DISC](https://disc.gsfc.nasa.gov/) (➡️ [source OPeNDAP
+  DISC](https://disc.gsfc.nasa.gov/) (:arrow_right: [source OPeNDAP
   server](https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3)).
 
 Details of each product available for download are provided in the
@@ -1888,7 +1888,7 @@ by the user in the function `mf_get_url()`.
 
 Let’s take an example to understand.
 
-The following URL ⬇️
+The following URL :arrow_down:
 
 <https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.061/h17v08.ncml.nc4?MODIS_Grid_8Day_1km_LST_eos_cf_projection,LST_Day_1km%5B775:793>\]\[55:140\]\[512:560\],LST_Night_1km\[775:793\]\[55:140\]\[512:560\],QC_Day\[775:793\]\[55:140\]\[512:560\],QC_Night\[775:793\]\[55:140\]\[512:560\],time\[775:793\],YDim\[55:140\],XDim\[512:560\]
 

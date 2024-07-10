@@ -34,3 +34,4 @@
 ^data_use_case$
 ^vignettes/env_data$
 ^vignettes/articles$
+^.github$
