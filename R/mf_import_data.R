@@ -6,8 +6,8 @@
 #' @param path character string. mandatory. The path to the local directory where the data are stored.
 #' @param output_class character string. Output object class. Currently only "SpatRaster" implemented.
 #' @param proj_epsg numeric. EPSG of the desired projection for the output raster (default : source projection of the data).
+#' @param roi_mask \code{SpatRaster}, \code{SpatVector}, \code{sf}. Area beyond which data will be masked. Typically, the input ROI of \link{mf_get_url} (default : NULL (no mask))
 #' @param vrt boolean. Import virtual raster instead of SpatRaster. Useful for very large files. (default : FALSE)
-#'
 #' @inheritParams mf_get_url
 #'
 #' @note
@@ -71,6 +71,7 @@ mf_import_data <- function(path,
                            collection,
                            output_class = "SpatRaster",
                            proj_epsg = NULL,
+                           roi_mask = NULL,
                            vrt = FALSE){
 
   rasts <- NULL
@@ -85,11 +86,11 @@ mf_import_data <- function(path,
 
   if(odap_coll_info$source %in% c("MODIS","VIIRS")){
 
-      rasts <- .import_modis_viirs(path,output_class,proj_epsg,vrt)
+      rasts <- .import_modis_viirs(path,output_class,proj_epsg,roi_mask,vrt)
 
   } else if (odap_coll_info$source=="GPM"){
 
-      rasts <- .import_gpm(path,output_class,proj_epsg)
+      rasts <- .import_gpm(path,output_class,proj_epsg,roi_mask)
 
   }
 

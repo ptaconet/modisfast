@@ -1,7 +1,7 @@
 #' @name .import_gpm
 #' @title Import data  source=="GPM"
 #' @noRd
-.import_gpm <- function(dir_path,output_class,proj_epsg){
+.import_gpm <- function(dir_path,output_class,proj_epsg,roi_mask){
 
   files <- list.files(dir_path, full.names = T)
 
@@ -20,6 +20,16 @@
        rasts <- terra::project(rasts,paste0("epsg:",proj_epsg))
     }
 
+    if(!is.null(roi_mask)){
+      roi_mask <- terra::vect(roi_mask)
+      if(!is.null(proj_epsg)){
+        roi_mask <- terra::project(roi_mask,paste0("epsg:",proj_epsg))
+      } else {
+        roi_mask <- terra::project(roi_mask,"epsg:4326")
+      }
+
+      rasts <- terra::mask(rasts,roi_mask)
+    }
 
   } else if(output_class=="stars"){
    stop("stars output is not implemented for this collection")
@@ -41,7 +51,7 @@
 #' @name .import_modis_viirs
 #' @title Import data  source in% c("VNP46A1") , provider=="NASA USGS LAADS DAAC"
 #' @noRd
-.import_modis_viirs <- function(dir_path,output_class,proj_epsg,vrt){
+.import_modis_viirs <- function(dir_path,output_class,proj_epsg,roi_mask,vrt){
 
   files <- list.files(dir_path, full.names = T)
 
@@ -67,6 +77,17 @@
 
     if(!is.null(proj_epsg)){
      rasts <- terra::project(rasts,paste0("epsg:",proj_epsg))
+    }
+
+    if(!is.null(roi_mask)){
+      roi_mask <- terra::vect(roi_mask)
+      if(!is.null(proj_epsg)){
+        roi_mask <- terra::project(roi_mask,paste0("epsg:",proj_epsg))
+      } else {
+        roi_mask <- terra::project(roi_mask,"+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")
+      }
+
+      rasts <- terra::mask(rasts,roi_mask)
     }
 
   } else if (output_class=="stars"){
