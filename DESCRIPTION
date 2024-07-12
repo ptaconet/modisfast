@@ -1,6 +1,6 @@
 Package: modisfast
-Title: Fast and Efficient Access to 'MODIS' Earth Observation Data
-Version: 0.9.0
+Title: Fast and Efficient Access to MODIS Earth Observation Data
+Version: 0.9.1
 Authors@R: 
     c(person(given = "Paul", 
     family = "Taconet",
@@ -12,8 +12,8 @@ Authors@R:
       email="nicolas.moiroux@ird.fr",
       role = "fnd",
       comment = c(ORCID = "0000-0001-6755-6167")),
-      person("French Research Institute for Sustainable Development, IRD", role = "fnd"))
-Description: Programmatic interface to several NASA Earth Observation 'OPeNDAP' servers (Open-source Project for a Network Data Access Protocol) (<https://www.opendap.org/>). Allows for easy downloads of 'MODIS' subsets, as well as other Earth Observation datacubes, in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally).
+      person("French National Research Institute for Sustainable Development, IRD", role = "fnd"))
+Description: Programmatic interface to several NASA Earth Observation 'OPeNDAP' servers (Open-source Project for a Network Data Access Protocol) (<https://www.opendap.org/>). Allows for easy downloads of MODIS subsets, as well as other Earth Observation datacubes, in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally).
 License: GPL (>= 3)
 URL: https://github.com/ptaconet/modisfast
 BugReports: https://github.com/ptaconet/modisfast/issues

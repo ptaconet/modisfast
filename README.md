@@ -119,7 +119,7 @@ urls <- mf_get_url(
  )
 
 ## Download the data. By default the data is downloaded in a temporary directory, but you can specify a folder
-res_dl <- mf_download_data(urls)
+res_dl <- mf_download_data(urls, parallel = T)
 ```
 
 **3/ And finally, open the data in R as a `terra::SpatRaster` object

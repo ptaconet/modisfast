@@ -6,7 +6,7 @@
 #' @param path character string. mandatory. The path to the local directory where the data are stored.
 #' @param output_class character string. Output object class. Currently only "SpatRaster" implemented.
 #' @param proj_epsg numeric. EPSG of the desired projection for the output raster (default : source projection of the data).
-#' @param roi_mask \code{SpatRaster}, \code{SpatVector}, \code{sf}. Area beyond which data will be masked. Typically, the input ROI of \link{mf_get_url} (default : NULL (no mask))
+#' @param roi_mask \code{SpatRaster} or \code{SpatVector} or \code{sf}. Area beyond which data will be masked. Typically, the input ROI of \link{mf_get_url} (default : NULL (no mask))
 #' @param vrt boolean. Import virtual raster instead of SpatRaster. Useful for very large files. (default : FALSE)
 #' @inheritParams mf_get_url
 #'

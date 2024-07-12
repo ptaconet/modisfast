@@ -4,11 +4,11 @@
 \name{modisfast-package}
 \alias{modisfast}
 \alias{modisfast-package}
-\title{modisfast: Fast and Efficient Access to 'MODIS' Earth Observation Data}
+\title{modisfast: Fast and Efficient Access to MODIS Earth Observation Data}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Programmatic interface to several NASA Earth Observation 'OPeNDAP' servers (Open-source Project for a Network Data Access Protocol) (\url{https://www.opendap.org/}). Allows for easy downloads of 'MODIS' subsets, as well as other Earth Observation datacubes, in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally).
+Programmatic interface to several NASA Earth Observation 'OPeNDAP' servers (Open-source Project for a Network Data Access Protocol) (\url{https://www.opendap.org/}). Allows for easy downloads of MODIS subsets, as well as other Earth Observation datacubes, in a time-saving and efficient way : by sampling it at the very downloading phase (spatially, temporally and dimensionally).
 }
 \seealso{
 Useful links:
@@ -24,7 +24,7 @@ Useful links:
 Other contributors:
 \itemize{
   \item Nicolas Moiroux \email{nicolas.moiroux@ird.fr} (\href{https://orcid.org/0000-0001-6755-6167}{ORCID}) [funder]
-  \item French Research Institute for Sustainable Development, IRD [funder]
+  \item French National Research Institute for Sustainable Development, IRD [funder]
 }
 
 }
