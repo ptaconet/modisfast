@@ -1,6 +1,6 @@
 citHeader("To cite modisfast in publications use:")
 
-bibentry{Taconet2024,
+bibentry{,
   title = {modisfast: Fast and Efficient Access to MODIS Earth Observation Data},
   URL = "https://hal.science/hal-04603903",
   DOI = {10.32614/cran.package.modisfast},
@@ -9,7 +9,7 @@ bibentry{Taconet2024,
   bibtype  = "Misc",
   AUTHOR = c(person("Paul", "Taconet"), person("Nicolas", "Moiroux")),
   year = {2024},
-  month = jul 
+  month = jul,
   YEAR = "2024",
   MONTH = "Jun",
   SWHID = "swh:1:dir:261ad9eaa285da77dc356e3f20836fcbf022ea17;origin=https://github.com/ptaconet/modisfast;visit=swh:1:snp:07cf4ad57fcaa24d30ce8802c86297669abd0684;anchor=swh:1:rev:f7869b04d06e2a35ce982bb3407ef1a4918545db",
