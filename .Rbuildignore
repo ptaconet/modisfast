@@ -4,6 +4,7 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^.Rplot_readme\.png$
+^.Rplot_readme2\.png$
 ^.vignette_data\.csv$
 ^.data_collections\.csv$
 ^.data_collections_project\.csv$

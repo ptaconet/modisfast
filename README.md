@@ -8,7 +8,7 @@
 
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/modisfast)](https://cran.r-project.org/package=modisfast)
-[![Github_Status_Badge](https://img.shields.io/badge/Github-0.9.0-blue.svg)](https://github.com/ptaconet/modisfast)
+[![Github_Status_Badge](https://img.shields.io/badge/Github-0.9.1-blue.svg)](https://github.com/ptaconet/modisfast)
 [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/ptaconet/modisfast/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast)
 [![R-CMD-check](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
@@ -123,7 +123,7 @@ res_dl <- mf_download_data(urls, parallel = T)
 ```
 
 **3/ And finally, open the data in R as a `terra::SpatRaster` object
-using the function `mf_import_data()`** (:warning: see
+using the function `mf_import_data()`** ( :warning: see
 [here](https://ptaconet.github.io/modisfast/articles/get_started.html#warning-import)
 why you should use this function, instead of the original
 `terra::rast()`, in the context of `modisfast`) :
@@ -171,12 +171,12 @@ extracted from the following meta-collections :
 - [MODIS land
   products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/)
   made available by the [NASA / USGS LP DAAC](https://lpdaac.usgs.gov/)
-  (:arrow_right: [source OPeNDAP
+  ( :arrow_right: [source OPeNDAP
   server](https://opendap.cr.usgs.gov/opendap/hyrax/)) ;
 - [VIIRS land
   products](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/)
   made available by the [NASA / USGS LP DAAC](https://lpdaac.usgs.gov/)
-  (:arrow_right: [source OPeNDAP
+  ( :arrow_right: [source OPeNDAP
   server](https://opendap.cr.usgs.gov/opendap/hyrax/))
 
 In addition, `modisfast` supports download of the following
@@ -184,11 +184,11 @@ satellite-derived environmental data :
 
 - [Global Precipitation Measurement](https://gpm.nasa.gov/missions/GPM)
   (GPM) made available by the [NASA / JAXA GES
-  DISC](https://disc.gsfc.nasa.gov/) (:arrow_right: [source OPeNDAP
+  DISC](https://disc.gsfc.nasa.gov/) ( :arrow_right: [source OPeNDAP
   server](https://gpm1.gesdisc.eosdis.nasa.gov/opendap/hyrax/GPM_L3/)).
 
 Details of each product available for download are provided in the
-tables above or through the function `mf_list_collections()`. Want more
+tables below or through the function `mf_list_collections()`. Want more
 details on a specific collection ? Click on the “DOI” column !
 
 <details>
@@ -1838,7 +1838,7 @@ be more suitable if your requirements differ. These include :
 ## Next steps
 
 Next developments may involve including access to more collections from
-other OPeNDAP servers, and submitting the package to the CRAN and the
+other OPeNDAP servers, and submitting the package to the
 [rOpenSci](https://ropensci.org/) archives.
 
 Any contribution is welcome !
@@ -1851,10 +1851,9 @@ later](https://www.gnu.org/licenses/gpl-3.0-standalone.html) license.
 We thank in advance people that use `modisfast` for citing it in their
 work / publication(s). For this, please use the following citation :
 
-*Paul Taconet, Nicolas Moiroux. ‘modisfast’ : fast and efficient access
-to MODIS data with R. 2024,
-[⟨swh:1:dir:21b5ddcecb39e683c9f2fc5c135f23dc1b36fe28;origin=https://github.com/ptaconet/modisfast;visit=swh:1:snp:4064f0aae2b29808e9cbd096afaa495fd1360f78;anchor=swh:1:rev:9e5b2a456a0e1acd8ab34e6909424ae6c403150d⟩.](https://archive.softwareheritage.org/browse/swh:1:dir:21b5ddcecb39e683c9f2fc5c135f23dc1b36fe28;origin=https://github.com/ptaconet/modisfast;visit=swh:1:snp:4064f0aae2b29808e9cbd096afaa495fd1360f78;anchor=swh:1:rev:9e5b2a456a0e1acd8ab34e6909424ae6c403150d)
-⟨hal-04603903⟩*
+*Taconet, P. & Moiroux N.(2024). modisfast: Fast and Efficient Access to
+MODIS Earth Observation Data. In CRAN: Contributed Packages. The R
+Foundation. <https://doi.org/10.32614/cran.package.modisfast> *
 
 ## Under the woods… how does `modisfast` work ?
 
