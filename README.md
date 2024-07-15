@@ -65,19 +65,19 @@ downloading chunks of remote sensing data :
 
 ## Installation
 
-<!--
-You can install the released version of modisfast from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of `modisfast` from
+[CRAN](https://CRAN.R-project.org) with :
+
 ``` r
 install.packages("modisfast")
 ```
--->
 
-The package can be installed with:
+or the development version (to get a bug fix or to use a feature from
+the development version) with :
 
 ``` r
 if(!require(devtools)){install.packages("devtools")}
 devtools::install_github("ptaconet/modisfast")
-library(modisfast)
 ```
 
 ## Get Started
