@@ -11,6 +11,7 @@
 [![Github_Status_Badge](https://img.shields.io/badge/Github-0.9.1-blue.svg)](https://github.com/ptaconet/modisfast)
 [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/ptaconet/modisfast/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast)
 [![R-CMD-check](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml)
+<!--[![CRAN_downloads](https://cranlogs.r-pkg.org/badges/grand-total/modisfast)-->
 <!-- badges: end -->
 
 <!-- ATTENTION A CHANGER : FUSEAUX HORAIRES POUR DONNEES GPM HALF HOURLY !!!!!!
@@ -146,7 +147,7 @@ Want more examples of use of `modisfast` ? **Have a look at the
 [`vignette("get_started")`](https://ptaconet.github.io/modisfast/articles/get_started.html)
 to get started with a simple example, and see the
 [`vignette("modisfast2")`](https://ptaconet.github.io/modisfast/articles/modisfast2.html)
-for a more advanced workflow !**
+for a more advanced workflow and nice `modisfast` features !**
 
 <!--
 ## Objectives
