@@ -13,6 +13,27 @@ author = {C.O Justice and J.R.G Townshend and E.F Vermote and E Masuoka and R.E 
 abstract = {Data from the first Moderate Resolution Imaging Spectroradiometer (MODIS) instrument on the NASA Terra Platform are being used to provide a new generation of land data products in support of the National Aeronautics and Space Administration (NASA)'s Earth Science Enterprise, global change research and natural resource management. The MODIS products include global data sets heretofore unavailable, derived from new moderate resolution spectral bands with spatial resolutions of 250 m to 1 km. A partnership between Science Team members and the MODIS Science Data Support Team is producing data sets of unprecedented volume and number for the land research and applications. This overview paper provides a summary of the instrument performance and status, the data production system, the products, their status and availability for land studies.}
 }
 
+@inbook{modis-applications,
+author = {Shao, Yang and Taff, Greg and Lunetta, Ross},
+year = {2011},
+month = {01},
+pages = {31-55},
+title = {A review of selected MODIS algorithms, data products, and applications}
+}
+
+@article{AGNOLI2023122357,
+title = {Perspectives on user engagement of satellite Earth observation for water quality management},
+journal = {Technological Forecasting and Social Change},
+volume = {189},
+pages = {122357},
+year = {2023},
+issn = {0040-1625},
+doi = {https://doi.org/10.1016/j.techfore.2023.122357},
+url = {https://www.sciencedirect.com/science/article/pii/S0040162523000422},
+author = {Lara Agnoli and Erin Urquhart and Nikolaos Georgantzis and Blake Schaeffer and Richard Simmons and Bilqis Hoque and Merrie Beth Neely and Claire Neil and Jacques Oliver and Andrew Tyler},
+keywords = {Water quality, Earth observation, Satellite remote sensing, Knowledge transfer, Technology transfer, Data accessibility}
+}
+
 @article{ROMAN2024113963,
 title = {Continuity between NASA MODIS Collection 6.1 and VIIRS Collection 2 land products},
 journal = {Remote Sensing of Environment},
@@ -97,4 +118,63 @@ abstract = {This paper provides a review and summary status of the research unde
   pages = {439--446},
   volume = {10},
   number = {1},
+}
+
+
+@Manual{modistools,
+         title = "The MODISTools package: an interface to the MODIS Land Products Subsets Web Services",
+         author = "Koen Hufkens",
+         year = "2022",
+         url = "https://github.com/ropensci/MODISTools"
+         }
+
+@Article{MODIStsp,
+  author       = "Lorenzo Busetto and Luigi Ranghetti",
+  title        = "MODIStsp: an R package for preprocessing of MODIS Land Products time series",
+  journal      = "Computers & Geosciences",
+  year         = "2016",
+  volume       = "97",
+  pages        = "40-48",
+  issn         = "0098-3004",
+  doi          = "10.1016/j.cageo.2016.08.020",
+  url          = "https://github.com/ropensci/MODIStsp"
+}
+
+@Misc{appeears,
+         title = "The appeears package: an interface to NASA AppEEARS API endpoints",
+         author = "Koen Hufkens and Elio Campitelli",
+         year = "2023",
+         doi = "10.5281/zenodo.7938190",
+         url = "https://bluegreen-labs.github.io/appeears/"
+}
+
+@software{rgee,
+  author       = {Cesar Aybar and
+                  Qiusheng Wu and
+                  Lesly Bautista and
+                  Roy Yali and
+                  Antony Barja},
+  title        = {{rgee: An R package for interacting with Google
+                   Earth Engine}},
+  month        = jul,
+  year         = 2020,
+  publisher    = {Zenodo},
+  version      = {v.1.0.0-alpha},
+  doi          = {10.5281/zenodo.3945409},
+  url          = {https://doi.org/10.5281/zenodo.3945409}
+}
+
+@article{GORELICK201718,
+title = {Google Earth Engine: Planetary-scale geospatial analysis for everyone},
+journal = {Remote Sensing of Environment},
+volume = {202},
+pages = {18-27},
+year = {2017},
+note = {Big Remotely Sensed Data: tools, applications and experiences},
+issn = {0034-4257},
+doi = {https://doi.org/10.1016/j.rse.2017.06.031},
+url = {https://www.sciencedirect.com/science/article/pii/S0034425717302900},
+author = {Noel Gorelick and Matt Hancher and Mike Dixon and Simon Ilyushchenko and David Thau and Rebecca Moore},
+keywords = {Cloud computing, Big data, Analysis, Platform, Data democratization, Earth Engine},
+abstract = {Google Earth Engine is a cloud-based platform for planetary-scale geospatial analysis that brings Google's massive computational capabilities to bear on a variety of high-impact societal issues including deforestation, drought, disaster, disease, food security, water management, climate monitoring and environmental protection. It is unique in the field as an integrated platform designed to empower not only traditional remote sensing scientists, but also a much wider audience that lacks the technical capacity needed to utilize traditional supercomputers or large-scale commodity cloud computing resources.}
 }

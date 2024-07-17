@@ -6,12 +6,13 @@ tags:
 - MODIS
 - VIIRS
 - GPM
-- Earth observation datacubes
+- Earth observation
+- Datacubes
+- Remote sensing
 - OPeNDAP
 date: "1 August 2024"
 output:
   html_document: default
-  pdf_document: default
 authors:
 - name: Paul Taconet
   orcid: "0000-0001-7429-7204"
@@ -25,29 +26,35 @@ affiliations:
   index: 1
 ---
 
-<!-- voir exemple : https://raw.githubusercontent.com/FRBCesab/chessboard/main/joss-paper/paper.md -->
-
 # Summary
 
-`modisfast` is an R package that allows for easy and fast downloads of various Earth Observation (EO) data, including Moderate Resolution Imaging Spectroradiometer (MODIS) Land products, Visible Infrared Imaging Radiometer Suite (VIIRS) Land products, and Global Precipitation Measurement mission (GPM) products. Based on the Open-source Project for a Network Data Access Protocol (OPeNDAP) standard framework, it enables users to apply filters (spatial, temporal, and dimensional) directly at the downloading phase, supports parallelized downloads, and streamlines data import into R. Therefore, `modisfast` offers R users a cost-effective, time-efficient, and energy-saving approach to accessing a set of EO datasets.
+`modisfast` is an R package that allows for easy and fast downloads of various Earth Observation (EO) data, including the Moderate Resolution Imaging Spectroradiometer (MODIS) Land products, the Visible Infrared Imaging Radiometer Suite (VIIRS) Land products, and the Global Precipitation Measurement mission (GPM) products. Based on the Open-source Project for a Network Data Access Protocol (OPeNDAP) standard framework, it enables users to apply filters (spatial, temporal, and dimensional) directly at the downloading phase, supports parallelized downloads, and streamlines data import into R. Therefore, `modisfast` offers R users a cost-effective, time-efficient, and energy-saving approach to accessing a set of key EO datasets.
 
 # Statement of need
 
-<!-- Does the paper have a section titled ‘Statement of need’ that clearly states what problems the software is designed to solve, who the target audience is, and its relation to other work? -->
+Data from Earth Observation satellites are a crucial and increasingly valuable resource for monitoring and understanding our planet, especially in the context of global change. EO data from the U.S. federal government National Aeronautics and Space Administration (NASA) are among the richest and longest-standing in the field. Iconic and widely used NASA EO data collections include the MODIS Land products [@JUSTICE20023], the VIIRS products - which continue the legacy of MODIS [@ROMAN2024113963], and the GPM mission products [@SkofronickJackson2017]. Collectively, these products have provided essential data for over 20 years, enabling the study of Earth's dynamics, including (but not limited to) global land cover, vegetation health, land surface temperature, rainfall patterns, burned areas. They support research in climate change, disaster response, biodiversity, ecosystem monitoring, ecology, epidemiology, and more [@modis-applications].
 
-<!-- 1/what are MODIS data useful for,  2/ the problem of the accessibility  (overall, and for R users in particular),  3/ ethical considerations-->
+Despite the increasing availability and utility of EO data, accessing and using them presents several challenges. Researchers often encounter issues such as multiple data sources, data complexity, large file sizes, and the need for advanced technical skills to process the information [@AGNOLI2023122357]. These data are typically distributed as multidimensional layers over extensive areas, making accessibility and processing difficult, especially when large time series are required. This problem is particularly acute in developing regions where internet infrastructure can be limited. The complexity of accessing EO data often leads to siloed data processing workflows, separating data extraction from pre-processing and analysis, thereby hindering transparent and reproducible open science practices. While some powerful tools, such as [Google Earth Engine](https://earthengine.google.com/) [@GORELICK201718] offer some solutions to these problems, they also have important limitations, such as proprietary software. Altogether, these barriers hinder the full potential of Earth observation data to support global research and decision-making. Efforts to simplify and streamline access to these data, while maintaining an open-source and open-science framework, are essential to overcoming these obstacles and maximizing the benefits of satellite data for all.
 
-Data from Earth Observation satellites are a crucial and increasingly valuable resource for monitoring and understanding our planet, especially in the context of global change. EO data from the U.S. federal government National Aeronautics and Space Administration (NASA) are among the richest and longest-standing in the field. Iconic and widely used NASA EO data collections include the MODIS Land products [@JUSTICE20023], the VIIRS products - which continue the legacy of MODIS [@ROMAN2024113963], and the GPM mission products [@SkofronickJackson2017] (in collaboration with the Japan Aerospace Exploration Agency (JAXA)). Collectively, these products have provided essential data for over 20 years, enabling the study of Earth's dynamics, including (but not limited to) global land cover, vegetation health, land surface temperature, rainfall patterns, burned areas. They support research in climate change, disaster response, biodiversity, ecosystem monitoring, ecology, epidemiology, and more.
+Here, we introduce `modisfast`, an open-source R package [@R] designed to simplify, streamline, and accelerate the download and import of MODIS, VIIRS, and GPM time series for R users. This package expands and the existing ecosystem of R tools for accessing MODIS data, enhancing it by introducing new features (see section \ref(comp-other-soft). `modisfast` allows users to subset these datasets using spatial, temporal, and band/layer directly at the downloading phase, optimizing data download and processing while promoting digital sobriety. Additionally, downloads can be parallelized for increased efficiency. `modisfast` thus facilitates access to EO data for R users, particularly in regions with limited internet infrastructure, and enables embedding data extraction within complex and holistic data workflows in R - fostering transparency and reproducibility in the context of Open Science. Importantly, the foundational framework of `modisfast` (see section \ref(foundational-fmwrk)) guarantees the package's long-term sustainability, open-source nature, and cost-free availability.
 
-Despite the increasing availability and utility of EO data, accessing them presents several challenges. Researchers often encounter issues such as multiple data sources, data complexity, large file sizes, and the need for advanced technical skills to process the information. These data are typically distributed as multidimensional layers over extensive areas, making accessibility and processing difficult, especially when large time series are required. This problem is particularly acute in developing regions where internet infrastructure can be limited. The complexity of accessing EO data often leads to siloed data processing workflows, separating data extraction from pre-processing and analysis, thereby hindering transparent and reproducible open science practices. While tools like Google Earth Engine offer some solutions, they also have limitations, such as requiring the use of new programming languages and proprietary software. Altogether, these barriers hinder the full potential of Earth observation data to support global research and decision-making. Efforts to simplify and streamline access to this data, while maintaining an open-source and open-science framework, are essential to overcoming these obstacles and maximizing the benefits of satellite data for all.
+# Target audience
 
-Here, we introduce `modisfast`, an open-source R package [@R] designed to simplify, streamline, and accelerate the download and import of MODIS, VIIRS, and GPM time series for R users. `modisfast` allows users to download and import only the specific chunks of satellite data needed, filtered spatially, temporally, and dimensionally, optimizing data download and processing. Additionally, downloads can be parallelized for increased efficiency. `modisfast` thus facilitates access to EO data for R users (especially in regions with limited internet infrastructure), promotes digital sobriety, supports the open-source software movement, and enables embedding data extraction within complex and holistic data workflows in R, fostering transparency and reproducibility in the context of Open Science. Importantly, the foundational framework of `modisfast` (see section \ref(foundational-fmwrk)) ensures the long-term sustainability and cost-free nature of the package. This package enhances the existing ecosystem of R tools for accessing MODIS data by introducing new features (see section \ref(comp-other-soft).
+`modisfast` is suitable to any R user looking to use MODIS, VIIRS or GPM Earth Observation data, either for research, education, or operational purposes.
+
+`modisfast` is particularly suited for the following cases : 
+
+- Retrieving MODIS, VIIRS or GPM data quickly over **long time series** and **areas** (as opposed to **short time series** and **specific points**).
+- Users who want to integrate the data extraction process within complex data workflows in R (e.g., extraction, transformation, visualization, modeling, communication).
+- Users in regions with limited internet infrastructure.
+- Users who wish to promote international standards for data formats and access, and Open Science in general.
+- Users who are concerned about digital sobriety.
 
 # Main features
 
 ## Typical workflow
 
-The typical workflow to access and import MODIS, VIIRS or GPM data in R with `modisfast` involves the following steps :
+ The typical workflow to access and import MODIS, VIIRS or GPM data in R with `modisfast` involves the following steps :
 
 1.  Defining the parameters of interest as natural R objects,
 2.  Login to NASA EOSDIS EarthData with the function `mf_login()`,
@@ -57,7 +64,7 @@ The typical workflow to access and import MODIS, VIIRS or GPM data in R with `mo
 
 This workflow is graphically summarized in figure \autoref{fig:wf_modisfast}.
 
-![Workflow for data download and import with `modisfast`.\label{fig:wf_modisfast}](workflow_modisfast.png){width="70%"}
+![Workflow for MODIS, VIIRS or GPM data download and import with `modisfast`.\label{fig:wf_modisfast}](workflow_modisfast2.png){width="90%"}
 
 Other functions available in the package include :
 
@@ -84,20 +91,23 @@ The full list of available data collections can be accessed with the function `m
 
 ## Foundational framework of `modisfast` {#foundational-fmwrk}
 
-Technically, `modisfast` is a programmatic interface to several NASA OPeNDAP servers (<https://www.opendap.org/>). OPeNDAP is the acronym for "Open-source Project for a Network Data Access Protocol" and designates both the software, the access protocol, and the corporation that develops them. The OPeNDAP is designed to simplify access to structured and high-volume data, such as satellite products, over the Web. It is a collaborative effort involving multiple institutions and companies, with open-source code, free software, and adherence to OGC standards. It is widely used by NASA, which partly finances the project. A key feature of OPeNDAP is its capability to apply filters at the data download process, ensuring that only the necessary data is retrieved. These filters, specified within a URL, can be spatial, temporal, or dimensional. Nevertheless, OPeNDAP URLs are not trivial to build. `modisfast` constructs these URLs based on the filters that are specified by the user through standard R objects.
+Technically, `modisfast` is a programmatic interface to several NASA OPeNDAP (https://www.opendap.org/) servers. OPeNDAP is the acronym for "Open-source Project for a Network Data Access Protocol" and designates both the software, the access protocol, and the corporation that develops them. The OPeNDAP is designed to simplify access to structured and high-volume data, such as satellite products, over the Web. It is a collaborative effort involving multiple institutions and companies, with open-source code, free software, and adherence to OGC standards. It is widely used by NASA, which partly finances it. A key feature of OPeNDAP is its capability to apply filters at the data download process, ensuring that only the necessary data is retrieved. These filters, specified within a URL, can be spatial, temporal, or dimensional. Nevertheless, OPeNDAP URLs are not trivial to build. `modisfast` constructs these URLs based on the filters that are specified by the user through standard R objects.
 
-A key feature of `modisfast` is that it builds on top of robust, sustainable, and cost-free foundations for both the data provider (NASA) and the software (R, OPeNDAP, the `tidyverse` [@tidyverse] and `GDAL` [@gdal] suite of packages). This stability guarantees the long-term reliability of the package.
+This robust, sustainable, and cost-free foundational framework, both for the data provider (NASA) and the software (R, OPeNDAP, the `tidyverse` [@tidyverse] and `GDAL` [@gdal] suite of packages), guarantees the long-term stability and reliability of the `modisfast` package.
 
 # Comparison with similar packages {#comp-other-soft}
 
-There are other R packages available for accessing MODIS data, which may be more suitable if your requirements differ. These include :
+In addition to `modisfast`, there are several open-source R packages available for accessing MODIS or VIIRS data :
 
--   [`MODIS`](https://github.com/fdetsch/MODIS)
--   [`MODIStsp`](https://github.com/ropensci/MODIStsp)
--   [`MODIStools`](https://github.com/ropensci/MODIStools)
--   [`appeears`](https://github.com/bluegreen-labs/appeears)
+The [`MODIS`](https://github.com/fdetsch/MODIS) package offers access to some MODIS data through global online data archives, but it lacks comprehensive documentation and was removed from the CRAN repository in 2023 for policy violations. Furthermore, some of its dependencies are not available anymore on CRAN.
 
-`modisfast` is particularly suited for retrieving MODIS, VIIRS OR GPM data **over long time series** and **over areas**, rather than short time series and points.
+The [`MODIStsp`](https://github.com/ropensci/MODIStsp) package [@MODIStsp] provides both a command-line and a user-friendly graphical interface to extract MODIS data in standard TIFF or original HDF formats. However, it does not allow to extract data at a sub-tile level (i.e. spatial subsetting capabilities are limited), and it was also removed from the CRAN repository in 2023 at the maintainer's request.
+
+The [`MODIStools`](https://github.com/ropensci/MODISTools) package [@modistools] serves as a programmatic interface to the ['MODIS Land Products Subsets' web service](https://modis.ornl.gov/data/modis_webservice.html), providing access to 46 MODIS and VIIRS collections. This package, available on CRAN, extracts data at specific points or buffer zones around coordinates, outputting in R `data.frame` or .csv format, which is not a standard geospatial format. This makes it suitable for point-based data extraction but less effective for area-based queries.
+
+The [`appeears`](https://github.com/bluegreen-labs/appeears) package [@appeears] acts as a programmatic interface to the [NASA AppEEARS API](https://appeears.earthdatacloud.nasa.gov/) services. AppEEARS is a NASA-built application that offers a simple and efficient way to access and transform geospatial data from a variety of federal data archives (including MODIS and VIIRS, but not GPM). AppEEARS allows accessing data from various NASA federal archives, including MODIS and VIIRS, and enables users to subset geospatial datasets using spatial, temporal, and band/layer parameters. Indeed, as for `modisfast`, the main sources of data are NASA OPeNDAP servers. While similar to `modisfast`, `appeears` offers a broader range of data sources but has a latency period (ranging from minutes to hours) for query processing due to server-side post-processing (mosaicking, reprojection, etc.).
+
+Finally, some R packages, such as [`rgee`](https://github.com/r-spatial/rgee) [@rgee], rely on proprietary software or data access protocols and are not discussed here for that reason.
 
 # Installation
 
@@ -116,7 +126,7 @@ devtools::install_github("ptaconet/modisfast")
 
 # Example {#example}
 
-Downloading and importing EO data in R with `modisfast` is a simple workflow, as shown in the example below.
+This example shows how to download a one-year-long monthly time series of MODIS Normalized Difference Vegetation Index (NDVI) at 1 km spatial resolution over the whole country of Madagascar.
 
 1/ First, load the packages and define the parameters of interest (region, time frame, data collection, and variables for the collection) :
 
@@ -146,7 +156,7 @@ bands <- c("_1_km_monthly_NDVI")
 ``` r
 ## Login to Earthdata servers with your EOSDIS credentials. 
 # To create an account (free) go to : https://urs.earthdata.nasa.gov/.
-log <- mf_login(credentials = c("username","password"))  # set your own EOSDIS username and password
+log <- mf_login(credentials = c("earthdata_username","earthdata_password"))  # set your own EOSDIS username and password
 
 ## Get the URLs of the data 
 urls <- mf_get_url(
