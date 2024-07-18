@@ -1,29 +1,27 @@
 ---
-title: 'modisfast: An R package for fast and efficient access to MODIS, VIIRS and
-  GPM Earth Observation data'
+title: 'modisfast: An R package for fast and efficient access to MODIS, VIIRS and GPM Earth Observation data'
 tags:
-- R
-- MODIS
-- VIIRS
-- GPM
-- Earth observation
-- Datacubes
-- Remote sensing
-- OPeNDAP
-date: "1 August 2024"
-output:
-  html_document: default
+  - R
+  - MODIS
+  - VIIRS
+  - GPM
+  - Earth observation
+  - Datacubes
+  - Remote sensing
+  - OPeNDAP
 authors:
-- name: Paul Taconet
-  orcid: "0000-0001-7429-7204"
-  affiliation: 1
-- name: Nicolas Moiroux
-  orcid: "0000-0001-6755-6167"
-  affiliation: 1
-bibliography: paper.bib
+ - name: Paul Taconet
+   corresponding: true
+   orcid: "0000-0001-7429-7204"
+   affiliation: 1
+ - name: Nicolas Moiroux
+   orcid: "0000-0001-6755-6167"
+   affiliation: 1
 affiliations:
 - name: MIVEGEC, Université de Montpellier, CNRS, IRD, Montpellier, France
   index: 1
+date: 18 July 2024
+bibliography: paper.bib
 ---
 
 # Summary
@@ -64,7 +62,7 @@ Here, we introduce `modisfast`, an open-source R package [@R] designed to simpli
 
 This workflow is graphically summarized in figure \autoref{fig:wf_modisfast} along with a toy example.
 
-![Workflow for MODIS, VIIRS or GPM data download and import with `modisfast`.\label{fig:wf_modisfast}](workflow_modisfast2.png){width="90%"}
+![Workflow for MODIS, VIIRS or GPM data download and import with `modisfast`.\label{fig:wf_modisfast}](workflow_modisfast.png){width="90%"}
 
 Other functions available in the package include :
 

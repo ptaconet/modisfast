@@ -7,7 +7,7 @@ authors:
 - family-names: "Moiroux"
   given-names: "Nicolas"
   orcid: "https://orcid.org/0000-0001-6755-6167"
-title: "modisfast: Fast and Efficient Access to MODIS Earth Observation Data"
+title: "modisfast: An R package for fast and efficient access to MODIS, VIIRS and GPM Earth Observation data"
 version: 0.9.2
 doi: 10.5281/zenodo.12772739
 date-released: 2024-07-14
