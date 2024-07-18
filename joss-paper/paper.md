@@ -62,7 +62,7 @@ Here, we introduce `modisfast`, an open-source R package [@R] designed to simpli
 
 This workflow is graphically summarized in figure \autoref{fig:wf_modisfast} along with a toy example.
 
-![Workflow for MODIS, VIIRS or GPM data download and import with `modisfast`.\label{fig:wf_modisfast}](workflow_modisfast.png){width="90%"}
+![Workflow for MODIS, VIIRS or GPM data download and import with `modisfast`.\label{fig:wf_modisfast}](workflow_modisfast.png){width="100%"}
 
 Other functions available in the package include :
 
