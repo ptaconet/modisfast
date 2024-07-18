@@ -40,3 +40,4 @@
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 ^joss-paper$
+^\.CITATION\.cff$
