@@ -1,12 +1,12 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 authors:
-  - family-names: "Taconet"
-given-names: "Paul"
-orcid: "https://orcid.org/0000-0001-7429-7204"
+- family-names: "Taconet"
+  given-names: "Paul"
+  orcid: "https://orcid.org/0000-0001-7429-7204"
 - family-names: "Moiroux"
-given-names: "Nicolas"
-orcid: "https://orcid.org/0000-0001-6755-6167"
+  given-names: "Nicolas"
+  orcid: "https://orcid.org/0000-0001-6755-6167"
 title: "modisfast: Fast and Efficient Access to MODIS Earth Observation Data"
 version: 0.9.2
 doi: 10.5281/zenodo.12772739
