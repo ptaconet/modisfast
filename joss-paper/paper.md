@@ -136,8 +136,11 @@ library(modisfast)
 library(sf)
 library(terra)
 
-## ROI (format sf type POLYGON, with an 'id' column). Here, we provide the bounding box of Madagascar
-roi_mada <- st_as_sf(data.frame(id = "madagascar", geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"), wkt="geom", crs = 4326) 
+## ROI (format sf type POLYGON, with an 'id' column). Here, we provide the 
+# bounding box of Madagascar
+roi_mada <- st_as_sf(data.frame(id = "madagascar", 
+geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"),
+wkt="geom", crs = 4326) 
 
 ## Time range (two dates, i.e. the first and the last)
 t_range <- as.Date(c("2023-01-01","2023-12-31"))
@@ -147,7 +150,8 @@ t_range <- as.Date(c("2023-01-01","2023-12-31"))
 coll <- "MOD13A3.061" # Here we choose MODIS/Terra Vegetation Indices Monthly 1 km
 
 # Variables for the collection 
-## run mf_list_variables("MOD13A3.061") to get an exhaustive list of variables available for the collection "MOD13A3.061"
+## run mf_list_variables("MOD13A3.061") to get an exhaustive list of variables 
+# available for the collection "MOD13A3.061"
 bands <- c("_1_km_monthly_NDVI")
 ```
 
@@ -156,7 +160,7 @@ bands <- c("_1_km_monthly_NDVI")
 ``` r
 ## Login to Earthdata servers with your EOSDIS credentials. 
 # To create an account (free) go to : https://urs.earthdata.nasa.gov/.
-log <- mf_login(credentials = c("earthdata_username","earthdata_password"))  # set your own EOSDIS username and password
+log <- mf_login(credentials = c("earthdata_username","earthdata_password"))
 
 ## Get the URLs of the data 
 urls <- mf_get_url(
@@ -166,7 +170,8 @@ urls <- mf_get_url(
   time_range = t_range
  )
 
-## Download the data. By default the data is downloaded in a temporary directory, but you can specify a folder
+## Download the data. By default the data is downloaded in a temporary directory, 
+# but you can specify a folder
 res_dl <- mf_download_data(urls, parallel = T)
 ```
 
