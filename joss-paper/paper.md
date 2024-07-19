@@ -20,21 +20,21 @@ authors:
 affiliations:
 - name: MIVEGEC, Université de Montpellier, CNRS, IRD, Montpellier, France
   index: 1
-date: 18 July 2024
+date: 19 July 2024
 bibliography: paper.bib
 ---
 
 # Summary
 
-`modisfast` is an R package designed for easy and fast downloads of various Earth Observation (EO) data, including the Moderate Resolution Imaging Spectroradiometer (MODIS) Land products, the Visible Infrared Imaging Radiometer Suite (VIIRS) Land products, and the Global Precipitation Measurement mission (GPM) products. It enables users to subset the data directly during the download phase using spatial, temporal, and dimensional filters and supports parallelized downloads. It also streamlines the process of importing the downloaded data into R. Overall, `modisfast` offers R users a cost-effective, time-efficient, and energy-saving approach to accessing a set of key EO datasets with R.
+`modisfast` is an R package designed for easy and fast downloads of various Earth Observation (EO) data, including the Moderate Resolution Imaging Spectroradiometer (MODIS) Land products, the Visible Infrared Imaging Radiometer Suite (VIIRS) Land products, and the Global Precipitation Measurement mission (GPM) products. It enables users to subset the data directly at the download phase using spatial, temporal, and dimensional filters and supports parallelized downloads. It also streamlines the process of importing the downloaded data into R. Overall, `modisfast` offers R users a cost-effective, time-efficient, and energy-saving approach to accessing a set of key EO datasets with R.
 
 # Statement of need
 
-Data from Earth Observation satellites are a crucial and increasingly valuable resource for monitoring and understanding our planet, especially in the context of global change. EO data from the U.S. federal government National Aeronautics and Space Administration (NASA) are among the richest and longest-standing in the field. Iconic, widely used and free NASA EO data collections include the MODIS Land products [@JUSTICE20023], the VIIRS products - which continue the legacy of MODIS [@ROMAN2024113963], and the GPM mission products [@SkofronickJackson2017]. Collectively, these products have provided essential data for over 20 years, enabling the study of Earth's dynamics, including global land cover, vegetation health, burned areas, land surface temperature, rainfall patterns. They support research in climate change, disaster response, biodiversity, ecosystem monitoring, ecology, public health, and more [@modis-applications].
+Data from Earth Observation satellites are a crucial and increasingly valuable resource for monitoring and understanding our planet, especially in the context of global change. EO data from the U.S. federal government National Aeronautics and Space Administration (NASA) are among the richest and longest-standing in the field. Iconic and widely NASA EO data collections include the MODIS Land products [@JUSTICE20023], the VIIRS products - which continue the legacy of MODIS [@ROMAN2024113963], and the GPM mission products [@SkofronickJackson2017]. Collectively, these products have provided essential data for over 20 years, enabling the study of Earth's dynamics, including global land cover, vegetation health, burned areas, land surface temperature, rainfall patterns. They support research in climate change, disaster response, biodiversity, ecosystem monitoring, ecology, public health, and more [@modis-applications].
 
-Despite the increasing availability and utility of these EO data, accessing and using them presents several challenges. Researchers often encounter issues such as multiple data sources, data complexity, or large file sizes [@AGNOLI2023122357]. These data are typically distributed as multidimensional layers over extensive areas, making accessibility and processing difficult, especially when large time series are required. This problem is particularly acute in developing regions where internet infrastructure, needed to access the data, can be limited. The complexity of accessing EO data can result in obstacles such as underutilization or the creation of siloed data processing workflows, which separate data extraction from pre-processing and analysis, thereby hindering transparent and reproducible open science practices. While some powerful tools, such as [Google Earth Engine](https://earthengine.google.com/) [@GORELICK201718] offer some solutions to these problems, they also have important limitations, such as proprietary and energy-intensive software. Altogether, these barriers hinder the full potential of Earth observation data to support global research and decision-making. Efforts to simplify and streamline access to these data, while maintaining an open-source and open-science framework, are essential to overcoming these obstacles and maximizing the benefits of satellite data for all.
+Despite the increasing availability and utility of these EO data, accessing and using them presents several challenges  [@AGNOLI2023122357]. Among other issues, these data are typically distributed as multidimensional layers over vast areas. This results in large file sizes, making accessibility and processing difficult, particularly when large time series are needed. This problem is particularly acute in developing regions where internet infrastructure, needed to access the data, can be limited. The complexity of accessing EO data can result in obstacles such as underutilization or the creation of siloed data processing workflows, which separate data extraction from pre-processing and analysis, thereby hindering transparent and reproducible open science practices. While some powerful tools, such as [Google Earth Engine](https://earthengine.google.com/) [@GORELICK201718] offer some solutions to these problems, they also have important limitations, such as proprietary and energy-intensive software. Altogether, these barriers hinder the full potential of Earth observation data to support global research and decision-making. Efforts to simplify, lighten and streamline access to these data, while maintaining an open-source and open-science framework, are essential to overcoming these obstacles and maximizing the benefits of satellite data for all.
 
-Here, we introduce `modisfast`, an open-source R package [@R] designed to simplify, streamline, and accelerate the download and import of MODIS, VIIRS, and GPM time series for R users. This package expands and the existing ecosystem of R tools for accessing MODIS data, enhancing it by introducing new features and data sources (see section \autoref{comp-other-soft}). `modisfast` allows users to subset these datasets using spatial, temporal, and band/layer directly at the downloading phase, optimizing data download and processing. Additionally, downloads can be parallelized for increased efficiency. `modisfast` thus facilitates access to EO data for R users, particularly in regions with limited internet infrastructure, and enables embedding data extraction within complex and holistic data workflows in R - fostering transparency and reproducibility in the context of Open Science. Importantly, the foundational framework of `modisfast` (see section \autoref{foundational-fmwrk}) guarantees the package's long-term sustainability, open-source nature, and cost-free availability.
+Here, we introduce `modisfast`, an open-source R package [@R] designed to simplify, streamline, and accelerate the download and import of MODIS, VIIRS, and GPM time series for R users. This package expands and the existing ecosystem of R tools for accessing MODIS data, enhancing it by introducing new features and data sources. `modisfast` allows users to subset these datasets using spatial, temporal, and band/layer directly at the downloading phase - optimizing data download and processing - and to softly import them in R for further analysis. Additionally, downloads can be parallelized for increased efficiency. `modisfast` thus facilitates access to EO data for R users, particularly in regions with limited internet infrastructure, and enables embedding data extraction within complex and holistic data workflows in R - fostering transparency and reproducibility in the context of Open Science. Importantly, the foundational framework of `modisfast` guarantees the package's long-term sustainability, open-source nature, and cost-free availability.
 
 # Target audience
 
@@ -54,13 +54,13 @@ Here, we introduce `modisfast`, an open-source R package [@R] designed to simpli
 
  The typical workflow to access and import MODIS, VIIRS or GPM data in R with `modisfast` involves the following steps :
 
-1.  Defining the parameters of interest as natural R objects,
-2.  Login to NASA EOSDIS EarthData, with the function `mf_login()`,
-3.  Building the URL(s) of the dataset(s) of interest, with the function `mf_get_url()`,
-4.  Downloading the dataset(s), with the function `mf_download_data()` (the preferred and default output format is the widely used [NetCDF format](https://www.unidata.ucar.edu/software/netcdf/), although other formats can be defined),
-5.  Importing the dataset(s) in R as a `SpatRast` object of the `terra` library [@terra], with the function `mf_import_data()`.
+1.  **Defining the parameters of interest** as natural R objects (e.g. `sf` [@sf] objects and `Dates`),
+2.  **Executing the function `mf_login()`** to login to a [NASA EOSDIS EarthData account](https://urs.earthdata.nasa.gov/) (mandatory to access these data),
+3.  **Executing the function `mf_get_url()`** to build the URL(s) of the dataset(s) of interest (filtered spatially, temporally, and dimensionally),
+4.  **Executing the function `mf_download_data()`** to download the dataset(s) (the preferred and default output format is the widely used [NetCDF format](https://www.unidata.ucar.edu/software/netcdf/), although other formats can be defined),
+5.  **Executing the function `mf_import_data()`** to import the dataset(s) in R as a `SpatRast` object of the `terra` library [@terra].
 
-This workflow is graphically summarized in figure \autoref{fig:wf_modisfast} along with a toy example.
+This workflow is graphically summarized in \autoref{fig:wf_modisfast} along with a toy example.
 
 ![Workflow for MODIS, VIIRS or GPM data download and import with `modisfast`.\label{fig:wf_modisfast}](workflow_modisfast.png){width="100%"}
 
@@ -185,10 +185,11 @@ r <- mf_import_data(
   )
 ```
 
-You may now go ahead with any useful analysis, e.g. plot the data with (see \autoref{fig:example} for the output) :
+You may now go ahead with any useful analysis, e.g. plot the data :
 
 ``` r
-plot(r, col = rev(terrain.colors(20)))
+plot(r, col = rev(terrain.colors(20))) # See Figure 2 for the output
+
 ```
 
 ![Time series of monthly MODIS NDVI over Madagascar for the year 2023, retrieved with `modisfast`.\label{fig:example}](plot_mada_ndvi.png)
