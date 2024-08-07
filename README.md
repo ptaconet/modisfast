@@ -30,14 +30,32 @@ provides the MOD11A1.006 (MODIS/Terra Land Surface Temperature/Emissivity Daily 
 This package enables to build OPeNDAP (https) URLs given input parameters such as a data collection, region and time range of interst . These URLs can then be used to either download the data to your workspace or computer, or access the datacube directly as an R object (of class `ndcf4`, `raster`, `stars`, etc.)
 -->
 
-**`modisfast`** (formerly `opendapr`) is an R package that provides
-functions to **speed-up** the **download** of time-series raster data
-products derived from some
+## Table of contents
+
+<p align="left">
+• <a href="#overview">Overview</a><br> •
+<a href="#installation">Installation</a><br> •
+<a href="#get-started">Get started</a><br> •
+<a href="#collections-available-in-modisfast">Data collections
+available</a><br> • <a href="#foundational-framework">Foundational
+framework </a><br> •
+<a href="#comparison-with-similar-r-packages">Comparison with similar R
+packages</a><br> • <a href="#future-developments">Future
+developments</a><br> • <a href="#citation">Citation</a><br> •
+<a href="#contributing">Contributing</a><br> •
+<a href="#acknowledgments">Acknowledgments</a><br>
+</p>
+
+## Overview
+
+**`modisfast`** is an R package designed for **easy** and **fast**
+downloads and import of some widely-used satellite-derived environmental
+data, including
 [**MODIS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/)
-and
+Land products,
 [**VIIRS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/)
-observations, as well as other widely-used satellite-derived
-environmental data (e.g. Global Precipitation Measurement Mission).
+Land products, and \[**GPM**\])(<https://gpm.nasa.gov/data/>) products
+(Global Precipitation Measurement Mission).
 
 **`modisfast`** uses the abilities offered by the [OPeNDAP
 framework](https://www.opendap.org/about/) (*Open-source Project for a
@@ -53,15 +71,16 @@ data **over long time series** and **over areas**, rather than short
 time series and points.
 
 Below is a comparison of modisfast with other packages available for
-downloading chunks of remote sensing data :
+downloading chunks of MODIS or VIIRS data :
 
-| Package                                                  |                   Data                    | Temporal subsetting\* | Spatial subsetting\* | Dimensional subsetting\* |       Speed        |
-|:---------------------------------------------------------|:-----------------------------------------:|:---------------------:|:--------------------:|:------------------------:|:------------------:|
-| [`modisfast`](https://github.com/ptaconet/modisfast)     |             MODIS, VIIRS, GPM             |  :white_check_mark:   |  :white_check_mark:  |    :white_check_mark:    | :white_check_mark: |
-| [`MODIS`](https://github.com/fdetsch/MODIS)              |                   MODIS                   |  :white_check_mark:   |         :x:          |           :x:            | :white_check_mark: |
-| [`MODIStsp`](https://github.com/ropensci/MODIStsp)       |                   MODIS                   |  :white_check_mark:   |         :x:          |    :white_check_mark:    | :white_check_mark: |
-| [`MODISTools`](https://github.com/ropensci/MODISTools)   | MODIS and VIIRS (but not all collections) |  :white_check_mark:   |  :white_check_mark:  |    :white_check_mark:    | :white_check_mark: |
-| [`appeears`](https://github.com/bluegreen-labs/appeears) |       MODIS, VIIRS, and many others       |  :white_check_mark:   |  :white_check_mark:  |    :white_check_mark:    |        :x:         |
+|                         Package                          |                Data                | Available on CRAN  | Utilizes open standards for data access protocols | Spatial subsetting\* | Dimensional subsetting\* | Maximum area size allowed for download | [Speed](https://ptaconet.github.io/modisfast/articles/perf_comp.html) |
+|:--------------------------------------------------------:|:----------------------------------:|:------------------:|:-------------------------------------------------:|:--------------------:|:------------------------:|:--------------------------------------:|:---------------------------------------------------------------------:|
+|   [`modisfast`](https://github.com/ptaconet/modisfast)   |         MODIS, VIIRS, GPM          | :white_check_mark: |                :white_check_mark:                 |  :white_check_mark:  |    :white_check_mark:    |               unlimited                |                          :white_check_mark:                           |
+| [`appeears`](https://github.com/bluegreen-labs/appeears) |   MODIS, VIIRS, and many others    | :white_check_mark: |                :white_check_mark:                 |  :white_check_mark:  |    :white_check_mark:    |               unlimited                |                               variable                                |
+|  [`MODISTools`](https://github.com/ropensci/MODISTools)  |            MODIS, VIIRS            | :white_check_mark: |                        :x:                        |  :white_check_mark:  |    :white_check_mark:    |            200 km x 200 km             |                          :white_check_mark:                           |
+|       [`rgee`](https://github.com/r-spatial/rgee)        | MODIS, VIIRS, GPM, and many others | :white_check_mark: |                        :x:                        |  :white_check_mark:  |    :white_check_mark:    |               unlimited                |                              not tested                               |
+|    [`MODIStsp`](https://github.com/ropensci/MODIStsp)    |               MODIS                |        :x:         |                                                   |         :x:          |    :white_check_mark:    |               unlimited                |                                  NA                                   |
+|       [`MODIS`](https://github.com/fdetsch/MODIS)        |               MODIS                |        :x:         |                        :x:                        |         :x:          |           :x:            |                   NA                   |                                  NA                                   |
 
 \* at the downloading phase
 
@@ -85,7 +104,10 @@ devtools::install_github("ptaconet/modisfast")
 ## Get Started
 
 Accessing and opening MODIS data with `modisfast` is a simple 3-steps
-workflow, as shown in the example below.
+workflow, as shown in the example below. This example shows how to
+download a one-year-long monthly time series of MODIS Normalized
+Difference Vegetation Index (NDVI) at 1 km spatial resolution over the
+whole country of Madagascar.
 
 **1/ First, define the variables of interest (ROI, time frame,
 collection, and bands) :**
@@ -97,12 +119,12 @@ library(sf)
 library(terra)
 
 # ROI and time range of interest
-roi <- st_as_sf(data.frame(id = "roi_id", geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326) # a ROI of interest, format sf polygon
-time_range <- as.Date(c("2017-01-01","2017-06-01"))  # a time range of interest
+roi <- st_as_sf(data.frame(id = "madagascar", geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"), wkt="geom", crs = 4326) # a ROI of interest, format sf polygon
+time_range <- as.Date(c("2023-01-01","2023-12-31"))  # a time range of interest
 
 # MODIS collections and variables (bands) of interest
-collection <- "MOD11A2.061"  # run mf_list_collections() for an exhaustive list of collections available
-variables <- c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night") # run mf_list_variables("MOD11A2.061") for an exhaustive list of variables available for the collection "MOD11A1.062"
+collection <- "MOD13A3.061"  # run mf_list_collections() for an exhaustive list of collections available
+variables <- c("_1_km_monthly_NDVI") # run mf_list_variables("MOD13A3.061") for an exhaustive list of variables available for the collection "MOD13A3.061"
 ```
 
 **2/ Then, get the URL of the data and download them :**
@@ -137,18 +159,33 @@ r <- mf_import_data(
   proj_epsg = 4326
   )
 
-terra::plot(r)
+terra::plot(r, col = rev(terrain.colors(20)))
 ```
 
-![](.Rplot_readme.png)
+<figure>
+<img src=".Rplot_readme.png"
+alt="Time series of monthly 1-km MODIS NDVI over Madagascar for the year 2023, retrieved with modisfast" />
+<figcaption aria-hidden="true">Time series of monthly 1-km MODIS NDVI
+over Madagascar for the year 2023, retrieved with
+<code>modisfast</code></figcaption>
+</figure>
 
 et voilà !
 
-Want more examples of use of `modisfast` ? **Have a look at the
-[`vignette("get_started")`](https://ptaconet.github.io/modisfast/articles/get_started.html)
-to get started with a simple example, and see the
-[`vignette("modisfast2")`](https://ptaconet.github.io/modisfast/articles/modisfast2.html)
-for a more advanced workflow and nice `modisfast` features !**
+Want more examples ? `modisfast` provides three long-form documentations
+and examples to learn more about the package :
+
+- a [“Get started”
+  article](https://ptaconet.github.io/modisfast/articles/get_started.html)
+  describing the core features of the package;
+- a [“Get data on several regions or periods of interest simultaneously”
+  article](https://ptaconet.github.io/modisfast/articles/modisfast2.html)
+  detailing advanced functionalities of `modisfast` (for multi-time
+  frame or multi-regions data access);
+- a [“Full use case”
+  article](https://ptaconet.github.io/modisfast/articles/use_case.html)
+  showcasing an example of use of the package in a scientific context
+  (here: landscape epidemiology).
 
 <!--
 ## Objectives
@@ -1823,41 +1860,7 @@ Rainfall
 </p>
 </details>
 
-## Similar packages
-
-`modisfast` is particularly suited for retrieving MODIS or VIIRS data
-**over long time series** and **over areas**, rather than short time
-series and points.
-
-There are other R packages available for accessing MODIS data, which may
-be more suitable if your requirements differ. These include :
-
-- [`MODIS`](https://github.com/fdetsch/MODIS)
-- [`MODIStsp`](https://github.com/ropensci/MODIStsp)
-- [`MODIStools`](https://github.com/ropensci/MODIStools)
-- [`appeears`](https://github.com/bluegreen-labs/appeears)
-
-## Next steps
-
-Next developments may involve including access to more collections from
-other OPeNDAP servers, and submitting the package to the
-[rOpenSci](https://ropensci.org/) archives.
-
-Any contribution is welcome !
-
-## License and citation
-
-This package is licensed under a [GNU General Public License v3.0 or
-later](https://www.gnu.org/licenses/gpl-3.0-standalone.html) license.
-
-We thank in advance people that use `modisfast` for citing it in their
-work / publication(s). For this, please use the following citation :
-
-*Taconet, P. & Moiroux N.(2024). modisfast: Fast and Efficient Access to
-MODIS Earth Observation Data. In CRAN: Contributed Packages. The R
-Foundation. <https://doi.org/10.32614/cran.package.modisfast> *
-
-## Under the woods… how does `modisfast` work ?
+## Foundational framework
 
 `modisfast` is an R wrapper for OPeNDAP (*Open-source Project for a
 Network Data Access Protocol*). When utilized by data providers, such as
@@ -1891,6 +1894,54 @@ URL(s). Subsequently, the function `mf_download_data()` allows for
 downloading the data using the
 [`httr`](https://cran.r-project.org/package=httr) and `parallel`
 packages.
+
+## Comparison with similar R packages
+
+There are other R packages available for accessing MODIS data. These
+include :
+
+- [`MODIS`](https://github.com/fdetsch/MODIS)
+- [`MODIStsp`](https://github.com/ropensci/MODIStsp)
+- [`MODIStools`](https://github.com/ropensci/MODIStools)
+- [`appeears`](https://github.com/bluegreen-labs/appeears)
+
+**Take a look at the article [“Comparison of performance with other
+similar R
+packages”](https://ptaconet.github.io/modisfast/articles/perf_comp.html)
+to get an overview of how `modisfast` compares to these packages in
+terms of data access time.**
+
+## Future developments
+
+Future developments of the package may include access to additional data
+collections from other OPeNDAP servers, and support for a variety of
+data formats as they become available from data providers through their
+OPeNDAP servers. Furthermore, the creation of an RShiny application on
+top of the package is being considered, as a means of further
+simplifying data access for users with limited coding skills.
+
+## Citation
+
+This package is licensed under a [GNU General Public License v3.0 or
+later](https://www.gnu.org/licenses/gpl-3.0-standalone.html) license.
+
+We thank in advance people that use `modisfast` for citing it in their
+work / publication(s). For this, please use the following citation :
+
+> Taconet, P. & Moiroux N.(2024). modisfast: Fast and Efficient Access
+> to MODIS Earth Observation Data. In CRAN: Contributed Packages. The R
+> Foundation. <https://doi.org/10.32614/cran.package.modisfast>
+
+## Contributing
+
+All types of contributions are encouraged and valued. For more
+information, check out our [Contributor
+Guidelines](https://github.com/ptaconet/modisfast/blob/main/CONTRIBUTING.md).
+
+Please note that the `modisfast` project is released with a [Contributor
+Code of
+Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
 
 ## Acknowledgments
 
