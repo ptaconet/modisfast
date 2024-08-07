@@ -1,0 +1,217 @@
+---
+title: "Comparison of performance with other similar R packages"
+author: "Paul Taconet"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Comparison of performance with other similar R packages}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+format:
+  html:
+    code-overflow: scroll
+params:
+  password: "to complete interactively"
+---
+
+<!--  To render this vignette, use : rmarkdown::render("vignettes/articles/perf_comp.Rmd", params = "ask") -->
+
+```{r, include = FALSE}
+NOT_CRAN <- !identical(tolower(Sys.getenv("NOT_CRAN")), "true") # vignette will not be executed when tested on the cran
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  purl = NOT_CRAN
+)
+```
+
+# Introduction
+
+The goal of this exercise is to evaluate the performance of various R packages designed for accessing MODIS data, specifically focusing on data access and import times. To do this, we will download and import a one-year monthly time series of MODIS Normalized Difference Vegetation Index (NDVI) at a 1 km spatial resolution for the entire country of Madagascar.
+
+# Other R packages available for accessing MODIS data
+
+The [`MODIS`](https://github.com/fdetsch/MODIS) package offers access to some MODIS data through global online data archives, but it lacks comprehensive documentation and was removed from the CRAN repository in 2023 for policy violations. Furthermore, some of its dependencies are not available anymore on CRAN.
+
+The [`MODIStsp`](https://github.com/ropensci/MODIStsp) package provides both a command-line and a user-friendly graphical interface to extract MODIS data in standard TIFF or original HDF formats. However, it does not allow to extract data at a sub-tile level (i.e. spatial subsetting capabilities are limited), and it was also removed from the CRAN repository in 2023 at the maintainer's request.
+
+The [`MODIStools`](https://github.com/ropensci/MODISTools) package serves as a programmatic interface to the ['MODIS Land Products Subsets' web service](https://modis.ornl.gov/data/modis_webservice.html), providing access to 46 MODIS and VIIRS collections. This package, available on CRAN, extracts data at specific points or buffer zones around a point. However, for area-based queries, the maximum area size is 200 km x 200 km. This makes it suitable for point-based data extraction but less effective for wide area-based queries.
+
+The [`appeears`](https://github.com/bluegreen-labs/appeears) package acts as a programmatic interface to the [NASA AppEEARS API](https://appeears.earthdatacloud.nasa.gov/) services. AppEEARS is a NASA-built application that offers a simple and efficient way to access and transform geospatial data from a variety of federal data archives (including MODIS and VIIRS, but not GPM). AppEEARS allows accessing data from various NASA federal archives, including MODIS and VIIRS, and enables users to subset geospatial datasets using spatial, temporal, and band/layer parameters. Indeed, as for `modisfast`, AppEEARS uses OPeNDAP. While similar to `modisfast`, `appeears` offers a broader range of data sources but has a latency period (ranging from minutes to hours) for query processing due to server-side post-processing (mosaicking, reprojection, etc.).
+
+Finally, some R packages, such as [`rgee`](https://github.com/r-spatial/rgee) [@rgee], rely on proprietary software or data access protocols and are not discussed here for that reason.
+
+# System benchmarking 
+
+Before proceeding to the test, some system benchmarking :
+
+```{r benchmark, eval=T }
+library(benchmarkme)
+Sys.time()
+Sys.info()
+benchmarkme::get_r_version()
+benchmarkme::get_cpu()
+benchmarkme::get_ram()
+```
+
+# `appeears`
+
+```{r appears, eval = T }
+appears_start_time <- Sys.time()
+
+library(appeears)
+library(sf)
+library(terra)
+
+roi <- st_as_sf(data.frame(id = "madagascar", geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"), wkt="geom", crs = 4326) 
+time_range <- as.Date(c("2023-01-01","2023-12-31"))
+collection <- "MOD13A3.061"  
+variables <- c("_1_km_monthly_NDVI") 
+
+token <- rs_login(user = Sys.getenv("earthdata_un"))
+
+df <- data.frame(
+  task = "polygon_test",
+  subtask = "subtask",
+  start = as.character(time_range[1]),
+  end = as.character(time_range[2]),
+  product = collection,
+  layer = variables
+)
+
+# create the task
+task <- rs_build_task(
+  df = df,
+  roi = roi,
+  format = "netcdf4"
+)
+
+# request the task to be executed
+rs_request(
+  request = task,
+  user = Sys.getenv("earthdata_un"),
+  transfer = TRUE,
+  verbose = TRUE
+)
+
+r <- terra::rast(file.path(tempdir(),df$task,"MOD13A3.061_1km_aid0001.nc"))
+
+r
+
+appears_end_time <- Sys.time()
+```
+
+# `modisfast`
+
+```{r modisfast, eval = T }
+modisfast_start_time <- Sys.time()
+
+library(modisfast)
+library(sf)
+library(terra)
+
+roi <- st_as_sf(data.frame(id = "madagascar", geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"), wkt="geom", crs = 4326) 
+time_range <- as.Date(c("2023-01-01","2023-12-31"))
+collection <- "MOD13A3.061"  
+variables <- c("_1_km_monthly_NDVI") 
+
+log <- mf_login(credentials = c(Sys.getenv("earthdata_un"), Sys.getenv("earthdata_pw")))
+
+urls <- mf_get_url(
+  collection = collection,
+  variables = variables,
+  roi = roi,
+  time_range = time_range
+ )
+
+res_dl <- mf_download_data(urls, parallel = T)
+
+r <- mf_import_data(
+  path = dirname(res_dl$destfile[1]),
+  collection = collection, 
+  proj_epsg = 4326
+  )
+
+r
+
+modisfast_end_time <- Sys.time()
+```
+
+# `MODIS`
+
+We were not able to install the `MODIS` package, because some of the dependencies were not available for our version of R. **We could therefore not finish the test with `MODIS`.**
+
+# `MODIStsp`
+
+```{r modistsp, eval = T, error=TRUE }
+modistsp_start_time <- Sys.time()
+
+library(MODIStsp)
+
+MODIStsp(gui = FALSE, 
+         parallel = TRUE,
+         selprod = "Vegetation_Indexes_Monthly_1Km (M*D13A3)",
+         prod_version = "061",
+         bandsel = "NDVI",
+         sensor = "Terra",
+         start_date = gsub("-",".",as.character(time_range[1])),
+         end_date   = gsub("-",".",as.character(time_range[2])),
+         user = Sys.getenv("earthdata_un"),
+         password = Sys.getenv("earthdata_pw"),
+         bbox = c(41.95,-26.17,51.26,-11.37),
+         download_range = "Full",
+         spatmeth = "bbox",
+         out_projsel = "User Defined",
+         output_proj = "4326",
+         out_res_sel = "Native",
+         out_format = "GTiff"
+)
+
+modistsp_end_time <- Sys.time()
+```
+
+The system returns that "Username and/or password are not valid", although they are those successfully used with both `modisfast` and `appeears`. **We could therefore not finish the test with `MODIStsp`.**
+
+# `MODIStools`
+
+MOD13A3 is not available with `MODIStools`, so we run the exercise with MOD21A2 (spatial resolution : 1 km ; temporal resolution : 8 day). Because the temporal resolution is 4 fold lower than MOD13A3 (8 days instead of 1 month), we also divide the time range by 4 to have comparable data. 
+
+```{r modistools, eval = T , error=TRUE}
+modistools_start_time <- Sys.time()
+
+library(MODISTools)
+
+subset <- mt_subset(product = "MOD21A2",
+                    lat = -19.5,
+                    lon = 46.5,
+                    band = "LST_Day_1KM",
+                    start = as.character(time_range[1]),
+                    end = "2023-03-12",
+                    km_lr = 500,
+                    km_ab = 900,
+                    site_name = "madagascar",
+                    internal = TRUE,
+                    progress = FALSE)
+
+modistools_end_time <- Sys.time()
+```
+
+The system returns that "Number of kilometers above or below the subset location must be less than or equal to 100.", which is not enough for the whole size of Madagascar. `MODIStools` enables to download data for 200 km x 200 km areas maximum. **We could therefore not finish the test with `MODIStools`.**
+
+# Results
+
+`modisfast` and `appeears` passed the test, while `MODIS`, `MODIStools` and `MODIStsp` did not (for different reasons). Let's see the duration of data processing access :
+
+```{r results_benchmark, eval = T }
+
+# with modisfast
+round(modisfast_end_time - modisfast_start_time,2)
+
+# with appeears
+round(appears_end_time - appears_start_time,2)
+
+```
+
+We see here that accessing and importing the time-series with `modisfast` was much faster than with `appeears` ! Once again, `appeears` has a variable latency period for query processing, ranging from minutes to hours, due to server-side post-processing. `modisfast` does not have such latency.
