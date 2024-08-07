@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2. Get data on several regions or periods of interest at a glance • modisfast</title>
+<title>2. Get data on several regions or periods of interest simultaneously • modisfast</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="2. Get data on several regions or periods of interest at a glance">
+<meta property="og:title" content="2. Get data on several regions or periods of interest simultaneously">
 <meta property="og:description" content="modisfast">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modisfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.1</span>
       </span>
     </div>
 
@@ -61,12 +61,18 @@
       <a href="../articles/get_started.html">1. Get started</a>
     </li>
     <li>
-      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest at a glance</a>
+      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest simultaneously</a>
+    </li>
+    <li>
+      <a href="../articles/perf_comp.html">4. Comparison of performance with other similar R packages</a>
     </li>
     <li>
       <a href="../articles/use_case.html">3. Full use case</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -90,11 +96,11 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>2. Get data on several regions or periods of
-interest at a glance</h1>
+interest simultaneously</h1>
                         <h4 data-toc-skip class="author">Paul
 Taconet</h4>
             
-            <h4 data-toc-skip class="date">2024-07-09</h4>
+            <h4 data-toc-skip class="date">2024-08-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ptaconet/modisfast/blob/HEAD/vignettes/articles/modisfast2.Rmd" class="external-link"><code>vignettes/articles/modisfast2.Rmd</code></a></small>
       <div class="hidden name"><code>modisfast2.Rmd</code></div>
@@ -133,7 +139,7 @@ why and we show how to optimize the data import in the case of
 periods</strong> of interest. Let’s start !</p>
 </div>
 <div class="section level2">
-<h2 id="get-data-over-multiple-regions-of-interest-at-a-glance">Get data over multiple regions of interest at a glance<a class="anchor" aria-label="anchor" href="#get-data-over-multiple-regions-of-interest-at-a-glance"></a>
+<h2 id="get-data-over-multiple-regions-of-interest-simultaneously">Get data over multiple regions of interest simultaneously<a class="anchor" aria-label="anchor" href="#get-data-over-multiple-regions-of-interest-simultaneously"></a>
 </h2>
 <p>It is very easy to get data over multiple regions of interest, as
 <code><a href="../reference/mf_get_url.html">mf_get_url()</a></code> naturally supports the setting up of various
@@ -181,7 +187,7 @@ ROIs, as shown in the example below :</p>
 <span><span class="va">modis_ts_diebougou</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"data"</span>,<span class="st">"Diebougou"</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="get-data-over-multiple-time-periods-of-interest-at-a-glance">Get data over multiple time periods of interest at a glance<a class="anchor" aria-label="anchor" href="#get-data-over-multiple-time-periods-of-interest-at-a-glance"></a>
+<h2 id="get-data-over-multiple-time-periods-of-interest-simultaneously">Get data over multiple time periods of interest simultaneously<a class="anchor" aria-label="anchor" href="#get-data-over-multiple-time-periods-of-interest-simultaneously"></a>
 </h2>
 <p>Here, the things are just a bit more different, as explained in this
 example :</p>
@@ -300,7 +306,7 @@ argument <code>opt_param</code> :</p>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Paul Taconet.</p>
+<p>Developed by Paul Taconet, Nicolas Moiroux, French National Research Institute for Sustainable Development, IRD.</p>
 </div>
 
 <div class="pkgdown">

@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modisfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.1</span>
       </span>
     </div>
 
@@ -61,12 +61,18 @@
       <a href="../articles/get_started.html">1. Get started</a>
     </li>
     <li>
-      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest at a glance</a>
+      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest simultaneously</a>
+    </li>
+    <li>
+      <a href="../articles/perf_comp.html">4. Comparison of performance with other similar R packages</a>
     </li>
     <li>
       <a href="../articles/use_case.html">3. Full use case</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -100,7 +106,7 @@
                         <h4 data-toc-skip class="author">Paul
 Taconet</h4>
             
-            <h4 data-toc-skip class="date">2024-07-09</h4>
+            <h4 data-toc-skip class="date">2024-08-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ptaconet/modisfast/blob/HEAD/vignettes/articles/get_started.Rmd" class="external-link"><code>vignettes/articles/get_started.Rmd</code></a></small>
       <div class="hidden name"><code>get_started.Rmd</code></div>
@@ -133,7 +139,7 @@ collections that are available for download, using the function
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">collections</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_list_collections.html">mf_list_collections</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">collections</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'data.frame':    78 obs. of  26 variables:</span></span>
+<span><span class="co">#&gt; 'data.frame':    77 obs. of  26 variables:</span></span>
 <span><span class="co">#&gt;  $ collection              : chr  "GPM_3IMERGDE.06" "GPM_3IMERGDF.06" "GPM_3IMERGDF.07" "GPM_3IMERGDL.06" ...</span></span>
 <span><span class="co">#&gt;  $ source                  : chr  "GPM" "GPM" "GPM" "GPM" ...</span></span>
 <span><span class="co">#&gt;  $ long_name               : chr  "GPM IMERG Early Precipitation L3 1 day 0.1 degree x 0.1 degree V06" "GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V06" "GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V07" "GPM IMERG Late Precipitation L3 1 day 0.1 degree x 0.1 degree V06" ...</span></span>
@@ -199,13 +205,13 @@ account go to : <a href="https://urs.earthdata.nasa.gov/" class="external-link u
 <p>With the function <code><a href="../reference/mf_get_url.html">mf_get_url()</a></code>, we get the https URLs
 for our collections of interest (<em>MOD11A1.061</em> and
 <em>GPM_3IMERGDF.07</em>) given our ROI and time frame.</p>
-<p>➡️ For each collection, we can select a subset only of variables
-(sometimes called “dimensions”, or “bands”) that are of interest for us,
-through the parameter <code>variables</code>. By default, this parameter
-is set to <code>NULL</code>, which means that all the available
-variables for the specified collection are included. To get the
-variables available for a given collection along with information for
-each of them (description, etc.), use the function
+<p>:arrow_right: For each collection, we can select a subset only of
+variables (sometimes called “dimensions”, or “bands”) that are of
+interest for us, through the parameter <code>variables</code>. By
+default, this parameter is set to <code>NULL</code>, which means that
+all the available variables for the specified collection are included.
+To get the variables available for a given collection along with
+information for each of them (description, etc.), use the function
 <code><a href="../reference/mf_list_variables.html">mf_list_variables()</a></code>.</p>
 <!-- ➡️ **Note on the use of the parameter `variables` of the function `mf_get_url()` :** -->
 <!-- The collections generally contain several variables (sometimes called "dimensions", or "bands"). As an example, MODIS LST products contain one band for the day temperature ("LST_Day_1km"), one band for the night temperature ("LST_Night_1km"), etc. To get all the variables available for a given collection along with information for each of them (description, etc.), use the function `mf_list_variables()`. e.g. : -->
@@ -278,7 +284,11 @@ need to be downloaded.</p>
 <span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">df_to_dl</span>, path <span class="op">=</span> <span class="va">target_fold</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 13  datasets in total :  0  already downloaded and  13  datasets to download</span></span>
 <span><span class="co">#&gt; Downloading the data...</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Only part of the data has been downloaded. Downloading the remaining datasets one by one...</span></span>
+<span><span class="co">#&gt; 13  datasets in total :  12  already downloaded and  1  datasets to download</span></span>
+<span><span class="co">#&gt; Downloading the data...</span></span>
+<span><span class="co">#&gt; [ 1  over  1 ]</span></span>
+<span><span class="co">#&gt; Downloading: 480 B     Downloading: 480 B     Downloading: 480 B       |                                                                              |                                                                      |   0%Downloading: 7.2 kB     Downloading: 7.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 27 kB     Downloading: 27 kB     Downloading: 27 kB     Downloading: 27 kB     </span></span>
 <span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  env_data/data/Korhogo/MOD13A3.061 and env_data/data/Korhogo/GPM_3IMERGM.07 </span></span>
 <span><span class="co">#&gt; **To import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)**</span></span>
 <span></span>
@@ -291,7 +301,7 @@ need to be downloaded.</p>
 <span><span class="co">#&gt;  $ url       : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A3.061/h17v08.ncml.nc4?MOD_Grid_monthly_1km_VI_eos_cf_projection"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170101-S000000-E2"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170201-S000000-E2"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170301-S000000-E2"| __truncated__ ...</span></span>
 <span><span class="co">#&gt;  $ destfile  : chr  "env_data/data/Korhogo/MOD13A3.061/MOD13A3.061.2017001_2017335.h17v08.nc4" "env_data/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170101-S000000-E235959.01.V07B.nc4" "env_data/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170201-S000000-E235959.02.V07B.nc4" "env_data/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170301-S000000-E235959.03.V07B.nc4" ...</span></span>
 <span><span class="co">#&gt;  $ fileDl    : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...</span></span>
-<span><span class="co">#&gt;  $ fileSize  : num  284663 26540 26495 26548 26560 ...</span></span>
+<span><span class="co">#&gt;  $ fileSize  : num  288607 26540 26495 26548 26560 ...</span></span>
 <span><span class="co">#&gt;  $ dlStatus  : num  1 1 1 1 1 1 1 1 1 1 ...</span></span>
 <span><span class="co">#&gt; NULL</span></span></code></pre></div>
 </div>
@@ -309,7 +319,7 @@ from the excellent <a href="https://cran.r-project.org/package=stars" class="ext
 package for data cubes manipulation. All the data can also be imported
 as <code>ncdf4</code> objects using e.g. the <a href="https://cran.r-project.org/package=ncdf4" class="external-link"><code>ncdf4</code></a>
 package.</p>
-<p>⚠️ ⚠️ ⚠️ ⚠️</p>
+<p>:warning: :warning: :warning: :warning:</p>
 <div class="section level4">
 <h4 id="warning-import">Important warning regarding the use of the data after download
 through <code>modisfast</code><a class="anchor" aria-label="anchor" href="#warning-import"></a>
@@ -393,7 +403,7 @@ the data in R as a <code>SpatRaster</code> object (from the package <a href="htt
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Paul Taconet.</p>
+<p>Developed by Paul Taconet, Nicolas Moiroux, French National Research Institute for Sustainable Development, IRD.</p>
 </div>
 
 <div class="pkgdown">
