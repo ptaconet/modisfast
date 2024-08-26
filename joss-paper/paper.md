@@ -30,11 +30,11 @@ bibliography: paper.bib
 
 # Statement of need
 
-Data from EO satellites are a crucial and increasingly valuable resource for monitoring and understanding our planet, especially in the context of global change. EO data from the NASA are among the richest and longest-standing in the field. Iconic and widely NASA EO data collections include the MODIS Land products [@JUSTICE20023], the VIIRS products - which continue the legacy of MODIS [@ROMAN2024113963], and the GPM mission products [@SkofronickJackson2017]. Collectively, these products have provided essential data for over 20 years, enabling the study of Earth's dynamics. They support research in climate change, disaster response, biodiversity, ecosystem monitoring, ecology, public health, and more [@modis-applications].
+EO satellite data are invaluable for monitoring and understanding our planet, with NASA's datasets like MODIS [@JUSTICE20023], VIIRS [@ROMAN2024113963], and GPM [@SkofronickJackson2017] among the most important. These collections have provided crucial data for over 20 years, supporting research in areas such as climate change, disaster response, biodiversity, public health, and more [@modis-applications].
 
-Despite the growing availability of EO data, accessing and utilizing them remains challenging due to large file sizes and complex multidimensional layers [@AGNOLI2023122357], especially for long time series and in areas with limited internet. This complexity can lead to underutilization or fragmented data processing workflows, hindering transparent and reproducible open science. While powerful tools like [Google Earth Engine](https://earthengine.google.com/) [@GORELICK201718] offer some solutions, they have drawbacks such as proprietary and energy-intensive software. To fully realize the potential of EO data for global research and decision-making, it is crucial to simplify, lighten and streamline access while maintaining an open-source framework.
+However, despite the increasing availability of EO data, accessing and utilizing them remains challenging [@AGNOLI2023122357]. The large file sizes and complex multidimensional layers make it difficult to work with long time series, especially in regions with limited internet infrastructure. This complexity often leads to underutilization of data, fragmented workflows, and reliance on proprietary, energy-intensive tools like [Google Earth Engine](https://earthengine.google.com/), which can hinder transparent and reproducible Open Science.
 
-In this context we have developed `modisfast`, an open-source R package [@R] designed to simplify, streamline, and speed-up the download and import of MODIS, VIIRS, and GPM time series for R users. Enhancing the existing R ecosystem for accessing MODIS data, `modisfast` introduces new features and supports additional data sources. Built on the [OPeNDAP](https://www.opendap.org/) protocol, `modisfast` allows users to apply spatial, temporal, and band/layer filters during the download phase, optimizing data retrieval and processing. The package also supports parallelized downloads for increased efficiency. Thus, `modisfast` facilitates access to a set of EO data for R users, while using and promoting open-source international standards for data access.
+To address these challenges, we developed `modisfast`, an R [@R] package designed to simplify and speed-up the download and import of MODIS, VIIRS, and GPM time series for R users. Built on the [OPeNDAP](https://www.opendap.org/) protocol, `modisfast` enhances the existing R ecosystem of tools for accessing MODIS data by introducing new features and supporting additional data sources. It allows users to apply spatial, temporal, and band/layer filters during the download phase, optimizing data retrieval and processing while promoting open-source international standards for data access.
 
 # Target audience
 
@@ -72,7 +72,7 @@ The typical workflow to access and import MODIS, VIIRS or GPM data in R with `mo
 
 # Alternatives
 
-Besides `modisfast`, there are several open-source R packages available for accessing MODIS or VIIRS Land products. Table 1 summarizes the main features of these packages. A thorough comparison of `modisfast` with these R packages in terms of data access time can be found in the [package documentation](https://ptaconet.github.io/modisfast/articles/perf_comp.html).
+Besides `modisfast`, there are several open-source R packages available for accessing MODIS or VIIRS Land products. Table 1 summarizes the main features of these packages. A thorough comparison of `modisfast` with these R packages (including data access time) can be found in the [package documentation](https://ptaconet.github.io/modisfast/articles/perf_comp.html).
 
 |                                                      |                    `modisfast`                    |                       `appeears`                       |                   `MODIS`                    |                    `MODIStsp`                    |                    `MODIStools`                    |                    `rgee`                     |
 |-----------|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
@@ -87,15 +87,12 @@ Besides `modisfast`, there are several open-source R packages available for acce
 | Website                                              | [`GitHub`](https://github.com/ptaconet/modisfast) | [`GitHub`](https://github.com/bluegreen-labs/appeears) | [`GitHub`](https://github.com/fdetsch/MODIS) | [`GitHub`](https://github.com/ropensci/MODIStsp) | [`GitHub`](https://github.com/ropensci/MODISTools) | [`GitHub`](https://github.com/r-spatial/rgee) |
 | Publication                                          |                                                   |                         @rgee                          |                      NA                      |                    @MODIStsp                     |                    @modistools                     |                     @rgee                     |
 
-Table 1: Comparison of `modisfast` with other popular alternatives.
+Table 1: Comparison of `modisfast` with other alternatives.
 
 # Acknowledgements
 
 We thank NASA and its partners for making all their Earth science data freely available, and financing and implementing open data access protocols such as OPeNDAP. We also thank the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about/) for developing and maintaining the eponym tool, and the developers of the R packages `modisfast` depends on.
 
-This work has been developed over the course of several research projects :
-
--   the REACT 1 and REACT 2 projects funded by the *l'Initiative - Expertise France* ;
--   the ANORHYTHM (ANR-16-CE35-008) and DIV-YOO project (ANR-23-CE35-0005) funded by the French National Research Agency (ANR).
+This work has been developed over the course of several research projects (REACT 1, REACT 2, ANORHYTHM and DIV-YOO) funded by Expertise France and the French National Research Agency (ANR).
 
 # References
