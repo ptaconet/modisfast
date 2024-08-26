@@ -64,6 +64,8 @@ This package enables to build OPeNDAP (https) URLs given input parameters such a
 
 `modisfast` is hence particularly suited for retrieving MODIS or VIIRS data **over long time series** and **over areas**, rather than short time series and points.
 
+Importantly, the robust, sustainable, and cost-free [foundational framework](#foundational-framework) of `modisfast`, both for the data provider (NASA) and the software (R, OPeNDAP, the `tidyverse` and `GDAL` suite of packages and software), guarantees the long-term reliability and open-source nature of the package.
+
 Below is a comparison of modisfast with other packages available for downloading chunks of MODIS or VIIRS data :
 
 
@@ -225,9 +227,11 @@ mf_list_collections() %>%
 </p>
 </details>
 
-## Foundational framework
+## Foundational framework  {#foundational-framework}
 
-`modisfast` is an R wrapper for OPeNDAP (*Open-source Project for a Network Data Access Protocol*). When utilized by data providers, such as those managing many NASA datasets, OPeNDAP allows for subsetting portions of Earth observation cubes based on any dimension by specifying filters in a URL. `modisfast` facilitates this process by constructing the URL based on the spatial, temporal, and dimensional filters provided by the user in the function `mf_get_url()`.
+Technically, `modisfast` is a programmatic interface (R wrapper) to several NASA OPeNDAP (https://www.opendap.org/) servers. OPeNDAP is the acronym for *Open-source Project for a Network Data Access Protocol* and designates both the software, the access protocol, and the corporation that develops them. The OPeNDAP is designed to simplify access to structured and high-volume data, such as satellite products, over the Web. It is a collaborative effort involving multiple institutions and companies, with open-source code, free software, and adherence to the [Open Geospatial Consortium](https://www.ogc.org/) (OGC) standards. It is widely used by NASA, which partly finances it. 
+
+A key feature of OPeNDAP is its capability to apply filters at the data download process, ensuring that only the necessary data is retrieved. These filters, specified within a URL, can be spatial, temporal, or dimensional. Although powerful, OPeNDAP URLs are not trivial to build. `modisfast` facilitates this process by constructing the URL based on the spatial, temporal, and dimensional filters provided by the user in the function `mf_get_url()`.
 
 Let's take an example to understand.
 
