@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modisfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.1</span>
       </span>
     </div>
 
@@ -32,15 +32,21 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/get_started.html">1. Get started </a>
+      <a href="../articles/get_started.html">1. Get started</a>
     </li>
     <li>
-      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest at a glance</a>
+      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest simultaneously</a>
+    </li>
+    <li>
+      <a href="../articles/perf_comp.html">Comparison of performance with other similar R packages</a>
     </li>
     <li>
       <a href="../articles/use_case.html">3. Full use case</a>
     </li>
   </ul></li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/ptaconet/modisfast/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
@@ -64,13 +70,21 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
+          <p><code><a href="entomological_data.html">entomological_data</a></code> </p>
+        </td>
+        <td><p>Example dataset containing abundances of mosquitoes vectors of malaria. Used in article 'use_case'.</p></td>
+      </tr><tr><td>
           <p><code><a href="mf_download_data.html">mf_download_data()</a></code> </p>
         </td>
         <td><p>Download several datasets given their URLs and destination path</p></td>
       </tr><tr><td>
+          <p><code><a href="mf_get_data.html">mf_get_data()</a></code> </p>
+        </td>
+        <td><p>Execute the whole workflow</p></td>
+      </tr><tr><td>
           <p><code><a href="mf_get_opt_param.html">mf_get_opt_param()</a></code> </p>
         </td>
-        <td><p>Precompute the parameter <code>opt_param</code> of the function mf_get_url</p></td>
+        <td><p>Precompute the parameter <code>opt_param</code> of the function <a href="https://rdrr.io/pkg/modisfast/man/mf_get_url.html" class="external-link">mf_get_url</a></p></td>
       </tr><tr><td>
           <p><code><a href="mf_get_url.html">mf_get_url()</a></code> </p>
         </td>
@@ -78,19 +92,19 @@
       </tr><tr><td>
           <p><code><a href="mf_import_data.html">mf_import_data()</a></code> </p>
         </td>
-        <td><p>Import the time series in R as a <code>SpatRaster</code> object</p></td>
+        <td><p>Import datasets downloaded using <code>modisfast</code> as a <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> object</p></td>
       </tr><tr><td>
           <p><code><a href="mf_list_collections.html">mf_list_collections()</a></code> </p>
         </td>
-        <td><p>Get the collections implemented in the package</p></td>
+        <td><p>Get the collections available for download with the <code>modisfast</code> package</p></td>
       </tr><tr><td>
           <p><code><a href="mf_list_variables.html">mf_list_variables()</a></code> </p>
         </td>
-        <td><p>Get informations related to the variables available for a given collection</p></td>
+        <td><p>Get information for the variables (bands) available for a given collection</p></td>
       </tr><tr><td>
           <p><code><a href="mf_login.html">mf_login()</a></code> </p>
         </td>
-        <td><p>Login to query servers and download data</p></td>
+        <td><p>Login to EOSDIS EarthData account</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -100,7 +114,7 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Paul Taconet.</p>
+  <p></p><p>Developed by Paul Taconet, Nicolas Moiroux, French National Research Institute for Sustainable Development, IRD.</p>
 </div>
 
 <div class="pkgdown">

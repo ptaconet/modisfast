@@ -1,10 +1,10 @@
 ---
-title: "Comparison of performance with other similar R packages"
+title: "4. Comparison of performance with other similar R packages"
 author: "Paul Taconet"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Comparison of performance with other similar R packages}
+  %\VignetteIndexEntry{4. Comparison of performance with other similar R packages}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 format:
@@ -47,7 +47,7 @@ Finally, some R packages, such as [`rgee`](https://github.com/r-spatial/rgee) [@
 
 Before proceeding to the test, some system benchmarking :
 
-```{r benchmark, eval=T }
+```{r benchmark, eval=F }
 library(benchmarkme)
 Sys.time()
 Sys.info()
@@ -58,7 +58,7 @@ benchmarkme::get_ram()
 
 # `appeears`
 
-```{r appears, eval = T }
+```{r appears, eval = F }
 appears_start_time <- Sys.time()
 
 library(appeears)
@@ -105,7 +105,7 @@ appears_end_time <- Sys.time()
 
 # `modisfast`
 
-```{r modisfast, eval = T }
+```{r modisfast, eval = F }
 modisfast_start_time <- Sys.time()
 
 library(modisfast)
@@ -145,7 +145,7 @@ We were not able to install the `MODIS` package, because some of the dependencie
 
 # `MODIStsp`
 
-```{r modistsp, eval = T, error=TRUE }
+```{r modistsp, eval = F, error=TRUE }
 modistsp_start_time <- Sys.time()
 
 library(MODIStsp)
@@ -178,7 +178,7 @@ The system returns that "Username and/or password are not valid", although they 
 
 MOD13A3 is not available with `MODIStools`, so we run the exercise with MOD21A2 (spatial resolution : 1 km ; temporal resolution : 8 day). Because the temporal resolution is 4 fold lower than MOD13A3 (8 days instead of 1 month), we also divide the time range by 4 to have comparable data. 
 
-```{r modistools, eval = T , error=TRUE}
+```{r modistools, eval = F , error=TRUE}
 modistools_start_time <- Sys.time()
 
 library(MODISTools)
@@ -204,7 +204,7 @@ The system returns that "Number of kilometers above or below the subset location
 
 `modisfast` and `appeears` passed the test, while `MODIS`, `MODIStools` and `MODIStsp` did not (for different reasons). Let's see the duration of data processing access :
 
-```{r results_benchmark, eval = T }
+```{r results_benchmark, eval = F }
 
 # with modisfast
 round(modisfast_end_time - modisfast_start_time,2)

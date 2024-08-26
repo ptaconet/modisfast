@@ -18,7 +18,7 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modisfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.1</span>
       </span>
     </div>
 
@@ -33,15 +33,21 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/get_started.html">1. Get started </a>
+      <a href="../articles/get_started.html">1. Get started</a>
     </li>
     <li>
-      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest at a glance</a>
+      <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest simultaneously</a>
+    </li>
+    <li>
+      <a href="../articles/perf_comp.html">Comparison of performance with other similar R packages</a>
     </li>
     <li>
       <a href="../articles/use_case.html">3. Full use case</a>
     </li>
   </ul></li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/ptaconet/modisfast/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
@@ -70,13 +76,13 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mf_download_data</span><span class="op">(</span></span>
 <span>  <span class="va">df_to_dl</span>,</span>
-<span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"tmp"</span><span class="op">)</span>,</span>
-<span>  parallel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"modisfast_"</span><span class="op">)</span>,</span>
+<span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  num_workers <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,</span>
 <span>  credentials <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  source <span class="op">=</span> <span class="st">"earthdata"</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  min_filesize <span class="op">=</span> <span class="fl">5000</span></span>
+<span>  min_filesize <span class="op">=</span> <span class="fl">5000</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -87,7 +93,7 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
 
 
 <dt>path</dt>
-<dd><p>string. Target folder for the data to download. Default : <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile()</a></code></p></dd>
+<dd><p>string. Target folder for the data to download. Default : temporary folder.</p></dd>
 
 
 <dt>parallel</dt>
@@ -99,11 +105,7 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
 
 
 <dt>credentials</dt>
-<dd><p>vector string of length 2 with username and password. optional.</p></dd>
-
-
-<dt>source</dt>
-<dd><p>source. See details</p></dd>
+<dd><p>vector string of length 2 with username and password. optional if the function <a href="mf_login.html">mf_login</a> was previously executed.</p></dd>
 
 
 <dt>verbose</dt>
@@ -111,7 +113,11 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
 
 
 <dt>min_filesize</dt>
-<dd><p>integer. minimum file size expected (in bites) for one file downloaded. If files downloaded are less that this value, the files will be downloaded again. Default 5000.</p></dd>
+<dd><p>integer. Minimum file size expected (in bites) for one file downloaded. If files downloaded are less that this value, the files will be downloaded again. Default 5000.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>not used</p></dd>
 
 </dl></div>
     <div id="value">
@@ -131,7 +137,7 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>Parameter <code>df_to_dl</code> must a data.frame with the following minimal structure :</p><dl><dt>id_roi</dt>
+    <p>Parameter <code>df_to_dl</code> must be a data.frame with the following minimal structure :</p><dl><dt>id_roi</dt>
 <dd><p>An id for the ROI (character string)</p></dd>
 
 <dt>collection</dt>
@@ -141,13 +147,51 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
 <dd></dd>
 
 <dt>url</dt>
-<dd><p>URL of the source file (character string)</p></dd>
+<dd><p>URL of the file to download (character string)</p></dd>
 
 
-</dl><p>Parameter <code>source</code> takes NULL as default value. Options are :</p><ul><li><p><code>NULL</code> :  when no mf_login is required to download the data.</p></li>
-<li><p><code>"earthdata"</code> :  to download data requiring a mf_login to EOSDIS Earthdata. To create an account go to : https://urs.earthdata.nasa.gov/</p></li>
-</ul></div>
+</dl></div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">### Login to EOSDIS Earthdata with your username and password</span></span></span>
+<span class="r-in"><span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="mf_login.html">mf_login</a></span><span class="op">(</span>credentials <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"earthdata_un"</span>,<span class="st">"earthdata_pw"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">### Set-up parameters of interest</span></span></span>
+<span class="r-in"><span><span class="va">coll</span> <span class="op">&lt;-</span> <span class="st">"MOD11A1.061"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">bands</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LST_Day_1km"</span>,<span class="st">"LST_Night_1km"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">time_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2017-01-01"</span>,<span class="st">"2017-01-30"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>id <span class="op">=</span> <span class="st">"roi_test"</span>,</span></span>
+<span class="r-in"><span>geom<span class="op">=</span><span class="st">"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>wkt<span class="op">=</span><span class="st">"geom"</span>,crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">### Get the URLs of the data</span></span></span>
+<span class="r-in"><span><span class="op">(</span><span class="va">urls_mod11a1</span> <span class="op">&lt;-</span> <span class="fu"><a href="mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>collection <span class="op">=</span> <span class="va">coll</span>,</span></span>
+<span class="r-in"><span>variables <span class="op">=</span> <span class="va">bands</span>,</span></span>
+<span class="r-in"><span>roi <span class="op">=</span> <span class="va">roi</span>,</span></span>
+<span class="r-in"><span>time_range <span class="op">=</span> <span class="va">time_range</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">### Download the data</span></span></span>
+<span class="r-in"><span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu">mf_download_data</span><span class="op">(</span><span class="va">urls_mod11a1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">### Import the data as terra::SpatRast</span></span></span>
+<span class="r-in"><span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="mf_import_data.html">mf_import_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">res_dl</span><span class="op">$</span><span class="va">destfile</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, collection <span class="op">=</span> <span class="va">coll</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">### Plot the data</span></span></span>
+<span class="r-in"><span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis_ts</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
@@ -156,7 +200,7 @@ The download can the parallelized."><meta property="og:image" content="/logo.png
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Paul Taconet.</p>
+  <p></p><p>Developed by Paul Taconet, Nicolas Moiroux, French National Research Institute for Sustainable Development, IRD.</p>
 </div>
 
 <div class="pkgdown">
