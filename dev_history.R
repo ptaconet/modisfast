@@ -99,6 +99,8 @@ devtools::install()
 # devtools::check_win_release()
 
 ## To build a website with home and vignettes
+pkgdown::build_site()
+
 usethis::use_package_doc()
 
 ## To build a website with home and articles (not vignettes)

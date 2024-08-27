@@ -54,17 +54,17 @@ data, including
 [**MODIS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/)
 Land products,
 [**VIIRS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/)
-Land products, and \[**GPM**\])(<https://gpm.nasa.gov/data/>) products
+Land products, and [**GPM**](https://gpm.nasa.gov/data/) products
 (Global Precipitation Measurement Mission).
 
-**`modisfast`** uses the abilities offered by the [OPeNDAP
-framework](https://www.opendap.org/about/) (*Open-source Project for a
-Network Data Access Protocol*) to download a subset of Earth science
-data cube, along spatial, temporal or any other data dimension (depth,
-…). This way, it reduces downloading time and disk usage to their
-minimum : no more 1° x 1° MODIS tiles with 10 bands when your region of
-interest is only 30 km x 30 km wide and you need 2 bands ! Moreover,
-`modisfast` enables parallel downloads of data.
+**`modisfast`** uses the abilities offered by the
+[OPeNDAP](https://www.opendap.org/about/) framework (*Open-source
+Project for a Network Data Access Protocol*) to download a subset of
+Earth science data cube, along spatial, temporal or any other data
+dimension (depth, …). This way, it reduces downloading time and disk
+usage to their minimum : no more 1° x 1° MODIS tiles with 10 bands when
+your region of interest is only 30 km x 30 km wide and you need 2 bands
+! Moreover, `modisfast` enables parallel downloads of data.
 
 `modisfast` is hence particularly suited for retrieving MODIS or VIIRS
 data **over long time series** and **over areas**, rather than short
@@ -75,6 +75,11 @@ framework](#foundational-framework) of `modisfast`, both for the data
 provider (NASA) and the software (R, OPeNDAP, the `tidyverse` and `GDAL`
 suite of packages and software), guarantees the long-term reliability
 and open-source nature of the package.
+
+By enabling to download subsets of data cubes, `modisfast` facilites the
+access to Earth science data for R users in places where internet
+connection is slow or expensive and promotes digital sobriety for our
+research work.
 
 Below is a comparison of modisfast with other packages available for
 downloading chunks of MODIS or VIIRS data :
@@ -176,6 +181,7 @@ over Madagascar for the year 2023, retrieved with
 <code>modisfast</code></figcaption>
 </figure>
 
+  
 et voilà !
 
 Want more examples ? `modisfast` provides three long-form documentations
@@ -1922,11 +1928,11 @@ include :
 - [`MODIStools`](https://github.com/ropensci/MODIStools)
 - [`appeears`](https://github.com/bluegreen-labs/appeears)
 
-**Take a look at the article [“Comparison of performance with other
+Take a look at the article [“Comparison of performance with other
 similar R
 packages”](https://ptaconet.github.io/modisfast/articles/perf_comp.html)
 to get an overview of how `modisfast` compares to these packages in
-terms of data access time.**
+terms of data access time.
 
 ## Future developments
 
@@ -1971,18 +1977,8 @@ developing the eponym tool in an open and collaborative way.
 We also thank the contributors that have tested the package, reviewed
 the documentation and brought valuable feedbacks to improve the package
 : [Florian de Boissieu](https://github.com/floriandeboissieu), Julien
-Taconet, [Nicolas Moiroux](https://github.com/Nmoiroux)
+Taconet.
 
-The initial development and first release of this package were financed
-by the MIVEGEC unit of the [French Research Institute for Sustainable
-Development](https://en.ird.fr/), as part of the REACT project.
-
-By enabling to download subsets of data cubes, `modisfast` facilites the
-access to Earth science data for R users in places where internet
-connection is slow or expensive and promotes digital sobriety for our
-research work.
-
-The OPeNDAP, over which the package builds, is a project developed by
-the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about/) and
-advanced openly and collaboratively. By using this data access protocol,
-`modisfast` support the open-source-software movement.
+This work has been developed over the course of several research
+projects (REACT 1, REACT 2, ANORHYTHM and DIV-YOO) funded by Expertise
+France and the French National Research Agency (ANR).
