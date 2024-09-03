@@ -9,9 +9,9 @@
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/modisfast)](https://cran.r-project.org/package=modisfast)
 [![Github_Status_Badge](https://img.shields.io/badge/Github-0.9.2-blue.svg)](https://github.com/ptaconet/modisfast)
-[![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/ptaconet/modisfast/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast)
 [![R-CMD-check](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml)
 <!--[![CRAN_downloads](https://cranlogs.r-pkg.org/badges/grand-total/modisfast)-->
+[![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/ptaconet/modisfast/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast)
 [![DOI-zenodo](https://zenodo.org/badge/doi/10.5281/zenodo.8475.svg)](https://doi.org/10.5281/zenodo.12772739)
 <!-- badges: end -->
 
@@ -29,6 +29,9 @@ https://opendap.cr.usgs.gov/opendap/hyrax/MOD11A1.006/h17v08.ncml.nc4?MODIS_Grid
 provides the MOD11A1.006 (MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN Grid V006) data in netCDF, subsetted for bands LST_Day_1km, LST_Night_1km, QC_Day, QC_Night, for each day between the 2017-01-01 and the 2017-01-30, and within the following bounding box (lon/lat): -5.41 8.84, -5.82 9.54.
 This package enables to build OPeNDAP (https) URLs given input parameters such as a data collection, region and time range of interst . These URLs can then be used to either download the data to your workspace or computer, or access the datacube directly as an R object (of class `ndcf4`, `raster`, `stars`, etc.)
 -->
+
+:warning: **`modisfast` is currently temporarily unavailable, due to a
+migration of some NASA OPeNDAP servers from DAP2 to DAP4.**
 
 ## Table of contents
 
