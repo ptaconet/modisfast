@@ -30,9 +30,6 @@ provides the MOD11A1.006 (MODIS/Terra Land Surface Temperature/Emissivity Daily 
 This package enables to build OPeNDAP (https) URLs given input parameters such as a data collection, region and time range of interst . These URLs can then be used to either download the data to your workspace or computer, or access the datacube directly as an R object (of class `ndcf4`, `raster`, `stars`, etc.)
 -->
 
-:warning: **`modisfast` is currently temporarily unavailable, due to a
-migration of some NASA OPeNDAP servers from DAP2 to DAP4.**
-
 ## Table of contents
 
 <p align="left">
