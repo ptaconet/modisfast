@@ -80,20 +80,6 @@ access to Earth science data for R users in places where internet
 connection is slow or expensive and promotes digital sobriety for our
 research work.
 
-Below is a comparison of modisfast with other packages available for
-downloading chunks of MODIS or VIIRS data :
-
-|                         Package                          |                Data                | Available on CRAN  | Utilizes open standards for data access protocols | Spatial subsetting\* | Dimensional subsetting\* | Maximum area size allowed for download | [Speed](https://ptaconet.github.io/modisfast/articles/perf_comp.html) |
-|:--------------------------------------------------------:|:----------------------------------:|:------------------:|:-------------------------------------------------:|:--------------------:|:------------------------:|:--------------------------------------:|:---------------------------------------------------------------------:|
-|   [`modisfast`](https://github.com/ptaconet/modisfast)   |         MODIS, VIIRS, GPM          | :white_check_mark: |                :white_check_mark:                 |  :white_check_mark:  |    :white_check_mark:    |               unlimited                |                          :white_check_mark:                           |
-| [`appeears`](https://github.com/bluegreen-labs/appeears) |   MODIS, VIIRS, and many others    | :white_check_mark: |                :white_check_mark:                 |  :white_check_mark:  |    :white_check_mark:    |               unlimited                |                               variable                                |
-|  [`MODISTools`](https://github.com/ropensci/MODISTools)  |            MODIS, VIIRS            | :white_check_mark: |                        :x:                        |  :white_check_mark:  |    :white_check_mark:    |            200 km x 200 km             |                          :white_check_mark:                           |
-|       [`rgee`](https://github.com/r-spatial/rgee)        | MODIS, VIIRS, GPM, and many others | :white_check_mark: |                        :x:                        |  :white_check_mark:  |    :white_check_mark:    |               unlimited                |                              not tested                               |
-|    [`MODIStsp`](https://github.com/ropensci/MODIStsp)    |               MODIS                |        :x:         |                                                   |         :x:          |    :white_check_mark:    |               unlimited                |                                  NA                                   |
-|       [`MODIS`](https://github.com/fdetsch/MODIS)        |               MODIS                |        :x:         |                        :x:                        |         :x:          |           :x:            |                   NA                   |                                  NA                                   |
-
-\* at the downloading phase
-
 ## Installation
 
 You can install the released version of `modisfast` from
@@ -1438,15 +1424,22 @@ packages.
 
 ## Comparison with similar R packages
 
-There are other R packages available for accessing MODIS data. These
-include :
+There are other R packages available for accessing MODIS data. Below is
+a comparison of modisfast with other packages available for downloading
+chunks of MODIS or VIIRS data :
 
-- [`appeears`](https://github.com/bluegreen-labs/appeears)
-- [`MODIS`](https://github.com/fdetsch/MODIS)
-- [`MODIStsp`](https://github.com/ropensci/MODIStsp)
-- [`MODIStools`](https://github.com/ropensci/MODIStools)
+|                         Package                          |                Data                | Available on CRAN  | Utilizes open standards for data access protocols | Spatial subsetting\* | Dimensional subsetting\* | Maximum area size allowed for download |     Speed\*\*      |
+|:--------------------------------------------------------:|:----------------------------------:|:------------------:|:-------------------------------------------------:|:--------------------:|:------------------------:|:--------------------------------------:|:------------------:|
+|   [`modisfast`](https://github.com/ptaconet/modisfast)   |         MODIS, VIIRS, GPM          | :white_check_mark: |                :white_check_mark:                 |  :white_check_mark:  |    :white_check_mark:    |               unlimited                | :white_check_mark: |
+| [`appeears`](https://github.com/bluegreen-labs/appeears) |   MODIS, VIIRS, and many others    | :white_check_mark: |                :white_check_mark:                 |  :white_check_mark:  |    :white_check_mark:    |               unlimited                |      variable      |
+|  [`MODISTools`](https://github.com/ropensci/MODISTools)  |            MODIS, VIIRS            | :white_check_mark: |                        :x:                        |  :white_check_mark:  |    :white_check_mark:    |            200 km x 200 km             | :white_check_mark: |
+|       [`rgee`](https://github.com/r-spatial/rgee)        | MODIS, VIIRS, GPM, and many others | :white_check_mark: |                        :x:                        |  :white_check_mark:  |    :white_check_mark:    |               unlimited                |     not tested     |
+|    [`MODIStsp`](https://github.com/ropensci/MODIStsp)    |               MODIS                |        :x:         |                                                   |         :x:          |    :white_check_mark:    |               unlimited                |         NA         |
+|       [`MODIS`](https://github.com/fdetsch/MODIS)        |               MODIS                |        :x:         |                        :x:                        |         :x:          |           :x:            |                   NA                   |         NA         |
 
-Take a look at the article [“Comparison of performance with other
+\* at the downloading phase
+
+\*\* Take a look at the article [“Comparison of performance with other
 similar R
 packages”](https://ptaconet.github.io/modisfast/articles/perf_comp.html)
 to get an overview of how `modisfast` compares to these packages in
