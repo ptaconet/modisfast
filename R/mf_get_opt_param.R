@@ -191,10 +191,10 @@ mf_get_opt_param<-function(collection,roi,credentials=NULL,verbose=TRUE){
         x <- .x
         len <- length(.y)
 
-        x[1] <- ifelse(x[1] <= 20, 0, ifelse(x[1] >= len - 20, len - 20, x[1]))
-        x[2] <- ifelse(x[2] <= 20, 20, ifelse(x[2] >= len - 20, len - 1, x[2]))
-        x[3] <- ifelse(x[3] <= 20, 0, ifelse(x[3] >= len - 20, len - 20, x[3]))
-        x[4] <- ifelse(x[4] <= 20, 20, ifelse(x[4] >= len - 20, len - 1, x[4]))
+        x[1] <- ifelse(x[1] <= 60, 0, ifelse(x[1] >= len - 60, len - 60, x[1]))
+        x[2] <- ifelse(x[2] <= 60, 60, ifelse(x[2] >= len - 60, len - 1, x[2]))
+        x[3] <- ifelse(x[3] <= 60, 0, ifelse(x[3] >= len - 60, len - 60, x[3]))
+        x[4] <- ifelse(x[4] <= 60, 60, ifelse(x[4] >= len - 60, len - 1, x[4]))
 
         return(x)
       })

@@ -12,6 +12,7 @@
 #' @param parallel boolean. Parallelize the download ? Default to FALSE
 #' @param num_workers integer. Number of workers in case of parallel download. Default to number of workers available in the machine minus one.
 #' @param min_filesize integer. Minimum file size expected (in bites) for one file downloaded. If files downloaded are less that this value, the files will be downloaded again. Default 5000.
+#' @param ... not used
 #'
 #' @return a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional columns are :
 #' \describe{
@@ -30,7 +31,7 @@
 #' \item{url}{URL of the file to download (character string)}
 #' }
 #'
-#' @import dplyr parallel httr
+#' @import dplyr parallel httr cli
 #' @importFrom utils write.csv URLdecode
 #' @export
 #'
@@ -73,7 +74,7 @@
 #'}
 
 
-mf_download_data<-function(df_to_dl,path=tempfile("modisfast_"),parallel=FALSE,num_workers=parallel::detectCores()-1,credentials=NULL,verbose=TRUE,min_filesize=5000){
+mf_download_data<-function(df_to_dl,path=tempfile("modisfast_"),parallel=FALSE,num_workers=parallel::detectCores()-1,credentials=NULL,verbose=TRUE,min_filesize=5000, ...){
 
   fileSize <- destfile <- fileDl <- folders <- readme_files <- source <-  NULL
 
@@ -165,14 +166,17 @@ mf_download_data<-function(df_to_dl,path=tempfile("modisfast_"),parallel=FALSE,n
   data_downloaded <- dplyr::filter(data_dl,fileSize>=min_filesize)
 
   if(!(identical(data_dl,data_downloaded))){
-    if(verbose){cat("Only part of the data has been downloaded. Downloading the remaining datasets one by one...\n")}
+    if(verbose){cli_alert_warning("Only part of the data has been downloaded. Downloading the remaining datasets one by one...\n")}
     mf_download_data(df_to_dl=df_to_dl,path=path,parallel=FALSE,credentials=credentials)#,source=source)
   } else {
 
   # 1 : download ok
   # 2 : download error
   # 3 : data already existing in output folder
-    if(verbose){cat("\nData were all properly downloaded under the folder(s) ",paste(as.character(unique(dirname(df_to_dl$destfile))), collapse=" and "),"\n**To import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)**\n")}
+    if(verbose){
+      cli_alert_success("\nData were all properly downloaded under the folder(s) ",paste(as.character(unique(dirname(df_to_dl$destfile))), collapse=" and "))
+      cli_alert_info("\nTo import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)\n")
+      }
   }
 
   # write readme

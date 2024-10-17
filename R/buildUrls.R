@@ -7,7 +7,7 @@
 
 .buildUrls<-function(collection,variables,roi,time_range,output_format="nc4",single_netcdf=TRUE,optionalsOpendap=NULL,credentials=NULL,verbose=FALSE){
 
-  ideal_date <- date_closest_to_ideal_date <- index_opendap_closest_to_date <- dimensions_url <- hour_end <- date_character <- hour_start <- number_minutes_from_start_day <- year <- day <- product_name <- month <- x <- . <- url_product <- dayofyear <- Var1 <- Var2 <- lines <- NULL
+  ideal_date <- date_closest_to_ideal_date <- index_opendap_closest_to_date <- dimensions_url <- hour_end <- date_character <- hour_start <- number_minutes_from_start_day <- year <- day <- product_name <- month <- x <- . <- url_product <- dayofyear <- Var1 <- Var2 <- lines <- fileSizeEstimated <- NULL
 
   .testIfCollExists(collection)
   .testRoi(roi)
@@ -66,7 +66,10 @@
 
           name=paste0(collection,".",lubridate::year(min(timeIndices_of_interest$date_closest_to_ideal_date)),sprintf("%03d",lubridate::yday(min(timeIndices_of_interest$date_closest_to_ideal_date))),"_",lubridate::year(max(timeIndices_of_interest$date_closest_to_ideal_date)),sprintf("%03d",lubridate::yday(max(timeIndices_of_interest$date_closest_to_ideal_date))),".",modis_tile)
 
-          table_urls<-data.frame(date=min(timeIndices_of_interest$date_closest_to_ideal_date),name=name,url=url,roi_id=roiId,stringsAsFactors = F)
+          fileSizeEstimated <- ((roiSpatialIndexBound[2]-roiSpatialIndexBound[1]) * (roiSpatialIndexBound[4]-roiSpatialIndexBound[3]) * (timeIndex[2]-timeIndex[1]) * length(variables) ) * 0.000000575 # ie. total number of cells / size of a cell in mb
+          fileSizeEstimated <- round(fileSizeEstimated,1)
+
+          table_urls<-data.frame(date=min(timeIndices_of_interest$date_closest_to_ideal_date),name=name,url=url,roi_id=roiId,fileSizeEstimated=fileSizeEstimated,stringsAsFactors = F)
         } else { # download data in multiple netcdf files (1/each time frame)
           table_urls<-timeIndices_of_interest %>%
             dplyr::mutate(dimensions_url=purrr::map(.x=index_opendap_closest_to_date,.f=~.getOpenDapURL_dimensions(variables,c(.x,.x),roiSpatialIndexBound[1],roiSpatialIndexBound[2],roiSpatialIndexBound[3],roiSpatialIndexBound[4],odap_timeDimName,odap_lonDimName,odap_latDimName))) %>%

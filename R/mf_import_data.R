@@ -9,6 +9,7 @@
 #' @param roi_mask \code{SpatRaster} or \code{SpatVector} or \code{sf}. Area beyond which data will be masked. Typically, the input ROI of \link{mf_get_url} (default : NULL (no mask))
 #' @param vrt boolean. Import virtual raster instead of SpatRaster. Useful for very large files. (default : FALSE)
 #' @inheritParams mf_get_url
+#' @param ... not used
 #'
 #' @note
 #'
@@ -72,7 +73,8 @@ mf_import_data <- function(path,
                            output_class = "SpatRaster",
                            proj_epsg = NULL,
                            roi_mask = NULL,
-                           vrt = FALSE){
+                           vrt = FALSE,
+                           ...){
 
   rasts <- NULL
 

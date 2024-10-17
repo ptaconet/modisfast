@@ -11,7 +11,8 @@ mf_download_data(
   num_workers = parallel::detectCores() - 1,
   credentials = NULL,
   verbose = TRUE,
-  min_filesize = 5000
+  min_filesize = 5000,
+  ...
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ mf_download_data(
 \item{verbose}{boolean. optional. Verbose (default TRUE)}
 
 \item{min_filesize}{integer. Minimum file size expected (in bites) for one file downloaded. If files downloaded are less that this value, the files will be downloaded again. Default 5000.}
+
+\item{...}{not used}
 }
 \value{
 a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional columns are :

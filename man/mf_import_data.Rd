@@ -10,7 +10,8 @@ mf_import_data(
   output_class = "SpatRaster",
   proj_epsg = NULL,
   roi_mask = NULL,
-  vrt = FALSE
+  vrt = FALSE,
+  ...
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ mf_import_data(
 \item{roi_mask}{\code{SpatRaster} or \code{SpatVector} or \code{sf}. Area beyond which data will be masked. Typically, the input ROI of \link{mf_get_url} (default : NULL (no mask))}
 
 \item{vrt}{boolean. Import virtual raster instead of SpatRaster. Useful for very large files. (default : FALSE)}
+
+\item{...}{not used}
 }
 \value{
 a \code{terra::SpatRast} object

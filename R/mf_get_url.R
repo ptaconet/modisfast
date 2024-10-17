@@ -12,6 +12,7 @@
 #' @param opt_param list of optional arguments. optional. (see details).
 #' @param credentials vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.
 #' @param verbose boolean. optional. Verbose (default TRUE)
+#' @param ... not used
 #'
 #' @return a data.frame with one row for each dataset to download and 5 columns :
 #'  \describe{
@@ -95,7 +96,9 @@ mf_get_url<-function(collection,
                  single_netcdf=TRUE,
                  opt_param=NULL,
                  credentials=NULL,
-                 verbose=TRUE){
+                 verbose=TRUE,
+                 ...
+                 ){
 
   existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName  <- . <- name <- destfile <- roi_id <- NULL
 
@@ -152,7 +155,7 @@ mf_get_url<-function(collection,
     dplyr::mutate(name=paste0(name,".",output_format)) %>%
     dplyr::arrange(roi_id,date) %>%
     dplyr::mutate(collection=collection) %>%
-    dplyr::select(roi_id,date,collection,name,url) %>%
+    dplyr::select(roi_id,date,collection,name,url,fileSizeEstimated) %>%
     dplyr::rename(time_start = date,id_roi = roi_id)
 
   if(verbose){cat("OK\n")}
