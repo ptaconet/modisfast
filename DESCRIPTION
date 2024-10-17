@@ -32,7 +32,8 @@ Imports:
     stats,
     stringr,
     terra,
-    xml2
+    xml2,
+    cli
 Suggests: 
     ggplot2,
     knitr,
