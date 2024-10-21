@@ -155,7 +155,7 @@ mf_get_url<-function(collection,
     dplyr::mutate(name=paste0(name,".",output_format)) %>%
     dplyr::arrange(roi_id,date) %>%
     dplyr::mutate(collection=collection) %>%
-    dplyr::select(roi_id,date,collection,name,url,fileSizeEstimated) %>%
+    dplyr::select(roi_id,date,collection,name,url) %>% #,fileSizeEstimated) %>%
     dplyr::rename(time_start = date,id_roi = roi_id)
 
   if(verbose){cat("OK\n")}
