@@ -49,7 +49,8 @@ a data.frame with one row for each dataset to download and 5 columns :
  }
 }
 \description{
-Builds the OPeNDAP URL(s) of the spatiotemporal datacube to download, given a collection, variables, region and time range of interest.
+Builds the OPeNDAP URL(s) of the spatiotemporal datacube to
+download, given a collection, variables, region and time range of interest.
 }
 \details{
 Argument \code{collection} : Collections available can be retrieved with the function \link{mf_list_collections}
@@ -66,14 +67,13 @@ It might be particularly useful to precompute it with \link{mf_get_opt_param} in
 Argument \code{credentials} : Login to the OPeNDAP servers is required to use the function. Login can be done either within the function or outside with the function \link{mf_login}
 }
 \examples{
-
 \dontrun{
 
 ### First login to EOSDIS Earthdata with username and password.
 # To create an account go to : https://urs.earthdata.nasa.gov/.
 username <- "earthdata_un"
 password <- "earthdata_pw"
-log <- mf_login(credentials = c(username,password))
+log <- mf_login(credentials = c(username, password))
 
 ### Get the URLs to download the following datasets :
 # MODIS Terra LST Daily (MOD11A1.061) (collection)
@@ -81,18 +81,21 @@ log <- mf_login(credentials = c(username,password))
 # over a 50km x 70km region of interest (roi)
 # for the time frame 2017-01-01 to 2017-01-30 (30 days) (time_range)
 
-roi <- sf::st_as_sf(data.frame(
-id = "roi_test",
-geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
-wkt="geom",crs = 4326)
+roi <- sf::st_as_sf(
+  data.frame(
+    id = "roi_test",
+    geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"
+  ),
+  wkt = "geom", crs = 4326
+)
 
-time_range = as.Date(c("2017-01-01","2017-01-30"))
+time_range <- as.Date(c("2017-01-01", "2017-01-30"))
 
 (urls_mod11a1 <- mf_get_url(
-collection = "MOD11A1.061",
-variables = c("LST_Day_1km","LST_Night_1km"),
-roi = roi,
-time_range = time_range
+  collection = "MOD11A1.061",
+  variables = c("LST_Day_1km", "LST_Night_1km"),
+  roi = roi,
+  time_range = time_range
 ))
 
 ## Download the data :

@@ -91,7 +91,7 @@ roi <- roi %>%
   sf::st_as_sfc() %>%
   sf::st_sf() 
 
-roi$id = "korhogo"
+roi$id <- "korhogo"
 
 ```
 

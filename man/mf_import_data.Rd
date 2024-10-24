@@ -47,30 +47,32 @@ The function \link{mf_import_data} includes the processing that needs to be done
 Also note that reprojecting over large ROIs using the argument \code{proj_epsg} might take long. In this case, setting the argument \code{vrt} to TRUE might be a solution.
 }
 \examples{
-
 \dontrun{
 
 ### Login to EOSDIS Earthdata with your username and password
-log <- mf_login(credentials = c("earthdata_un","earthdata_pw"))
+log <- mf_login(credentials = c("earthdata_un", "earthdata_pw"))
 
 ### Set-up parameters of interest
 coll <- "MOD11A1.061"
 
-bands <- c("LST_Day_1km","LST_Night_1km")
+bands <- c("LST_Day_1km", "LST_Night_1km")
 
-time_range <- as.Date(c("2017-01-01","2017-01-30"))
+time_range <- as.Date(c("2017-01-01", "2017-01-30"))
 
-roi <- sf::st_as_sf(data.frame(
-id = "roi_test",
-geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
-wkt="geom",crs = 4326)
+roi <- sf::st_as_sf(
+  data.frame(
+    id = "roi_test",
+    geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"
+  ),
+  wkt = "geom", crs = 4326
+)
 
 ### Get the URLs of the data
 (urls_mod11a1 <- mf_get_url(
-collection = coll,
-variables = bands,
-roi = roi,
-time_range = time_range
+  collection = coll,
+  variables = bands,
+  roi = roi,
+  time_range = time_range
 ))
 
 ### Download the data
@@ -81,6 +83,5 @@ modis_ts <- mf_import_data(dirname(res_dl$destfile[1]), collection = coll)
 
 ### Plot the data
 terra::plot(modis_ts)
-
 }
 }

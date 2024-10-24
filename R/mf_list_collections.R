@@ -10,7 +10,7 @@
 #'   \item{doi}{DOI of the collection}
 #'   \item{start_date}{First available date for the collection}
 #'   \item{url_opendapserver}{URL of the OPeNDAP server of the data}
-#'}
+#' }
 #'
 #' @export
 #'
@@ -18,11 +18,6 @@
 #'
 #' (head(mf_list_collections()))
 #'
-#'
-
-
-mf_list_collections <- function(){
-
+mf_list_collections <- function() {
   return(opendapMetadata_internal)
-
 }

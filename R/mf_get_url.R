@@ -1,7 +1,8 @@
 #' @name mf_get_url
 #' @aliases mf_get_url
 #' @title Build the URL(s) of the data to download
-#' @description Builds the OPeNDAP URL(s) of the spatiotemporal datacube to download, given a collection, variables, region and time range of interest.
+#' @description Builds the OPeNDAP URL(s) of the spatiotemporal datacube to
+#' download, given a collection, variables, region and time range of interest.
 #'
 #' @param collection string. mandatory. Collection of interest (see details of \link{mf_get_url}).
 #' @param variables string vector. optional. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted (see details of \link{mf_get_url}).
@@ -45,14 +46,13 @@
 #' @import dplyr
 #'
 #' @examples
-#'
 #' \dontrun{
 #'
 #' ### First login to EOSDIS Earthdata with username and password.
 #' # To create an account go to : https://urs.earthdata.nasa.gov/.
 #' username <- "earthdata_un"
 #' password <- "earthdata_pw"
-#' log <- mf_login(credentials = c(username,password))
+#' log <- mf_login(credentials = c(username, password))
 #'
 #' ### Get the URLs to download the following datasets :
 #' # MODIS Terra LST Daily (MOD11A1.061) (collection)
@@ -60,18 +60,21 @@
 #' # over a 50km x 70km region of interest (roi)
 #' # for the time frame 2017-01-01 to 2017-01-30 (30 days) (time_range)
 #'
-#' roi <- sf::st_as_sf(data.frame(
-#' id = "roi_test",
-#' geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
-#' wkt="geom",crs = 4326)
+#' roi <- sf::st_as_sf(
+#'   data.frame(
+#'     id = "roi_test",
+#'     geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"
+#'   ),
+#'   wkt = "geom", crs = 4326
+#' )
 #'
-#' time_range = as.Date(c("2017-01-01","2017-01-30"))
+#' time_range <- as.Date(c("2017-01-01", "2017-01-30"))
 #'
 #' (urls_mod11a1 <- mf_get_url(
-#' collection = "MOD11A1.061",
-#' variables = c("LST_Day_1km","LST_Night_1km"),
-#' roi = roi,
-#' time_range = time_range
+#'   collection = "MOD11A1.061",
+#'   variables = c("LST_Day_1km", "LST_Night_1km"),
+#'   roi = roi,
+#'   time_range = time_range
 #' ))
 #'
 #' ## Download the data :
@@ -85,81 +88,92 @@
 #' ## Plot the data
 #'
 #' terra::plot(modis_ts)
-#'}
-
-
-mf_get_url<-function(collection,
-                 variables=NULL,
-                 roi,
-                 time_range,
-                 output_format="nc4",
-                 single_netcdf=TRUE,
-                 opt_param=NULL,
-                 credentials=NULL,
-                 verbose=TRUE,
-                 ...
-                 ){
-
-  existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName  <- . <- name <- destfile <- roi_id <- NULL
+#' }
+mf_get_url <- function(collection,
+                       variables = NULL,
+                       roi,
+                       time_range,
+                       output_format = "nc4",
+                       single_netcdf = TRUE,
+                       opt_param = NULL,
+                       credentials = NULL,
+                       verbose = TRUE,
+                       ...) {
+  existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- . <- name <- destfile <- roi_id <- NULL
 
   ## tests :
   # collection
-  #if(verbose){cat("Checking if specified collection exist and is implemented in the package...\n")}
+  # if(verbose){cat("Checking if specified collection exist and is implemented in the package...\n")}
   .testIfCollExists(collection)
   # roi
   .testRoi(roi)
   # time_range_format
   .testTimeRange(time_range)
   # time_range_available_dates
-  .testTimeRangeAvDates(time_range,collection)
+  .testTimeRangeAvDates(time_range, collection)
   # output_format
   .testFormat(output_format)
   # single_netcdf
-  if(!inherits(single_netcdf,"logical")){stop("single_netcdf argument must be boolean\n")}
+  if (!inherits(single_netcdf, "logical")) {
+    stop("single_netcdf argument must be boolean\n")
+  }
   # verbose
-  if(!inherits(verbose,"logical")){stop("verbose argument must be boolean\n")}
+  if (!inherits(verbose, "logical")) {
+    stop("verbose argument must be boolean\n")
+  }
   # Internet connection
   .testInternetConnection()
   # credentials
   .testLogin(credentials)
 
-  if(verbose){cat("Building the URLs...\n")}
-
-  if(is.null(opt_param)){
-    #if(verbose){cat("Retrieving opendap arguments for the collection specified...\n")}
-    opt_param <- mf_get_opt_param(collection,roi,verbose=verbose)
+  if (verbose) {
+    cat("Building the URLs...\n")
   }
 
-  if(length(opt_param$roiSpatialIndexBound)==0){stop("Your ROI does not cover a region where there is any data. Please provide a correct ROI.")}
+  if (is.null(opt_param)) {
+    # if(verbose){cat("Retrieving opendap arguments for the collection specified...\n")}
+    opt_param <- mf_get_opt_param(collection, roi, verbose = verbose)
+  }
+
+  if (length(opt_param$roiSpatialIndexBound) == 0) {
+    stop("Your ROI does not cover a region where there is any data.
+         Please provide a correct ROI.")
+  }
 
   # test variables
-  #if(verbose){cat("Checking if specified variables exist for the collection specified...\n")}
-  available_variables <- opt_param$availableVariables$name[which(opt_param$availableVariables$extractable_w_opendapr=="extractable")]
-  if(is.null(variables)){
+  # if(verbose){cat("Checking if specified variables exist for the collection specified...\n")}
+  available_variables <- opt_param$availableVariables$name[which(opt_param$availableVariables$extractable_w_opendapr == "extractable")]
+  if (is.null(variables)) {
     variables <- available_variables
   } else {
-    .testIfVarExists(variables,available_variables)
+    .testIfVarExists(variables, available_variables)
   }
 
   # build URLs
-  table_urls <- .buildUrls(collection,variables,roi,time_range,output_format,single_netcdf,opt_param,credentials,verbose)
+  table_urls <- .buildUrls(collection,
+                           variables,
+                           roi,
+                           time_range,
+                           output_format,
+                           single_netcdf,
+                           opt_param,
+                           credentials,
+                           verbose)
 
   table_urls <- table_urls %>%
-    dplyr::mutate(name=stringr::str_replace(name,".*/","")) %>%
-    dplyr::mutate(url=gsub("\\[","%5B",url)) %>%
-    dplyr::mutate(url=gsub("\\]","%5D",url)) %>%
+    dplyr::mutate(name = stringr::str_replace(name, ".*/", "")) %>%
+    dplyr::mutate(url = gsub("\\[", "%5B", url)) %>%
+    dplyr::mutate(url = gsub("\\]", "%5D", url)) %>%
     dplyr::arrange(name) %>%
-    # transform(name = ifelse(duplicated(name) | duplicated(name, fromLast=TRUE),
-    #                         paste0(roi_id,"_",name), #paste(name, stats::ave(name, name, FUN=seq_along), sep='_'),
-    #                         name)) %>%
-    dplyr::mutate(name=paste0(name,".",output_format)) %>%
-    dplyr::arrange(roi_id,date) %>%
-    dplyr::mutate(collection=collection) %>%
-    dplyr::select(roi_id,date,collection,name,url) %>% #,fileSizeEstimated) %>%
-    dplyr::rename(time_start = date,id_roi = roi_id)
+    dplyr::mutate(name = paste0(name, ".", output_format)) %>%
+    dplyr::arrange(roi_id, date) %>%
+    dplyr::mutate(collection = collection) %>%
+    dplyr::select(roi_id, date, collection, name, url) %>% # ,fileSizeEstimated) %>%
+    dplyr::rename(time_start = date, id_roi = roi_id)
 
-  if(verbose){cat("OK\n")}
+  if (verbose) {
+    cat("OK\n")
+  }
 
   return(table_urls)
-
 }

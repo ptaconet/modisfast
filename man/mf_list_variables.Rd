@@ -19,10 +19,9 @@ The variables marked as "extractable" in the column "extractable_w_opendapr" can
 Get the variables available for a given collection, along with a set of related information for each.
 }
 \examples{
-
 \dontrun{
 # login to Earthdata
-log <- mf_login(c("earthdata_un","earthdata_pw"))
+log <- mf_login(c("earthdata_un", "earthdata_pw"))
 
 # Get the variables available for the collection MOD11A1.061
 (df_varinfo <- mf_list_variables("MOD11A1.061"))

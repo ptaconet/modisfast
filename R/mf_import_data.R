@@ -17,7 +17,7 @@
 #' \itemize{
 #'  \item{for MODIS and VIIRS collections : CRS has to be provided}
 #'  \item{for GPM collections : CRS has to be provided + data have to be flipped}
-#'}
+#' }
 #'
 #' The function \link{mf_import_data} includes the processing that needs to be done at the data import phase in order to safely use the data as \code{terra} objects.
 #'
@@ -31,30 +31,32 @@
 #' @export
 #'
 #' @examples
-#'
 #' \dontrun{
 #'
 #' ### Login to EOSDIS Earthdata with your username and password
-#' log <- mf_login(credentials = c("earthdata_un","earthdata_pw"))
+#' log <- mf_login(credentials = c("earthdata_un", "earthdata_pw"))
 #'
 #' ### Set-up parameters of interest
 #' coll <- "MOD11A1.061"
 #'
-#' bands <- c("LST_Day_1km","LST_Night_1km")
+#' bands <- c("LST_Day_1km", "LST_Night_1km")
 #'
-#' time_range <- as.Date(c("2017-01-01","2017-01-30"))
+#' time_range <- as.Date(c("2017-01-01", "2017-01-30"))
 #'
-#' roi <- sf::st_as_sf(data.frame(
-#' id = "roi_test",
-#' geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
-#' wkt="geom",crs = 4326)
+#' roi <- sf::st_as_sf(
+#'   data.frame(
+#'     id = "roi_test",
+#'     geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"
+#'   ),
+#'   wkt = "geom", crs = 4326
+#' )
 #'
 #' ### Get the URLs of the data
 #' (urls_mod11a1 <- mf_get_url(
-#' collection = coll,
-#' variables = bands,
-#' roi = roi,
-#' time_range = time_range
+#'   collection = coll,
+#'   variables = bands,
+#'   roi = roi,
+#'   time_range = time_range
 #' ))
 #'
 #' ### Download the data
@@ -65,37 +67,33 @@
 #'
 #' ### Plot the data
 #' terra::plot(modis_ts)
-#'
-#'}
-
+#' }
 mf_import_data <- function(path,
                            collection,
                            output_class = "SpatRaster",
                            proj_epsg = NULL,
                            roi_mask = NULL,
                            vrt = FALSE,
-                           ...){
-
+                           ...) {
   rasts <- NULL
 
-  if(!dir.exists(path)){stop("Directory provided does not exist.")}
+  if (!dir.exists(path)) {
+    stop("Directory provided does not exist.")
+  }
 
   .testIfCollExists(collection)
 
-  odap_coll_info <- opendapMetadata_internal[which(opendapMetadata_internal$collection==collection),]
+  odap_coll_info <- opendapMetadata_internal[which(opendapMetadata_internal$collection == collection), ]
 
-  if(!(output_class %in% c("SpatRaster","stars"))){stop("paramater 'output_class' must be SpatRaster.")}
+  if (!(output_class %in% c("SpatRaster", "stars"))) {
+    stop("paramater 'output_class' must be SpatRaster.")
+  }
 
-  if(odap_coll_info$source %in% c("MODIS","VIIRS")){
-
-      rasts <- .import_modis_viirs(path,output_class,proj_epsg,roi_mask,vrt)
-
-  } else if (odap_coll_info$source=="GPM"){
-
-      rasts <- .import_gpm(path,output_class,proj_epsg,roi_mask)
-
+  if (odap_coll_info$source %in% c("MODIS", "VIIRS")) {
+    rasts <- .import_modis_viirs(path, output_class, proj_epsg, roi_mask, vrt)
+  } else if (odap_coll_info$source == "GPM") {
+    rasts <- .import_gpm(path, output_class, proj_epsg, roi_mask)
   }
 
   return(rasts)
-
 }

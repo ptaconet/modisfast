@@ -114,31 +114,31 @@ library(sf)
 library(terra)
 
 # ROI and time range of interest
-roi <- st_as_sf(data.frame(id = "madagascar", geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"), wkt="geom", crs = 4326) # a ROI of interest, format sf polygon
-time_range <- as.Date(c("2023-01-01","2023-12-31"))  # a time range of interest
+roi <- st_as_sf(data.frame(id = "madagascar", geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"), wkt = "geom", crs = 4326) # a ROI of interest, format sf polygon
+time_range <- as.Date(c("2023-01-01", "2023-12-31")) # a time range of interest
 
 # MODIS collections and variables (bands) of interest
-collection <- "MOD13A3.061"  # run mf_list_collections() for an exhaustive list of collections available
+collection <- "MOD13A3.061" # run mf_list_collections() for an exhaustive list of collections available
 variables <- c("_1_km_monthly_NDVI") # run mf_list_variables("MOD13A3.061") for an exhaustive list of variables available for the collection "MOD13A3.061"
 ```
 
 **2/ Then, get the URL of the data and download them :**
 
 ``` r
-## Login to Earthdata servers with your EOSDIS credentials. 
+## Login to Earthdata servers with your EOSDIS credentials.
 # To create an account (free) go to : https://urs.earthdata.nasa.gov/.
-log <- mf_login(credentials = c("username","password"))  # set your own EOSDIS username and password
+log <- mf_login(credentials = c("username", "password")) # set your own EOSDIS username and password
 
-## Get the URLs of the data 
+## Get the URLs of the data
 urls <- mf_get_url(
   collection = collection,
   variables = variables,
   roi = roi,
   time_range = time_range
- )
+)
 
 ## Download the data. By default the data is downloaded in a temporary directory, but you can specify a folder
-res_dl <- mf_download_data(urls, parallel = T)
+res_dl <- mf_download_data(urls, parallel = TRUE)
 ```
 
 **3/ And finally, import the data in R as a `terra::SpatRaster` object
@@ -150,9 +150,9 @@ why you should use this function, instead of the original
 ``` r
 r <- mf_import_data(
   path = dirname(res_dl$destfile[1]),
-  collection = collection, 
+  collection = collection,
   proj_epsg = 4326
-  )
+)
 
 terra::plot(r, col = rev(terrain.colors(20)))
 ```

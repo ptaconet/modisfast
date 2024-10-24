@@ -35,36 +35,39 @@ When it is needed to loop the function \link{mf_get_url} over several time frame
 This will save much time, as internal parameters will be calculated only once.
 }
 \examples{
-
 \dontrun{
 
 # Login to Earthdata
 
-log <- mf_login(credentials = c("earthdata_un","earthdata_pw"))
+log <- mf_login(credentials = c("earthdata_un", "earthdata_pw"))
 
 # Get the optional parameters for the collection MOD11A1.061 and the following roi :
-roi <- sf::st_as_sf(data.frame(
-id = "roi_test",
-geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),
-wkt="geom",crs = 4326)
+roi <- sf::st_as_sf(
+  data.frame(
+    id = "roi_test",
+    geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"
+  ),
+  wkt = "geom", crs = 4326
+)
 
-opt_param_mod11a1 <- mf_get_opt_param("MOD11A1.061",roi)
+opt_param_mod11a1 <- mf_get_opt_param("MOD11A1.061", roi)
 str(opt_param_mod11a1)
 
 # Now we can provide opt_param_mod11a1 as input parameter of the function mf_get_url().
 
-time_ranges <- list(as.Date(c("2016-01-01","2016-01-31")),
-                   as.Date(c("2017-01-01","2017-01-31")),
-                   as.Date(c("2018-01-01","2018-01-31")),
-                   as.Date(c("2019-01-01","2019-01-31")))
+time_ranges <- list(
+  as.Date(c("2016-01-01", "2016-01-31")),
+  as.Date(c("2017-01-01", "2017-01-31")),
+  as.Date(c("2018-01-01", "2018-01-31")),
+  as.Date(c("2019-01-01", "2019-01-31"))
+)
 
-(urls_mod11a1 <- map(.x = time_ranges, ~mf_get_url(
- collection = "MOD11A1.061",
- variables = c("LST_Day_1km","LST_Night_1km","QC_Day","QC_Night"),
- roi = roi,
- time_range = .x,
- opt_param = opt_param_mod11a1)
-))
-
+(urls_mod11a1 <- map(.x = time_ranges, ~ mf_get_url(
+  collection = "MOD11A1.061",
+  variables = c("LST_Day_1km", "LST_Night_1km", "QC_Day", "QC_Night"),
+  roi = roi,
+  time_range = .x,
+  opt_param = opt_param_mod11a1
+)))
 }
 }

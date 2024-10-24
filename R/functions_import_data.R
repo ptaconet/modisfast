@@ -1,12 +1,10 @@
 #' @name .import_gpm
 #' @title Import data  source=="GPM"
 #' @noRd
-.import_gpm <- function(dir_path,output_class,proj_epsg,roi_mask){
+.import_gpm <- function(dir_path, output_class, proj_epsg, roi_mask) {
+  files <- list.files(dir_path, full.names = TRUE)
 
-  files <- list.files(dir_path, full.names = T)
-
-  if(output_class=="SpatRaster"){
-
+  if (output_class == "SpatRaster") {
     rasts <- terra::rast(files)
 
     terra::crs(rasts) <- "epsg:4326"
@@ -16,23 +14,22 @@
       terra::flip("vertical") %>%
       terra::flip("horizontal")
 
-    if(!is.null(proj_epsg)){
-       rasts <- terra::project(rasts,paste0("epsg:",proj_epsg))
+    if (!is.null(proj_epsg)) {
+      rasts <- terra::project(rasts, paste0("epsg:", proj_epsg))
     }
 
-    if(!is.null(roi_mask)){
+    if (!is.null(roi_mask)) {
       roi_mask <- terra::vect(roi_mask)
-      if(!is.null(proj_epsg)){
-        roi_mask <- terra::project(roi_mask,paste0("epsg:",proj_epsg))
+      if (!is.null(proj_epsg)) {
+        roi_mask <- terra::project(roi_mask, paste0("epsg:", proj_epsg))
       } else {
-        roi_mask <- terra::project(roi_mask,"epsg:4326")
+        roi_mask <- terra::project(roi_mask, "epsg:4326")
       }
 
-      rasts <- terra::mask(rasts,roi_mask)
+      rasts <- terra::mask(rasts, roi_mask)
     }
-
-  } else if(output_class=="stars"){
-   stop("stars output is not implemented for this collection")
+  } else if (output_class == "stars") {
+    stop("stars output is not implemented for this collection")
     # rasts <- stars::read_stars(files) %>%
     #   st_transform(4326) %>%
     #   stars::t() %>%
@@ -44,55 +41,48 @@
   }
 
   return(rasts)
-
 }
 
 
 #' @name .import_modis_viirs
 #' @title Import data  source in% c("VNP46A1") , provider=="NASA USGS LAADS DAAC"
 #' @noRd
-.import_modis_viirs <- function(dir_path,output_class,proj_epsg,roi_mask,vrt){
+.import_modis_viirs <- function(dir_path, output_class, proj_epsg, roi_mask, vrt) {
+  files <- list.files(dir_path, full.names = TRUE)
 
-  files <- list.files(dir_path, full.names = T)
+  if (output_class == "SpatRaster") {
+    if (length(files) > 1 & length(unique(substr(files, nchar(files) - 9, nchar(files) - 4))) > 1) { # if there are multiple files from differents tiles, we need to merge them
 
-  if(output_class=="SpatRaster"){
-
-    if(length(files)>1 & length(unique(substr(files,nchar(files)-9,nchar(files)-4)))>1 ){ # if there are multiple files from differents tiles, we need to merge them
-
-      if(vrt){
+      if (vrt) {
         rasts <- terra::vrt(files)
       } else {
-       rasts <- files %>%
-         terra::sprc() %>%
-         terra::merge()
+        rasts <- files %>%
+          terra::sprc() %>%
+          terra::merge()
       }
-
     } else { # if there is only one file or if the files cover multiple tiles, we do not need to merge them
 
-        rasts <- terra::rast(files)
-
+      rasts <- terra::rast(files)
     }
 
     terra::crs(rasts) <- "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"
 
-    if(!is.null(proj_epsg)){
-     rasts <- terra::project(rasts,paste0("epsg:",proj_epsg))
+    if (!is.null(proj_epsg)) {
+      rasts <- terra::project(rasts, paste0("epsg:", proj_epsg))
     }
 
-    if(!is.null(roi_mask)){
+    if (!is.null(roi_mask)) {
       roi_mask <- terra::vect(roi_mask)
-      if(!is.null(proj_epsg)){
-        roi_mask <- terra::project(roi_mask,paste0("epsg:",proj_epsg))
+      if (!is.null(proj_epsg)) {
+        roi_mask <- terra::project(roi_mask, paste0("epsg:", proj_epsg))
       } else {
-        roi_mask <- terra::project(roi_mask,"+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")
+        roi_mask <- terra::project(roi_mask, "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs")
       }
 
-      rasts <- terra::mask(rasts,roi_mask)
+      rasts <- terra::mask(rasts, roi_mask)
     }
-
-  } else if (output_class=="stars"){
+  } else if (output_class == "stars") {
     stop("stars output is not implemented yet for this collection")
-
   }
 
   return(rasts)

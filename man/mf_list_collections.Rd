@@ -24,5 +24,4 @@ Get the collections available for download using the package and a set of relate
 
 (head(mf_list_collections()))
 
-
 }
