@@ -23,7 +23,7 @@ smooth out the experience for all involved.
 ## Code of conduct
 
 This project is released with a
-[Contributor Code of Conduct](https://github.com/ptaconet/modisfast/blob/main/CODE_OF_CONDUCT.md).
+[Contributor Code of Conduct](https://github.com/ptaconet/modisfast/blob/master/CODE_OF_CONDUCT.md).
 By participating, you are expected to uphold this code. Please report 
 unacceptable behavior to <paul.taconet@gmail.com>.
 
@@ -56,7 +56,6 @@ If you then still feel the need to ask a question and need clarification, we
 recommend the following:
 
 - Open a new [Issue](https://github.com/ptaconet/modisfast/issues/new).
-- Use the template [other_issue.md](https://github.com/ptaconet/modisfast/blob/main/.github/ISSUE_TEMPLATE/other_issue.md).
 - Provide as much context as you can about what you're running into.
 - Provide project and platform versions (paste the output of `sessionInfo()`).
 

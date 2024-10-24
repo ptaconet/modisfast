@@ -1470,7 +1470,7 @@ simplifying data access for users with limited coding skills.
 
 All types of contributions are encouraged and valued. For more
 information, check out our [Contributor
-Guidelines](https://github.com/ptaconet/modisfast/blob/main/CONTRIBUTING.md).
+Guidelines](https://github.com/ptaconet/modisfast/blob/master/CONTRIBUTING.md).
 
 Please note that the `modisfast` project is released with a [Contributor
 Code of

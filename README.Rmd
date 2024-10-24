@@ -266,7 +266,7 @@ Future developments of the package may include access to additional data collect
 
 ## Contributing
 
-All types of contributions are encouraged and valued. For more information, check out our [Contributor Guidelines](https://github.com/ptaconet/modisfast/blob/main/CONTRIBUTING.md).
+All types of contributions are encouraged and valued. For more information, check out our [Contributor Guidelines](https://github.com/ptaconet/modisfast/blob/master/CONTRIBUTING.md).
 
 Please note that the `modisfast` project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
 
