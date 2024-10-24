@@ -40,6 +40,6 @@
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 ^joss-paper$
-^\.CITATION\.cff$
-^\.CODE_OF_CONDUCT\.md$
-^\.CONTRIBUTING\.md$
+^CITATION\.cff$
+^CODE_OF_CONDUCT\.md$
+^CONTRIBUTING\.md$
