@@ -10,17 +10,17 @@ tags:
   - Remote sensing
   - OPeNDAP
 authors:
- - name: Paul Taconet
-   corresponding: true
-   orcid: "0000-0001-7429-7204"
-   affiliation: 1
- - name: Nicolas Moiroux
-   orcid: "0000-0001-6755-6167"
-   affiliation: 1
+  - name: Paul Taconet
+    corresponding: true
+    orcid: "0000-0001-7429-7204"
+    affiliation: 1
+  - name: Nicolas Moiroux
+    orcid: "0000-0001-6755-6167"
+    affiliation: 1
 affiliations:
 - name: MIVEGEC, Université de Montpellier, CNRS, IRD, Montpellier, France
   index: 1
-date: 07 August 2024
+date: 24 October 2024
 bibliography: paper.bib
 ---
 
@@ -32,9 +32,9 @@ bibliography: paper.bib
 
 EO satellite data are invaluable for monitoring and understanding our planet, with NASA's datasets like MODIS [@JUSTICE20023], VIIRS [@ROMAN2024113963], and GPM [@SkofronickJackson2017] among the most important. These collections have provided crucial data for over 20 years, supporting research in areas such as climate change, disaster response, biodiversity, public health, and more [@modis-applications].
 
-However, despite the increasing availability of EO data, accessing and utilizing them remains challenging [@AGNOLI2023122357]. The large file sizes and complex multidimensional layers make it difficult to work with long time series, especially in regions with limited internet infrastructure. This complexity often leads to underutilization of data, fragmented workflows, and reliance on proprietary, energy-intensive tools like [Google Earth Engine](https://earthengine.google.com/), which can hinder transparent and reproducible Open Science.
+However, despite the increasing availability of EO data, accessing and utilizing them remains challenging [@AGNOLI2023122357]. The large file sizes and complex multidimensional layers make it difficult to access and handle long time series, especially in regions with limited internet infrastructure. This complexity often leads to underutilization of data, fragmented workflows, and reliance on proprietary, energy-intensive tools like [Google Earth Engine](https://earthengine.google.com/), which can hinder transparent and reproducible Open Science.
 
-To address these challenges, we developed `modisfast`, an R [@R] package designed to simplify and speed-up the download and import of MODIS, VIIRS, and GPM time series for R users. Built on the [OPeNDAP](https://www.opendap.org/) protocol, `modisfast` enhances the existing R ecosystem of tools for accessing MODIS data by introducing new features and supporting additional data sources. It allows users to apply spatial, temporal, and band/layer filters during the download phase, optimizing data retrieval and processing while promoting open-source international standards for data access.
+To address these challenges, we developed `modisfast`, an R [@R] package designed to simplify and speed-up the download and import of MODIS, VIIRS, and GPM time series for R users. Built on the [OPeNDAP](https://www.opendap.org/) protocol [@opendap1; @opendap2; @opendap3], `modisfast` enhances the existing R ecosystem of tools for accessing MODIS data by introducing new features and supporting additional data sources. It allows users to apply spatial, temporal, and band/layer filters during the download phase, optimizing data retrieval and processing while promoting open-source international standards for data access.
 
 # Target audience
 
@@ -85,7 +85,7 @@ Besides `modisfast`, there are several open-source R packages available for acce
 | Enables dimensional subsetting at the download phase |                        yes                        |                          yes                           |                      no                      |                       yes                        |                        yes                         |                      yes                      |
 | Maximum area size allowed for download               |                     unlimited                     |                       unlimited                        |                      NA                      |                    unlimited                     |                  200 km x 200 km                   |                   unlimited                   |
 | Website                                              | [`GitHub`](https://github.com/ptaconet/modisfast) | [`GitHub`](https://github.com/bluegreen-labs/appeears) | [`GitHub`](https://github.com/fdetsch/MODIS) | [`GitHub`](https://github.com/ropensci/MODIStsp) | [`GitHub`](https://github.com/ropensci/MODISTools) | [`GitHub`](https://github.com/r-spatial/rgee) |
-| Publication                                          |                                                   |                         @rgee                          |                      NA                      |                    @MODIStsp                     |                    @modistools                     |                     @rgee                     |
+| Reference                                         |                       @modisfast                            |                         @appeears                          |                      NA                      |                    @MODIStsp                     |                    @modistools                     |                     @rgee                     |
 
 Table 1: Comparison of `modisfast` with other alternatives.
 
