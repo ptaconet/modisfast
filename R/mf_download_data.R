@@ -12,7 +12,6 @@
 #' @param parallel boolean. Parallelize the download ? Default to FALSE
 #' @param num_workers integer. Number of workers in case of parallel download. Default to number of workers available in the machine minus one.
 #' @param min_filesize integer. Minimum file size expected (in bites) for one file downloaded. If files downloaded are less that this value, the files will be downloaded again. Default 5000.
-#' @param ... not used
 #'
 #' @return a data.frame with the same structure of the input data.frame \code{df_to_dl} + columns providing details of the data downloaded. The additional columns are :
 #' \describe{
@@ -73,7 +72,7 @@
 #' ### Plot the data
 #' terra::plot(modis_ts)
 #' }
-mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel = FALSE, num_workers = parallel::detectCores() - 1, credentials = NULL, verbose = TRUE, min_filesize = 5000, ...) {
+mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel = FALSE, num_workers = parallel::detectCores() - 1, credentials = NULL, verbose = TRUE, min_filesize = 5000) {
   fileSize <- destfile <- fileDl <- folders <- readme_files <- source <- NULL
 
   source <- "earthdata"
@@ -189,7 +188,7 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
 
   if (!(identical(data_dl, data_downloaded))) {
     if (verbose) {
-      cli_alert_warning("Only part of the data has been downloaded. Downloading the remaining datasets one by one...\n")
+      cli::cli_alert_warning("Only part of the data has been downloaded. Downloading the remaining datasets one by one...\n")
     }
     mf_download_data(df_to_dl = df_to_dl, path = path, parallel = FALSE, credentials = credentials) # ,source=source)
   } else {
@@ -197,8 +196,8 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
     # 2 : download error
     # 3 : data already existing in output folder
     if (verbose) {
-      cli_alert_success("\nData were all properly downloaded under the folder(s) ", paste(as.character(unique(dirname(df_to_dl$destfile))), collapse = " and "))
-      cli_alert_info("\nTo import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)\n")
+      cli::cli_alert_success("\nData were all properly downloaded under the folder(s) ", paste(as.character(unique(dirname(df_to_dl$destfile))), collapse = " and "))
+      cli::cli_alert_info("\nTo import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)\n")
     }
   }
 

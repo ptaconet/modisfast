@@ -6,7 +6,7 @@
 #' @inheritParams mf_get_url
 #'
 #' @return A data.frame with the variables available for the collection, and a set of related information for each variable.
-#' The variables marked as "extractable" in the column "extractable_w_opendapr" can be provided as input parameter \code{variables} of the function \link{mf_get_url}
+#' The variables marked as "extractable" in the column "extractable_with_modisfast" can be provided as input parameter \code{variables} of the function \link{mf_get_url}
 #'
 #' @export
 #'
@@ -83,20 +83,20 @@ mf_list_variables <- function(collection, credentials = NULL) { # for a given co
   dim_proj <- opendapMetadata$dim_proj
 
   tab <- tab %>%
-    dplyr::mutate(extractable_w_opendapr = dplyr::case_when(
+    dplyr::mutate(extractable_with_modisfast = dplyr::case_when(
       name %in% c(dim_lon, dim_lat, dim_time, dim_proj) ~ "automatically extracted",
       grepl(dim_lon, tab$indices) & grepl(dim_lat, tab$indices) & grepl(dim_time, tab$indices) & !is.na(dim_time) ~ "extractable",
       grepl(dim_lon, tab$indices) & grepl(dim_lat, tab$indices) & is.na(dim_time) ~ "extractable"
     ))
 
-  tab$extractable_w_opendapr[which(is.na(tab$extractable_w_opendapr))] <- "not extractable"
+  tab$extractable_with_modisfast[which(is.na(tab$extractable_with_modisfast))] <- "not extractable"
 
   if (opendapMetadata$source == "SMAP") {
-    tab$extractable_w_opendapr[which(tab$extractable_w_opendapr == "not extractable")] <- "extractable"
+    tab$extractable_with_modisfast[which(tab$extractable_with_modisfast == "not extractable")] <- "extractable"
   }
 
 
-  tab <- tab[c("name", "long_name", "units", "indices", "all_info", "extractable_w_opendapr")]
+  tab <- tab[c("name", "long_name", "units", "indices", "all_info", "extractable_with_modisfast")]
 
   return(tab)
 }

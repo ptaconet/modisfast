@@ -2,7 +2,6 @@
 % Please edit documentation in R/modisfast-package.R
 \docType{package}
 \name{modisfast-package}
-\alias{modisfast}
 \alias{modisfast-package}
 \title{modisfast: Fast and Efficient Access to MODIS Earth Observation Data}
 \description{

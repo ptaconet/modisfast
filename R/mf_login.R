@@ -4,6 +4,8 @@
 #'
 #' @inheritParams mf_get_url
 #'
+#' @importFrom cli cli_alert_success
+#'
 #' @return None.
 #' @export
 #'
@@ -39,6 +41,6 @@ mf_login <- function(credentials, verbose = TRUE) {
   # }
   # if(verbose){cat("Successfull login to",source,"\n")}
   if (verbose) {
-    cat("Successfull login to Earthdata\n")
+    cli::cli_alert_success("Successfull login to Earthdata\n")
   }
 }

@@ -13,8 +13,7 @@ mf_get_url(
   single_netcdf = TRUE,
   opt_param = NULL,
   credentials = NULL,
-  verbose = TRUE,
-  ...
+  verbose = TRUE
 )
 }
 \arguments{
@@ -35,8 +34,6 @@ mf_get_url(
 \item{credentials}{vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.}
 
 \item{verbose}{boolean. optional. Verbose (default TRUE)}
-
-\item{...}{not used}
 }
 \value{
 a data.frame with one row for each dataset to download and 5 columns :

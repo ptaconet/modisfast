@@ -8,6 +8,7 @@
 #' @param proj_epsg numeric. EPSG of the desired projection for the output raster (default : source projection of the data).
 #' @param roi_mask \code{SpatRaster} or \code{SpatVector} or \code{sf}. Area beyond which data will be masked. Typically, the input ROI of \link{mf_get_url} (default : NULL (no mask))
 #' @param vrt boolean. Import virtual raster instead of SpatRaster. Useful for very large files. (default : FALSE)
+#' @param verbose boolean. optional. Verbose (default TRUE)
 #' @inheritParams mf_get_url
 #' @param ... not used
 #'
@@ -28,6 +29,7 @@
 #' @import purrr
 #' @importFrom terra rast t merge flip
 #' @importFrom magrittr %>%
+#' @importFrom cli cli_alert_success
 #' @export
 #'
 #' @examples
@@ -74,6 +76,7 @@ mf_import_data <- function(path,
                            proj_epsg = NULL,
                            roi_mask = NULL,
                            vrt = FALSE,
+                           verbose = TRUE,
                            ...) {
   rasts <- NULL
 
@@ -89,10 +92,18 @@ mf_import_data <- function(path,
     stop("paramater 'output_class' must be SpatRaster.")
   }
 
+  if (verbose) {
+    cat("Importing the dataset as a",output_class,"object...\n")
+  }
+
   if (odap_coll_info$source %in% c("MODIS", "VIIRS")) {
     rasts <- .import_modis_viirs(path, output_class, proj_epsg, roi_mask, vrt)
   } else if (odap_coll_info$source == "GPM") {
     rasts <- .import_gpm(path, output_class, proj_epsg, roi_mask)
+  }
+
+  if (verbose) {
+    cli_alert_success("Dataset imported")
   }
 
   return(rasts)

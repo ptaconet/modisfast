@@ -13,7 +13,7 @@ mf_list_variables(collection, credentials = NULL)
 }
 \value{
 A data.frame with the variables available for the collection, and a set of related information for each variable.
-The variables marked as "extractable" in the column "extractable_w_opendapr" can be provided as input parameter \code{variables} of the function \link{mf_get_url}
+The variables marked as "extractable" in the column "extractable_with_modisfast" can be provided as input parameter \code{variables} of the function \link{mf_get_url}
 }
 \description{
 Get the variables available for a given collection, along with a set of related information for each.

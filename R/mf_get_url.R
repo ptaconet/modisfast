@@ -13,7 +13,6 @@
 #' @param opt_param list of optional arguments. optional. (see details).
 #' @param credentials vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.
 #' @param verbose boolean. optional. Verbose (default TRUE)
-#' @param ... not used
 #'
 #' @return a data.frame with one row for each dataset to download and 5 columns :
 #'  \describe{
@@ -43,6 +42,7 @@
 #'
 #' @importFrom stringr str_replace
 #' @importFrom stats ave
+#' @importFrom cli cli_alert_success
 #' @import dplyr
 #'
 #' @examples
@@ -97,8 +97,7 @@ mf_get_url <- function(collection,
                        single_netcdf = TRUE,
                        opt_param = NULL,
                        credentials = NULL,
-                       verbose = TRUE,
-                       ...) {
+                       verbose = TRUE) {
   existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- . <- name <- destfile <- roi_id <- NULL
 
   ## tests :
@@ -142,7 +141,7 @@ mf_get_url <- function(collection,
 
   # test variables
   # if(verbose){cat("Checking if specified variables exist for the collection specified...\n")}
-  available_variables <- opt_param$availableVariables$name[which(opt_param$availableVariables$extractable_w_opendapr == "extractable")]
+  available_variables <- opt_param$availableVariables$name[which(opt_param$availableVariables$extractable_with_modisfast == "extractable")]
   if (is.null(variables)) {
     variables <- available_variables
   } else {
@@ -172,7 +171,7 @@ mf_get_url <- function(collection,
     dplyr::rename(time_start = date, id_roi = roi_id)
 
   if (verbose) {
-    cat("OK\n")
+    cli::cli_alert_success("URL(s) built\n")
   }
 
   return(table_urls)
