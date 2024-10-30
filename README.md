@@ -38,7 +38,9 @@ This package enables to build OPeNDAP (https) URLs given input parameters such a
 <a href="#get-started">Get started</a><br> •
 <a href="#collections-available-in-modisfast">Data collections
 available</a><br> • <a href="#foundational-framework">Foundational
-framework </a><br> •
+framework</a><br> •
+<a href="#manual-testing-of-the-functionality">Manual testing of the
+functionality</a><br> •
 <a href="#comparison-with-similar-r-packages">Comparison with similar R
 packages</a><br> • <a href="#citation">Citation</a><br> •
 <a href="#future-developments">Future developments</a><br> •
@@ -1421,6 +1423,14 @@ URL(s). Subsequently, the function `mf_download_data()` allows for
 downloading the data using the
 [`httr`](https://cran.r-project.org/package=httr) and `parallel`
 packages.
+
+## Manual testing of the functionality
+
+Since most `modisfast` functions depend on EarthData credentials,
+automated tests (usually ran through e.g. `devtools::check()`) are
+disabled. However, after installation, users can manually test the
+package’s functionality by following the steps outlined in
+[`tests/testthat.R`](https://github.com/ptaconet/modisfast/blob/master/tests/testthat.R).
 
 ## Comparison with similar R packages
 
