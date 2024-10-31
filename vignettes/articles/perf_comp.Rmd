@@ -70,6 +70,13 @@ time_range <- as.Date(c("2023-01-01","2023-12-31"))
 collection <- "MOD13A3.061"  
 variables <- c("_1_km_monthly_NDVI") 
 
+# Replace Sys.getenv("earthdata_un") and Sys.getenv("earthdata_pw") below by your Earthdata credentials  (see https://github.com/bluegreen-labs/appeears#use to setup an appeears connection)
+
+rs_set_key(
+  user = Sys.getenv("earthdata_un"),
+  password = Sys.getenv("earthdata_pw")
+  )
+
 token <- rs_login(user = Sys.getenv("earthdata_un"))
 
 df <- data.frame(
@@ -139,10 +146,6 @@ r
 modisfast_end_time <- Sys.time()
 ```
 
-# `MODIS`
-
-We were not able to install the `MODIS` package, because some of the dependencies were not available for our version of R. **We could therefore not finish the test with `MODIS`.**
-
 # `MODIStsp`
 
 ```{r modistsp, eval = F, error=TRUE }
@@ -202,7 +205,7 @@ The system returns that "Number of kilometers above or below the subset location
 
 # Results
 
-`modisfast` and `appeears` passed the test, while `MODIS`, `MODIStools` and `MODIStsp` did not (for different reasons). Let's see the duration of data processing access :
+`modisfast` and `appeears` passed the test, `MODIStools` and `MODIStsp` did not (for different reasons). Let's see the duration of data processing access :
 
 ```{r results_benchmark, eval = F }
 
