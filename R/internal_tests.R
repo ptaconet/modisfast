@@ -45,7 +45,7 @@
   mf_login <- NULL
 
   if (!is.null(credentials) || is.null(getOption("earthdata_mf_login"))) {
-    mf_login <- mf_login(credentials, source = "earthdata")
+    mf_login <- mf_login(credentials)
     return(mf_login)
   }
 }
