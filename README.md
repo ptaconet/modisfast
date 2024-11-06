@@ -1427,10 +1427,17 @@ packages.
 ## Manual testing of the functionality
 
 Since most `modisfast` functions depend on EarthData credentials,
-automated tests (usually ran through e.g. `devtools::check()`) are
-disabled. However, after installation, users can manually test the
-package’s functionality by following the steps outlined in
-[`tests/testthat.R`](https://github.com/ptaconet/modisfast/blob/master/tests/testthat.R).
+automated tests are disabled. However, after installation, users can
+manually test the package’s functionality by running these lines of code
+:
+
+``` r
+# replace "username" and "password" with your own EOSDIS (Earthdata) credentials 
+earthdata_un <- "username" 
+earthdata_pw <- "password"
+
+devtools::check("modisfast)`
+```
 
 ## Comparison with similar R packages
 
