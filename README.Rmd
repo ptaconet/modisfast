@@ -275,4 +275,4 @@ We thank NASA and its partners for making all their Earth science data freely av
 
 We also thank the contributors that have tested the package, reviewed the documentation and brought valuable feedbacks to improve the package : [Florian de Boissieu](https://github.com/floriandeboissieu), Julien Taconet.
 
-This work has been developed over the course of several research projects (REACT 1, REACT 2, ANORHYTHM and DIV-YOO) funded by Expertise France and the French National Research Agency (ANR).
+This work has been developed over the course of several research projects (REACT 1, REACT 2, ANORHYTHM and DIV-YOO) funded by Expertise France, the French National Research Agency (ANR), and the French National Research Institute for Sustainable Development (IRD).

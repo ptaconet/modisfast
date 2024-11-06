@@ -1502,4 +1502,5 @@ Taconet.
 
 This work has been developed over the course of several research
 projects (REACT 1, REACT 2, ANORHYTHM and DIV-YOO) funded by Expertise
-France and the French National Research Agency (ANR).
+France, the French National Research Agency (ANR), and the French
+National Research Institute for Sustainable Development (IRD).
