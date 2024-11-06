@@ -2,6 +2,8 @@ test_that("function mf_import_data() works to import a MODIS datacube", {
 
   skip_on_cran()
   skip_on_ci()
+  skip_if_creds_not_provided()
+  skip_if_wrong_creds()
 
   modis_directory <- dirname(list.files(path = tempdir(), pattern = "MOD13A3.061.2023001_2023060.h21v10.nc4", recursive = TRUE, full.names = TRUE))
 
@@ -40,6 +42,8 @@ test_that("function mf_import_data() works to import a GPM datacube", {
 
   skip_on_cran()
   skip_on_ci()
+  skip_if_creds_not_provided()
+  skip_if_wrong_creds()
 
   gpm_directory <- dirname(list.files(path = tempdir(), pattern = "3B-DAY.MS.MRG.3IMERG.20230101-S000000-E235959.V07B.nc4", recursive = TRUE, full.names = TRUE))
 

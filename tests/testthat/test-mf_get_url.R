@@ -4,6 +4,8 @@ test_that("function mf_get_url() sends back the expected output for a MODIS quer
 
   skip_on_cran()
   skip_on_ci()
+  skip_if_creds_not_provided()
+  skip_if_wrong_creds()
 
   urls_modis <- mf_get_url(collection = "MOD13A3.061",
                      variables = c("_1_km_monthly_NDVI"),
@@ -37,6 +39,8 @@ test_that("function mf_get_url() sends back the expected output for a GPM query"
 
   skip_on_cran()
   skip_on_ci()
+  skip_if_creds_not_provided()
+  skip_if_wrong_creds()
 
   urls_gpm <- mf_get_url(collection = "GPM_3IMERGDF.07",
                      variables = c("precipitation"),
@@ -66,6 +70,8 @@ test_that("function mf_get_url() sends back the expected errors when necessary",
 
   skip_on_cran()
   skip_on_ci()
+  skip_if_creds_not_provided()
+  skip_if_wrong_creds()
 
   # wrong type for roi
   expect_error(mf_get_url(collection = "MOD13A3.061",

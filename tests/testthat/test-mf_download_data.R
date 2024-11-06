@@ -3,6 +3,8 @@ test_that("function mf_download_data() works to download a MODIS datacube", {
 
   skip_on_cran()
   skip_on_ci()
+  skip_if_creds_not_provided()
+  skip_if_wrong_creds()
 
   urls_modis <- mf_get_url(collection = "MOD13A3.061",
                            variables = c("_1_km_monthly_NDVI"),
@@ -30,6 +32,8 @@ test_that("function mf_download_data() works to download a GPM datacube", {
 
   skip_on_cran()
   skip_on_ci()
+  skip_if_creds_not_provided()
+  skip_if_wrong_creds()
 
   urls_gpm <- mf_get_url(collection = "GPM_3IMERGDF.07",
                          variables = c("precipitation"),

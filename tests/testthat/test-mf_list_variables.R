@@ -3,6 +3,8 @@ test_that("function mf_list_variables() sends back the expected output", {
 
   skip_on_cran()
   skip_on_ci()
+  skip_if_creds_not_provided()
+  skip_if_wrong_creds()
 
   # here we test with the collections "MOD13A3.061" and "GPM_3IMERGDF.07"
   vars_mod13a3 <- mf_list_variables(collection = "MOD13A3.061")
