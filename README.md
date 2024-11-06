@@ -1436,7 +1436,7 @@ manually test the package’s functionality by running these lines of code
 earthdata_un <- "username" 
 earthdata_pw <- "password"
 
-devtools::check("modisfast)`
+devtools::test("modisfast")
 ```
 
 ## Comparison with similar R packages

@@ -239,7 +239,7 @@ Since most `modisfast` functions depend on EarthData credentials, automated test
 earthdata_un <- "username" 
 earthdata_pw <- "password"
 
-devtools::check("modisfast)`
+devtools::test("modisfast")
 ```
 
 
