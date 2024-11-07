@@ -57,7 +57,7 @@ Finally, some R packages, such as [`rgee`](https://github.com/r-spatial/rgee) [@
 
 Before proceeding to the test, some system benchmarking :
 
-```{r benchmark, eval=F }
+```{r benchmark, eval=T }
 library(benchmarkme)
 Sys.time()
 Sys.info()
@@ -68,7 +68,7 @@ benchmarkme::get_ram()
 
 # `appeears`
 
-```{r appears, eval = F }
+```{r appears, eval = T }
 appears_start_time <- Sys.time()
 
 roi <- st_as_sf(data.frame(id = "madagascar", geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"), wkt="geom", crs = 4326) 
@@ -118,7 +118,7 @@ appears_end_time <- Sys.time()
 
 # `modisfast`
 
-```{r modisfast, eval = F }
+```{r modisfast, eval = T }
 modisfast_start_time <- Sys.time()
 
 roi <- st_as_sf(data.frame(id = "madagascar", geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"), wkt="geom", crs = 4326) 
@@ -205,7 +205,7 @@ The system returns that "Number of kilometers above or below the subset location
 
 `modisfast` and `appeears` passed the test, `MODIStools` and `MODIStsp` did not (for different reasons). Let's see the duration of data processing access :
 
-```{r results_benchmark, eval = F }
+```{r results_benchmark, eval = T }
 
 # with modisfast
 round(modisfast_end_time - modisfast_start_time,2)
