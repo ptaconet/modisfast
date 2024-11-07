@@ -27,6 +27,16 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r setup, message=F}
+library(modisfast)
+library(appeears)
+library(MODIStsp)
+library(MODISTools)
+library(sf)
+library(terra)
+```
+
+
 # Introduction
 
 The goal of this exercise is to evaluate the performance of various R packages designed for accessing MODIS data, specifically focusing on data access and import times. To do this, we will download and import a one-year monthly time series of MODIS Normalized Difference Vegetation Index (NDVI) at a 1 km spatial resolution for the entire country of Madagascar.
@@ -60,10 +70,6 @@ benchmarkme::get_ram()
 
 ```{r appears, eval = F }
 appears_start_time <- Sys.time()
-
-library(appeears)
-library(sf)
-library(terra)
 
 roi <- st_as_sf(data.frame(id = "madagascar", geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"), wkt="geom", crs = 4326) 
 time_range <- as.Date(c("2023-01-01","2023-12-31"))
@@ -115,10 +121,6 @@ appears_end_time <- Sys.time()
 ```{r modisfast, eval = F }
 modisfast_start_time <- Sys.time()
 
-library(modisfast)
-library(sf)
-library(terra)
-
 roi <- st_as_sf(data.frame(id = "madagascar", geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"), wkt="geom", crs = 4326) 
 time_range <- as.Date(c("2023-01-01","2023-12-31"))
 collection <- "MOD13A3.061"  
@@ -151,8 +153,6 @@ modisfast_end_time <- Sys.time()
 ```{r modistsp, eval = F, error=TRUE }
 modistsp_start_time <- Sys.time()
 
-library(MODIStsp)
-
 MODIStsp(gui = FALSE, 
          parallel = TRUE,
          selprod = "Vegetation_Indexes_Monthly_1Km (M*D13A3)",
@@ -183,8 +183,6 @@ MOD13A3 is not available with `MODIStools`, so we run the exercise with MOD21A2 
 
 ```{r modistools, eval = F , error=TRUE}
 modistools_start_time <- Sys.time()
-
-library(MODISTools)
 
 subset <- mt_subset(product = "MOD21A2",
                     lat = -19.5,

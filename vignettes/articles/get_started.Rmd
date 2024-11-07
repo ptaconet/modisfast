@@ -27,6 +27,7 @@ knitr::opts_chunk$set(
 library(modisfast)
 library(sf)
 library(terra)
+library(mapview)
 ```
 
 In this example we want to download, import and plot over the 3500 km^2^ wide region of interest (mapped below) :
@@ -35,7 +36,6 @@ In this example we want to download, import and plot over the 3500 km^2^ wide re
 - the same 1 year-long times series of monthly precipitations from [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERG/3B-MONTH/07) (spatial resolution : 1° ; temporal resolution : 1 month)
 
 ```{r, echo=F, fig.height=5, fig.width=3, eval=NOT_CRAN }
-library(mapview)
 roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
 mapview::mapview(roi,legend=F)
 ```
@@ -62,17 +62,18 @@ First we prepare the script : define the ROI, the time frame, and the folder wer
 # Set ROI and time range of interest
 roi <- st_as_sf(data.frame(id="Korhogo", geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326)
 time_range <- as.Date(c("2017-01-01","2017-12-31"))
-target_fold <- "env_data"
 ```
 
 ### Login to EOSDIS Earthdata
 
 And we login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
 
+<!-- Note : When testing the vignette, please run only the chunk named odr_login (replacing "earthdata_un" and "earthdata_pw" with your own credentials). The others (log1 and log3) are used only for development, i.e. when the vignette is published on the package website -->
+
 ```{r log1, eval=NOT_CRAN, echo=F,message=F }
 username <- Sys.getenv("earthdata_un")
 password <- Sys.getenv("earthdata_pw")
-log <- mf_login(credentials = c(username,password),verbose = F)
+log <- mf_login(credentials = c(username,password),verbose = "quiet")
 ```
 
 ```{r odr_login, eval=F}
@@ -85,13 +86,8 @@ log <- mf_login(credentials = c(username,password))
 ```{r log3, eval=NOT_CRAN, echo=F,message=F }
 username <- Sys.getenv("earthdata_un")
 password <- Sys.getenv("earthdata_pw")
-log <- mf_login(credentials = c(username,password),verbose = F)
+log <- mf_login(credentials = c(username,password),verbose = "quiet")
 ```
-
-```{r eval=NOT_CRAN, echo=F,message=F }
-unlink(target_fold, recursive = T)
-```
-
 
 ### Get the URLs of the data to download {#get-url}
 
@@ -99,18 +95,7 @@ With the function `mf_get_url()`, we get the https URLs for our collections of i
 
 :arrow_right: For each collection, we can select a subset only of variables (sometimes called "dimensions", or "bands") that are of interest for us, through the parameter `variables`. By default, this parameter is set to `NULL`, which means that all the available variables for the specified collection are included. To get the variables available for a given collection along with information for each of them (description, etc.), use the function `mf_list_variables()`.
 
-<!-- `r emo::ji("right arrow")` **Note on the use of the parameter `variables` of the function `mf_get_url()` :** -->
-
-<!-- The collections generally contain several variables (sometimes called "dimensions", or "bands"). As an example, MODIS LST products contain one band for the day temperature ("LST_Day_1km"), one band for the night temperature ("LST_Night_1km"), etc. To get all the variables available for a given collection along with information for each of them (description, etc.), use the function `mf_list_variables()`. e.g. : -->
-
-<!-- ```{r mf_list_variables, eval=T} -->
-<!-- tail(mf_list_variables("MOD11A1.061")) -->
-<!-- ``` -->
-
-<!-- In `mf_get_url()`, the parameter `variables` enables to restrict the data to download to only specific variables. By default it is set to `NULL`, which means that all the available variables for the specified collection are downloaded. Specifying `variables` will make the data to download lighter.  -->
-
-<!-- **End Note** -->
-
+For more information on the variables in the context of OPeNDAP, see the [OPeNDAP Data model documentation](https://opendap.github.io/documentation/UserGuideComprehensive.html#OPeNDAP_Data_Model).
 
 ```{r mf_get_url, eval=NOT_CRAN}
 ## Get the URLs of MODIS Vegetation indexes
@@ -144,12 +129,12 @@ The destination file for each dataset is specified in the column *destfile* of t
 Setting the argument `parallel` to `TRUE` will parallelize - therefore fasten - the download in case numerous datasets need to be downloaded.
 
 ```{r mf_download_data, eval=NOT_CRAN }
-
 # Hint : to fasten the download in case of multiple collections, bind them in a single data.frame (as shown below) before executing the function 'mf_download_data()' :
-df_to_dl <- rbind(urls_mod11a1,urls_gpm)
+df_to_dl <- rbind(urls_mod11a1, urls_gpm)
 
-# Then download the data (by default, in temp directory, but the target folder can be set in the function
-res_dl <- mf_download_data(df_to_dl, path = target_fold, parallel = TRUE)
+# Then download the data (by default, in temporary directory, but the target folder can be set with the argument 'path'
+res_dl <- mf_download_data(df_to_dl = df_to_dl, 
+                           parallel = TRUE)
 
 print(str(res_dl))
 ```
@@ -173,10 +158,12 @@ These issues can easily be dealt at the import phase in R using the function `mf
 
 ```{r import_example, message=F, eval=NOT_CRAN}
 # import MOD11A1.061
-modis_ts <- mf_import_data(path = file.path(target_fold,"data","Korhogo","MOD13A3.061"), 
+# argument 'path' is the folder where the data are stored (here, in a temporary directory)
+modis_ts <- mf_import_data(path = dirname(list.files(path = tempdir(), pattern = "MOD13A3.061", recursive = TRUE, full.names = TRUE)),
                            collection = "MOD13A3.061")
+
 # import GPM
-gpm_ts <- mf_import_data(path = file.path(target_fold,"data","Korhogo","GPM_3IMERGM.07"), 
+gpm_ts <- mf_import_data(path = unique(dirname(list.files(path = tempdir(), pattern = "3IMERG", recursive = TRUE, full.names = TRUE))),
                          collection = "GPM_3IMERGM.07")
 
 modis_ts

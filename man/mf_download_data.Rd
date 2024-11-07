@@ -10,7 +10,7 @@ mf_download_data(
   parallel = FALSE,
   num_workers = parallel::detectCores() - 1,
   credentials = NULL,
-  verbose = TRUE,
+  verbose = "inform",
   min_filesize = 5000
 )
 }
@@ -25,7 +25,7 @@ mf_download_data(
 
 \item{credentials}{vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.}
 
-\item{verbose}{boolean. optional. Verbose (default TRUE)}
+\item{verbose}{string. Verbose mode ("quiet", "inform", or "debug"). Default "inform".}
 
 \item{min_filesize}{integer. Minimum file size expected (in bites) for one file downloaded. If files downloaded are less that this value, the files will be downloaded again. Default 5000.}
 }
@@ -34,7 +34,7 @@ a data.frame with the same structure of the input data.frame \code{df_to_dl} + c
 \describe{
 \item{fileDl}{Booloean (dataset downloaded or failure)}
 \item{dlStatus}{Download status : 1 = download ok ; 2 = download error ; 3 = dataset was already existing in destination file }
-\item{fileSize}{File size on disk}
+\item{fileSize}{File size on disk (in bites)}
 }
 }
 \description{

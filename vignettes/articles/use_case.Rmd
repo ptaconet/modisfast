@@ -42,6 +42,7 @@ library(terra)
 library(purrr)
 library(dplyr)
 library(ggplot2)
+library(mapview)
 ```
 
 Then, let's load the data and have a look at them :
@@ -68,8 +69,6 @@ entomological_data <- entomological_data %>%
 Let's map the collection points and their bounding box : 
 
 ```{r, echo=F, fig.height=5, fig.width=3, eval=NOT_CRAN }
-library(mapview)
-
 roi <- st_bbox(entomological_data) %>%
   sf::st_as_sfc() %>%
   sf::st_sf() 
@@ -80,7 +79,6 @@ mapview(list(roi, entomological_data),legend=F)
 We now generate the bounding box of the collection points (ie. area of interest) to get a POLYGON object (which is the input type for `modisfast`). Then, since we will calculate the meteorological indicators in 2-km radius buffer zones, we need to enlarge a bit the ROI. Here, we enlarge it by 3000 m in all directions (N, S, W, E) and we give the ROI the name "Korhogo" (the name of the main city in the area) :
 
 ```{r eval=NOT_CRAN}
-
 roi <- st_bbox(entomological_data)
 
 # function expand_bbox() (Thanks @Chrisjb for the function)

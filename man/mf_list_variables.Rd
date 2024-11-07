@@ -4,12 +4,14 @@
 \alias{mf_list_variables}
 \title{Get information for the variables (bands) available for a given collection}
 \usage{
-mf_list_variables(collection, credentials = NULL)
+mf_list_variables(collection, credentials = NULL, verbose = "inform")
 }
 \arguments{
 \item{collection}{string. mandatory. Collection of interest (see details of \link{mf_get_url}).}
 
 \item{credentials}{vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.}
+
+\item{verbose}{string. Verbose mode ("quiet", "inform", or "debug"). Default "inform".}
 }
 \value{
 A data.frame with the variables available for the collection, and a set of related information for each variable.

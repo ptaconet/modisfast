@@ -12,7 +12,7 @@
 #' @param single_netcdf boolean. optional. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.
 #' @param opt_param list of optional arguments. optional. (see details).
 #' @param credentials vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.
-#' @param verbose boolean. optional. Verbose (default TRUE)
+#' @param verbose string. Verbose mode ("quiet", "inform", or "debug"). Default "inform".
 #'
 #' @return a data.frame with one row for each dataset to download and 5 columns :
 #'  \describe{
@@ -21,6 +21,7 @@
 #'  \item{collection}{Name of the collection}
 #'  \item{name}{Indicative name for the dataset}
 #'  \item{url}{https OPeNDAP URL of the dataset}
+#'  \item{maxFileSizeEstimated}{Maximum estimated data size for the dataset (in bites)}
 #'  }
 #'
 #' @details
@@ -29,7 +30,7 @@
 #'
 #' Argument \code{variables} : For each collection, variables available can be retrieved with the function \link{mf_list_variables}
 #'
-#' Argument \code{time_range} : Can be provided either as i) a single date (e.g. \code{as.Date("2017-01-01"))} or ii) a time frame provided as two bounding dates (starting and ending time) ( e.g. \code{as.Date(c("2010-01-01","2010-01-30"))}) or iii) a POSIXlt single time (e.g. \code{as.POSIXlt("2010-01-01 18:00:00")}) or iv) a POSIXlt time range (e.g. \code{as.POSIXlt(c("2010-01-01 18:00:00","2010-01-02 09:00:00"))}) for the half-hourly collection (GPM_3IMERGHH.06). If POSIXlt, times must be in UTC.
+#' Argument \code{time_range} : Can be provided either as i) a single date (e.g. \code{as.Date("2017-01-01"))} or ii) a time frame provided as two bounding dates (starting and ending time) ( e.g. \code{as.Date(c("2010-01-01","2010-01-30"))}) or iii) a POSIXlt single time (e.g. \code{as.POSIXlt("2010-01-01 18:00:00")}) or iv) a POSIXlt time range (e.g. \code{as.POSIXlt(c("2010-01-01 18:00:00","2010-01-02 09:00:00"))}) for the half-hourly collection (GPM_3IMERGHH.06). If POSIXlt, hours must be provided in GMT.
 #'
 #' Argument \code{single_netcdf} : for MODIS and VIIRS products from LP DAAC: download the data as a single file encompassing the whole time frame (TRUE) or as multiple files : one for each date, which is the behavious for the other collections - GPM and SMAP) (FALSE) ?
 #'
@@ -97,8 +98,8 @@ mf_get_url <- function(collection,
                        single_netcdf = TRUE,
                        opt_param = NULL,
                        credentials = NULL,
-                       verbose = TRUE) {
-  existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- . <- name <- destfile <- roi_id <- NULL
+                       verbose = "inform") {
+  existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- . <- name <- destfile <- roi_id <- maxFileSizeEstimated <- NULL
 
   ## tests :
   # collection
@@ -117,20 +118,19 @@ mf_get_url <- function(collection,
     stop("single_netcdf argument must be boolean\n")
   }
   # verbose
-  if (!inherits(verbose, "logical")) {
-    stop("verbose argument must be boolean\n")
+  if (!inherits(verbose, "character")) {
+    stop("verbose argument must be a character string ('quiet'', 'inform', or 'debug') \n")
   }
   # Internet connection
   .testInternetConnection()
   # credentials
   .testLogin(credentials)
 
-  if (verbose) {
+  if (verbose %in% c("inform","debug")) {
     cat("Building the URLs...\n")
   }
 
   if (is.null(opt_param)) {
-    # if(verbose){cat("Retrieving opendap arguments for the collection specified...\n")}
     opt_param <- mf_get_opt_param(collection, roi, verbose = verbose)
   }
 
@@ -167,11 +167,14 @@ mf_get_url <- function(collection,
     dplyr::mutate(name = paste0(name, ".", output_format)) %>%
     dplyr::arrange(roi_id, date) %>%
     dplyr::mutate(collection = collection) %>%
-    dplyr::select(roi_id, date, collection, name, url) %>% # ,fileSizeEstimated) %>%
+    dplyr::select(roi_id, date, collection, name, url, maxFileSizeEstimated) %>%
     dplyr::rename(time_start = date, id_roi = roi_id)
 
-  if (verbose) {
-    cli::cli_alert_success("URL(s) built\n")
+  maxFileSizeEstimated <- dplyr::if_else(round(sum(table_urls$maxFileSizeEstimated)/1000000)>1,round(sum(table_urls$maxFileSizeEstimated)/1000000),1)
+
+  if (verbose %in% c("inform","debug")) {
+    cli::cli_alert_success("URL(s) built.\n")
+    cat("Maximum estimated data size is",maxFileSizeEstimated,"Mb\n")
   }
 
   return(table_urls)

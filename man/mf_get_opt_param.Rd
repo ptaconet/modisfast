@@ -4,7 +4,7 @@
 \alias{mf_get_opt_param}
 \title{Precompute the parameter \code{opt_param} of the function \link{mf_get_url}}
 \usage{
-mf_get_opt_param(collection, roi, credentials = NULL, verbose = TRUE)
+mf_get_opt_param(collection, roi, credentials = NULL, verbose = "inform")
 }
 \arguments{
 \item{collection}{string. mandatory. Collection of interest (see details of \link{mf_get_url}).}
@@ -13,7 +13,7 @@ mf_get_opt_param(collection, roi, credentials = NULL, verbose = TRUE)
 
 \item{credentials}{vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.}
 
-\item{verbose}{boolean. optional. Verbose (default TRUE)}
+\item{verbose}{string. Verbose mode ("quiet", "inform", or "debug"). Default "inform".}
 }
 \value{
 a list with the following named objects :

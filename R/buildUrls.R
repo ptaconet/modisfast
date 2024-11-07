@@ -3,6 +3,7 @@
 #' of interest
 #'
 #' @importFrom lubridate year yday hour minute second floor_date
+#' @importFrom cli cli_alert_info
 #' @noRd
 
 .buildUrls <- function(collection,
@@ -13,8 +14,8 @@
                        single_netcdf = TRUE,
                        optionalsOpendap = NULL,
                        credentials = NULL,
-                       verbose = FALSE) {
-  ideal_date <- date_closest_to_ideal_date <- index_opendap_closest_to_date <- dimensions_url <- hour_end <- date_character <- hour_start <- number_minutes_from_start_day <- year <- day <- product_name <- month <- x <- . <- url_product <- dayofyear <- Var1 <- Var2 <- lines <- fileSizeEstimated <- NULL
+                       verbose = "inform") {
+  ideal_date <- date_closest_to_ideal_date <- index_opendap_closest_to_date <- dimensions_url <- hour_end <- date_character <- hour_start <- number_minutes_from_start_day <- year <- day <- product_name <- month <- x <- . <- url_product <- dayofyear <- Var1 <- Var2 <- lines <- maxFileSizeEstimated <- NULL
 
   .testIfCollExists(collection)
   .testRoi(roi)
@@ -96,14 +97,13 @@
                          lubridate::year(max(timeIndices_of_interest$date_closest_to_ideal_date)),
                          sprintf("%03d", lubridate::yday(max(timeIndices_of_interest$date_closest_to_ideal_date))), ".", modis_tile)
 
-          fileSizeEstimated <- ((roiSpatialIndexBound[2] - roiSpatialIndexBound[1]) * (roiSpatialIndexBound[4] - roiSpatialIndexBound[3]) * (timeIndex[2] - timeIndex[1]) * length(variables)) * 0.000000575 # ie. total number of cells / size of a cell in mb
-          fileSizeEstimated <- round(fileSizeEstimated, 1)
+          maxFileSizeEstimated <- ((roiSpatialIndexBound[2] - roiSpatialIndexBound[1]) * (roiSpatialIndexBound[4] - roiSpatialIndexBound[3]) * (timeIndex[2] - timeIndex[1]) * length(variables)) * 4 # ie. total number of cells / size of a cell in bites
 
           table_urls <- data.frame(date = min(timeIndices_of_interest$date_closest_to_ideal_date),
                                    name = name,
                                    url = url,
                                    roi_id = roiId,
-                                   fileSizeEstimated = fileSizeEstimated,
+                                   maxFileSizeEstimated = maxFileSizeEstimated,
                                    stringsAsFactors = FALSE)
         } else { # download data in multiple netcdf files (1/each time frame)
           table_urls <- timeIndices_of_interest %>%
@@ -126,7 +126,7 @@
       )
     } else if (odap_coll_info$provider == "NASA LAADS DAAC") {
       # e.g. VNP46A1
-      if (verbose) {
+      if (verbose %in% c("inform","debug")) {
         cat("Getting the URLs for this collection might take some time...\n")
       }
       time_range <- as.Date(time_range, origin = "1970-01-01")
@@ -166,6 +166,7 @@
 
     ##############  GPM_3IMERGHH.06 and GPM_3IMERGHH.07  ######################
     if (collection %in% c("GPM_3IMERGHH.06", "GPM_3IMERGHHL.06", "GPM_3IMERGHHE.06", "GPM_3IMERGHH.07")) {
+      cli::cli_alert_info("For this collection, please ensure that hours are provided are in GMT\n")
       if (collection %in% c("GPM_3IMERGHHL.06")) {
         indicatif <- "-L"
       } else if (collection %in% c("GPM_3IMERGHHE.06")) {
@@ -244,7 +245,8 @@
       th_table_urls <- urls %>%
         dplyr::mutate(url = paste0(url_product, "?", dim[i])) %>%
         dplyr::mutate(name = product_name) %>%
-        dplyr::mutate(roi_id = roi$id[i])
+        dplyr::mutate(roi_id = roi$id[i]) %>%
+        dplyr::mutate(maxFileSizeEstimated = (abs(roiSpatialIndexBound$'1'[1] - roiSpatialIndexBound$'1'[2]) * abs(roiSpatialIndexBound$'1'[4] - roiSpatialIndexBound$'1'[3]) * length(variables)) * 4) # ie. total number of cells / size of a cell in bites)
       table_urls <- rbind(table_urls, th_table_urls)
     }
   } else if (odap_source == "CHIRPS") {

@@ -23,7 +23,7 @@
 #' (df_varinfo <- mf_list_variables("MOD11A1.061"))
 #' }
 #'
-mf_list_variables <- function(collection, credentials = NULL) { # for a given collection, get the available variables and associated information
+mf_list_variables <- function(collection, credentials = NULL, verbose = "inform") { # for a given collection, get the available variables and associated information
 
   .testIfCollExists(collection)
   .testInternetConnection()
@@ -37,7 +37,14 @@ mf_list_variables <- function(collection, credentials = NULL) { # for a given co
 
   InfoURL <- paste0(URL, ".info")
   vector_response <- httr::GET(InfoURL)
-  vector_response <- httr::GET(vector_response$url)
+  f <- function() {
+    httr::GET(vector_response$url)
+  }
+  if(verbose %in% c("quiet","inform")){
+    vector_response <- f()
+  } else if (verbose == "debug"){
+    vector_response <- httr::with_verbose(f())
+  }
   if (vector_response$status_code == 400) {
     stop("Bad request\n")
   }
@@ -55,7 +62,13 @@ mf_list_variables <- function(collection, credentials = NULL) { # for a given co
 
   DdsURL <- paste0(URL, ".dds")
   vector_response <- httr::GET(DdsURL)
-  vector_response <- httr::GET(vector_response$url)
+
+  if(verbose %in% c("quiet","inform")){
+    vector_response <- f()
+  } else if (verbose == "debug"){
+    vector_response <- httr::with_verbose(f())
+  }
+
   vector <- httr::content(vector_response, "text", encoding = "UTF-8")
   vector <- strsplit(vector, "\n")
   vector <- vector[[1]][-length(vector[[1]])]

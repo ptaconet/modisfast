@@ -17,7 +17,7 @@
 #' \describe{
 #' \item{fileDl}{Booloean (dataset downloaded or failure)}
 #' \item{dlStatus}{Download status : 1 = download ok ; 2 = download error ; 3 = dataset was already existing in destination file }
-#' \item{fileSize}{File size on disk}
+#' \item{fileSize}{File size on disk (in bites)}
 #' }
 #'
 #' @details
@@ -72,14 +72,14 @@
 #' ### Plot the data
 #' terra::plot(modis_ts)
 #' }
-mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel = FALSE, num_workers = parallel::detectCores() - 1, credentials = NULL, verbose = TRUE, min_filesize = 5000) {
-  fileSize <- destfile <- fileDl <- folders <- readme_files <- source <- NULL
+mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel = FALSE, num_workers = parallel::detectCores() - 1, credentials = NULL, verbose = "inform", min_filesize = 5000) {
+  fileSize <- destfile <- fileDl <- folders <- readme_files <- source <- maxFileSizeEstimated <- NULL
 
   source <- "earthdata"
 
   # tests
-  if (!inherits(verbose, "logical")) {
-    stop("verbose argument must be boolean\n")
+  if (!inherits(verbose, "character")) {
+    stop("verbose argument must be a character string ('quiet'', 'inform', or 'debug') \n")
   }
   if (!inherits(parallel, "logical")) {
     stop("parallel argument must be boolean\n")
@@ -127,7 +127,7 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
   data_to_download <- data_dl %>%
     dplyr::filter(fileDl == FALSE)
 
-  if (verbose) {
+  if (verbose %in% c("inform","debug")) {
     cat(nrow(df_to_dl), " datasets in total : ", nrow(data_already_exist), " already downloaded and ", nrow(data_to_download), " datasets to download\n")
   }
 
@@ -158,22 +158,29 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
       # GET(u$url, httr::write_disk(output), httr::progress(), config(maxredirs=-1, netrc = TRUE, netrc_file = netrc), set_cookies("LC" = "cookies"))
     }
 
-    if (verbose) {
-      cat("Downloading the data...\n")
+    if (verbose %in% c("inform","debug")) {
+       maxFileSizeEstimated <- sum(data_dl$maxFileSizeEstimated[which(data_dl$fileDl == FALSE)])
+       maxFileSizeEstimated <- dplyr::if_else(round(maxFileSizeEstimated/1000000)>1,round(maxFileSizeEstimated/1000000),1)
+       cat("Downloading the data in",path,"... \nMaximum estimated data size to download is ~",maxFileSizeEstimated,"Mb\n")
+      # cat("Downloading the data in",path,"...\n")
     }
     if (parallel) {
       cl <- parallel::makeCluster(num_workers)
       parallel::clusterMap(cl, dl_func,
         url = data_to_download$url, output = data_to_download$destfile, username = username, password = password,
         .scheduling = "dynamic"
-      )
+        )
       parallel::stopCluster(cl)
     } else {
       for (i in seq_len(nrow(data_to_download))) {
-        if (verbose) {
+        if (verbose %in% c("inform","debug")) {
           cat("[", i, " over ", nrow(data_to_download), "]\n")
         }
-        dl_func(url = data_to_download$url[i], output = data_to_download$destfile[i], username = username, password = password)
+        if(verbose %in% c("quiet","inform")){
+          dl_func(url = data_to_download$url[i], output = data_to_download$destfile[i], username = username, password = password)
+        } else if (verbose == "debug"){
+          httr::with_verbose(dl_func(url = data_to_download$url[i], output = data_to_download$destfile[i], username = username, password = password))
+        }
       }
     }
   }
@@ -187,7 +194,7 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
   data_downloaded <- dplyr::filter(data_dl, fileSize >= min_filesize)
 
   if (!(identical(data_dl, data_downloaded))) {
-    if (verbose) {
+    if (verbose %in% c("inform","debug")) {
       cli::cli_alert_warning("Only part of the data has been downloaded. Downloading the remaining datasets one by one...\n")
     }
     mf_download_data(df_to_dl = df_to_dl, path = path, parallel = FALSE, credentials = credentials) # ,source=source)
@@ -195,7 +202,7 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
     # 1 : download ok
     # 2 : download error
     # 3 : data already existing in output folder
-    if (verbose) {
+    if (verbose %in% c("inform","debug")) {
       cli::cli_alert_success("\nData were all properly downloaded under the folder(s) ", paste(as.character(unique(dirname(df_to_dl$destfile))), collapse = " and "))
       cli::cli_alert_info("\nTo import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)\n")
     }

@@ -11,7 +11,7 @@ mf_import_data(
   proj_epsg = NULL,
   roi_mask = NULL,
   vrt = FALSE,
-  verbose = TRUE,
+  verbose = "inform",
   ...
 )
 }
@@ -28,7 +28,7 @@ mf_import_data(
 
 \item{vrt}{boolean. Import virtual raster instead of SpatRaster. Useful for very large files. (default : FALSE)}
 
-\item{verbose}{boolean. optional. Verbose (default TRUE)}
+\item{verbose}{string. Verbose mode ("quiet", "inform", or "debug"). Default "inform".}
 
 \item{...}{not used}
 }

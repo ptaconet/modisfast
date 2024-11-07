@@ -60,7 +60,7 @@
 #'   opt_param = opt_param_mod11a1
 #' )))
 #' }
-mf_get_opt_param <- function(collection, roi, credentials = NULL, verbose = TRUE) {
+mf_get_opt_param <- function(collection, roi, credentials = NULL, verbose = "inform") {
   . <- odap_coll_info <- odap_source <- odap_server <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- odap_crs <- odap_urlExample <- modis_tile <- OpendapURL <- OpenDAPtimeVector <- OpenDAPXVector <- OpenDAPYVector <- roi_bbox <- Opendap_minLat <- Opendap_maxLat <- Opendap_minLon <- Opendap_maxLon <- roiSpatialIndexBound <- minLat <- maxLat <- minLon <- maxLon <- roiSpatialBound <- availableDimensions <- null_elements <- NULL
 
   OpenDAPtimeVector <- modis_tile <- NULL

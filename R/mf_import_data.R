@@ -8,7 +8,7 @@
 #' @param proj_epsg numeric. EPSG of the desired projection for the output raster (default : source projection of the data).
 #' @param roi_mask \code{SpatRaster} or \code{SpatVector} or \code{sf}. Area beyond which data will be masked. Typically, the input ROI of \link{mf_get_url} (default : NULL (no mask))
 #' @param vrt boolean. Import virtual raster instead of SpatRaster. Useful for very large files. (default : FALSE)
-#' @param verbose boolean. optional. Verbose (default TRUE)
+#' @param verbose string. Verbose mode ("quiet", "inform", or "debug"). Default "inform".
 #' @inheritParams mf_get_url
 #' @param ... not used
 #'
@@ -76,7 +76,7 @@ mf_import_data <- function(path,
                            proj_epsg = NULL,
                            roi_mask = NULL,
                            vrt = FALSE,
-                           verbose = TRUE,
+                           verbose = "inform",
                            ...) {
   rasts <- NULL
 
@@ -92,7 +92,7 @@ mf_import_data <- function(path,
     stop("paramater 'output_class' must be SpatRaster.")
   }
 
-  if (verbose) {
+  if (verbose %in% c("inform","debug")) {
     cat("Importing the dataset as a",output_class,"object...\n")
   }
 
@@ -102,7 +102,7 @@ mf_import_data <- function(path,
     rasts <- .import_gpm(path, output_class, proj_epsg, roi_mask)
   }
 
-  if (verbose) {
+  if (verbose %in% c("inform","debug")) {
     cli_alert_success("Dataset imported")
   }
 

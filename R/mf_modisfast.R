@@ -1,5 +1,5 @@
-#' @name modisfast
-#' @aliases modisfast
+#' @name mf_modisfast
+#' @aliases mf_modisfast
 #' @title Download (and possibly import) MODIS, VIIRS and GPM
 #' Earth Observation data
 #' @description Download and possibly import MODIS, VIIRS and GPM
@@ -12,7 +12,7 @@
 #' @inheritParams mf_import_data
 #' @param earthdata_username EarthData username
 #' @param earthdata_password EarthData username
-#' @param import boolean. Import the data as a SpatRast object ? defaut TRUE. FALSE will dowload the data without importing it in R.
+#' @param import boolean. Import the data as a SpatRast object ? defaut TRUE. FALSE will download the data but not import them it in R.
 #' @param ... Further arguments to be passed to \link{mf_import_data}
 #'
 #' @return if the parameter \code{import} is set to TRUE, a \code{terra::SpatRast}
@@ -21,7 +21,7 @@
 #'
 #' @note Whenever possible, users should prefer executing the functions \link{mf_login}, \link{mf_get_url}, \link{mf_download_data} and \link{mf_import_data} sequentially rather than using this \code{modisfast} high-level function
 #'
-#' @seealso [mf_login()], [mf_get_url()], [mf_download_data()], [mf_import_data()]
+#' @seealso \link{mf_login}, \link{mf_get_url}, \link{mf_download_data}, \link{mf_import_data}
 #' @export
 #' @examples
 #' \dontrun{
@@ -42,7 +42,7 @@
 #' )
 #'
 #' ### Download and import the data
-#' modis_ts <- modisfast(
+#' modis_ts <- mf_modisfast(
 #'   collection = coll,
 #'   variables = bands,
 #'   roi = roi,
@@ -54,7 +54,7 @@
 #' ### Plot the data
 #' terra::plot(modis_ts)
 #' }
-modisfast <- function(collection,
+mf_modisfast <- function(collection,
                       variables,
                       roi,
                       time_range,
@@ -62,7 +62,7 @@ modisfast <- function(collection,
                       earthdata_username,
                       earthdata_password,
                       parallel = FALSE,
-                      verbose = TRUE,
+                      verbose = "inform",
                       import = TRUE,
                       ...) {
   log <- mf_login(c(earthdata_username, earthdata_password), verbose = verbose)

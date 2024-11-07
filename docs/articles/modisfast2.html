@@ -63,11 +63,11 @@
     <li>
       <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest simultaneously</a>
     </li>
-        <li>
-      <a href="../articles/use_case.html">3. Full use case</a>
-    </li>
     <li>
       <a href="../articles/perf_comp.html">4. Comparison of performance with other similar R packages</a>
+    </li>
+    <li>
+      <a href="../articles/use_case.html">3. Full use case</a>
     </li>
   </ul>
 </li>
@@ -100,7 +100,7 @@ interest simultaneously</h1>
                         <h4 data-toc-skip class="author">Paul
 Taconet</h4>
             
-            <h4 data-toc-skip class="date">2024-08-07</h4>
+            <h4 data-toc-skip class="date">2024-11-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ptaconet/modisfast/blob/HEAD/vignettes/articles/modisfast2.Rmd" class="external-link"><code>vignettes/articles/modisfast2.Rmd</code></a></small>
       <div class="hidden name"><code>modisfast2.Rmd</code></div>
@@ -159,14 +159,10 @@ ROIs, as shown in the example below :</p>
 <span>                                   </span>
 <span><span class="va">time_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2017-01-01"</span>,<span class="st">"2017-01-30"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># define target folder</span></span>
-<span><span class="va">target_fold</span> <span class="op">&lt;-</span> <span class="st">"env_data_2"</span></span>
-<span></span>
 <span><span class="co"># and then execute the classical workflow</span></span>
 <span></span>
 <span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_login.html">mf_login</a></span><span class="op">(</span>credentials <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_un"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_pw"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Checking credentials...</span></span>
-<span><span class="co">#&gt; Successfull login to Earthdata</span></span>
 <span></span>
 <span><span class="va">urls_mod11a1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span>
 <span>        collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span>,</span>
@@ -174,17 +170,18 @@ ROIs, as shown in the example below :</p>
 <span>        roi <span class="op">=</span> <span class="va">roi</span>,</span>
 <span>        time_range <span class="op">=</span> <span class="va">time_range</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Building the URLs...</span></span>
-<span><span class="co">#&gt; OK</span></span>
 <span></span>
-<span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls_mod11a1</span>, path <span class="op">=</span> <span class="va">target_fold</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls_mod11a1</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 2  datasets in total :  0  already downloaded and  2  datasets to download</span></span>
-<span><span class="co">#&gt; Downloading the data...</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  env_data_2/data/Diebougou/MOD11A1.061 and env_data_2/data/Korhogo/MOD11A1.061 </span></span>
-<span><span class="co">#&gt; **To import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)**</span></span>
+<span><span class="co">#&gt; Downloading the data in /tmp/Rtmphov0xs/modisfast_6cf66274da92 ...</span></span>
 <span></span>
-<span><span class="va">modis_ts_korhogo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"data"</span>,<span class="st">"Korhogo"</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span><span class="op">)</span></span>
-<span><span class="va">modis_ts_diebougou</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"data"</span>,<span class="st">"Diebougou"</span>,<span class="st">"MOD11A1.061"</span><span class="op">)</span>, collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">modis_ts_korhogo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"MOD11A1.061"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, </span>
+<span>                                   collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Importing the dataset as a SpatRaster object...</span></span>
+<span></span>
+<span><span class="va">modis_ts_diebougou</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"MOD11A1.061"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, </span>
+<span>                                     collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Importing the dataset as a SpatRaster object...</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="get-data-over-multiple-time-periods-of-interest-simultaneously">Get data over multiple time periods of interest simultaneously<a class="anchor" aria-label="anchor" href="#get-data-over-multiple-time-periods-of-interest-simultaneously"></a>
@@ -201,11 +198,8 @@ ROI)</p>
 <span>                    <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2018-01-01"</span>,<span class="st">"2018-01-31"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                    <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2019-01-01"</span>,<span class="st">"2019-01-31"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">target_fold</span> <span class="op">&lt;-</span> <span class="st">"env_data_2"</span></span>
-<span></span>
 <span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_login.html">mf_login</a></span><span class="op">(</span>credentials <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_un"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_pw"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Checking credentials...</span></span>
-<span><span class="co">#&gt; Successfull login to Earthdata</span></span></code></pre></div>
+<span><span class="co">#&gt; Checking credentials...</span></span></code></pre></div>
 <p>Of course, we could loop over the <code><a href="../reference/mf_get_url.html">mf_get_url()</a></code> with the
 time ranges of interest, and get the data. However, the
 <code><a href="../reference/mf_get_url.html">mf_get_url()</a></code> function does query the OPeNDAP servers each
@@ -216,7 +210,7 @@ multiple time frames of interest, it will import again and again the
 same data, which is quite useless.</p>
 <p>Here is where the function <code><a href="../reference/mf_get_opt_param.html">mf_get_opt_param()</a></code> comes into
 the game. For a given collection and ROI, this function queries the
-OPeNDAP server and retrieves the information that we were mentionning in
+OPeNDAP server and retrieves the information that we were mentioning in
 the previous paragraph. This function is actually run within the
 <code><a href="../reference/mf_get_url.html">mf_get_url()</a></code> function, but its output can also be provided
 as input parameter <code>opt_param</code> of <code><a href="../reference/mf_get_url.html">mf_get_url()</a></code>.
@@ -247,13 +241,9 @@ argument <code>opt_param</code> :</p>
 <span>  opt_param <span class="op">=</span> <span class="va">opt_param_mod11a1</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; Building the URLs...</span></span>
-<span><span class="co">#&gt; OK</span></span>
 <span><span class="co">#&gt; Building the URLs...</span></span>
-<span><span class="co">#&gt; OK</span></span>
 <span><span class="co">#&gt; Building the URLs...</span></span>
-<span><span class="co">#&gt; OK</span></span>
 <span><span class="co">#&gt; Building the URLs...</span></span>
-<span><span class="co">#&gt; OK</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">urls_mod11a1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'data.frame':    4 obs. of  5 variables:</span></span>
@@ -265,14 +255,13 @@ argument <code>opt_param</code> :</p>
 <p>Now, download and import the data in R :</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls_mod11a1</span>, path <span class="op">=</span> <span class="va">target_fold</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls_mod11a1</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 4  datasets in total :  0  already downloaded and  4  datasets to download</span></span>
-<span><span class="co">#&gt; Downloading the data...</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  env_data_2/data/Korhogo/MOD11A1.061 </span></span>
-<span><span class="co">#&gt; **To import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)**</span></span>
+<span><span class="co">#&gt; Downloading the data in /tmp/Rtmphov0xs/modisfast_6cf665c173c8 ...</span></span>
 <span></span>
-<span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">res_dl</span><span class="op">$</span><span class="va">destfile</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span><span class="op">)</span></span>
+<span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">res_dl</span><span class="op">$</span><span class="va">destfile</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, </span>
+<span>                           collection <span class="op">=</span> <span class="st">"MOD11A1.061"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Importing the dataset as a SpatRaster object...</span></span>
 <span></span>
 <span><span class="va">modis_ts</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>

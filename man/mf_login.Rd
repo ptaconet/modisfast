@@ -4,12 +4,12 @@
 \alias{mf_login}
 \title{Login to EOSDIS EarthData account}
 \usage{
-mf_login(credentials, verbose = TRUE)
+mf_login(credentials, verbose = "inform")
 }
 \arguments{
 \item{credentials}{vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.}
 
-\item{verbose}{boolean. optional. Verbose (default TRUE)}
+\item{verbose}{string. Verbose mode ("quiet", "inform", or "debug"). Default "inform".}
 }
 \value{
 None.

@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modisfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.1</span>
       </span>
     </div>
 
@@ -63,12 +63,17 @@
     <li>
       <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest simultaneously</a>
     </li>
-     <li>
-      <a href="../articles/use_case.html">3. Full use case</a>
-    </li>
     <li>
       <a href="../articles/perf_comp.html">4. Comparison of performance with other similar R packages</a>
     </li>
+    <li>
+      <a href="../articles/use_case.html">3. Full use case</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -101,7 +106,7 @@
                         <h4 data-toc-skip class="author">Paul
 Taconet</h4>
             
-            <h4 data-toc-skip class="date">2024-07-09</h4>
+            <h4 data-toc-skip class="date">2024-11-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ptaconet/modisfast/blob/HEAD/vignettes/articles/use_case.Rmd" class="external-link"><code>vignettes/articles/use_case.Rmd</code></a></small>
       <div class="hidden name"><code>use_case.Rmd</code></div>
@@ -140,7 +145,8 @@ paper</a>.</em></p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/" class="external-link">purrr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-spatial/mapview" class="external-link">mapview</a></span><span class="op">)</span></span></code></pre></div>
 <p>Then, let’s load the data and have a look at them :</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">entomological_data</span><span class="op">)</span></span>
@@ -175,8 +181,7 @@ enlarge a bit the ROI. Here, we enlarge it by 3000 m in all directions
 (N, S, W, E) and we give the ROI the name “Korhogo” (the name of the
 main city in the area) :</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">entomological_data</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">entomological_data</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># function expand_bbox() (Thanks @Chrisjb for the function)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/Chrisjb/basemapR/master/R/expand_bbox.R"</span><span class="op">)</span></span>
@@ -186,7 +191,7 @@ main city in the area) :</p>
 <span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">st_sf</a></span><span class="op">(</span><span class="op">)</span> </span>
 <span></span>
-<span><span class="va">roi</span><span class="op">$</span><span class="va">id</span> <span class="op">=</span> <span class="st">"korhogo"</span></span></code></pre></div>
+<span><span class="va">roi</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="st">"korhogo"</span></span></code></pre></div>
 <p>Next, we define the time range of interest.</p>
 <p>Here we will first download the whole time series, and then (in step
 <a href="#extract-data">3</a>) filter-out the specific dates for each
@@ -212,7 +217,6 @@ degree x 0.1 degree V07</li>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_login.html">mf_login</a></span><span class="op">(</span>credentials <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_un"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"earthdata_pw"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Checking credentials...</span></span>
-<span><span class="co">#&gt; Successfull login to Earthdata</span></span>
 <span></span>
 <span><span class="va">urls_mod11a2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span>
 <span>  collection <span class="op">=</span> <span class="st">"MOD11A2.061"</span>,</span>
@@ -220,7 +224,6 @@ degree x 0.1 degree V07</li>
 <span>  roi <span class="op">=</span> <span class="va">roi</span>,</span>
 <span>  time_range <span class="op">=</span> <span class="va">time_range</span> <span class="op">)</span></span>
 <span><span class="co">#&gt; Building the URLs...</span></span>
-<span><span class="co">#&gt; OK</span></span>
 <span></span>
 <span></span>
 <span><span class="va">urls_gpm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span>
@@ -229,27 +232,22 @@ degree x 0.1 degree V07</li>
 <span>  roi <span class="op">=</span> <span class="va">roi</span>,</span>
 <span>  time_range <span class="op">=</span> <span class="va">time_range</span> <span class="op">)</span></span>
 <span><span class="co">#&gt; Building the URLs...</span></span>
-<span><span class="co">#&gt; OK</span></span>
 <span></span>
 <span></span>
 <span><span class="va">res_dl_modis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls_mod11a2</span>, path <span class="op">=</span> <span class="st">"data_use_case"</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 1  datasets in total :  1  already downloaded and  0  datasets to download</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  data_use_case/data/korhogo/MOD11A2.061 </span></span>
-<span><span class="co">#&gt; **To import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)**</span></span>
 <span><span class="va">res_dl_gpm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls_gpm</span>, path <span class="op">=</span> <span class="st">"data_use_case"</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 590  datasets in total :  590  already downloaded and  0  datasets to download</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  data_use_case/data/korhogo/GPM_3IMERGDF.07 </span></span>
-<span><span class="co">#&gt; **To import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)**</span></span></code></pre></div>
+<span><span class="co">#&gt; 590  datasets in total :  590  already downloaded and  0  datasets to download</span></span></code></pre></div>
 <p>And then we import it in R :</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># import MODIS</span></span>
 <span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">res_dl_modis</span><span class="op">$</span><span class="va">destfile</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, </span>
 <span>                           collection <span class="op">=</span> <span class="st">"MOD11A2.061"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Importing the dataset as a SpatRaster object...</span></span>
 <span><span class="co"># import GPM</span></span>
 <span><span class="va">gpm_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">res_dl_gpm</span><span class="op">$</span><span class="va">destfile</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, </span>
 <span>                         collection <span class="op">=</span> <span class="st">"GPM_3IMERGDF.07"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Importing the dataset as a SpatRaster object...</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">modis_ts</span><span class="op">)</span></span></code></pre></div>
 <p><img src="use_case_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
@@ -373,7 +371,7 @@ one</a> for examples of full data mining works using such data.</p>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Paul Taconet.</p>
+<p>Developed by Paul Taconet, Nicolas Moiroux, French National Research Institute for Sustainable Development, IRD.</p>
 </div>
 
 <div class="pkgdown">

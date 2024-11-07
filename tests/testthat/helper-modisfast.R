@@ -15,7 +15,7 @@ skip_if_creds_not_provided <- function() {
 }
 
 skip_if_wrong_creds <- function() {
-  out <- tryCatch(mf_login(credentials = c(earthdata_un,earthdata_pw), verbose = F), error = function(e) e)
+  out <- tryCatch(mf_login(credentials = c(earthdata_un,earthdata_pw), verbose = "quiet"), error = function(e) e)
   if (any(class(out) == "error")) {
     skip("EarthData username and/or passwords are wrong. Please provide correct credentials before testing the package.")
   } else {

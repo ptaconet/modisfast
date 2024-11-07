@@ -63,11 +63,11 @@
     <li>
       <a href="../articles/modisfast2.html">2. Get data on several regions or periods of interest simultaneously</a>
     </li>
-        <li>
-      <a href="../articles/use_case.html">3. Full use case</a>
-    </li>
     <li>
       <a href="../articles/perf_comp.html">4. Comparison of performance with other similar R packages</a>
+    </li>
+    <li>
+      <a href="../articles/use_case.html">3. Full use case</a>
     </li>
   </ul>
 </li>
@@ -106,7 +106,7 @@
                         <h4 data-toc-skip class="author">Paul
 Taconet</h4>
             
-            <h4 data-toc-skip class="date">2024-08-07</h4>
+            <h4 data-toc-skip class="date">2024-11-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ptaconet/modisfast/blob/HEAD/vignettes/articles/get_started.Rmd" class="external-link"><code>vignettes/articles/get_started.Rmd</code></a></small>
       <div class="hidden name"><code>get_started.Rmd</code></div>
@@ -118,7 +118,8 @@ Taconet</h4>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ptaconet/modisfast" class="external-link">modisfast</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-spatial/mapview" class="external-link">mapview</a></span><span class="op">)</span></span></code></pre></div>
 <p>In this example we want to download, import and plot over the 3500
 km<sup>2</sup> wide region of interest (mapped below) :</p>
 <ul>
@@ -185,14 +186,14 @@ folder were the data will be downloaded :</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Set ROI and time range of interest</span></span>
 <span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id<span class="op">=</span><span class="st">"Korhogo"</span>, geom<span class="op">=</span><span class="st">"POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"</span><span class="op">)</span>, wkt<span class="op">=</span><span class="st">"geom"</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
-<span><span class="va">time_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2017-01-01"</span>,<span class="st">"2017-12-31"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">target_fold</span> <span class="op">&lt;-</span> <span class="st">"env_data"</span></span></code></pre></div>
+<span><span class="va">time_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2017-01-01"</span>,<span class="st">"2017-12-31"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="login-to-eosdis-earthdata">Login to EOSDIS Earthdata<a class="anchor" aria-label="anchor" href="#login-to-eosdis-earthdata"></a>
 </h3>
 <p>And we login to EOSDIS Earthdata with our credentials. To create an
 account go to : <a href="https://urs.earthdata.nasa.gov/" class="external-link uri">https://urs.earthdata.nasa.gov/</a>.</p>
+<!-- Note : When testing the vignette, please run only the chunk named odr_login (replacing "earthdata_un" and "earthdata_pw" with your own credentials). The others (log1 and log3) are used only for development, i.e. when the vignette is published on the package website -->
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Login to Earthdata servers with username and password. </span></span>
 <span><span class="va">username</span> <span class="op">&lt;-</span> <span class="st">"earthdata_un"</span></span>
@@ -213,13 +214,9 @@ all the available variables for the specified collection are included.
 To get the variables available for a given collection along with
 information for each of them (description, etc.), use the function
 <code><a href="../reference/mf_list_variables.html">mf_list_variables()</a></code>.</p>
-<!-- ➡️ **Note on the use of the parameter `variables` of the function `mf_get_url()` :** -->
-<!-- The collections generally contain several variables (sometimes called "dimensions", or "bands"). As an example, MODIS LST products contain one band for the day temperature ("LST_Day_1km"), one band for the night temperature ("LST_Night_1km"), etc. To get all the variables available for a given collection along with information for each of them (description, etc.), use the function `mf_list_variables()`. e.g. : -->
-<!-- ```{r mf_list_variables, eval=T} -->
-<!-- tail(mf_list_variables("MOD11A1.061")) -->
-<!-- ``` -->
-<!-- In `mf_get_url()`, the parameter `variables` enables to restrict the data to download to only specific variables. By default it is set to `NULL`, which means that all the available variables for the specified collection are downloaded. Specifying `variables` will make the data to download lighter.  -->
-<!-- **End Note** -->
+<p>For more information on the variables in the context of OPeNDAP, see
+the <a href="https://opendap.github.io/documentation/UserGuideComprehensive.html#OPeNDAP_Data_Model" class="external-link">OPeNDAP
+Data model documentation</a>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get the URLs of MODIS Vegetation indexes</span></span>
 <span><span class="va">urls_mod11a1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span>
@@ -228,7 +225,6 @@ information for each of them (description, etc.), use the function
 <span>  roi <span class="op">=</span> <span class="va">roi</span>,</span>
 <span>  time_range <span class="op">=</span> <span class="va">time_range</span> <span class="op">)</span></span>
 <span><span class="co">#&gt; Building the URLs...</span></span>
-<span><span class="co">#&gt; OK</span></span>
 <span></span>
 <span><span class="co">## Get the URLs of GPM daily</span></span>
 <span><span class="va">urls_gpm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span>
@@ -237,7 +233,6 @@ information for each of them (description, etc.), use the function
 <span>  roi <span class="op">=</span> <span class="va">roi</span>,</span>
 <span>  time_range <span class="op">=</span> <span class="va">time_range</span> <span class="op">)</span></span>
 <span><span class="co">#&gt; Building the URLs...</span></span>
-<span><span class="co">#&gt; OK</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">urls_mod11a1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1</span></span>
@@ -276,21 +271,14 @@ of course be modified.</p>
 parallelize - therefore fasten - the download in case numerous datasets
 need to be downloaded.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="co"># Hint : to fasten the download in case of multiple collections, bind them in a single data.frame (as shown below) before executing the function 'mf_download_data()' :</span></span>
-<span><span class="va">df_to_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">urls_mod11a1</span>,<span class="va">urls_gpm</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Hint : to fasten the download in case of multiple collections, bind them in a single data.frame (as shown below) before executing the function 'mf_download_data()' :</span></span>
+<span><span class="va">df_to_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">urls_mod11a1</span>, <span class="va">urls_gpm</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Then download the data (by default, in temp directory, but the target folder can be set in the function</span></span>
-<span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">df_to_dl</span>, path <span class="op">=</span> <span class="va">target_fold</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co"># Then download the data (by default, in temporary directory, but the target folder can be set with the argument 'path'</span></span>
+<span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span>df_to_dl <span class="op">=</span> <span class="va">df_to_dl</span>, </span>
+<span>                           parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 13  datasets in total :  0  already downloaded and  13  datasets to download</span></span>
-<span><span class="co">#&gt; Downloading the data...</span></span>
-<span><span class="co">#&gt; Only part of the data has been downloaded. Downloading the remaining datasets one by one...</span></span>
-<span><span class="co">#&gt; 13  datasets in total :  12  already downloaded and  1  datasets to download</span></span>
-<span><span class="co">#&gt; Downloading the data...</span></span>
-<span><span class="co">#&gt; [ 1  over  1 ]</span></span>
-<span><span class="co">#&gt; Downloading: 480 B     Downloading: 480 B     Downloading: 480 B       |                                                                              |                                                                      |   0%Downloading: 7.2 kB     Downloading: 7.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 8.2 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 16 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 25 kB     Downloading: 27 kB     Downloading: 27 kB     Downloading: 27 kB     Downloading: 27 kB     </span></span>
-<span><span class="co">#&gt; Data were all properly downloaded under the folder(s)  env_data/data/Korhogo/MOD13A3.061 and env_data/data/Korhogo/GPM_3IMERGM.07 </span></span>
-<span><span class="co">#&gt; **To import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)**</span></span>
+<span><span class="co">#&gt; Downloading the data in /tmp/Rtmpyz1oHF/modisfast_6bee4768dd63 ...</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res_dl</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'data.frame':    13 obs. of  9 variables:</span></span>
@@ -299,7 +287,7 @@ need to be downloaded.</p>
 <span><span class="co">#&gt;  $ collection: chr  "MOD13A3.061" "GPM_3IMERGM.07" "GPM_3IMERGM.07" "GPM_3IMERGM.07" ...</span></span>
 <span><span class="co">#&gt;  $ name      : chr  "MOD13A3.061.2017001_2017335.h17v08.nc4" "3B-MO.MS.MRG.3IMERG.20170101-S000000-E235959.01.V07B.nc4" "3B-MO.MS.MRG.3IMERG.20170201-S000000-E235959.02.V07B.nc4" "3B-MO.MS.MRG.3IMERG.20170301-S000000-E235959.03.V07B.nc4" ...</span></span>
 <span><span class="co">#&gt;  $ url       : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A3.061/h17v08.ncml.nc4?MOD_Grid_monthly_1km_VI_eos_cf_projection"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170101-S000000-E2"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170201-S000000-E2"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170301-S000000-E2"| __truncated__ ...</span></span>
-<span><span class="co">#&gt;  $ destfile  : chr  "env_data/data/Korhogo/MOD13A3.061/MOD13A3.061.2017001_2017335.h17v08.nc4" "env_data/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170101-S000000-E235959.01.V07B.nc4" "env_data/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170201-S000000-E235959.02.V07B.nc4" "env_data/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170301-S000000-E235959.03.V07B.nc4" ...</span></span>
+<span><span class="co">#&gt;  $ destfile  : chr  "/tmp/Rtmpyz1oHF/modisfast_6bee4768dd63/data/Korhogo/MOD13A3.061/MOD13A3.061.2017001_2017335.h17v08.nc4" "/tmp/Rtmpyz1oHF/modisfast_6bee4768dd63/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170101-S000000-E235959.01.V07B.nc4" "/tmp/Rtmpyz1oHF/modisfast_6bee4768dd63/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170201-S000000-E235959.02.V07B.nc4" "/tmp/Rtmpyz1oHF/modisfast_6bee4768dd63/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170301-S000000-E235959.03.V07B.nc4" ...</span></span>
 <span><span class="co">#&gt;  $ fileDl    : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...</span></span>
 <span><span class="co">#&gt;  $ fileSize  : num  288607 26540 26495 26548 26560 ...</span></span>
 <span><span class="co">#&gt;  $ dlStatus  : num  1 1 1 1 1 1 1 1 1 1 ...</span></span>
@@ -342,11 +330,15 @@ the data in R as a <code>SpatRaster</code> object (from the package <a href="htt
 :</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># import MOD11A1.061</span></span>
-<span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"data"</span>,<span class="st">"Korhogo"</span>,<span class="st">"MOD13A3.061"</span><span class="op">)</span>, </span>
+<span><span class="co"># argument 'path' is the folder where the data are stored (here, in a temporary directory)</span></span>
+<span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"MOD13A3.061"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                           collection <span class="op">=</span> <span class="st">"MOD13A3.061"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Importing the dataset as a SpatRaster object...</span></span>
+<span></span>
 <span><span class="co"># import GPM</span></span>
-<span><span class="va">gpm_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">target_fold</span>,<span class="st">"data"</span>,<span class="st">"Korhogo"</span>,<span class="st">"GPM_3IMERGM.07"</span><span class="op">)</span>, </span>
+<span><span class="va">gpm_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"3IMERG"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                         collection <span class="op">=</span> <span class="st">"GPM_3IMERGM.07"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Importing the dataset as a SpatRaster object...</span></span>
 <span></span>
 <span><span class="va">modis_ts</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>

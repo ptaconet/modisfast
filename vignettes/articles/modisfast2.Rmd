@@ -60,9 +60,6 @@ roi <- st_as_sf(data.frame(id=c("Korhogo","Diebougou"),
                                    
 time_range <- as.Date(c("2017-01-01","2017-01-30"))
 
-# define target folder
-target_fold <- "env_data_2"
-
 # and then execute the classical workflow
 
 log <- mf_login(credentials = c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
@@ -73,15 +70,14 @@ urls_mod11a1 <- mf_get_url(
         roi = roi,
         time_range = time_range)
 
-res_dl <- mf_download_data(urls_mod11a1, path = target_fold, parallel = TRUE)
+res_dl <- mf_download_data(urls_mod11a1, parallel = TRUE)
 
-modis_ts_korhogo <- mf_import_data(file.path(target_fold,"data","Korhogo","MOD11A1.061"), collection = "MOD11A1.061")
-modis_ts_diebougou <- mf_import_data(file.path(target_fold,"data","Diebougou","MOD11A1.061"), collection = "MOD11A1.061")
+modis_ts_korhogo <- mf_import_data(path = dirname(list.files(path = tempdir(), pattern = "MOD11A1.061", recursive = TRUE, full.names = TRUE))[2], 
+                                   collection = "MOD11A1.061")
 
-```
+modis_ts_diebougou <- mf_import_data(path = dirname(list.files(path = tempdir(), pattern = "MOD11A1.061", recursive = TRUE, full.names = TRUE))[1], 
+                                     collection = "MOD11A1.061")
 
-```{r eval=NOT_CRAN, echo=F,message=F }
-unlink(target_fold, recursive = T)
 ```
 
 ## Get data over multiple time periods of interest simultaneously
@@ -98,15 +94,13 @@ time_ranges <- list(as.Date(c("2016-01-01","2016-01-31")),
                     as.Date(c("2018-01-01","2018-01-31")),
                     as.Date(c("2019-01-01","2019-01-31")))
 
-target_fold <- "env_data_2"
-
 log <- mf_login(credentials = c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
 
 ```
 
 Of course, we could loop over the `mf_get_url()` with the time ranges of interest, and get the data. However, the `mf_get_url()` function does query the OPeNDAP servers each time it is called. This query internally imports various data, including OPeNDAP time, latitude and longitude vectors, and this process takes some time. In case you loop over the function for the same ROI and multiple time frames of interest, it will import again and again the same data, which is quite useless.
 
-Here is where the function `mf_get_opt_param()` comes into the game. For a given collection and ROI, this function queries the OPeNDAP server and retrieves the information that we were mentionning in the previous paragraph. This function is actually run within the `mf_get_url()` function, but its output can also be provided as input parameter `opt_param` of `mf_get_url()`. If `mf_get_url()` is queried multiple times for the same couple {collection, ROI}, it is hence more efficient to pre-compute only once the argument `opt_param` using `mf_get_opt_param()` and to further provide it to `mf_get_url()` within a `for` loop or e.g. a `purrr::map()` function.
+Here is where the function `mf_get_opt_param()` comes into the game. For a given collection and ROI, this function queries the OPeNDAP server and retrieves the information that we were mentioning in the previous paragraph. This function is actually run within the `mf_get_url()` function, but its output can also be provided as input parameter `opt_param` of `mf_get_url()`. If `mf_get_url()` is queried multiple times for the same couple {collection, ROI}, it is hence more efficient to pre-compute only once the argument `opt_param` using `mf_get_opt_param()` and to further provide it to `mf_get_url()` within a `for` loop or e.g. a `purrr::map()` function.
 
 **To summarize : when we have multiple time frames of interest, we first execute the function `mf_get_opt_param()`. Then, we execute the function `mf_get_url()`, passing the result of `mf_get_opt_param()` in the parameter `opt_param`.**
 
@@ -138,9 +132,10 @@ Now, download and import the data in R :
 
 ```{r dl, eval=NOT_CRAN}
 
-res_dl <- mf_download_data(urls_mod11a1, path = target_fold, parallel = TRUE)
+res_dl <- mf_download_data(urls_mod11a1, parallel = TRUE)
 
-modis_ts <- mf_import_data(path = dirname(res_dl$destfile[1]), collection = "MOD11A1.061")
+modis_ts <- mf_import_data(path = dirname(res_dl$destfile[1]), 
+                           collection = "MOD11A1.061")
 
 modis_ts
 

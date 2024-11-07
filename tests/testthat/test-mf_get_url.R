@@ -14,12 +14,12 @@ test_that("function mf_get_url() sends back the expected output for a MODIS quer
   )
 
   expect_is(urls_modis, "data.frame") # output is a data.frame
-  expect_named(urls_modis, c("id_roi","time_start","collection","name","url")) # column names are ok
-  expect_equal(ncol(urls_modis), 5) # there are 5 columns
+  expect_named(urls_modis, c("id_roi","time_start","collection","name","url","maxFileSizeEstimated")) # column names are ok
+  expect_equal(ncol(urls_modis), 6) # there are 6 columns
   expect_equal(nrow(urls_modis), 5)# there are 5 rows (corresponding to 5 tiles)
   expect_match(urls_modis$url[1], "https://opendap.cr.usgs.gov")  # urls starts with the right OPENDAP url
 
-  expect_equal(urls_modis, data.frame(id_roi = rep("madagascar",5),
+  expect_equal(urls_modis[,1:5], data.frame(id_roi = rep("madagascar",5),
                                 time_start = rep(as.Date("2023-01-01"), 5),
                                 collection = rep("MOD13A3.061", 5),
                                 name = c("MOD13A3.061.2023001_2023060.h21v10.nc4", "MOD13A3.061.2023001_2023060.h21v11.nc4", "MOD13A3.061.2023001_2023060.h22v10.nc4", "MOD13A3.061.2023001_2023060.h22v11.nc4", "MOD13A3.061.2023001_2023060.h23v10.nc4"),
@@ -49,12 +49,12 @@ test_that("function mf_get_url() sends back the expected output for a GPM query"
   )
 
   expect_is(urls_gpm, "data.frame") # output is a data.frame
-  expect_named(urls_gpm, c("id_roi","time_start","collection","name","url")) # column names are ok
-  expect_equal(ncol(urls_gpm), 5) # there are 5 columns
+  expect_named(urls_gpm, c("id_roi","time_start","collection","name","url","maxFileSizeEstimated")) # column names are ok
+  expect_equal(ncol(urls_gpm), 6) # there are 5 columns
   expect_equal(nrow(urls_gpm), 90) # there are 90 rows (corresponding to 90 dates)
   expect_match(urls_gpm$url[1], "https://gpm1.gesdisc.eosdis.nasa.gov")  # urls starts with the right OPENDAP url
 
-  expect_equal(urls_gpm[1,], data.frame(id_roi = "madagascar",
+  expect_equal(urls_gpm[1,1:5], data.frame(id_roi = "madagascar",
                                       time_start = as.Date("2023-01-01"),
                                       collection = "GPM_3IMERGDF.07",
                                       name = "3B-DAY.MS.MRG.3IMERG.20230101-S000000-E235959.V07B.nc4",
