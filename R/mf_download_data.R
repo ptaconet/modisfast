@@ -73,7 +73,7 @@
 #' terra::plot(modis_ts)
 #' }
 mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel = FALSE, num_workers = parallel::detectCores() - 1, credentials = NULL, verbose = "inform", min_filesize = 5000) {
-  fileSize <- destfile <- fileDl <- folders <- readme_files <- source <- maxFileSizeEstimated <- NULL
+  fileSize <- destfile <- fileDl <- folders <- readme_files <- source <- maxFileSizeEstimated <- actualFileSize <- NULL
 
   source <- "earthdata"
 
@@ -161,7 +161,7 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
     if (verbose %in% c("inform","debug")) {
        maxFileSizeEstimated <- sum(data_dl$maxFileSizeEstimated[which(data_dl$fileDl == FALSE)])
        maxFileSizeEstimated <- dplyr::if_else(round(maxFileSizeEstimated/1000000)>1,round(maxFileSizeEstimated/1000000),1)
-       cat("Downloading the data in",path,"... \nMaximum estimated data size to download is ~",maxFileSizeEstimated,"Mb\n")
+       cat("Downloading the data ... (destination folder:",path,")\nEstimated maximum data size to download is ~",maxFileSizeEstimated,"Mb\n")
       # cat("Downloading the data in",path,"...\n")
     }
     if (parallel) {
@@ -202,8 +202,13 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
     # 1 : download ok
     # 2 : download error
     # 3 : data already existing in output folder
+
+    actualFileSize <- sum(data_dl$fileSize)
+    actualFileSize <- dplyr::if_else(round(actualFileSize/1000000)>1,round(actualFileSize/1000000),1)
+
     if (verbose %in% c("inform","debug")) {
-      cli::cli_alert_success("\nData were all properly downloaded under the folder(s) ", paste(as.character(unique(dirname(df_to_dl$destfile))), collapse = " and "))
+      cat("\nData were all properly downloaded under the folder(s) ", paste(as.character(unique(dirname(df_to_dl$destfile))), collapse = " and "))
+      cat("\nActual data size is",actualFileSize,"Mb\n")
       cli::cli_alert_info("\nTo import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)\n")
     }
   }
