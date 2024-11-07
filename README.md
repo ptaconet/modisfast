@@ -12,7 +12,8 @@
 [![R-CMD-check](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml)
 \[![CRAN_downloads](https://cranlogs.r-pkg.org/badges/grand-total/modisfast)
 [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/ptaconet/modisfast/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast)
-[![DOI-zenodo](https://zenodo.org/badge/doi/10.5281/zenodo.8475.svg)](https://doi.org/10.5281/zenodo.12772739)
+<!-- [![DOI-zenodo](https://zenodo.org/badge/doi/10.5281/zenodo.8475.svg)](https://doi.org/10.5281/zenodo.12772739) -->
+[![DOI](https://joss.theoj.org/papers/abd5750a442de6a9d95b60bf49c440cb/status.svg)](https://joss.theoj.org/papers/abd5750a442de6a9d95b60bf49c440cb)
 <!-- badges: end -->
 
 <!-- ATTENTION A CHANGER : FUSEAUX HORAIRES POUR DONNEES GPM HALF HOURLY !!!!!!
