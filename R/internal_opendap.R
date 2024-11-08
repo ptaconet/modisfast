@@ -45,7 +45,7 @@
 
 
 #' @name .getVarVector
-#' @title get SRTM time name
+#' @title get var vector
 #' @import httr
 #' @noRd
 
@@ -59,6 +59,8 @@
   vector_response <- httr::GET(paste0(OpenDAPUrl, ".ascii?", variableName), config = list(maxredirs = -1))
 
   vector_response <- httr::GET(vector_response$url)
+  httr::stop_for_status(vector_response)
+  httr::warn_for_status(vector_response)
 
   if (vector_response$status_code != 404) {
     vector <- httr::content(vector_response, "text", encoding = "UTF-8")

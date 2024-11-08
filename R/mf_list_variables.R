@@ -45,6 +45,8 @@ mf_list_variables <- function(collection, credentials = NULL, verbose = "inform"
   } else if (verbose == "debug"){
     vector_response <- httr::with_verbose(f())
   }
+  httr::stop_for_status(vector_response)
+  httr::warn_for_status(vector_response)
   if (vector_response$status_code == 400) {
     stop("Bad request\n")
   }
@@ -68,6 +70,8 @@ mf_list_variables <- function(collection, credentials = NULL, verbose = "inform"
   } else if (verbose == "debug"){
     vector_response <- httr::with_verbose(f())
   }
+  httr::stop_for_status(vector_response)
+  httr::warn_for_status(vector_response)
 
   vector <- httr::content(vector_response, "text", encoding = "UTF-8")
   vector <- strsplit(vector, "\n")

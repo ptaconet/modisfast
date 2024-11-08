@@ -195,7 +195,7 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
 
   if (!(identical(data_dl, data_downloaded))) {
     if (verbose %in% c("inform","debug")) {
-      cli::cli_alert_warning("Only part of the data has been downloaded. Downloading the remaining datasets one by one...\n")
+      cli::cli_alert_warning("Not all the datasets were downloaded. Downloading the remaining datasets one by one...\n")
     }
     mf_download_data(df_to_dl = df_to_dl, path = path, parallel = FALSE, credentials = credentials) # ,source=source)
   } else {

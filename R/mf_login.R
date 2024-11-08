@@ -40,7 +40,7 @@ mf_login <- function(credentials, verbose = "inform") {
   } else if (verbose == "debug"){
     x <- httr::with_verbose(f())
   }
-  httr::stop_for_status(x, "login to Earthdata. Check out username and password. The service might also be unavailable (error 503).")
+  httr::stop_for_status(x, "login to Earthdata. Wrong username / password, or service / servers unavailable.")
   httr::warn_for_status(x)
   options(earthdata_user = credentials[1])
   options(earthdata_pass = credentials[2])
