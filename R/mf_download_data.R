@@ -161,7 +161,7 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
     if (verbose %in% c("inform","debug")) {
        maxFileSizeEstimated <- sum(data_dl$maxFileSizeEstimated[which(data_dl$fileDl == FALSE)])
        maxFileSizeEstimated <- dplyr::if_else(round(maxFileSizeEstimated/1000000)>1,round(maxFileSizeEstimated/1000000),1)
-       cat("Downloading the data ... (destination folder:",path,")\nEstimated maximum data size to download is ~",maxFileSizeEstimated,"Mb\n")
+       cat("Downloading the data ... (destination folder:",path,")\nEstimated maximum size of data to be downloaded is ~",maxFileSizeEstimated,"Mb\n")
       # cat("Downloading the data in",path,"...\n")
     }
     if (parallel) {
@@ -207,8 +207,8 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
     actualFileSize <- dplyr::if_else(round(actualFileSize/1000000)>1,round(actualFileSize/1000000),1)
 
     if (verbose %in% c("inform","debug")) {
-      cat("\nData were all properly downloaded under the folder(s) ", paste(as.character(unique(dirname(df_to_dl$destfile))), collapse = " and "))
-      cat("\nActual data size is",actualFileSize,"Mb\n")
+      cli::cli_alert_success(paste0("\nData were all properly downloaded under the folder(s) ", paste(as.character(unique(dirname(df_to_dl$destfile))), collapse = " and ")))
+      cat("\nActual size of downloaded data is",actualFileSize,"Mb\n")
       cli::cli_alert_info("\nTo import the data in R, use the function modisfast::mf_import_data() rather than terra::rast() or stars::read_stars(). More info at help(mf_import_data)\n")
     }
   }

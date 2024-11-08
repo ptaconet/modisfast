@@ -174,7 +174,7 @@ mf_get_url <- function(collection,
 
   if (verbose %in% c("inform","debug")) {
     cli::cli_alert_success("URL(s) built.\n")
-    cat("Estimated maximum data size is",maxFileSizeEstimated,"Mb\n")
+    cat("Estimated maximum size of data to be downloaded is",maxFileSizeEstimated,"Mb\n")
   }
 
   return(table_urls)

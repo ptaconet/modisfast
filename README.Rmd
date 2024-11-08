@@ -21,9 +21,9 @@ library(dplyr)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/modisfast)](https://cran.r-project.org/package=modisfast)
 [![Github_Status_Badge](https://img.shields.io/badge/Github-0.9.2-blue.svg)](https://github.com/ptaconet/modisfast)
 [![R-CMD-check](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml)
-[![CRAN_downloads](https://cranlogs.r-pkg.org/badges/grand-total/modisfast)
-[![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/ptaconet/modisfast/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast)
+<!-- [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/ptaconet/modisfast/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast) -->
 <!-- [![DOI-zenodo](https://zenodo.org/badge/doi/10.5281/zenodo.8475.svg)](https://doi.org/10.5281/zenodo.12772739) -->
+[![CRAN_downloads](https://cranlogs.r-pkg.org/badges/grand-total/modisfast)
 [![DOI](https://joss.theoj.org/papers/abd5750a442de6a9d95b60bf49c440cb/status.svg)](https://joss.theoj.org/papers/abd5750a442de6a9d95b60bf49c440cb)
 <!-- badges: end -->
 
@@ -49,8 +49,8 @@ This package enables to build OPeNDAP (https) URLs given input parameters such a
   • <a href="#installation">Installation</a><br>
   • <a href="#get-started">Get started</a><br>
   • <a href="#collections-available-in-modisfast">Data collections available</a><br>
-  • <a href="#foundational-framework">Foundational framework</a><br>
   • <a href="#manual-testing-of-the-functionality">Manual testing of the functionality</a><br>
+  • <a href="#foundational-framework">Foundational framework</a><br>
   • <a href="#comparison-with-similar-r-packages">Comparison with similar R packages</a><br>
   • <a href="#citation">Citation</a><br>
   • <a href="#future-developments">Future developments</a><br>
@@ -209,6 +209,18 @@ mf_list_collections() %>%
 </p>
 </details>
 
+## Manual testing of the functionality
+
+Since most `modisfast` functions depend on EarthData credentials, automated tests are disabled. However, after installation, users can manually test the package's functionality by running these lines of code :
+
+```{r, eval = F, echo=T,message=F}
+# replace "username" and "password" with your own EOSDIS (Earthdata) credentials 
+earthdata_un <- "username" 
+earthdata_pw <- "password"
+
+devtools::test("modisfast")
+```
+
 ## Foundational framework  {#foundational-framework}
 
 Technically, `modisfast` is a programmatic interface (R wrapper) to several NASA [OPeNDAP](https://www.opendap.org/) servers. OPeNDAP is the acronym for *Open-source Project for a Network Data Access Protocol* and designates both the software, the access protocol, and the corporation that develops them. The OPeNDAP is designed to simplify access to structured and high-volume data, such as satellite products, over the Web. It is a collaborative effort involving multiple institutions and companies, with open-source code, free software, and adherence to the [Open Geospatial Consortium](https://www.ogc.org/) (OGC) standards. It is widely used by NASA, which partly finances it. 
@@ -230,19 +242,6 @@ is a link to download the following subset of MOD11A2.061 data in netCDF :
 The indices within the `[]` refer to values encoding for the spatial and temporal filters.
 
 These OPeNDAP URLs are not trivial to build. `modisfast` converts the spatial, temporal and dimensional filters (R objects) provided by the user through the function `mf_get_url()` into the appropriate OPeNDAP URL(s). Subsequently, the function `mf_download_data()` allows for downloading the data using the [`httr`](https://cran.r-project.org/package=httr) and `parallel` packages. 
-
-## Manual testing of the functionality
-
-Since most `modisfast` functions depend on EarthData credentials, automated tests are disabled. However, after installation, users can manually test the package's functionality by running these lines of code :
-
-```{r, eval = F, echo=T,message=F}
-# replace "username" and "password" with your own EOSDIS (Earthdata) credentials 
-earthdata_un <- "username" 
-earthdata_pw <- "password"
-
-devtools::test("modisfast")
-```
-
 
 ## Comparison with similar R packages
 

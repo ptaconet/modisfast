@@ -10,9 +10,9 @@
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/modisfast)](https://cran.r-project.org/package=modisfast)
 [![Github_Status_Badge](https://img.shields.io/badge/Github-0.9.2-blue.svg)](https://github.com/ptaconet/modisfast)
 [![R-CMD-check](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml)
-\[![CRAN_downloads](https://cranlogs.r-pkg.org/badges/grand-total/modisfast)
-[![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/ptaconet/modisfast/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast)
+<!-- [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/ptaconet/modisfast/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast) -->
 <!-- [![DOI-zenodo](https://zenodo.org/badge/doi/10.5281/zenodo.8475.svg)](https://doi.org/10.5281/zenodo.12772739) -->
+\[![CRAN_downloads](https://cranlogs.r-pkg.org/badges/grand-total/modisfast)
 [![DOI](https://joss.theoj.org/papers/abd5750a442de6a9d95b60bf49c440cb/status.svg)](https://joss.theoj.org/papers/abd5750a442de6a9d95b60bf49c440cb)
 <!-- badges: end -->
 
@@ -38,10 +38,10 @@ This package enables to build OPeNDAP (https) URLs given input parameters such a
 <a href="#installation">Installation</a><br> •
 <a href="#get-started">Get started</a><br> •
 <a href="#collections-available-in-modisfast">Data collections
-available</a><br> • <a href="#foundational-framework">Foundational
-framework</a><br> •
+available</a><br> •
 <a href="#manual-testing-of-the-functionality">Manual testing of the
-functionality</a><br> •
+functionality</a><br> • <a href="#foundational-framework">Foundational
+framework</a><br> •
 <a href="#comparison-with-similar-r-packages">Comparison with similar R
 packages</a><br> • <a href="#citation">Citation</a><br> •
 <a href="#future-developments">Future developments</a><br> •
@@ -1380,6 +1380,21 @@ Rainfall
 </p>
 </details>
 
+## Manual testing of the functionality
+
+Since most `modisfast` functions depend on EarthData credentials,
+automated tests are disabled. However, after installation, users can
+manually test the package’s functionality by running these lines of code
+:
+
+``` r
+# replace "username" and "password" with your own EOSDIS (Earthdata) credentials 
+earthdata_un <- "username" 
+earthdata_pw <- "password"
+
+devtools::test("modisfast")
+```
+
 ## Foundational framework
 
 Technically, `modisfast` is a programmatic interface (R wrapper) to
@@ -1424,21 +1439,6 @@ URL(s). Subsequently, the function `mf_download_data()` allows for
 downloading the data using the
 [`httr`](https://cran.r-project.org/package=httr) and `parallel`
 packages.
-
-## Manual testing of the functionality
-
-Since most `modisfast` functions depend on EarthData credentials,
-automated tests are disabled. However, after installation, users can
-manually test the package’s functionality by running these lines of code
-:
-
-``` r
-# replace "username" and "password" with your own EOSDIS (Earthdata) credentials 
-earthdata_un <- "username" 
-earthdata_pw <- "password"
-
-devtools::test("modisfast")
-```
 
 ## Comparison with similar R packages
 

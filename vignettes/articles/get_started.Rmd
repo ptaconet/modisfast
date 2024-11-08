@@ -160,11 +160,13 @@ These issues can easily be dealt at the import phase in R using the function `mf
 # import MOD11A1.061
 # argument 'path' is the folder where the data are stored (here, in a temporary directory)
 modis_ts <- mf_import_data(path = dirname(list.files(path = tempdir(), pattern = "MOD13A3.061", recursive = TRUE, full.names = TRUE)),
-                           collection = "MOD13A3.061")
+                           collection = "MOD13A3.061",
+                           proj_epsg = 4326)
 
 # import GPM
 gpm_ts <- mf_import_data(path = unique(dirname(list.files(path = tempdir(), pattern = "3IMERG", recursive = TRUE, full.names = TRUE))),
-                         collection = "GPM_3IMERGM.07")
+                         collection = "GPM_3IMERGM.07",
+                         proj_epsg = 4326)
 
 modis_ts
 gpm_ts
