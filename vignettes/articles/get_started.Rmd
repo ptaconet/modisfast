@@ -10,6 +10,8 @@ vignette: >
 format:
   html:
     code-overflow: scroll
+toc:
+  depth: 2
 ---
 
 ```{r, include = FALSE}
@@ -36,8 +38,8 @@ In this example we want to download, import and plot over the 3500 km^2^ wide re
 - the same 1 year-long times series of monthly precipitations from [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERG/3B-MONTH/07) (spatial resolution : 1° ; temporal resolution : 1 month)
 
 ```{r, echo=F, fig.height=5, fig.width=3, eval=NOT_CRAN }
-roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"),wkt="geom",crs = 4326)
-mapview::mapview(roi,legend=F)
+roi <- st_as_sf(data.frame(geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326)
+mapview::mapview(roi, legend = FALSE)
 ```
 
 ### Check which collections are available 

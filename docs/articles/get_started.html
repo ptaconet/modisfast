@@ -19,15 +19,13 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="1. Get started">
-<meta property="og:description" content="modisfast">
-<meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -53,7 +51,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -79,7 +77,7 @@
 <li>
   <a href="https://github.com/ptaconet/modisfast/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -90,7 +88,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><link href="get_started_files/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
 <script src="get_started_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="get_started_files/leaflet-1.3.1/leaflet.css" rel="stylesheet">
@@ -106,7 +104,7 @@
                         <h4 data-toc-skip class="author">Paul
 Taconet</h4>
             
-            <h4 data-toc-skip class="date">2024-11-07</h4>
+            <h4 data-toc-skip class="date">2024-11-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ptaconet/modisfast/blob/HEAD/vignettes/articles/get_started.Rmd" class="external-link"><code>vignettes/articles/get_started.Rmd</code></a></small>
       <div class="hidden name"><code>get_started.Rmd</code></div>
@@ -225,6 +223,7 @@ Data model documentation</a>.</p>
 <span>  roi <span class="op">=</span> <span class="va">roi</span>,</span>
 <span>  time_range <span class="op">=</span> <span class="va">time_range</span> <span class="op">)</span></span>
 <span><span class="co">#&gt; Building the URLs...</span></span>
+<span><span class="co">#&gt; Estimated maximum size of data to be downloaded is 1 Mb</span></span>
 <span></span>
 <span><span class="co">## Get the URLs of GPM daily</span></span>
 <span><span class="va">urls_gpm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span>
@@ -233,6 +232,7 @@ Data model documentation</a>.</p>
 <span>  roi <span class="op">=</span> <span class="va">roi</span>,</span>
 <span>  time_range <span class="op">=</span> <span class="va">time_range</span> <span class="op">)</span></span>
 <span><span class="co">#&gt; Building the URLs...</span></span>
+<span><span class="co">#&gt; Estimated maximum size of data to be downloaded is 1 Mb</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">urls_mod11a1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1</span></span>
@@ -241,6 +241,8 @@ Data model documentation</a>.</p>
 <span><span class="co">#&gt; 1 Korhogo 2017-01-01 MOD13A3.061 MOD13A3.061.2017001_2017335.h17v08.nc4</span></span>
 <span><span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                    url</span></span>
 <span><span class="co">#&gt; 1 https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A3.061/h17v08.ncml.nc4?MOD_Grid_monthly_1km_VI_eos_cf_projection,_1_km_monthly_NDVI%5B203:214%5D%5B55:140%5D%5B511:561%5D,_1_km_monthly_EVI%5B203:214%5D%5B55:140%5D%5B511:561%5D,_1_km_monthly_VI_Quality%5B203:214%5D%5B55:140%5D%5B511:561%5D,time%5B203:214%5D,YDim%5B55:140%5D,XDim%5B511:561%5D</span></span>
+<span><span class="co">#&gt;   maxFileSizeEstimated</span></span>
+<span><span class="co">#&gt; 1               561000</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">urls_gpm</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 12</span></span>
@@ -256,7 +258,11 @@ Data model documentation</a>.</p>
 <span><span class="co">#&gt;                                                                                                                                                                                                                                          url</span></span>
 <span><span class="co">#&gt; 1 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170101-S000000-E235959.01.V07B.HDF5.nc4?precipitation%5B0:0%5D%5B1742:1746%5D%5B989:996%5D,time%5B0:0%5D,lon%5B1742:1746%5D,lat%5B989:996%5D</span></span>
 <span><span class="co">#&gt; 2 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170201-S000000-E235959.02.V07B.HDF5.nc4?precipitation%5B0:0%5D%5B1742:1746%5D%5B989:996%5D,time%5B0:0%5D,lon%5B1742:1746%5D,lat%5B989:996%5D</span></span>
-<span><span class="co">#&gt; 3 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170301-S000000-E235959.03.V07B.HDF5.nc4?precipitation%5B0:0%5D%5B1742:1746%5D%5B989:996%5D,time%5B0:0%5D,lon%5B1742:1746%5D,lat%5B989:996%5D</span></span></code></pre></div>
+<span><span class="co">#&gt; 3 https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170301-S000000-E235959.03.V07B.HDF5.nc4?precipitation%5B0:0%5D%5B1742:1746%5D%5B989:996%5D,time%5B0:0%5D,lon%5B1742:1746%5D,lat%5B989:996%5D</span></span>
+<span><span class="co">#&gt;   maxFileSizeEstimated</span></span>
+<span><span class="co">#&gt; 1                  112</span></span>
+<span><span class="co">#&gt; 2                  112</span></span>
+<span><span class="co">#&gt; 3                  112</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="download">Download the data<a class="anchor" aria-label="anchor" href="#download"></a>
@@ -278,19 +284,23 @@ need to be downloaded.</p>
 <span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span>df_to_dl <span class="op">=</span> <span class="va">df_to_dl</span>, </span>
 <span>                           parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 13  datasets in total :  0  already downloaded and  13  datasets to download</span></span>
-<span><span class="co">#&gt; Downloading the data in /tmp/Rtmpyz1oHF/modisfast_6bee4768dd63 ...</span></span>
+<span><span class="co">#&gt; Downloading the data ... (destination folder: /tmp/Rtmp2vpw2a/modisfast_3df01416cf7b )</span></span>
+<span><span class="co">#&gt; Estimated maximum size of data to be downloaded is ~ 1 Mb</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Actual size of downloaded data is 1 Mb</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res_dl</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'data.frame':    13 obs. of  9 variables:</span></span>
-<span><span class="co">#&gt;  $ id_roi    : chr  "Korhogo" "Korhogo" "Korhogo" "Korhogo" ...</span></span>
-<span><span class="co">#&gt;  $ time_start: Date, format: "2017-01-01" "2017-01-01" ...</span></span>
-<span><span class="co">#&gt;  $ collection: chr  "MOD13A3.061" "GPM_3IMERGM.07" "GPM_3IMERGM.07" "GPM_3IMERGM.07" ...</span></span>
-<span><span class="co">#&gt;  $ name      : chr  "MOD13A3.061.2017001_2017335.h17v08.nc4" "3B-MO.MS.MRG.3IMERG.20170101-S000000-E235959.01.V07B.nc4" "3B-MO.MS.MRG.3IMERG.20170201-S000000-E235959.02.V07B.nc4" "3B-MO.MS.MRG.3IMERG.20170301-S000000-E235959.03.V07B.nc4" ...</span></span>
-<span><span class="co">#&gt;  $ url       : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A3.061/h17v08.ncml.nc4?MOD_Grid_monthly_1km_VI_eos_cf_projection"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170101-S000000-E2"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170201-S000000-E2"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170301-S000000-E2"| __truncated__ ...</span></span>
-<span><span class="co">#&gt;  $ destfile  : chr  "/tmp/Rtmpyz1oHF/modisfast_6bee4768dd63/data/Korhogo/MOD13A3.061/MOD13A3.061.2017001_2017335.h17v08.nc4" "/tmp/Rtmpyz1oHF/modisfast_6bee4768dd63/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170101-S000000-E235959.01.V07B.nc4" "/tmp/Rtmpyz1oHF/modisfast_6bee4768dd63/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170201-S000000-E235959.02.V07B.nc4" "/tmp/Rtmpyz1oHF/modisfast_6bee4768dd63/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170301-S000000-E235959.03.V07B.nc4" ...</span></span>
-<span><span class="co">#&gt;  $ fileDl    : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...</span></span>
-<span><span class="co">#&gt;  $ fileSize  : num  288607 26540 26495 26548 26560 ...</span></span>
-<span><span class="co">#&gt;  $ dlStatus  : num  1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span><span class="co">#&gt; 'data.frame':    13 obs. of  10 variables:</span></span>
+<span><span class="co">#&gt;  $ id_roi              : chr  "Korhogo" "Korhogo" "Korhogo" "Korhogo" ...</span></span>
+<span><span class="co">#&gt;  $ time_start          : Date, format: "2017-01-01" "2017-01-01" ...</span></span>
+<span><span class="co">#&gt;  $ collection          : chr  "MOD13A3.061" "GPM_3IMERGM.07" "GPM_3IMERGM.07" "GPM_3IMERGM.07" ...</span></span>
+<span><span class="co">#&gt;  $ name                : chr  "MOD13A3.061.2017001_2017335.h17v08.nc4" "3B-MO.MS.MRG.3IMERG.20170101-S000000-E235959.01.V07B.nc4" "3B-MO.MS.MRG.3IMERG.20170201-S000000-E235959.02.V07B.nc4" "3B-MO.MS.MRG.3IMERG.20170301-S000000-E235959.03.V07B.nc4" ...</span></span>
+<span><span class="co">#&gt;  $ url                 : chr  "https://opendap.cr.usgs.gov/opendap/hyrax/MOD13A3.061/h17v08.ncml.nc4?MOD_Grid_monthly_1km_VI_eos_cf_projection"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170101-S000000-E2"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170201-S000000-E2"| __truncated__ "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGM.07/2017/3B-MO.MS.MRG.3IMERG.20170301-S000000-E2"| __truncated__ ...</span></span>
+<span><span class="co">#&gt;  $ maxFileSizeEstimated: num  561000 112 112 112 112 112 112 112 112 112 ...</span></span>
+<span><span class="co">#&gt;  $ destfile            : chr  "/tmp/Rtmp2vpw2a/modisfast_3df01416cf7b/data/Korhogo/MOD13A3.061/MOD13A3.061.2017001_2017335.h17v08.nc4" "/tmp/Rtmp2vpw2a/modisfast_3df01416cf7b/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170101-S000000-E235959.01.V07B.nc4" "/tmp/Rtmp2vpw2a/modisfast_3df01416cf7b/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170201-S000000-E235959.02.V07B.nc4" "/tmp/Rtmp2vpw2a/modisfast_3df01416cf7b/data/Korhogo/GPM_3IMERGM.07/3B-MO.MS.MRG.3IMERG.20170301-S000000-E235959.03.V07B.nc4" ...</span></span>
+<span><span class="co">#&gt;  $ fileDl              : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...</span></span>
+<span><span class="co">#&gt;  $ fileSize            : num  288607 26540 26495 26548 26560 ...</span></span>
+<span><span class="co">#&gt;  $ dlStatus            : num  1 1 1 1 1 1 1 1 1 1 ...</span></span>
 <span><span class="co">#&gt; NULL</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -332,40 +342,38 @@ the data in R as a <code>SpatRaster</code> object (from the package <a href="htt
 <code class="sourceCode R"><span><span class="co"># import MOD11A1.061</span></span>
 <span><span class="co"># argument 'path' is the folder where the data are stored (here, in a temporary directory)</span></span>
 <span><span class="va">modis_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"MOD13A3.061"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                           collection <span class="op">=</span> <span class="st">"MOD13A3.061"</span><span class="op">)</span></span>
+<span>                           collection <span class="op">=</span> <span class="st">"MOD13A3.061"</span>,</span>
+<span>                           proj_epsg <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Importing the dataset as a SpatRaster object...</span></span>
 <span></span>
 <span><span class="co"># import GPM</span></span>
 <span><span class="va">gpm_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"3IMERG"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                         collection <span class="op">=</span> <span class="st">"GPM_3IMERGM.07"</span><span class="op">)</span></span>
+<span>                         collection <span class="op">=</span> <span class="st">"GPM_3IMERGM.07"</span>,</span>
+<span>                         proj_epsg <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Importing the dataset as a SpatRaster object...</span></span>
 <span></span>
 <span><span class="va">modis_ts</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>
-<span><span class="co">#&gt; dimensions  : 86, 51, 36  (nrow, ncol, nlyr)</span></span>
-<span><span class="co">#&gt; resolution  : 926.6254, 926.6254  (x, y)</span></span>
-<span><span class="co">#&gt; extent      : -638908.2, -591650.3, 981759.6, 1061449  (xmin, xmax, ymin, ymax)</span></span>
-<span><span class="co">#&gt; coord. ref. : +proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs </span></span>
-<span><span class="co">#&gt; sources     : MOD13A3.061.2017001_2017335.h17v08.nc4:_1_km_monthly_EVI  (12 layers) </span></span>
-<span><span class="co">#&gt;               MOD13A3.061.2017001_2017335.h17v08.nc4:_1_km_monthly_VI_Quality  (12 layers) </span></span>
-<span><span class="co">#&gt;               MOD13A3.061.2017001_2017335.h17v08.nc4:_1_km_monthly_NDVI  (12 layers) </span></span>
-<span><span class="co">#&gt; varnames    : _1_km_monthly_EVI (1 km monthly EVI) </span></span>
-<span><span class="co">#&gt;               _1_km_monthly_VI_Quality (1 km monthly VI Quality) </span></span>
-<span><span class="co">#&gt;               _1_km_monthly_NDVI (1 km monthly NDVI) </span></span>
+<span><span class="co">#&gt; dimensions  : 85, 52, 36  (nrow, ncol, nlyr)</span></span>
+<span><span class="co">#&gt; resolution  : 0.008420659, 0.008420659  (x, y)</span></span>
+<span><span class="co">#&gt; extent      : -5.826512, -5.388637, 8.830077, 9.545833  (xmin, xmax, ymin, ymax)</span></span>
+<span><span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326) </span></span>
+<span><span class="co">#&gt; source(s)   : memory</span></span>
 <span><span class="co">#&gt; names       : _1_km~EVI_1, _1_km~EVI_2, _1_km~EVI_3, _1_km~EVI_4, _1_km~EVI_5, _1_km~EVI_6, ... </span></span>
+<span><span class="co">#&gt; min values  :   0.1065465,  0.09200972,  0.09880671,   0.1148083,   0.1415658,   0.1807865, ... </span></span>
+<span><span class="co">#&gt; max values  :   0.3287283,  0.33806026,  0.36024132,   0.4717904,   0.5491539,   0.5933855, ... </span></span>
 <span><span class="co">#&gt; unit        :         EVI,         EVI,         EVI,         EVI,         EVI,         EVI, ... </span></span>
 <span><span class="co">#&gt; time (days) : 2017-01-01 to 2017-12-01</span></span>
 <span><span class="va">gpm_ts</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>
 <span><span class="co">#&gt; dimensions  : 8, 5, 12  (nrow, ncol, nlyr)</span></span>
-<span><span class="co">#&gt; resolution  : 0.1, 0.09999997  (x, y)</span></span>
+<span><span class="co">#&gt; resolution  : 0.09999999, 0.09999999  (x, y)</span></span>
 <span><span class="co">#&gt; extent      : -5.8, -5.3, 8.9, 9.7  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : precipitation </span></span>
 <span><span class="co">#&gt; names       : preci~ation, preci~ation, preci~ation, preci~ation, preci~ation, preci~ation, ... </span></span>
-<span><span class="co">#&gt; min values  :       0.010,       0.001,       0.035,       0.096,       0.097,       0.198, ... </span></span>
-<span><span class="co">#&gt; max values  :       0.071,       0.014,       0.071,       0.196,       0.142,       0.249, ... </span></span>
+<span><span class="co">#&gt; min values  :  0.01000000,  0.00100000,  0.03500000,   0.0960000,  0.09700001,       0.198, ... </span></span>
+<span><span class="co">#&gt; max values  :  0.07099995,  0.01399999,  0.07099999,   0.1959999,  0.14200000,       0.249, ... </span></span>
 <span><span class="co">#&gt; time        : 2017-01-01 to 2017-12-01 UTC</span></span></code></pre></div>
 </div>
 </div>
@@ -387,7 +395,9 @@ the data in R as a <code>SpatRaster</code> object (from the package <a href="htt
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
@@ -400,16 +410,16 @@ the data in R as a <code>SpatRaster</code> object (from the package <a href="htt
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.9000.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

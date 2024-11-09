@@ -10,6 +10,8 @@ vignette: >
 format:
   html:
     code-overflow: scroll
+toc:
+  depth: 2
 params:
   password: "to complete interactively"
 ---
@@ -34,6 +36,7 @@ library(MODIStsp)
 library(MODISTools)
 library(sf)
 library(terra)
+library(benchmarkme)
 ```
 
 
@@ -58,7 +61,6 @@ Finally, some R packages, such as [`rgee`](https://github.com/r-spatial/rgee) [@
 Before proceeding to the test, some system benchmarking :
 
 ```{r benchmark, eval=T }
-library(benchmarkme)
 Sys.time()
 Sys.info()
 benchmarkme::get_r_version()
