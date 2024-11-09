@@ -105,6 +105,7 @@ usethis::use_package_doc()
 
 ## To build a website with home and articles (not vignettes)
 pkgdown::build_articles()
+pkgdown::build_reference(examples = FALSE)
 
 #usethis::use_tibble()
 devtools::document()
