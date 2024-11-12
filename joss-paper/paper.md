@@ -62,9 +62,9 @@ The typical workflow to access and import MODIS, VIIRS or GPM data in R with `mo
 
 ![Workflow for MODIS, VIIRS or GPM data download and import with `modisfast`.\label{fig:wf_modisfast}](workflow_modisfast.png){width="100%"}
 
-## Long-form documentations and examples
+## Vignettes and examples
 
-`modisfast` provides three long-form documentations and examples to learn more about the package :
+`modisfast` provides three vignettes and examples to learn more about the package :
 
 -   a [Get started](https://ptaconet.github.io/modisfast/articles/get_started.html) vignette describing the core features of the package;
 -   a [Get data on several regions or periods of interest simultaneously](https://ptaconet.github.io/modisfast/articles/modisfast2.html) vignette detailing advanced functionalities of `modisfast` (for multi-time frame or multi-regions data access);
