@@ -15,7 +15,7 @@
 #' @inheritParams mf_import_data
 #' @param earthdata_username EarthData username
 #' @param earthdata_password EarthData username
-#' @param import boolean. Import the data as a SpatRast object ? defaut TRUE. FALSE will download the data but not import them it in R.
+#' @param import boolean. Import the data as a SpatRast object ? default TRUE. FALSE will download the data but not import them it in R.
 #' @param ... Further arguments to be passed to \link{mf_import_data}
 #'
 #' @return if the parameter \code{import} is set to TRUE, a \code{terra::SpatRast}

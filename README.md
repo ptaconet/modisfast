@@ -56,7 +56,7 @@ downloads of
 [**MODIS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/modis-overview/)
 Land products,
 [**VIIRS**](https://lpdaac.usgs.gov/data/get-started-data/collection-overview/missions/s-npp-nasa-viirs-overview/)
-Land products, and [**GPM**](https://gpm.nasa.gov/data/) (Global
+Land products, and [**GPM**](https://gpm.nasa.gov/data) (Global
 Precipitation Measurement Mission) Earth Observation data.
 
 `modisfast` uses the abilities offered by the
@@ -2019,7 +2019,7 @@ GPM IMERG Early Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
 </tr>
 <tr>
 <td style="text-align:left;">
-<a href="https://doi.org/10.5067/GPM/IMERG/3B-HH-L/06%20" style="     ">GPM_3IMERGHHL.06</a>
+<a href="https://doi.org/10.5067/GPM/IMERG/3B-HH-L/06" style="     ">GPM_3IMERGHHL.06</a>
 </td>
 <td style="text-align:left;">
 GPM
@@ -2157,14 +2157,14 @@ There are other R packages available for accessing MODIS data. Below is
 a comparison of modisfast with other packages available for downloading
 chunks of MODIS or VIIRS data :
 
-|                         Package                          |                Data                | Available on CRAN  | Utilizes open standards for data access protocols | Spatial subsetting\* | Dimensional subsetting\* | Maximum area size allowed for download |     Speed\*\*      |
-|:--------------------------------------------------------:|:----------------------------------:|:------------------:|:-------------------------------------------------:|:--------------------:|:------------------------:|:--------------------------------------:|:------------------:|
-|   [`modisfast`](https://github.com/ptaconet/modisfast)   |         MODIS, VIIRS, GPM          | :white_check_mark: |                :white_check_mark:                 |  :white_check_mark:  |    :white_check_mark:    |               unlimited                | :white_check_mark: |
-| [`appeears`](https://github.com/bluegreen-labs/appeears) |   MODIS, VIIRS, and many others    | :white_check_mark: |                :white_check_mark:                 |  :white_check_mark:  |    :white_check_mark:    |               unlimited                |      variable      |
-|  [`MODISTools`](https://github.com/ropensci/MODISTools)  |            MODIS, VIIRS            | :white_check_mark: |                        :x:                        |  :white_check_mark:  |    :white_check_mark:    |            200 km x 200 km             | :white_check_mark: |
-|       [`rgee`](https://github.com/r-spatial/rgee)        | MODIS, VIIRS, GPM, and many others | :white_check_mark: |                        :x:                        |  :white_check_mark:  |    :white_check_mark:    |               unlimited                |     not tested     |
-|    [`MODIStsp`](https://github.com/ropensci/MODIStsp)    |               MODIS                |        :x:         |                                                   |         :x:          |    :white_check_mark:    |               unlimited                |         NA         |
-|       [`MODIS`](https://github.com/fdetsch/MODIS)        |               MODIS                |        :x:         |                        :x:                        |         :x:          |           :x:            |                   NA                   |         NA         |
+|                            Package                            |                Data                | Available on CRAN  | Utilizes open standards for data access protocols | Spatial subsetting\* | Dimensional subsetting\* | Maximum area size allowed for download |     Speed\*\*      |
+|:-------------------------------------------------------------:|:----------------------------------:|:------------------:|:-------------------------------------------------:|:--------------------:|:------------------------:|:--------------------------------------:|:------------------:|
+|     [`modisfast`](https://github.com/ptaconet/modisfast)      |         MODIS, VIIRS, GPM          | :white_check_mark: |                :white_check_mark:                 |  :white_check_mark:  |    :white_check_mark:    |               unlimited                | :white_check_mark: |
+|   [`appeears`](https://github.com/bluegreen-labs/appeears)    |   MODIS, VIIRS, and many others    | :white_check_mark: |                :white_check_mark:                 |  :white_check_mark:  |    :white_check_mark:    |               unlimited                |      variable      |
+| [`MODISTools`](https://github.com/bluegreen-labs/MODISTools/) |            MODIS, VIIRS            | :white_check_mark: |                        :x:                        |  :white_check_mark:  |    :white_check_mark:    |            200 km x 200 km             | :white_check_mark: |
+|          [`rgee`](https://github.com/r-spatial/rgee)          | MODIS, VIIRS, GPM, and many others | :white_check_mark: |                        :x:                        |  :white_check_mark:  |    :white_check_mark:    |               unlimited                |     not tested     |
+|      [`MODIStsp`](https://github.com/ropensci/MODIStsp)       |               MODIS                |        :x:         |                                                   |         :x:          |    :white_check_mark:    |               unlimited                |         NA         |
+|          [`MODIS`](https://github.com/fdetsch/MODIS)          |               MODIS                |        :x:         |                        :x:                        |         :x:          |           :x:            |                   NA                   |         NA         |
 
 \* at the downloading phase
 

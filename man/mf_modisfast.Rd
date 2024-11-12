@@ -38,7 +38,7 @@ mf_modisfast(
 
 \item{verbose}{string. Verbose mode ("quiet", "inform", or "debug"). Default "inform".}
 
-\item{import}{boolean. Import the data as a SpatRast object ? defaut TRUE. FALSE will download the data but not import them it in R.}
+\item{import}{boolean. Import the data as a SpatRast object ? default TRUE. FALSE will download the data but not import them it in R.}
 
 \item{...}{Further arguments to be passed to \link{mf_import_data}}
 }
