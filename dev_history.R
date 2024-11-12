@@ -107,6 +107,7 @@ usethis::use_package_doc()
 pkgdown::build_articles()
 pkgdown::build_reference(examples = FALSE)
 pkgdown::build_home()
+pkgdown::build_news()
 
 #usethis::use_tibble()
 devtools::document()
