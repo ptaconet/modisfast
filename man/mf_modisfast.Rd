@@ -52,9 +52,9 @@ Download and possibly import MODIS, VIIRS and GPM
 Earth Observation data quickly and efficiently.
 This function is a wrapper for
 \link{mf_login}, \link{mf_get_url}, \link{mf_download_data} and \link{mf_import_data}.
-}
-\note{
-Whenever possible, users should prefer executing the functions \link{mf_login}, \link{mf_get_url}, \link{mf_download_data} and \link{mf_import_data} sequentially rather than using this \code{modisfast} high-level function
+Whenever possible, users should prefer executing the functions \link{mf_login},
+\link{mf_get_url}, \link{mf_download_data} and \link{mf_import_data} sequentially
+rather than using this high-level function
 }
 \examples{
 \dontrun{

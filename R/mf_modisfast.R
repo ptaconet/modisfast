@@ -6,6 +6,9 @@
 #' Earth Observation data quickly and efficiently.
 #' This function is a wrapper for
 #' \link{mf_login}, \link{mf_get_url}, \link{mf_download_data} and \link{mf_import_data}.
+#' Whenever possible, users should prefer executing the functions \link{mf_login},
+#' \link{mf_get_url}, \link{mf_download_data} and \link{mf_import_data} sequentially
+#' rather than using this high-level function
 #'
 #' @inheritParams mf_get_url
 #' @inheritParams mf_download_data
@@ -18,8 +21,6 @@
 #' @return if the parameter \code{import} is set to TRUE, a \code{terra::SpatRast}
 #' object ; else a data.frame providing details of the data downloaded
 #' (see output of \link{mf_download_data}).
-#'
-#' @note Whenever possible, users should prefer executing the functions \link{mf_login}, \link{mf_get_url}, \link{mf_download_data} and \link{mf_import_data} sequentially rather than using this \code{modisfast} high-level function
 #'
 #' @seealso \link{mf_login}, \link{mf_get_url}, \link{mf_download_data}, \link{mf_import_data}
 #' @export

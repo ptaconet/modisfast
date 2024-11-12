@@ -183,8 +183,13 @@ library(kableExtra)
 mf_list_collections() %>%
   dplyr::filter(source %in% c("MODIS", "VIIRS")) %>%
   dplyr::mutate(collection = cell_spec(collection, "html", link = doi)) %>%
-  dplyr::select(collection, source, long_name, nature) %>%
-  dplyr::rename(Collection = collection, Type = nature, Name = long_name, Source = source) %>%
+  dplyr::mutate(spatial_resolution_m = paste0(spatial_resolution_m, " m")) %>%
+  dplyr::mutate(temporal_resolution = paste0(temporal_resolution," ",temporal_resolution_unit)) %>%
+  dplyr::mutate(temporal_resolution = ifelse(temporal_resolution=="1 day", "Daily", temporal_resolution)) %>%
+  dplyr::mutate(start_date = paste0(start_date," to present")) %>%
+  dplyr::select(collection, source, nature, long_name, spatial_resolution_m, temporal_resolution, start_date) %>%
+  dplyr::arrange(nature, source, spatial_resolution_m, rev(temporal_resolution)) %>% 
+  dplyr::rename(Collection = collection, Type = nature, Name = long_name, Source = source, 'Spatial resolution' = spatial_resolution_m, 'Temporal resolution' = temporal_resolution, 'Temporal extent' = start_date) %>%
   kable("html", escape = FALSE) %>%
   kable_styling(bootstrap_options = c("hover", "condensed"))
 ```
@@ -200,8 +205,13 @@ library(kableExtra)
 mf_list_collections() %>%
   dplyr::filter(!(source %in% c("MODIS", "VIIRS"))) %>%
   dplyr::mutate(collection = cell_spec(collection, "html", link = doi)) %>%
-  dplyr::select(collection, source, long_name, nature) %>%
-  dplyr::rename(Collection = collection, Type = nature, Name = long_name, Source = source) %>%
+  dplyr::mutate(spatial_resolution_m = paste0(spatial_resolution_m, " m")) %>%
+  dplyr::mutate(temporal_resolution = paste0(temporal_resolution," ",temporal_resolution_unit)) %>%
+  dplyr::mutate(temporal_resolution = ifelse(temporal_resolution=="1 day", "Daily", temporal_resolution)) %>%
+  dplyr::mutate(start_date = paste0(start_date," to present")) %>%
+  dplyr::select(collection, source, nature, long_name, spatial_resolution_m, temporal_resolution, start_date) %>%
+  dplyr::arrange(nature, source, spatial_resolution_m, rev(temporal_resolution)) %>% 
+  dplyr::rename(Collection = collection, Type = nature, Name = long_name, Source = source, 'Spatial resolution' = spatial_resolution_m, 'Temporal resolution' = temporal_resolution, 'Temporal extent' = start_date) %>%
   kable("html", escape = FALSE) %>%
   kable_styling(bootstrap_options = c("hover", "condensed"))
 ```

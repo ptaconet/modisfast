@@ -161,7 +161,7 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
     if (verbose %in% c("inform","debug")) {
        maxFileSizeEstimated <- sum(data_dl$maxFileSizeEstimated[which(data_dl$fileDl == FALSE)])
        maxFileSizeEstimated <- dplyr::if_else(round(maxFileSizeEstimated/1000000)>1,round(maxFileSizeEstimated/1000000),1)
-       cat("Downloading the data ... (destination folder:",path,")\nEstimated maximum size of data to be downloaded is ~",maxFileSizeEstimated,"Mb\n")
+       cat("Downloading the data (destination folder:",path,") ...\nEstimated maximum size of data to be downloaded is ~",maxFileSizeEstimated,"Mb\n")
       # cat("Downloading the data in",path,"...\n")
     }
     if (parallel) {
