@@ -1,14 +1,38 @@
-cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
+cff-version: "1.2.0"
 authors:
-- family-names: "Taconet"
-  given-names: "Paul"
+- family-names: Taconet
+  given-names: Paul
   orcid: "https://orcid.org/0000-0001-7429-7204"
-- family-names: "Moiroux"
-  given-names: "Nicolas"
+- family-names: Moiroux
+  given-names: Nicolas
   orcid: "https://orcid.org/0000-0001-6755-6167"
-title: "modisfast: An R package for fast and efficient access to MODIS, VIIRS and GPM Earth Observation data"
-version: 0.9.2
-doi: 10.5281/zenodo.12772739
-date-released: 2024-07-14
-url: "https://github.com/ptaconet/modisfast"
+contact:
+- family-names: Taconet
+  given-names: Paul
+  orcid: "https://orcid.org/0000-0001-7429-7204"
+doi: 10.5281/zenodo.14100599
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+  - family-names: Taconet
+    given-names: Paul
+    orcid: "https://orcid.org/0000-0001-7429-7204"
+  - family-names: Moiroux
+    given-names: Nicolas
+    orcid: "https://orcid.org/0000-0001-6755-6167"
+  date-published: 2024-11-13
+  doi: 10.21105/joss.07343
+  issn: 2475-9066
+  issue: 103
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 7343
+  title: "modisfast: An R package for fast and efficient access to
+    MODIS, VIIRS and GPM Earth Observation data"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.07343"
+  volume: 9
+title: "modisfast: An R package for fast and efficient access to MODIS,
+  VIIRS and GPM Earth Observation data"

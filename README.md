@@ -10,7 +10,7 @@
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/modisfast)](https://cran.r-project.org/package=modisfast)
 [![Github_Status_Badge](https://img.shields.io/badge/Github-1.0.0-blue.svg)](https://github.com/ptaconet/modisfast)
 [![R-CMD-check](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml)
-[![DOI](https://joss.theoj.org/papers/abd5750a442de6a9d95b60bf49c440cb/status.svg)](https://joss.theoj.org/papers/abd5750a442de6a9d95b60bf49c440cb)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.07343/status.svg)](https://doi.org/10.21105/joss.07343)
 ![CRAN_downloads](https://cranlogs.r-pkg.org/badges/grand-total/modisfast)
 <!-- [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/ptaconet/modisfast/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/ptaconet/modisfast) -->
 <!-- [![DOI-zenodo](https://zenodo.org/badge/doi/10.5281/zenodo.8475.svg)](https://doi.org/10.5281/zenodo.12772739) -->
@@ -2182,9 +2182,9 @@ later](https://www.gnu.org/licenses/gpl-3.0-standalone.html) license.
 We thank in advance people that use `modisfast` for citing it in their
 work / publication(s). For this, please use the following citation :
 
-> Taconet, P. & Moiroux N.(2024). modisfast: Fast and Efficient Access
-> to MODIS Earth Observation Data. In CRAN: Contributed Packages. The R
-> Foundation. <https://doi.org/10.32614/cran.package.modisfast>
+> Taconet et al., (2024). modisfast: An R package for fast and efficient
+> access to MODIS, VIIRS and GPM Earth Observation data. Journal of Open
+> Source Software, 9(103), 7343, <https://doi.org/10.21105/joss.07343>
 
 ## Future developments
 
