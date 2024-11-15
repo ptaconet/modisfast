@@ -56,8 +56,14 @@
 
 .testRoi <- function(roi) {
   # if(!inherits(roi,"sf") || as.character(unique(sf::st_geometry_type(roi)))!="POLYGON" || !("id" %in% colnames(roi)) || !("geom" %in% colnames(roi)) || length(which(is.na(roi$id))) || length(which(is.na(roi$geom)))){stop("Argument roi must be an object of class sf or sfc with POLYGON-type feature geometry and at least two columns : 'id' and 'geom' that must not be NULL or NA")}
-  if (!inherits(roi, "sf") || as.character(unique(sf::st_geometry_type(roi))) != "POLYGON" || !("id" %in% colnames(roi)) || length(which(is.na(roi$id)))) {
-    stop("Argument roi must be an object of class sf or sfc with POLYGON-type feature geometry and at least two columns : 'id' and a geometry column that must not be NULL or NA")
+  if (!inherits(roi, "sf")) {
+    stop("Argument roi must be an object of class sf or sfc")
+  }
+  if (as.character(unique(sf::st_geometry_type(roi))) != "POLYGON") {
+    stop("Argument roi must have a POLYGON-type feature geometry")
+  }
+  if (!("id" %in% colnames(roi)) || length(which(is.na(roi$id)))) {
+    stop("Argument roi must have at least two columns : 'id' (character string) and a geometry column that must not be NULL or NA")
   }
 }
 
@@ -81,7 +87,13 @@
 .testTimeRangeAvDates <- function(time_range, collection) {
   start_date <- opendapMetadata_internal$start_date[which(opendapMetadata_internal$collection == collection)]
   if (time_range[1] < as.Date(start_date)) {
-    stop("First time frame in time_range argument is before the beginning of the mission\n")
+    stop("Time start in time_range argument is out of the temporal extent of the collection. Please modify time start.\n")
+  }
+  end_date <- opendapMetadata_internal$end_date[which(opendapMetadata_internal$collection == collection)]
+  if(end_date != "ongoing"){
+    if (length(time_range) == 2 && time_range[2] > as.Date(end_date)) {
+     stop("Time end in time_range argument is out of the temporal extent of the collection. Please modify time end.\n")
+    }
   }
 }
 
