@@ -91,7 +91,7 @@
   }
   end_date <- opendapMetadata_internal$end_date[which(opendapMetadata_internal$collection == collection)]
   if(end_date != "ongoing"){
-    if (length(time_range) == 2 && time_range[2] > as.Date(end_date)) {
+    if (length(time_range) == 2 && (time_range[2] > as.Date(end_date) | time_range[2] > Sys.Date())) {
      stop("Time end in time_range argument is out of the temporal extent of the collection. Please modify time end.\n")
     }
   }

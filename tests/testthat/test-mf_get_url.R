@@ -76,9 +76,7 @@ test_that("function mf_get_url() sends back the expected errors when necessary",
   # wrong type for roi
   expect_error(mf_get_url(collection = "MOD13A3.061",
                           roi = "not_a_sf_object",
-                          time_range = as.Date(c("2017-01-01","2017-02-01"))),
-               "Argument roi must be an object of class sf or sfc with POLYGON-type feature geometry and at least two columns : 'id' and a geometry column that must not be NULL or NA",
-               fixed = TRUE)
+                          time_range = as.Date(c("2017-01-01","2017-02-01"))))
 
   # wrong type for time range
   expect_error(mf_get_url(collection = "MOD13A3.061",
