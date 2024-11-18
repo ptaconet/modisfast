@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
 library(magrittr)
 library(modisfast)
 library(dplyr)
+library(kableExtra)
 ```
 # modisfast 
 <!-- <img src="man/figures/logo.png" align="right" /> -->
@@ -175,13 +176,13 @@ Currently `modisfast` supports download of `r nrow(mf_list_collections())` data 
 
 Details of each product available for download are provided in the tables below or through the function `mf_list_collections()`.
 
-<details><summary><b>MODIS and VIIRS data collections accessible with modisfast (click to expand)</b></summary>
-<p>
 
 ```{r, eval = TRUE, echo=F,message=F}
-library(kableExtra)
-mf_list_collections() %>%
-  dplyr::filter(source %in% c("MODIS", "VIIRS")) %>%
+
+fun_display_coll <- function(filts){
+  
+  cols <- mf_list_collections() %>%
+  dplyr::filter(nature %in% filts) %>%
   dplyr::mutate(collection = cell_spec(collection, "html", link = doi)) %>%
   dplyr::mutate(spatial_resolution_m = paste0(spatial_resolution_m, " m")) %>%
   dplyr::mutate(temporal_resolution = paste0(temporal_resolution," ",temporal_resolution_unit)) %>%
@@ -192,32 +193,29 @@ mf_list_collections() %>%
   dplyr::rename(Collection = collection, Type = nature, Name = long_name, Source = source, 'Spatial resolution' = spatial_resolution_m, 'Temporal resolution' = temporal_resolution, 'Temporal extent' = start_date) %>%
   kable("html", escape = FALSE) %>%
   kable_styling(bootstrap_options = c("hover", "condensed"))
+  
+  return(cols)
+  
+}
+
+cols_natures <- unique(mf_list_collections()$nature)
+
 ```
 
-</p>
-</details>
 
-<details><summary><b>Other (non-MODIS or VIIRS) data collections accessible with modisfast (click to expand)</b></summary>
-<p>
+```{r, eval = TRUE, echo=F, message=F, results='asis'}
+for(i in 1:length(cols_natures)){
+  if(i==1){
+     cat('<details><summary><b>',cols_natures[i],'</b> data collections <b>(click to expand)</b></summary>')
+  } else {
+      cat('<details><summary><b>',cols_natures[i],'</b> data collections</summary>')
+  }
+  cat(knitr::asis_output(fun_display_coll(cols_natures[i])))
+  cat('</details>')
+}
 
-```{r, eval = TRUE, echo=F,message=F}
-library(kableExtra)
-mf_list_collections() %>%
-  dplyr::filter(!(source %in% c("MODIS", "VIIRS"))) %>%
-  dplyr::mutate(collection = cell_spec(collection, "html", link = doi)) %>%
-  dplyr::mutate(spatial_resolution_m = paste0(spatial_resolution_m, " m")) %>%
-  dplyr::mutate(temporal_resolution = paste0(temporal_resolution," ",temporal_resolution_unit)) %>%
-  dplyr::mutate(temporal_resolution = ifelse(temporal_resolution=="1 day", "Daily", temporal_resolution)) %>%
-  dplyr::mutate(start_date = paste0(start_date," to present")) %>%
-  dplyr::select(collection, source, nature, long_name, spatial_resolution_m, temporal_resolution, start_date) %>%
-  dplyr::arrange(nature, source, spatial_resolution_m, rev(temporal_resolution)) %>% 
-  dplyr::rename(Collection = collection, Type = nature, Name = long_name, Source = source, 'Spatial resolution' = spatial_resolution_m, 'Temporal resolution' = temporal_resolution, 'Temporal extent' = start_date) %>%
-  kable("html", escape = FALSE) %>%
-  kable_styling(bootstrap_options = c("hover", "condensed"))
 ```
 
-</p>
-</details>
 
 ## Manual testing of the functionality
 
