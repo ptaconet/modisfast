@@ -49,6 +49,13 @@ packages</a><br> • <a href="#citation">Citation</a><br> •
 <a href="#acknowledgments">Acknowledgments</a><br>
 </p>
 
+## News
+
+`modisfast 1.0.0` now [available on
+CRAN](https://cran.r-project.org/package=modisfast), and [associated
+software paper](https://doi.org/10.21105/joss.07343) published in the
+Journal of Open Source Software !
+
 ## Overview
 
 **`modisfast`** is an R package designed for **easy** and **fast**
@@ -226,7 +233,1219 @@ tables below or through the function `mf_list_collections()`.
 
 <details>
 <summary>
-<b> Rainfall </b> data collections <b>(click to expand)</b>
+<b> Albedo </b> data collections <b>(click to expand)</b>
+</summary>
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Collection
+</th>
+<th style="text-align:left;">
+Source
+</th>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Spatial resolution
+</th>
+<th style="text-align:left;">
+Temporal resolution
+</th>
+<th style="text-align:left;">
+Temporal extent
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD43A1.061" style="     ">MCD43A1.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+MODIS/Terra and Aqua BRDF/Albedo Model Parameters Daily L3 Global 500 m
+SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+Daily
+</td>
+<td style="text-align:left;">
+2000-02-24 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD43A2.061" style="     ">MCD43A2.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+MODIS/Terra and Aqua BRDF/Albedo Quality Daily L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+Daily
+</td>
+<td style="text-align:left;">
+2000-02-24 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD43A3.061" style="     ">MCD43A3.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+MODIS/Terra and Aqua Albedo Daily L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+Daily
+</td>
+<td style="text-align:left;">
+2000-02-24 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP43MA1.001" style="     ">VNP43MA1.001</a>
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+VIIRS/NPP BRDF/Albedo Model Parameters Daily L3 Global 1 km SIN
+</td>
+<td style="text-align:left;">
+1000 m
+</td>
+<td style="text-align:left;">
+Daily
+</td>
+<td style="text-align:left;">
+2012-01-17 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP43MA2.001" style="     ">VNP43MA2.001</a>
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+VIIRS/NPP BRDF/Albedo Quality Daily L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+1000 m
+</td>
+<td style="text-align:left;">
+Daily
+</td>
+<td style="text-align:left;">
+2012-01-17 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP43MA3.001" style="     ">VNP43MA3.001</a>
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Albedo Daily L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+1000 m
+</td>
+<td style="text-align:left;">
+Daily
+</td>
+<td style="text-align:left;">
+2012-01-17 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP43IA2.001" style="     ">VNP43IA2.001</a>
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+VIIRS/NPP BRDF/Albedo Quality Daily L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+Daily
+</td>
+<td style="text-align:left;">
+2012-01-17 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP43IA3.001" style="     ">VNP43IA3.001</a>
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Albedo
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Albedo Daily L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+Daily
+</td>
+<td style="text-align:left;">
+2012-01-17 to present
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details>
+<summary>
+<b> Burned areas </b> data collections
+</summary>
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Collection
+</th>
+<th style="text-align:left;">
+Source
+</th>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Spatial resolution
+</th>
+<th style="text-align:left;">
+Temporal resolution
+</th>
+<th style="text-align:left;">
+Temporal extent
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD64A1.061" style="     ">MCD64A1.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Burned areas
+</td>
+<td style="text-align:left;">
+MODIS/Terra+Aqua Burned Area Monthly L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+30 day
+</td>
+<td style="text-align:left;">
+2000-11-01 to present
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details>
+<summary>
+<b> Evapotranspiration </b> data collections
+</summary>
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Collection
+</th>
+<th style="text-align:left;">
+Source
+</th>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Spatial resolution
+</th>
+<th style="text-align:left;">
+Temporal resolution
+</th>
+<th style="text-align:left;">
+Temporal extent
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD16A2.061" style="     ">MOD16A2.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Evapotranspiration
+</td>
+<td style="text-align:left;">
+MODIS/Terra Net Evapotranspiration 8-Day L4 Global 500m SIN Grid v061
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2021-01-01 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD16A2.061" style="     ">MYD16A2.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Evapotranspiration
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Net Evapotranspiration 8-Day L4 Global 500m SIN Grid v061
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2021-01-01 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD16A2GF.061" style="     ">MOD16A2GF.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Evapotranspiration
+</td>
+<td style="text-align:left;">
+MODIS/Terra Net Evapotranspiration Gap-Filled 8-Day L4 Global 500 m SIN
+Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2000-01-01 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD16A3GF.061" style="     ">MOD16A3GF.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Evapotranspiration
+</td>
+<td style="text-align:left;">
+MODIS/Terra Net Evapotranspiration Gap-Filled Yearly L4 Global 500 m SIN
+Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+365 day
+</td>
+<td style="text-align:left;">
+2000-02-18 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD16A2GF.061" style="     ">MYD16A2GF.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Evapotranspiration
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Net Evapotranspiration Gap-Filled 8-Day L4 Global 500 m SIN
+Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2002-01-01 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD16A3GF.061" style="     ">MYD16A3GF.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Evapotranspiration
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Net Evapotranspiration Gap-Filled Yearly L4 Global 500 m SIN
+Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+365 day
+</td>
+<td style="text-align:left;">
+2002-07-04 to present
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details>
+<summary>
+<b> Land cover </b> data collections
+</summary>
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Collection
+</th>
+<th style="text-align:left;">
+Source
+</th>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Spatial resolution
+</th>
+<th style="text-align:left;">
+Temporal resolution
+</th>
+<th style="text-align:left;">
+Temporal extent
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD12Q1.061" style="     ">MCD12Q1.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land cover
+</td>
+<td style="text-align:left;">
+MODIS/Terra+Aqua Land Cover Type Yearly L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+365 day
+</td>
+<td style="text-align:left;">
+2001-01-01 to present
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details>
+<summary>
+<b> Land surface temperature </b> data collections
+</summary>
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Collection
+</th>
+<th style="text-align:left;">
+Source
+</th>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Spatial resolution
+</th>
+<th style="text-align:left;">
+Temporal resolution
+</th>
+<th style="text-align:left;">
+Temporal extent
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD11A1.061" style="     ">MOD11A1.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN
+Grid v061
+</td>
+<td style="text-align:left;">
+1000 m
+</td>
+<td style="text-align:left;">
+Daily
+</td>
+<td style="text-align:left;">
+2000-02-24 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD11A1.061" style="     ">MYD11A1.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Land Surface Temperature/Emissivity Daily L3 Global 1km SIN
+Grid v061
+</td>
+<td style="text-align:left;">
+1000 m
+</td>
+<td style="text-align:left;">
+Daily
+</td>
+<td style="text-align:left;">
+2002-07-05 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD11A2.061" style="     ">MYD11A2.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Land Surface Temperature/Emissivity 8-Day L3 Global 1 km SIN
+Grid v061
+</td>
+<td style="text-align:left;">
+1000 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2002-07-04 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD11A2.061" style="     ">MOD11A2.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 Global 1 km SIN
+Grid v061
+</td>
+<td style="text-align:left;">
+1000 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2000-02-18 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD11B3.061" style="     ">MOD11B3.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+MODIS/Terra Land Surface Temperature/Emissivity Monthly L3 Global 6 km
+SIN Grid
+</td>
+<td style="text-align:left;">
+6000 m
+</td>
+<td style="text-align:left;">
+30 day
+</td>
+<td style="text-align:left;">
+2000-02-01 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD11B3.061" style="     ">MYD11B3.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Land Surface Temperature/Emissivity Monthly L3 Global 6 km
+SIN Grid
+</td>
+<td style="text-align:left;">
+6000 m
+</td>
+<td style="text-align:left;">
+30 day
+</td>
+<td style="text-align:left;">
+2002-07-01 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD11B2.061" style="     ">MOD11B2.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 Global 6 km SIN
+Grid
+</td>
+<td style="text-align:left;">
+6000 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2000-02-18 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD11B2.061" style="     ">MYD11B2.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Land Surface Temperature/Emissivity 8-Day L3 Global 6 km SIN
+Grid
+</td>
+<td style="text-align:left;">
+6000 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2002-07-04 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP21A1D.001" style="     ">VNP21A1D.001</a>
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Land Surface Temperature and Emissivity Daily L3 Global 1 km
+SIN Grid Day
+</td>
+<td style="text-align:left;">
+1000 m
+</td>
+<td style="text-align:left;">
+Daily
+</td>
+<td style="text-align:left;">
+2012-01-19 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP21A1N.001" style="     ">VNP21A1N.001</a>
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Land Surface Temperature and Emissivity Daily L3 Global 1 km
+SIN Grid Night
+</td>
+<td style="text-align:left;">
+1000 m
+</td>
+<td style="text-align:left;">
+Daily
+</td>
+<td style="text-align:left;">
+2012-01-19 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP21A2.001" style="     ">VNP21A2.001</a>
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Land Surface Temperature and Emissivity 8-Day L3 Global 1 km
+SIN Grid
+</td>
+<td style="text-align:left;">
+1000 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2012-01-25 to present
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details>
+<summary>
+<b> Leaf area index </b> data collections
+</summary>
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Collection
+</th>
+<th style="text-align:left;">
+Source
+</th>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Spatial resolution
+</th>
+<th style="text-align:left;">
+Temporal resolution
+</th>
+<th style="text-align:left;">
+Temporal extent
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD15A2H.061" style="     ">MYD15A2H.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Leaf area index
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2002-07-04 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD15A2H.061" style="     ">MCD15A2H.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Leaf area index
+</td>
+<td style="text-align:left;">
+MODIS/Terra+Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2002-07-04 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MCD15A3H.061" style="     ">MCD15A3H.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Leaf area index
+</td>
+<td style="text-align:left;">
+MODIS/Terra+Aqua Leaf Area Index/FPAR 4-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+4 day
+</td>
+<td style="text-align:left;">
+2002-07-04 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD15A2H.061" style="     ">MOD15A2H.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Leaf area index
+</td>
+<td style="text-align:left;">
+MODIS/Terra Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2000-02-18 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://doi.org/10.5067/VIIRS/VNP15A2H.001" style="     ">VNP15A2H.001</a>
+</td>
+<td style="text-align:left;">
+VIIRS
+</td>
+<td style="text-align:left;">
+Leaf area index
+</td>
+<td style="text-align:left;">
+VIIRS/NPP Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2012-01-17 to present
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details>
+<summary>
+<b> Ocean Reflectance </b> data collections
+</summary>
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Collection
+</th>
+<th style="text-align:left;">
+Source
+</th>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Spatial resolution
+</th>
+<th style="text-align:left;">
+Temporal resolution
+</th>
+<th style="text-align:left;">
+Temporal extent
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MODOCGA.061" style="     ">MODOCGA.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Ocean Reflectance
+</td>
+<td style="text-align:left;">
+MODIS/Terra Ocean Reflectance Daily L2G-Lite Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+1000 m
+</td>
+<td style="text-align:left;">
+Daily
+</td>
+<td style="text-align:left;">
+2000-02-24 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYDOCGA.061" style="     ">MYDOCGA.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Ocean Reflectance
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Ocean Reflectance Daily L2G-Lite Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+1000 m
+</td>
+<td style="text-align:left;">
+Daily
+</td>
+<td style="text-align:left;">
+2002-07-04 to present
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details>
+<summary>
+<b> Primary Productivity </b> data collections
+</summary>
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Collection
+</th>
+<th style="text-align:left;">
+Source
+</th>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Spatial resolution
+</th>
+<th style="text-align:left;">
+Temporal resolution
+</th>
+<th style="text-align:left;">
+Temporal extent
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD17A2H.061" style="     ">MOD17A2H.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Primary Productivity
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Gross Primary Productivity 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2021-01-01 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD17A2H.061" style="     ">MYD17A2H.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Primary Productivity
+</td>
+<td style="text-align:left;">
+MODIS/Terra Gross Primary Productivity 8-Day L4 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2021-01-01 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD17A2HGF.061" style="     ">MOD17A2HGF.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Primary Productivity
+</td>
+<td style="text-align:left;">
+MODIS/Terra Gross Primary Productivity Gap-Filled 8-Day L4 Global 500 m
+SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2000-01-01 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD17A3HGF.061" style="     ">MOD17A3HGF.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Primary Productivity
+</td>
+<td style="text-align:left;">
+MODIS/Terra Net Primary Production Gap-Filled Yearly L4 Global 500 m SIN
+Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+365 day
+</td>
+<td style="text-align:left;">
+2000-02-18 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD17A2HGF.061" style="     ">MYD17A2HGF.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Primary Productivity
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Gross Primary Productivity Gap-Filled 8-Day L4 Global 500 m
+SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2002-01-01 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD17A3HGF.061" style="     ">MYD17A3HGF.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Primary Productivity
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Net Primary Production Gap-Filled Yearly L4 Global 500 m SIN
+Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+365 day
+</td>
+<td style="text-align:left;">
+2002-07-04 to present
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details>
+<summary>
+<b> Rainfall </b> data collections
 </summary>
 <table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 <thead>
@@ -483,431 +1702,6 @@ GPM IMERG Final Precipitation L3 1 month 0.1 degree x 0.1 degree V07
 </td>
 <td style="text-align:left;">
 2000-06-01 to present
-</td>
-</tr>
-</tbody>
-</table>
-</details>
-<details>
-<summary>
-<b> Land cover </b> data collections
-</summary>
-<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Collection
-</th>
-<th style="text-align:left;">
-Source
-</th>
-<th style="text-align:left;">
-Type
-</th>
-<th style="text-align:left;">
-Name
-</th>
-<th style="text-align:left;">
-Spatial resolution
-</th>
-<th style="text-align:left;">
-Temporal resolution
-</th>
-<th style="text-align:left;">
-Temporal extent
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MCD12Q1.061" style="     ">MCD12Q1.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Land cover
-</td>
-<td style="text-align:left;">
-MODIS/Terra+Aqua Land Cover Type Yearly L3 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-365 day
-</td>
-<td style="text-align:left;">
-2001-01-01 to present
-</td>
-</tr>
-</tbody>
-</table>
-</details>
-<details>
-<summary>
-<b> Leaf area index </b> data collections
-</summary>
-<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Collection
-</th>
-<th style="text-align:left;">
-Source
-</th>
-<th style="text-align:left;">
-Type
-</th>
-<th style="text-align:left;">
-Name
-</th>
-<th style="text-align:left;">
-Spatial resolution
-</th>
-<th style="text-align:left;">
-Temporal resolution
-</th>
-<th style="text-align:left;">
-Temporal extent
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD15A2H.061" style="     ">MYD15A2H.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Leaf area index
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2002-07-04 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MCD15A2H.061" style="     ">MCD15A2H.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Leaf area index
-</td>
-<td style="text-align:left;">
-MODIS/Terra+Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2002-07-04 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MCD15A3H.061" style="     ">MCD15A3H.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Leaf area index
-</td>
-<td style="text-align:left;">
-MODIS/Terra+Aqua Leaf Area Index/FPAR 4-Day L4 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-4 day
-</td>
-<td style="text-align:left;">
-2002-07-04 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MOD15A2H.061" style="     ">MOD15A2H.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Leaf area index
-</td>
-<td style="text-align:left;">
-MODIS/Terra Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2000-02-18 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP15A2H.001" style="     ">VNP15A2H.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Leaf area index
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2012-01-17 to present
-</td>
-</tr>
-</tbody>
-</table>
-</details>
-<details>
-<summary>
-<b> Albedo </b> data collections
-</summary>
-<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Collection
-</th>
-<th style="text-align:left;">
-Source
-</th>
-<th style="text-align:left;">
-Type
-</th>
-<th style="text-align:left;">
-Name
-</th>
-<th style="text-align:left;">
-Spatial resolution
-</th>
-<th style="text-align:left;">
-Temporal resolution
-</th>
-<th style="text-align:left;">
-Temporal extent
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MCD43A1.061" style="     ">MCD43A1.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Albedo
-</td>
-<td style="text-align:left;">
-MODIS/Terra and Aqua BRDF/Albedo Model Parameters Daily L3 Global 500 m
-SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2000-02-24 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MCD43A2.061" style="     ">MCD43A2.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Albedo
-</td>
-<td style="text-align:left;">
-MODIS/Terra and Aqua BRDF/Albedo Quality Daily L3 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2000-02-24 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MCD43A3.061" style="     ">MCD43A3.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Albedo
-</td>
-<td style="text-align:left;">
-MODIS/Terra and Aqua Albedo Daily L3 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2000-02-24 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP43MA1.001" style="     ">VNP43MA1.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Albedo
-</td>
-<td style="text-align:left;">
-VIIRS/NPP BRDF/Albedo Model Parameters Daily L3 Global 1 km SIN
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2012-01-17 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP43MA2.001" style="     ">VNP43MA2.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Albedo
-</td>
-<td style="text-align:left;">
-VIIRS/NPP BRDF/Albedo Quality Daily L3 Global 1 km SIN Grid
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2012-01-17 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP43MA3.001" style="     ">VNP43MA3.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Albedo
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Albedo Daily L3 Global 1 km SIN Grid
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2012-01-17 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP43IA2.001" style="     ">VNP43IA2.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Albedo
-</td>
-<td style="text-align:left;">
-VIIRS/NPP BRDF/Albedo Quality Daily L3 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2012-01-17 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP43IA3.001" style="     ">VNP43IA3.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Albedo
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Albedo Daily L3 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2012-01-17 to present
 </td>
 </tr>
 </tbody>
@@ -1249,7 +2043,7 @@ VIIRS/NPP Surface Reflectance 8-Day L3 Global 500 m SIN Grid
 </details>
 <details>
 <summary>
-<b> Burned areas </b> data collections
+<b> Thermal Anomalies/Fire </b> data collections
 </summary>
 <table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 <thead>
@@ -1280,25 +2074,25 @@ Temporal extent
 <tbody>
 <tr>
 <td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MCD64A1.061" style="     ">MCD64A1.061</a>
+<a href="https://doi.org/10.5067/VIIRS/VNP14A1.001" style="     ">VNP14A1.001</a>
 </td>
 <td style="text-align:left;">
-MODIS
+VIIRS
 </td>
 <td style="text-align:left;">
-Burned areas
+Thermal Anomalies/Fire
 </td>
 <td style="text-align:left;">
-MODIS/Terra+Aqua Burned Area Monthly L3 Global 500 m SIN Grid
+VIIRS/NPP Thermal Anomalies/Fire Daily L3 Global 1 km SIN Grid
 </td>
 <td style="text-align:left;">
-500 m
+1000 m
 </td>
 <td style="text-align:left;">
-30 day
+Daily
 </td>
 <td style="text-align:left;">
-2000-11-01 to present
+2012-01-19 to present
 </td>
 </tr>
 </tbody>
@@ -1306,7 +2100,7 @@ MODIS/Terra+Aqua Burned Area Monthly L3 Global 500 m SIN Grid
 </details>
 <details>
 <summary>
-<b> Land surface temperature </b> data collections
+<b> Thermal Bands </b> data collections
 </summary>
 <table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 <thead>
@@ -1337,17 +2131,16 @@ Temporal extent
 <tbody>
 <tr>
 <td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MOD11A1.061" style="     ">MOD11A1.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MODTBGA.061" style="     ">MODTBGA.061</a>
 </td>
 <td style="text-align:left;">
 MODIS
 </td>
 <td style="text-align:left;">
-Land surface temperature
+Thermal Bands
 </td>
 <td style="text-align:left;">
-MODIS/Terra Land Surface Temperature/Emissivity Daily L3 Global 1km SIN
-Grid v061
+MODIS/Terra Thermal Bands Daily L2G-Lite Global 1 km SIN Grid
 </td>
 <td style="text-align:left;">
 1000 m
@@ -1361,242 +2154,25 @@ Daily
 </tr>
 <tr>
 <td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD11A1.061" style="     ">MYD11A1.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MYDTBGA.061" style="     ">MYDTBGA.061</a>
 </td>
 <td style="text-align:left;">
 MODIS
 </td>
 <td style="text-align:left;">
-Land surface temperature
+Thermal Bands
 </td>
 <td style="text-align:left;">
-MODIS/Aqua Land Surface Temperature/Emissivity Daily L3 Global 1km SIN
-Grid v061
+MODIS/Aqua Thermal Bands Daily L2G-Lite Global 1 km SIN Grid
 </td>
 <td style="text-align:left;">
 1000 m
 </td>
 <td style="text-align:left;">
 Daily
-</td>
-<td style="text-align:left;">
-2002-07-05 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD11A2.061" style="     ">MYD11A2.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Land surface temperature
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Land Surface Temperature/Emissivity 8-Day L3 Global 1 km SIN
-Grid v061
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-8 day
 </td>
 <td style="text-align:left;">
 2002-07-04 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MOD11A2.061" style="     ">MOD11A2.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Land surface temperature
-</td>
-<td style="text-align:left;">
-MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 Global 1 km SIN
-Grid v061
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2000-02-18 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MOD11B3.061" style="     ">MOD11B3.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Land surface temperature
-</td>
-<td style="text-align:left;">
-MODIS/Terra Land Surface Temperature/Emissivity Monthly L3 Global 6 km
-SIN Grid
-</td>
-<td style="text-align:left;">
-6000 m
-</td>
-<td style="text-align:left;">
-30 day
-</td>
-<td style="text-align:left;">
-2000-02-01 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD11B3.061" style="     ">MYD11B3.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Land surface temperature
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Land Surface Temperature/Emissivity Monthly L3 Global 6 km
-SIN Grid
-</td>
-<td style="text-align:left;">
-6000 m
-</td>
-<td style="text-align:left;">
-30 day
-</td>
-<td style="text-align:left;">
-2002-07-01 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MOD11B2.061" style="     ">MOD11B2.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Land surface temperature
-</td>
-<td style="text-align:left;">
-MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 Global 6 km SIN
-Grid
-</td>
-<td style="text-align:left;">
-6000 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2000-02-18 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD11B2.061" style="     ">MYD11B2.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Land surface temperature
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Land Surface Temperature/Emissivity 8-Day L3 Global 6 km SIN
-Grid
-</td>
-<td style="text-align:left;">
-6000 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2002-07-04 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP21A1D.001" style="     ">VNP21A1D.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Land surface temperature
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Land Surface Temperature and Emissivity Daily L3 Global 1 km
-SIN Grid Day
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2012-01-19 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP21A1N.001" style="     ">VNP21A1N.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Land surface temperature
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Land Surface Temperature and Emissivity Daily L3 Global 1 km
-SIN Grid Night
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2012-01-19 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP21A2.001" style="     ">VNP21A2.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Land surface temperature
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Land Surface Temperature and Emissivity 8-Day L3 Global 1 km
-SIN Grid
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2012-01-25 to present
 </td>
 </tr>
 </tbody>
@@ -1884,575 +2460,6 @@ VIIRS/NPP Vegetation Indices 16-Day L3 Global 500 m SIN Grid
 </td>
 <td style="text-align:left;">
 2012-01-17 to present
-</td>
-</tr>
-</tbody>
-</table>
-</details>
-<details>
-<summary>
-<b> Evapotranspiration </b> data collections
-</summary>
-<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Collection
-</th>
-<th style="text-align:left;">
-Source
-</th>
-<th style="text-align:left;">
-Type
-</th>
-<th style="text-align:left;">
-Name
-</th>
-<th style="text-align:left;">
-Spatial resolution
-</th>
-<th style="text-align:left;">
-Temporal resolution
-</th>
-<th style="text-align:left;">
-Temporal extent
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MOD16A2.061" style="     ">MOD16A2.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Evapotranspiration
-</td>
-<td style="text-align:left;">
-MODIS/Terra Net Evapotranspiration 8-Day L4 Global 500m SIN Grid v061
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2021-01-01 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD16A2.061" style="     ">MYD16A2.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Evapotranspiration
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Net Evapotranspiration 8-Day L4 Global 500m SIN Grid v061
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2021-01-01 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MOD16A2GF.061" style="     ">MOD16A2GF.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Evapotranspiration
-</td>
-<td style="text-align:left;">
-MODIS/Terra Net Evapotranspiration Gap-Filled 8-Day L4 Global 500 m SIN
-Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2000-01-01 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MOD16A3GF.061" style="     ">MOD16A3GF.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Evapotranspiration
-</td>
-<td style="text-align:left;">
-MODIS/Terra Net Evapotranspiration Gap-Filled Yearly L4 Global 500 m SIN
-Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-365 day
-</td>
-<td style="text-align:left;">
-2000-02-18 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD16A2GF.061" style="     ">MYD16A2GF.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Evapotranspiration
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Net Evapotranspiration Gap-Filled 8-Day L4 Global 500 m SIN
-Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2002-01-01 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD16A3GF.061" style="     ">MYD16A3GF.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Evapotranspiration
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Net Evapotranspiration Gap-Filled Yearly L4 Global 500 m SIN
-Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-365 day
-</td>
-<td style="text-align:left;">
-2002-07-04 to present
-</td>
-</tr>
-</tbody>
-</table>
-</details>
-<details>
-<summary>
-<b> Primary Productivity </b> data collections
-</summary>
-<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Collection
-</th>
-<th style="text-align:left;">
-Source
-</th>
-<th style="text-align:left;">
-Type
-</th>
-<th style="text-align:left;">
-Name
-</th>
-<th style="text-align:left;">
-Spatial resolution
-</th>
-<th style="text-align:left;">
-Temporal resolution
-</th>
-<th style="text-align:left;">
-Temporal extent
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MOD17A2H.061" style="     ">MOD17A2H.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Primary Productivity
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Gross Primary Productivity 8-Day L4 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2021-01-01 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD17A2H.061" style="     ">MYD17A2H.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Primary Productivity
-</td>
-<td style="text-align:left;">
-MODIS/Terra Gross Primary Productivity 8-Day L4 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2021-01-01 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MOD17A2HGF.061" style="     ">MOD17A2HGF.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Primary Productivity
-</td>
-<td style="text-align:left;">
-MODIS/Terra Gross Primary Productivity Gap-Filled 8-Day L4 Global 500 m
-SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2000-01-01 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MOD17A3HGF.061" style="     ">MOD17A3HGF.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Primary Productivity
-</td>
-<td style="text-align:left;">
-MODIS/Terra Net Primary Production Gap-Filled Yearly L4 Global 500 m SIN
-Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-365 day
-</td>
-<td style="text-align:left;">
-2000-02-18 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD17A2HGF.061" style="     ">MYD17A2HGF.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Primary Productivity
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Gross Primary Productivity Gap-Filled 8-Day L4 Global 500 m
-SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2002-01-01 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD17A3HGF.061" style="     ">MYD17A3HGF.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Primary Productivity
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Net Primary Production Gap-Filled Yearly L4 Global 500 m SIN
-Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-365 day
-</td>
-<td style="text-align:left;">
-2002-07-04 to present
-</td>
-</tr>
-</tbody>
-</table>
-</details>
-<details>
-<summary>
-<b> Ocean Reflectance </b> data collections
-</summary>
-<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Collection
-</th>
-<th style="text-align:left;">
-Source
-</th>
-<th style="text-align:left;">
-Type
-</th>
-<th style="text-align:left;">
-Name
-</th>
-<th style="text-align:left;">
-Spatial resolution
-</th>
-<th style="text-align:left;">
-Temporal resolution
-</th>
-<th style="text-align:left;">
-Temporal extent
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MODOCGA.061" style="     ">MODOCGA.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Ocean Reflectance
-</td>
-<td style="text-align:left;">
-MODIS/Terra Ocean Reflectance Daily L2G-Lite Global 1 km SIN Grid
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2000-02-24 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYDOCGA.061" style="     ">MYDOCGA.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Ocean Reflectance
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Ocean Reflectance Daily L2G-Lite Global 1 km SIN Grid
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2002-07-04 to present
-</td>
-</tr>
-</tbody>
-</table>
-</details>
-<details>
-<summary>
-<b> Thermal Bands </b> data collections
-</summary>
-<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Collection
-</th>
-<th style="text-align:left;">
-Source
-</th>
-<th style="text-align:left;">
-Type
-</th>
-<th style="text-align:left;">
-Name
-</th>
-<th style="text-align:left;">
-Spatial resolution
-</th>
-<th style="text-align:left;">
-Temporal resolution
-</th>
-<th style="text-align:left;">
-Temporal extent
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MODTBGA.061" style="     ">MODTBGA.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Thermal Bands
-</td>
-<td style="text-align:left;">
-MODIS/Terra Thermal Bands Daily L2G-Lite Global 1 km SIN Grid
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2000-02-24 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYDTBGA.061" style="     ">MYDTBGA.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Thermal Bands
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Thermal Bands Daily L2G-Lite Global 1 km SIN Grid
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2002-07-04 to present
-</td>
-</tr>
-</tbody>
-</table>
-</details>
-<details>
-<summary>
-<b> Thermal Anomalies/Fire </b> data collections
-</summary>
-<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Collection
-</th>
-<th style="text-align:left;">
-Source
-</th>
-<th style="text-align:left;">
-Type
-</th>
-<th style="text-align:left;">
-Name
-</th>
-<th style="text-align:left;">
-Spatial resolution
-</th>
-<th style="text-align:left;">
-Temporal resolution
-</th>
-<th style="text-align:left;">
-Temporal extent
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP14A1.001" style="     ">VNP14A1.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Thermal Anomalies/Fire
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Thermal Anomalies/Fire Daily L3 Global 1 km SIN Grid
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2012-01-19 to present
 </td>
 </tr>
 </tbody>

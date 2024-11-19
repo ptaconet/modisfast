@@ -5,14 +5,16 @@ always_allow_html: yes
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 ```{r include=FALSE}
-knitr::opts_chunk$set(
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
 library(magrittr)
 library(modisfast)
 library(dplyr)
 library(kableExtra)
+library(knitr)
+
+knitr::opts_chunk$set(
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
 ```
 # modisfast 
 <!-- <img src="man/figures/logo.png" align="right" /> -->
@@ -58,6 +60,10 @@ This package enables to build OPeNDAP (https) URLs given input parameters such a
   • <a href="#contributing">Contributing</a><br>
   • <a href="#acknowledgments">Acknowledgments</a><br>
 </p>
+
+## News
+
+`modisfast 1.0.0` now [available on CRAN](https://cran.r-project.org/package=modisfast), and [associated software paper](https://doi.org/10.21105/joss.07343) published in the Journal of Open Source Software !   
 
 ## Overview
 
@@ -198,13 +204,13 @@ fun_display_coll <- function(filts){
   
 }
 
-cols_natures <- unique(mf_list_collections()$nature)
+cols_natures <- sort(unique(mf_list_collections()$nature))
 
 ```
 
 
 ```{r, eval = TRUE, echo=F, message=F, results='asis'}
-for(i in 1:length(cols_natures)){
+for(i in seq_along(cols_natures)){
   if(i==1){
      cat('<details><summary><b>',cols_natures[i],'</b> data collections <b>(click to expand)</b></summary>')
   } else {
@@ -213,7 +219,6 @@ for(i in 1:length(cols_natures)){
   cat(knitr::asis_output(fun_display_coll(cols_natures[i])))
   cat('</details>')
 }
-
 ```
 
 
