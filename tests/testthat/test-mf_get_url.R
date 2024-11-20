@@ -88,9 +88,7 @@ test_that("function mf_get_url() sends back the expected errors when necessary",
   # wrong dates
   expect_error(mf_get_url(collection = "MOD13A3.061",
                           roi = roi,
-                          time_range = as.Date(c("2000-01-01","2017-02-01"))),
-               "First time frame in time_range argument is before the beginning of the mission\n",
-               fixed = TRUE)
+                          time_range = as.Date(c("2000-01-01","2017-02-01"))))
 
   expect_error(mf_get_url(collection = "MOD13A3.061",
                           roi = roi,

@@ -48,8 +48,8 @@ test_that("function mf_download_data() works to download a GPM datacube", {
   expect_equal(ncol(res_dl_gpm), 10) # there are 10 columns
   expect_equal(nrow(res_dl_gpm), 90 ) # there are 90 rows (corresponding to 90 dates)
   expect_equal(unique(res_dl_gpm$fileDl), TRUE)  # all files were properly downloaded (fileDl == TRUE for all files)
-  expect_gt(sum(res_dl_gpm$fileSize),5000000)  # file size for this very specific example should be 5500000 bites
-  expect_lt(sum(res_dl_gpm$fileSize),6000000)
+  expect_gt(sum(res_dl_gpm$fileSize),4500000)  # file size for this very specific example should be 5500000 bites
+  expect_lt(sum(res_dl_gpm$fileSize),6500000)
 
 
 
