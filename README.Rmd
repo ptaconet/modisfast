@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-# modisfast 
+# modisfast <a href="https://github.com/ptaconet/modisfast"><img src="man/figures/logo.png" align="right" height="138" /></a>
 <!-- <img src="man/figures/logo.png" align="right" /> -->
 
 <!-- badges: start -->
