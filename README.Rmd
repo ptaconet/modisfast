@@ -63,7 +63,7 @@ This package enables to build OPeNDAP (https) URLs given input parameters such a
 
 ## News
 
-`modisfast 1.0.0` now [available on CRAN](https://cran.r-project.org/package=modisfast), and [associated software paper](https://doi.org/10.21105/joss.07343) published in the Journal of Open Source Software !   
+2025-05-09 : Several VIIRS collections were excluded from the list of available datasets due to their deprecation on the USGS LP DAAC [OPeNDAP server](https://opendap.cr.usgs.gov/opendap/hyrax/) server.
 
 ## Overview
 

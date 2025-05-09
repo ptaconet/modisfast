@@ -51,10 +51,9 @@ packages</a><br> • <a href="#citation">Citation</a><br> •
 
 ## News
 
-`modisfast 1.0.0` now [available on
-CRAN](https://cran.r-project.org/package=modisfast), and [associated
-software paper](https://doi.org/10.21105/joss.07343) published in the
-Journal of Open Source Software !
+2025-05-09 : Several VIIRS collections were excluded from the list of
+available datasets due to their deprecation on the USGS LP DAAC [OPeNDAP
+server](https://opendap.cr.usgs.gov/opendap/hyrax/) server.
 
 ## Overview
 
@@ -210,7 +209,7 @@ We thank in advance people that use `modisfast` for citing it in their work / pu
 
 ## Collections available in `modisfast`
 
-Currently `modisfast` supports download of 77 data collections,
+Currently `modisfast` supports download of 67 data collections,
 extracted from the following meta-collections :
 
 - [MODIS land
@@ -821,30 +820,6 @@ Daily
 </tr>
 <tr>
 <td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD11A2.061" style="     ">MYD11A2.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Land surface temperature
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Land Surface Temperature/Emissivity 8-Day L3 Global 1 km SIN
-Grid v061
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2002-07-04 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 <a href="https://dx.doi.org/10.5067/MODIS/MOD11A2.061" style="     ">MOD11A2.061</a>
 </td>
 <td style="text-align:left;">
@@ -869,7 +844,7 @@ Grid v061
 </tr>
 <tr>
 <td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MOD11B3.061" style="     ">MOD11B3.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MYD11A2.061" style="     ">MYD11A2.061</a>
 </td>
 <td style="text-align:left;">
 MODIS
@@ -878,41 +853,17 @@ MODIS
 Land surface temperature
 </td>
 <td style="text-align:left;">
-MODIS/Terra Land Surface Temperature/Emissivity Monthly L3 Global 6 km
-SIN Grid
+MODIS/Aqua Land Surface Temperature/Emissivity 8-Day L3 Global 1 km SIN
+Grid v061
 </td>
 <td style="text-align:left;">
-6000 m
+1000 m
 </td>
 <td style="text-align:left;">
-30 day
+8 day
 </td>
 <td style="text-align:left;">
-2000-02-01 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD11B3.061" style="     ">MYD11B3.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Land surface temperature
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Land Surface Temperature/Emissivity Monthly L3 Global 6 km
-SIN Grid
-</td>
-<td style="text-align:left;">
-6000 m
-</td>
-<td style="text-align:left;">
-30 day
-</td>
-<td style="text-align:left;">
-2002-07-01 to present
+2002-07-04 to present
 </td>
 </tr>
 <tr>
@@ -965,74 +916,50 @@ Grid
 </tr>
 <tr>
 <td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP21A1D.001" style="     ">VNP21A1D.001</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MOD11B3.061" style="     ">MOD11B3.061</a>
 </td>
 <td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Land surface temperature
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Land Surface Temperature and Emissivity Daily L3 Global 1 km
-SIN Grid Day
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2012-01-19 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP21A1N.001" style="     ">VNP21A1N.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
+MODIS
 </td>
 <td style="text-align:left;">
 Land surface temperature
 </td>
 <td style="text-align:left;">
-VIIRS/NPP Land Surface Temperature and Emissivity Daily L3 Global 1 km
-SIN Grid Night
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2012-01-19 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP21A2.001" style="     ">VNP21A2.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Land surface temperature
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Land Surface Temperature and Emissivity 8-Day L3 Global 1 km
+MODIS/Terra Land Surface Temperature/Emissivity Monthly L3 Global 6 km
 SIN Grid
 </td>
 <td style="text-align:left;">
-1000 m
+6000 m
 </td>
 <td style="text-align:left;">
-8 day
+30 day
 </td>
 <td style="text-align:left;">
-2012-01-25 to present
+2000-02-01 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD11B3.061" style="     ">MYD11B3.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Land surface temperature
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Land Surface Temperature/Emissivity Monthly L3 Global 6 km
+SIN Grid
+</td>
+<td style="text-align:left;">
+6000 m
+</td>
+<td style="text-align:left;">
+30 day
+</td>
+<td style="text-align:left;">
+2002-07-01 to present
 </td>
 </tr>
 </tbody>
@@ -1071,7 +998,7 @@ Temporal extent
 <tbody>
 <tr>
 <td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD15A2H.061" style="     ">MYD15A2H.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MOD15A2H.061" style="     ">MOD15A2H.061</a>
 </td>
 <td style="text-align:left;">
 MODIS
@@ -1080,7 +1007,7 @@ MODIS
 Leaf area index
 </td>
 <td style="text-align:left;">
-MODIS/Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+MODIS/Terra Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
 </td>
 <td style="text-align:left;">
 500 m
@@ -1089,7 +1016,7 @@ MODIS/Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
 8 day
 </td>
 <td style="text-align:left;">
-2002-07-04 to present
+2000-02-18 to present
 </td>
 </tr>
 <tr>
@@ -1140,7 +1067,7 @@ MODIS/Terra+Aqua Leaf Area Index/FPAR 4-Day L4 Global 500 m SIN Grid
 </tr>
 <tr>
 <td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MOD15A2H.061" style="     ">MOD15A2H.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MYD15A2H.061" style="     ">MYD15A2H.061</a>
 </td>
 <td style="text-align:left;">
 MODIS
@@ -1149,7 +1076,7 @@ MODIS
 Leaf area index
 </td>
 <td style="text-align:left;">
-MODIS/Terra Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+MODIS/Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
 </td>
 <td style="text-align:left;">
 500 m
@@ -1158,30 +1085,7 @@ MODIS/Terra Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
 8 day
 </td>
 <td style="text-align:left;">
-2000-02-18 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP15A2H.001" style="     ">VNP15A2H.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Leaf area index
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2012-01-17 to present
+2002-07-04 to present
 </td>
 </tr>
 </tbody>
@@ -1878,6 +1782,29 @@ MODIS/Aqua Surface Reflectance 8-Day L3 Global 250 m SIN Grid
 </tr>
 <tr>
 <td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD09A1.061" style="     ">MYD09A1.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Surface reflectance
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Surface Reflectance 8-Day L3 Global 500 m SIN Grid
+</td>
+<td style="text-align:left;">
+500 m
+</td>
+<td style="text-align:left;">
+8 day
+</td>
+<td style="text-align:left;">
+2002-07-04 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 <a href="https://dx.doi.org/10.5067/MODIS/MCD43A4.061" style="     ">MCD43A4.061</a>
 </td>
 <td style="text-align:left;">
@@ -1925,52 +1852,6 @@ MODIS/Terra Surface Reflectance 8-Day L3 Global 500 m SIN Grid
 </tr>
 <tr>
 <td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD09A1.061" style="     ">MYD09A1.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Surface reflectance
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Surface Reflectance 8-Day L3 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2002-07-04 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP09A1.001" style="     ">VNP09A1.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Surface reflectance
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Surface Reflectance 8-Day L3 Global 1 km SIN Grid
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2012-01-17 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 <a href="https://doi.org/10.5067/VIIRS/VNP43MA4.001" style="     ">VNP43MA4.001</a>
 </td>
 <td style="text-align:left;">
@@ -2013,86 +1894,6 @@ Daily
 </td>
 <td style="text-align:left;">
 2012-01-17 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP09H1.001" style="     ">VNP09H1.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Surface reflectance
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Surface Reflectance 8-Day L3 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-8 day
-</td>
-<td style="text-align:left;">
-2012-01-17 to present
-</td>
-</tr>
-</tbody>
-</table>
-</details>
-<details>
-<summary>
-<b> Thermal Anomalies/Fire </b> data collections
-</summary>
-<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Collection
-</th>
-<th style="text-align:left;">
-Source
-</th>
-<th style="text-align:left;">
-Type
-</th>
-<th style="text-align:left;">
-Name
-</th>
-<th style="text-align:left;">
-Spatial resolution
-</th>
-<th style="text-align:left;">
-Temporal resolution
-</th>
-<th style="text-align:left;">
-Temporal extent
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP14A1.001" style="     ">VNP14A1.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Thermal Anomalies/Fire
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Thermal Anomalies/Fire Daily L3 Global 1 km SIN Grid
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-Daily
-</td>
-<td style="text-align:left;">
-2012-01-19 to present
 </td>
 </tr>
 </tbody>
@@ -2211,29 +2012,6 @@ Temporal extent
 <tbody>
 <tr>
 <td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MOD13A2.061" style="     ">MOD13A2.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Vegetation indices
-</td>
-<td style="text-align:left;">
-MODIS/Terra Vegetation Indices 16-Day L3 Global 1 km SIN Grid
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-16 day
-</td>
-<td style="text-align:left;">
-2000-02-18 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 <a href="https://dx.doi.org/10.5067/MODIS/MOD13A3.061" style="     ">MOD13A3.061</a>
 </td>
 <td style="text-align:left;">
@@ -2257,29 +2035,6 @@ MODIS/Terra Vegetation Indices Monthly L3 Global 1 km SIN Grid
 </tr>
 <tr>
 <td style="text-align:left;">
-<a href="https://dx.doi.org/10.5067/MODIS/MYD13A2.061" style="     ">MYD13A2.061</a>
-</td>
-<td style="text-align:left;">
-MODIS
-</td>
-<td style="text-align:left;">
-Vegetation indices
-</td>
-<td style="text-align:left;">
-MODIS/Aqua Vegetation Indices 16-Day L3 Global 1 km SIN Grid
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-16 day
-</td>
-<td style="text-align:left;">
-2002-07-04 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 <a href="https://dx.doi.org/10.5067/MODIS/MYD13A3.061" style="     ">MYD13A3.061</a>
 </td>
 <td style="text-align:left;">
@@ -2299,6 +2054,52 @@ MODIS/Aqua Vegetation Indices Monthly L3 Global 1 km SIN Grid
 </td>
 <td style="text-align:left;">
 2002-07-01 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MOD13A2.061" style="     ">MOD13A2.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Vegetation indices
+</td>
+<td style="text-align:left;">
+MODIS/Terra Vegetation Indices 16-Day L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+1000 m
+</td>
+<td style="text-align:left;">
+16 day
+</td>
+<td style="text-align:left;">
+2000-02-18 to present
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://dx.doi.org/10.5067/MODIS/MYD13A2.061" style="     ">MYD13A2.061</a>
+</td>
+<td style="text-align:left;">
+MODIS
+</td>
+<td style="text-align:left;">
+Vegetation indices
+</td>
+<td style="text-align:left;">
+MODIS/Aqua Vegetation Indices 16-Day L3 Global 1 km SIN Grid
+</td>
+<td style="text-align:left;">
+1000 m
+</td>
+<td style="text-align:left;">
+16 day
+</td>
+<td style="text-align:left;">
+2002-07-04 to present
 </td>
 </tr>
 <tr>
@@ -2391,75 +2192,6 @@ MODIS/Aqua Vegetation Indices 16-Day L3 Global 500 m SIN Grid
 </td>
 <td style="text-align:left;">
 2002-07-04 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP13A2.001" style="     ">VNP13A2.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Vegetation indices
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Vegetation Indices 16-Day L3 Global 1 km SIN Grid
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-16 day
-</td>
-<td style="text-align:left;">
-2012-01-17 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP13A3.001" style="     ">VNP13A3.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Vegetation indices
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Vegetation Indices Monthly L3 Global 1 km SIN Grid
-</td>
-<td style="text-align:left;">
-1000 m
-</td>
-<td style="text-align:left;">
-30 day
-</td>
-<td style="text-align:left;">
-2012-01-01 to present
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-<a href="https://doi.org/10.5067/VIIRS/VNP13A1.001" style="     ">VNP13A1.001</a>
-</td>
-<td style="text-align:left;">
-VIIRS
-</td>
-<td style="text-align:left;">
-Vegetation indices
-</td>
-<td style="text-align:left;">
-VIIRS/NPP Vegetation Indices 16-Day L3 Global 500 m SIN Grid
-</td>
-<td style="text-align:left;">
-500 m
-</td>
-<td style="text-align:left;">
-16 day
-</td>
-<td style="text-align:left;">
-2012-01-17 to present
 </td>
 </tr>
 </tbody>
