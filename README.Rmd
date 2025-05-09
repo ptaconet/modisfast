@@ -63,7 +63,7 @@ This package enables to build OPeNDAP (https) URLs given input parameters such a
 
 ## News
 
-2025-05-09 : Several VIIRS collections were excluded from the list of available datasets due to their deprecation on the USGS LP DAAC [OPeNDAP server](https://opendap.cr.usgs.gov/opendap/hyrax/) server.
+2025-05-09 : Several VIIRS collections were excluded from the list of available datasets due to their deprecation on the USGS LP DAAC [OPeNDAP server](https://opendap.cr.usgs.gov/opendap/hyrax/).
 
 ## Overview
 

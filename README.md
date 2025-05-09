@@ -53,7 +53,7 @@ packages</a><br> • <a href="#citation">Citation</a><br> •
 
 2025-05-09 : Several VIIRS collections were excluded from the list of
 available datasets due to their deprecation on the USGS LP DAAC [OPeNDAP
-server](https://opendap.cr.usgs.gov/opendap/hyrax/) server.
+server](https://opendap.cr.usgs.gov/opendap/hyrax/).
 
 ## Overview
 
