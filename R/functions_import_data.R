@@ -63,9 +63,9 @@
 
           rasts <- tab$Var1 %>%
                  as.character() %>%
-                 map(~ list.files(dir_path, full.names = TRUE, pattern = .x)) %>%
-                 map(rast) %>%
-                 reduce(merge)
+                 purrr::map(~ list.files(dir_path, full.names = TRUE, pattern = .x)) %>%
+                 purrr::map(rast) %>%
+                 purrr::reduce(merge)
 
         } else {
         rasts <- files %>%
