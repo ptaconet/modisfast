@@ -56,9 +56,22 @@
       if (vrt) {
         rasts <- terra::vrt(files)
       } else {
+
+        tab <- as.data.frame(table(substr(files, nchar(files) - 9, nchar(files) - 4)))
+
+        if(nrow(tab)>=2 & tab$Freq[1]>1){
+
+          rasts <- tab$Var1 %>%
+                 as.character() %>%
+                 map(~ list.files(dir_path, full.names = TRUE, pattern = .x)) %>%
+                 map(rast) %>%
+                 reduce(merge)
+
+        } else {
         rasts <- files %>%
           terra::sprc() %>%
           terra::merge()
+        }
       }
     } else { # if there is only one file or if the files cover multiple tiles, we do not need to merge them
 
