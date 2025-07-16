@@ -12,4 +12,5 @@
 * add a start up message when the package is loaded with invitation to cite 
 package in publication
 * fixing bug in time extent for some collections (#18)
+* update function import data to deal with both multiple time frames and modis tiles
 
