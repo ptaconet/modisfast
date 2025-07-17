@@ -1,3 +1,5 @@
+# modisfast (development version)
+
 # modisfast 1.0.2
 
 # modisfast 1.0.1

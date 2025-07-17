@@ -1,6 +1,6 @@
 Package: modisfast
 Title: Fast and Efficient Access to MODIS Earth Observation Data
-Version: 1.0.2
+Version: 1.0.2.9000
 Authors@R: 
     c(person(given = "Paul", 
     family = "Taconet",
