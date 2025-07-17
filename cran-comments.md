@@ -1,8 +1,13 @@
-## Major release
-This is a major release, following the review of the package in the frame of the submission of a software paper in the Journal of Open Source Software (https://github.com/openjournals/joss-reviews/issues/7343)
+## Minor release
+
+This is a minor release with few improvements and fixes
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 note
+0 errors | 0 warnings | 1 note
 
-
+* Found the following (possibly) invalid DOIs:
+    DOI: https://doi.org/10.21105/joss.07343
+      From: inst/CITATION
+      Status: 404
+      Message: Not Found
