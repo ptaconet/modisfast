@@ -38,9 +38,9 @@ packages</a><br> • <a href="#citation">Citation</a><br> •
 
 ## News
 
-2025-05-09 : Several VIIRS collections were excluded from the list of
-available datasets due to their deprecation on the USGS LP DAAC [OPeNDAP
-server](https://opendap.cr.usgs.gov/opendap/hyrax/).
+2025-07-17 : `modisfast` v1.0.2 available on CRAN ! See
+[here](https://github.com/ptaconet/modisfast/blob/master/NEWS.md) for
+fixes.
 
 ## Overview
 
@@ -225,7 +225,7 @@ tables below or through the function `mf_list_collections()`.
 <b> Albedo </b> data collections <b>(click to expand)</b>
 </summary>
 
-<table class="table table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 
 <thead>
 
@@ -598,7 +598,7 @@ Daily
 <b> Burned areas </b> data collections
 </summary>
 
-<table class="table table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 
 <thead>
 
@@ -697,7 +697,7 @@ MODIS/Terra+Aqua Burned Area Monthly L3 Global 500 m SIN Grid
 <b> Evapotranspiration </b> data collections
 </summary>
 
-<table class="table table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 
 <thead>
 
@@ -995,7 +995,7 @@ Grid
 <b> Land cover </b> data collections
 </summary>
 
-<table class="table table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 
 <thead>
 
@@ -1094,7 +1094,7 @@ MODIS/Terra+Aqua Land Cover Type Yearly L3 Global 500 m SIN Grid
 <b> Land surface temperature </b> data collections
 </summary>
 
-<table class="table table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 
 <thead>
 
@@ -1474,7 +1474,7 @@ SIN Grid
 <b> Leaf area index </b> data collections
 </summary>
 
-<table class="table table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 
 <thead>
 
@@ -1690,7 +1690,7 @@ MODIS/Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
 <b> Ocean Reflectance </b> data collections
 </summary>
 
-<table class="table table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 
 <thead>
 
@@ -1828,7 +1828,7 @@ Daily
 <b> Primary Productivity </b> data collections
 </summary>
 
-<table class="table table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 
 <thead>
 
@@ -2126,7 +2126,7 @@ Grid
 <b> Rainfall </b> data collections
 </summary>
 
-<table class="table table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 
 <thead>
 
@@ -2576,7 +2576,7 @@ GPM IMERG Final Precipitation L3 1 month 0.1 degree x 0.1 degree V07
 <b> Surface reflectance </b> data collections
 </summary>
 
-<table class="table table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 
 <thead>
 
@@ -3066,7 +3066,7 @@ Daily
 <b> Thermal Bands </b> data collections
 </summary>
 
-<table class="table table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 
 <thead>
 
@@ -3204,7 +3204,7 @@ Daily
 <b> Vegetation indices </b> data collections
 </summary>
 
-<table class="table table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
 
 <thead>
 

@@ -49,7 +49,7 @@ knitr::opts_chunk$set(
 
 ## News
 
-2025-05-09 : Several VIIRS collections were excluded from the list of available datasets due to their deprecation on the USGS LP DAAC [OPeNDAP server](https://opendap.cr.usgs.gov/opendap/hyrax/).
+2025-07-17 : `modisfast` v1.0.2 available on CRAN ! See [here](https://github.com/ptaconet/modisfast/blob/master/NEWS.md) for fixes. 
 
 ## Overview
 

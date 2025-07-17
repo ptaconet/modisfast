@@ -6,7 +6,7 @@ bibentry(
   bibtype  = "article",
   title = "modisfast: An R package for fast and efficient access to MODIS, VIIRS and GPM Earth Observation data",
   AUTHOR = c(person("Paul", "Taconet"), person("Nicolas", "Moiroux")),
-  doi = "https://doi.org/10.21105/joss.07343",
+  doi = "10.21105/joss.07343",
   journal = "Journal of Open Source Software",
   publisher = "The Open Journal",
   volume = "9",
