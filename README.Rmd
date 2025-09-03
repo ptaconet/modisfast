@@ -49,6 +49,8 @@ knitr::opts_chunk$set(
 
 ## News
 
+2025-09-03 : collections [MOD44B.061](https://doi.org/10.5067/MODIS/MOD44B.061) and [MOD44W.061](https://doi.org/10.5067/MODIS/MOD44W.061) were added in the list of available collections (only available in the development version of the package) ! 
+
 2025-07-17 : `modisfast` v1.0.2 available on CRAN ! See [here](https://github.com/ptaconet/modisfast/blob/master/NEWS.md) for fixes. 
 
 ## Overview

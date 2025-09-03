@@ -38,6 +38,12 @@ packages</a><br> • <a href="#citation">Citation</a><br> •
 
 ## News
 
+2025-09-03 : collections
+[MOD44B.061](https://doi.org/10.5067/MODIS/MOD44B.061) and
+[MOD44W.061](https://doi.org/10.5067/MODIS/MOD44W.061) were added in the
+list of available collections (only available in the development version
+of the package) !
+
 2025-07-17 : `modisfast` v1.0.2 available on CRAN ! See
 [here](https://github.com/ptaconet/modisfast/blob/master/NEWS.md) for
 fixes.
@@ -197,7 +203,7 @@ We thank in advance people that use `modisfast` for citing it in their work / pu
 
 ## Collections available in `modisfast`
 
-Currently `modisfast` supports download of 67 data collections,
+Currently `modisfast` supports download of 69 data collections,
 extracted from the following meta-collections :
 
 - [MODIS land
@@ -1457,6 +1463,106 @@ SIN Grid
 <td style="text-align:left;">
 
 2002-07-01 to present
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</details>
+
+<details>
+
+<summary>
+
+<b> Land Water mask </b> data collections
+</summary>
+
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+Collection
+</th>
+
+<th style="text-align:left;">
+
+Source
+</th>
+
+<th style="text-align:left;">
+
+Type
+</th>
+
+<th style="text-align:left;">
+
+Name
+</th>
+
+<th style="text-align:left;">
+
+Spatial resolution
+</th>
+
+<th style="text-align:left;">
+
+Temporal resolution
+</th>
+
+<th style="text-align:left;">
+
+Temporal extent
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://dx.doi.org/10.5067/MODIS/MOD44W.061" style="     ">MOD44W.061</a>
+</td>
+
+<td style="text-align:left;">
+
+MODIS
+</td>
+
+<td style="text-align:left;">
+
+Land Water mask
+</td>
+
+<td style="text-align:left;">
+
+MODIS/Terra Land Water Mask Derived from MODIS and SRTM L3 Global 250m
+SIN Grid V061
+</td>
+
+<td style="text-align:left;">
+
+250 m
+</td>
+
+<td style="text-align:left;">
+
+365 day
+</td>
+
+<td style="text-align:left;">
+
+2000-01-01 to present
 </td>
 
 </tr>
@@ -3481,6 +3587,46 @@ MODIS/Aqua Vegetation Indices 16-Day L3 Global 250m SIN Grid v061
 <td style="text-align:left;">
 
 2002-07-04 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://dx.doi.org/10.5067/MODIS/MOD44B.061" style="     ">MOD44B.061</a>
+</td>
+
+<td style="text-align:left;">
+
+MODIS
+</td>
+
+<td style="text-align:left;">
+
+Vegetation indices
+</td>
+
+<td style="text-align:left;">
+
+MODIS/Terra Vegetation Continuous Fields Yearly L3 Global 250m SIN Grid
+V061
+</td>
+
+<td style="text-align:left;">
+
+250 m
+</td>
+
+<td style="text-align:left;">
+
+365 day
+</td>
+
+<td style="text-align:left;">
+
+2000-03-05 to present
 </td>
 
 </tr>
