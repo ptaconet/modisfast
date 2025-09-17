@@ -38,15 +38,11 @@ packages</a><br> • <a href="#citation">Citation</a><br> •
 
 ## News
 
-2025-09-03 : collections
-[MOD44B.061](https://doi.org/10.5067/MODIS/MOD44B.061) and
-[MOD44W.061](https://doi.org/10.5067/MODIS/MOD44W.061) were added in the
-list of available collections (only available in the development version
-of the package) !
-
-2025-07-17 : `modisfast` v1.0.2 available on CRAN ! See
-[here](https://github.com/ptaconet/modisfast/blob/master/NEWS.md) for
-fixes.
+**2025-09-17 : IMPORTANT NOTIFICATION : Due to major recent migrations
+of NASA’s servers (details
+[here](https://www.earthdata.nasa.gov/data/alerts-outages/lp-daac-discontinue-data-pool-distribution-modis-datasets)),
+`modisfast` will be temporarily unavailable in the coming months. Work
+is in progress to connect `modisfast` to the new NASA OPeNDAP servers.**
 
 ## Overview
 
