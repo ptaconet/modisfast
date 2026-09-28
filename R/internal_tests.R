@@ -4,14 +4,17 @@
 #'
 
 .testIfCollExists <- function(collection) {
-  if (!inherits(collection, "character") || length(collection) != 1) {
-    stop("Argument collection must be a character string of length 1")
+  if (!is.character(collection) || length(collection) != 1L ||
+      is.na(collection) || !nzchar(collection)) {
+    stop("collection must be one non-empty collection name. Run ",
+         "mf_list_collections_cloud() for MODIS/VIIRS or ",
+         "mf_list_collections() for GPM.")
   }
 
-  collection <- opendapMetadata_internal$collection[which(opendapMetadata_internal$collection == collection)]
-
-  if (length(collection) == 0) {
-    stop("The collection that you specified does not exist. Check mf_list_collections() to see which collections are implemented\n")
+  if (nrow(.mf_collection_metadata(collection)) == 0L) {
+    stop("Collection '", collection, "' is not available. Run ",
+         "mf_list_collections_cloud() for MODIS/VIIRS or ",
+         "mf_list_collections() for GPM.")
   }
 }
 
@@ -28,26 +31,39 @@
   }
 }
 
-# .testIfVarExists2<-function(collection,specified_variables,credentials=NULL){
-#  variables <- NULL
-#  .testIfCollExists(collection)
-#  .testLogin(credentials)
-#  variables <- mf_list_variables(collection,credentials)
-#  variables <- variables$name
-#  .testIfVarExists2(variables,specified_variables)
-# }
-
-#' @name .testLogin
-#' @title Test login, else log
-#' @noRd
-
-.testLogin <- function(credentials = NULL) {
-  mf_login <- NULL
-
-  if (!is.null(credentials) || is.null(getOption("earthdata_mf_login"))) {
-    mf_login <- mf_login(credentials)
-    return(mf_login)
+.mf_earthdata_auth <- function() {
+  token <- Sys.getenv("EARTHDATA_TOKEN", unset = "")
+  if (!nzchar(token)) {
+    stop("Set EARTHDATA_TOKEN to an Earthdata bearer token.")
   }
+  httr::add_headers(Authorization = paste("Bearer", token))
+}
+
+.mf_require_token <- function(function_name) {
+  if (!nzchar(trimws(Sys.getenv("EARTHDATA_TOKEN", unset = "")))) {
+    stop("Set EARTHDATA_TOKEN to an Earthdata bearer token before using ",
+         function_name, "().")
+  }
+  invisible(TRUE)
+}
+
+.mf_unknown_collection <- function(collection) {
+  label <- if (length(collection) == 1L && !is.na(collection)) {
+    as.character(collection)
+  } else {
+    "<invalid name>"
+  }
+  stop("Collection '", label, "' is not available in modisfast. ",
+       "Run mf_list_collections_cloud() for supported MODIS/VIIRS collections ",
+       "or mf_list_collections() for GPM collections.")
+}
+
+.mf_check_verbose <- function(verbose) {
+  if (!is.character(verbose) || length(verbose) != 1L ||
+      is.na(verbose) || !verbose %in% c("quiet", "inform", "debug")) {
+    stop("verbose must be one of 'quiet', 'inform', or 'debug'.")
+  }
+  invisible(verbose)
 }
 
 #' @name .testRoi
@@ -55,15 +71,22 @@
 #' @noRd
 
 .testRoi <- function(roi) {
-  # if(!inherits(roi,"sf") || as.character(unique(sf::st_geometry_type(roi)))!="POLYGON" || !("id" %in% colnames(roi)) || !("geom" %in% colnames(roi)) || length(which(is.na(roi$id))) || length(which(is.na(roi$geom)))){stop("Argument roi must be an object of class sf or sfc with POLYGON-type feature geometry and at least two columns : 'id' and 'geom' that must not be NULL or NA")}
-  if (!inherits(roi, "sf")) {
-    stop("Argument roi must be an object of class sf or sfc")
+  if (!inherits(roi, "sf") || !nrow(roi)) {
+    stop("roi must be a non-empty sf object containing polygon features ",
+         "and an id column.")
   }
-  if (as.character(unique(sf::st_geometry_type(roi))) != "POLYGON") {
-    stop("Argument roi must have a POLYGON-type feature geometry")
+  types <- as.character(sf::st_geometry_type(roi))
+  empty <- sf::st_is_empty(roi)
+  if (anyNA(types) || anyNA(empty) || !all(types == "POLYGON") ||
+      any(empty)) {
+    stop("roi must contain non-empty POLYGON geometries.")
   }
-  if (!("id" %in% colnames(roi)) || length(which(is.na(roi$id)))) {
-    stop("Argument roi must have at least two columns : 'id' (character string) and a geometry column that must not be NULL or NA")
+  if (!("id" %in% names(roi)) || anyNA(roi$id) ||
+      any(!nzchar(as.character(roi$id)))) {
+    stop("roi must contain an id column with a value for each polygon.")
+  }
+  if (is.na(sf::st_crs(roi))) {
+    stop("roi must have a coordinate reference system (CRS).")
   }
 }
 
@@ -72,12 +95,16 @@
 #' @noRd
 
 .testTimeRange <- function(time_range) {
-  if (!inherits(time_range, "Date") && !inherits(time_range, "POSIXlt") || length(time_range) > 2 || is.na(time_range[1]) || is.na(time_range[2])) {
-    stop("Argument time_range is not of class Date or POSIXlt or is not of length 1 or 2 \n")
+  if (!(inherits(time_range, "Date") || inherits(time_range, "POSIXt")) ||
+      !length(time_range) %in% 1:2 || anyNA(time_range)) {
+    stop("time_range must be one Date or two ordered Dates (or POSIXct/POSIXlt ",
+         "date-times for GPM); for example, as.Date(c('2026-01-01', ",
+         "'2026-01-30')).")
   }
-  if (length(time_range) == 2 && time_range[1] > time_range[2]) {
-    stop("Time end is superior to time start in time_range argument \n")
+  if (length(time_range) == 2L && time_range[1] > time_range[2]) {
+    stop("time_range must have its start date before its end date.")
   }
+  invisible(TRUE)
 }
 
 #' @name .testTimeRangeAvDates
@@ -85,25 +112,16 @@
 #' @noRd
 
 .testTimeRangeAvDates <- function(time_range, collection) {
-  start_date <- opendapMetadata_internal$start_date[which(opendapMetadata_internal$collection == collection)]
+  metadata <- .mf_collection_metadata(collection)
+  start_date <- metadata$start_date
   if (time_range[1] < as.Date(start_date)) {
     stop("Time start in time_range argument is out of the temporal extent of the collection. Please modify time start.\n")
   }
-  end_date <- opendapMetadata_internal$end_date[which(opendapMetadata_internal$collection == collection)]
+  end_date <- metadata$end_date
   if(end_date != "ongoing"){
     if (length(time_range) == 2 && (time_range[2] > as.Date(end_date) | time_range[2] > Sys.Date())) {
      stop("Time end in time_range argument is out of the temporal extent of the collection. Please modify time end.\n")
     }
-  }
-}
-
-#' @name .testFormat
-#' @title Test format
-#' @noRd
-
-.testFormat <- function(output_format) {
-  if (!(output_format %in% c("nc4", "ascii", "json"))) {
-    stop("Specified output format is not valid. Please specify a valid output format \n")
   }
 }
 

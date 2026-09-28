@@ -4,29 +4,48 @@
 \alias{mf_list_variables}
 \title{Get information for the variables (bands) available for a given collection}
 \usage{
-mf_list_variables(collection, credentials = NULL, verbose = "inform")
+mf_list_variables(
+  collection,
+  verbose = "inform",
+  backend = c("auto", "cloud", "legacy"),
+  time_range = NULL,
+  collection_id = NULL,
+  n_granules = 10L
+)
 }
 \arguments{
-\item{collection}{string. mandatory. Collection of interest (see details of \link{mf_get_url}).}
+\item{collection}{Collection identifier, e.g. `"MOD11A1.061"`,
+`"VNP43MA4.002"` or `"GPM_3IMERGDF.07"`.}
 
-\item{credentials}{vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.}
+\item{verbose}{Character string: `"quiet"`, `"inform"` (default), or
+`"debug"`. Controls progress messages; `"debug"` also shows request details.}
 
-\item{verbose}{string. Verbose mode ("quiet", "inform", or "debug"). Default "inform".}
+\item{backend}{`"auto"` (default) chooses the service for the collection.
+`"cloud"` selects Earthdata Cloud; `"legacy"` selects GPM's GES DISC service.}
+
+\item{time_range}{Optional date or pair of dates used to find a Cloud
+granule. Only used for Cloud collections.}
+
+\item{collection_id}{Optional Earthdata Cloud collection ID. Usually leave
+this empty; the package looks it up. Only used for Cloud collections.}
+
+\item{n_granules}{Maximum number of recent Cloud files to try (default 10).}
 }
 \value{
 A data.frame with the variables available for the collection, and a set of related information for each variable.
-The variables marked as "extractable" in the column "extractable_with_modisfast" can be provided as input parameter \code{variables} of the function \link{mf_get_url}
+The variables marked as "extractable" in the column "extractable_with_modisfast" can be provided as input parameter \code{variables} of \link{mf_get_url}. Cloud metadata comes from one accessible granule's DDS; it lists its two-dimensional fields but does not supply long names or units.
 }
 \description{
 Get the variables available for a given collection, along with a set of related information for each.
 }
 \examples{
 \dontrun{
-# login to Earthdata
-log <- mf_login(c("earthdata_un", "earthdata_pw"))
+# Configure an Earthdata bearer token for Cloud OPeNDAP.
+Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
 
-# Get the variables available for the collection MOD11A1.061
-(df_varinfo <- mf_list_variables("MOD11A1.061"))
+time_range <- as.Date(c("2026-01-01", "2026-01-30"))
+bands <- mf_list_variables("VJ121A2.002", time_range = time_range)
+subset(bands, name \%in\% c("LST_Day_1KM", "LST_Night_1KM"))
 }
 
 }

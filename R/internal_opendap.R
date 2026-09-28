@@ -49,16 +49,14 @@
 #' @import httr
 #' @noRd
 
-.getVarVector <- function(OpenDAPUrl, variableName, credentials = NULL) {
+.getVarVector <- function(OpenDAPUrl, variableName) {
   vector_response <- vector <- NULL
 
-  .testLogin(credentials)
+  auth <- .mf_earthdata_auth()
+  vector_response <- httr::GET(paste0(OpenDAPUrl, ".ascii?", variableName),
+                               auth, httr::config(maxredirs = -1))
 
-  httr::set_config(httr::authenticate(user = getOption("earthdata_user"), password = getOption("earthdata_pass"), type = "basic"))
-  httr::config(maxredirs = -1)
-  vector_response <- httr::GET(paste0(OpenDAPUrl, ".ascii?", variableName), config = list(maxredirs = -1))
-
-  vector_response <- httr::GET(vector_response$url)
+  vector_response <- httr::GET(vector_response$url, auth)
   httr::stop_for_status(vector_response)
   httr::warn_for_status(vector_response)
 

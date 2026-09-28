@@ -9,7 +9,6 @@ mf_download_data(
   path = tempfile("modisfast_"),
   parallel = FALSE,
   num_workers = parallel::detectCores() - 1,
-  credentials = NULL,
   verbose = "inform",
   min_filesize = 5000
 )
@@ -23,9 +22,8 @@ mf_download_data(
 
 \item{num_workers}{integer. Number of workers in case of parallel download. Default to number of workers available in the machine minus one.}
 
-\item{credentials}{vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.}
-
-\item{verbose}{string. Verbose mode ("quiet", "inform", or "debug"). Default "inform".}
+\item{verbose}{Character string: `"quiet"`, `"inform"` (default), or
+`"debug"`. Controls progress messages; `"debug"` also shows request details.}
 
 \item{min_filesize}{integer. Minimum file size expected (in bites) for one file downloaded. If files downloaded are less that this value, the files will be downloaded again. Default 5000.}
 }
@@ -54,15 +52,15 @@ Parameter \code{df_to_dl} must be a data.frame with the following minimal struct
 \examples{
 \dontrun{
 
-### Login to EOSDIS Earthdata with your username and password
-log <- mf_login(credentials = c("earthdata_un", "earthdata_pw"))
+### Configure an Earthdata bearer token for LP DAAC Cloud
+Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
 
 ### Set-up parameters of interest
-coll <- "MOD11A1.061"
+coll <- "VJ121A2.002"
 
-bands <- c("LST_Day_1km", "LST_Night_1km")
+bands <- c("LST_Day_1KM", "LST_Night_1KM")
 
-time_range <- as.Date(c("2017-01-01", "2017-01-30"))
+time_range <- as.Date(c("2026-01-01", "2026-01-30"))
 
 roi <- sf::st_as_sf(
   data.frame(
@@ -73,7 +71,7 @@ roi <- sf::st_as_sf(
 )
 
 ### Get the URLs of the data
-(urls_mod11a1 <- mf_get_url(
+(urls_vj121a2 <- mf_get_url(
   collection = coll,
   variables = bands,
   roi = roi,
@@ -81,7 +79,7 @@ roi <- sf::st_as_sf(
 ))
 
 ### Download the data
-res_dl <- mf_download_data(urls_mod11a1)
+res_dl <- mf_download_data(urls_vj121a2)
 
 ### Import the data as terra::SpatRast
 modis_ts <- mf_import_data(dirname(res_dl$destfile[1]), collection = coll)

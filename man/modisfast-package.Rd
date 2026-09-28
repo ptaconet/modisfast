@@ -21,6 +21,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Paul Taconet \email{paul.taconet@gmail.com} (\href{https://orcid.org/0000-0001-7429-7204}{ORCID}) [copyright holder]
 
+Authors:
+\itemize{
+  \item Paul Taconet \email{paul.taconet@gmail.com} (\href{https://orcid.org/0000-0001-7429-7204}{ORCID}) [copyright holder]
+}
+
 Other contributors:
 \itemize{
   \item Nicolas Moiroux \email{nicolas.moiroux@ird.fr} (\href{https://orcid.org/0000-0001-6755-6167}{ORCID}) [funder]

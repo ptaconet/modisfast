@@ -11,8 +11,6 @@ mf_modisfast(
   roi,
   time_range,
   path = tempfile("modisfast_"),
-  earthdata_username,
-  earthdata_password,
   parallel = FALSE,
   verbose = "inform",
   import = TRUE,
@@ -20,23 +18,22 @@ mf_modisfast(
 )
 }
 \arguments{
-\item{collection}{string. mandatory. Collection of interest (see details of \link{mf_get_url}).}
+\item{collection}{Collection identifier, e.g. `"MOD11A1.061"`,
+`"VNP43MA4.002"` or `"GPM_3IMERGDF.07"`.}
 
-\item{variables}{string vector. optional. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted (see details of \link{mf_get_url}).}
+\item{variables}{One or more band names to retrieve, as returned by
+[mf_list_variables()].}
 
-\item{roi}{object of class \code{sf}. mandatory. Area of region of interest. Must be a Simple feature collection with geometry type POLYGON, composed of one or several rows (i.e. one or several ROIs), and with at least two columns: 'id' (an identifier for the roi) and 'geom' (the geometry).}
+\item{roi}{An `sf` polygon with an `id` column.}
 
-\item{time_range}{date(s) / POSIXlt of interest . mandatory. Single date/datetime or time frame : vector with start and end dates/times (see details).}
+\item{time_range}{One date or two bounding dates.}
 
 \item{path}{string. Target folder for the data to download. Default : temporary folder.}
 
-\item{earthdata_username}{EarthData username}
-
-\item{earthdata_password}{EarthData username}
-
 \item{parallel}{boolean. Parallelize the download ? Default to FALSE}
 
-\item{verbose}{string. Verbose mode ("quiet", "inform", or "debug"). Default "inform".}
+\item{verbose}{Character string: `"quiet"`, `"inform"` (default), or
+`"debug"`. Controls progress messages; `"debug"` also shows request details.}
 
 \item{import}{boolean. Import the data as a SpatRast object ? default TRUE. FALSE will download the data but not import them it in R.}
 
@@ -51,8 +48,8 @@ object ; else a data.frame providing details of the data downloaded
 Download and possibly import MODIS, VIIRS and GPM
 Earth Observation data quickly and efficiently.
 This function is a wrapper for
-\link{mf_login}, \link{mf_get_url}, \link{mf_download_data} and \link{mf_import_data}.
-Whenever possible, users should prefer executing the functions \link{mf_login},
+\link{mf_get_url}, \link{mf_download_data} and \link{mf_import_data}.
+Whenever possible, users should prefer executing the functions
 \link{mf_get_url}, \link{mf_download_data} and \link{mf_import_data} sequentially
 rather than using this high-level function
 }
@@ -60,11 +57,11 @@ rather than using this high-level function
 \dontrun{
 
 ### Set-up parameters of interest
-coll <- "MOD11A1.061"
+coll <- "VJ121A2.002"
 
-bands <- c("LST_Day_1km", "LST_Night_1km")
+bands <- c("LST_Day_1KM", "LST_Night_1KM")
 
-time_range <- as.Date(c("2017-01-01", "2017-01-30"))
+time_range <- as.Date(c("2026-01-01", "2026-01-30"))
 
 roi <- sf::st_as_sf(
   data.frame(
@@ -75,13 +72,12 @@ roi <- sf::st_as_sf(
 )
 
 ### Download and import the data
+Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
 modis_ts <- mf_modisfast(
   collection = coll,
   variables = bands,
   roi = roi,
-  time_range = time_range,
-  earthdata_username = "earthdata_un",
-  earthdata_password = "earthdata_pw"
+  time_range = time_range
  )
 
 ### Plot the data
@@ -89,5 +85,5 @@ terra::plot(modis_ts)
 }
 }
 \seealso{
-\link{mf_login}, \link{mf_get_url}, \link{mf_download_data}, \link{mf_import_data}
+\link{mf_get_url}, \link{mf_download_data}, \link{mf_import_data}
 }

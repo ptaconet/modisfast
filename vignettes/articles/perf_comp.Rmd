@@ -128,7 +128,7 @@ time_range <- as.Date(c("2023-01-01","2023-12-31"))
 collection <- "MOD13A3.061"  
 variables <- c("_1_km_monthly_NDVI") 
 
-log <- mf_login(credentials = c(Sys.getenv("earthdata_un"), Sys.getenv("earthdata_pw")))
+stopifnot(nzchar(Sys.getenv("EARTHDATA_TOKEN")))
 
 urls <- mf_get_url(
   collection = collection,

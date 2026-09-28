@@ -113,7 +113,7 @@ We now download the data using `modisfast` :
 - "GPM_3IMERGDF.07" = GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V07
 
 ```{r eval=NOT_CRAN}
-log <- mf_login(credentials = c(Sys.getenv("earthdata_un"),Sys.getenv("earthdata_pw")))
+stopifnot(nzchar(Sys.getenv("EARTHDATA_TOKEN")))
 
 urls_mod11a2 <- mf_get_url(
   collection = "MOD11A2.061",

@@ -18,7 +18,8 @@ mf_import_data(
 \arguments{
 \item{path}{character string. mandatory. The path to the local directory where the data are stored.}
 
-\item{collection}{string. mandatory. Collection of interest (see details of \link{mf_get_url}).}
+\item{collection}{Collection identifier, e.g. `"MOD11A1.061"`,
+`"VNP43MA4.002"` or `"GPM_3IMERGDF.07"`.}
 
 \item{output_class}{character string. Output object class. Currently only "SpatRaster" implemented.}
 
@@ -28,7 +29,8 @@ mf_import_data(
 
 \item{vrt}{boolean. Import virtual raster instead of SpatRaster. Useful for very large files. (default : FALSE)}
 
-\item{verbose}{string. Verbose mode ("quiet", "inform", or "debug"). Default "inform".}
+\item{verbose}{Character string: `"quiet"`, `"inform"` (default), or
+`"debug"`. Controls progress messages.}
 
 \item{...}{not used}
 }
@@ -42,7 +44,7 @@ Import datasets downloaded using \code{modisfast} as a \code{terra::SpatRaster} 
 Although the data downloaded through \code{modisfast} could be imported with any netcdf-compliant R package (\code{terra}, \code{stars}, \code{ncdf4}, etc.), care must be taken. In fact, depending on the collection, some “issues” were raised. These issues are independent from \code{modisfast} : they result most of time of a lack of full implementation of the OPeNDAP framework by the data providers. Namely, these issues are :
 \itemize{
  \item{for MODIS and VIIRS collections : CRS has to be provided}
- \item{for GPM collections : CRS has to be provided + data have to be flipped}
+ \item{for GPM collections : EPSG:4326 is assigned to the grid}
 }
 
 The function \link{mf_import_data} includes the processing that needs to be done at the data import phase in order to safely use the data as \code{terra} objects.
@@ -52,15 +54,15 @@ Also note that reprojecting over large ROIs using the argument \code{proj_epsg} 
 \examples{
 \dontrun{
 
-### Login to EOSDIS Earthdata with your username and password
-log <- mf_login(credentials = c("earthdata_un", "earthdata_pw"))
+### Configure an Earthdata bearer token for LP DAAC Cloud
+Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
 
 ### Set-up parameters of interest
-coll <- "MOD11A1.061"
+coll <- "VJ121A2.002"
 
-bands <- c("LST_Day_1km", "LST_Night_1km")
+bands <- c("LST_Day_1KM", "LST_Night_1KM")
 
-time_range <- as.Date(c("2017-01-01", "2017-01-30"))
+time_range <- as.Date(c("2026-01-01", "2026-01-30"))
 
 roi <- sf::st_as_sf(
   data.frame(
@@ -71,7 +73,7 @@ roi <- sf::st_as_sf(
 )
 
 ### Get the URLs of the data
-(urls_mod11a1 <- mf_get_url(
+(urls_vj121a2 <- mf_get_url(
   collection = coll,
   variables = bands,
   roi = roi,
@@ -79,7 +81,7 @@ roi <- sf::st_as_sf(
 ))
 
 ### Download the data
-res_dl <- mf_download_data(urls_mod11a1)
+res_dl <- mf_download_data(urls_vj121a2)
 
 ### Import the data as terra::SpatRast
 modis_ts <- mf_import_data(dirname(res_dl$destfile[1]), collection = coll)

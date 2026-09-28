@@ -66,29 +66,12 @@ roi <- st_as_sf(data.frame(id="Korhogo", geom="POLYGON ((-5.82 9.54, -5.42 9.55,
 time_range <- as.Date(c("2017-01-01","2017-12-31"))
 ```
 
-### Login to EOSDIS Earthdata
+### Configure an Earthdata token
 
-And we login to EOSDIS Earthdata with our credentials. To create an account go to : https://urs.earthdata.nasa.gov/.
+Create a token in your [Earthdata profile](https://urs.earthdata.nasa.gov/) and set it in R:
 
-<!-- Note : When testing the vignette, please run only the chunk named odr_login (replacing "earthdata_un" and "earthdata_pw" with your own credentials). The others (log1 and log3) are used only for development, i.e. when the vignette is published on the package website -->
-
-```{r log1, eval=NOT_CRAN, echo=F,message=F }
-username <- Sys.getenv("earthdata_un")
-password <- Sys.getenv("earthdata_pw")
-log <- mf_login(credentials = c(username,password),verbose = "quiet")
-```
-
-```{r odr_login, eval=F}
-# Login to Earthdata servers with username and password. 
-username <- "earthdata_un"
-password <- "earthdata_pw"
-log <- mf_login(credentials = c(username,password))
-```
-
-```{r log3, eval=NOT_CRAN, echo=F,message=F }
-username <- Sys.getenv("earthdata_un")
-password <- Sys.getenv("earthdata_pw")
-log <- mf_login(credentials = c(username,password),verbose = "quiet")
+```{r earthdata_token, eval=FALSE}
+Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
 ```
 
 ### Get the URLs of the data to download {#get-url}

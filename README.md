@@ -38,11 +38,11 @@ packages</a><br> • <a href="#citation">Citation</a><br> •
 
 ## News
 
-**2025-09-17 : IMPORTANT NOTIFICATION : Due to major recent migrations
-of NASA’s servers (details
-[here](https://www.earthdata.nasa.gov/data/alerts-outages/lp-daac-discontinue-data-pool-distribution-modis-datasets)),
-`modisfast` will be temporarily unavailable in the coming months. Work
-is in progress to connect `modisfast` to the new NASA OPeNDAP servers.**
+- `modisfast` now uses the new [NASA Earthdata Cloud OPeNDAP
+  endpoint](https://opendap.earthdata.nasa.gov) for MODIS and VIIRS
+  collections !
+- Authentication to access data is now dealt with an Earthdata token
+  instead of username and password.
 
 ## Overview
 
@@ -97,13 +97,28 @@ devtools::install_github("ptaconet/modisfast")
 
 ## Get Started
 
-Accessing and opening MODIS data with `modisfast` is a simple 3-steps
-workflow. This example shows how to download and import a one-year-long
-monthly time series of MODIS Normalized Difference Vegetation Index
-(NDVI) at 1 km spatial resolution over the whole country of Madagascar.
+Accessing and opening MODIS/VIIRS/GPM data with `modisfast` is a simple
+3-steps workflow. This example shows how to download and import a
+3-month weekly time series of VIIRS Land Surface Temperature (LST) at 1
+km spatial resolution over the whole country of Madagascar.
 
-**1/ First, define the variables of interest (ROI, time frame,
-collection, and bands) :**
+**1/ Fist, set your Earthdata token**
+
+This token is mandatory to be able to access the data:
+<https://urs.earthdata.nasa.gov/> .
+
+<figure>
+<img src=".token_earthdata_readme.png"
+alt="Earthdata token generation" />
+<figcaption aria-hidden="true">Earthdata token generation</figcaption>
+</figure>
+
+``` r
+Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
+```
+
+**2/ Now, define the variables of interest (ROI, time frame, collection,
+and bands) :**
 
 ``` r
 # Load the packages
@@ -113,20 +128,16 @@ library(terra)
 
 # ROI and time range of interest
 roi <- st_as_sf(data.frame(id = "madagascar", geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"), wkt = "geom", crs = 4326) # a ROI of interest, format sf polygon
-time_range <- as.Date(c("2023-01-01", "2023-12-31")) # a time range of interest
+time_range <- as.Date(c("2023-01-01", "2023-04-01")) # a time range of interest
 
 # MODIS collections and variables (bands) of interest
-collection <- "MOD13A3.061" # run mf_list_collections() for an exhaustive list of collections available
-variables <- c("_1_km_monthly_NDVI") # run mf_list_variables("MOD13A3.061") for an exhaustive list of variables available for the collection "MOD13A3.061"
+collection <- "VNP21A2.002" # run mf_list_collections() for an exhaustive list of collections available
+variables <- c("LST_Day_1KM") # run mf_list_variables("MOD13A3.061") for an exhaustive list of variables available for the collection "MOD13A3.061"
 ```
 
-**2/ Then, get the URL of the data and download them :**
+**3/ Then, get the URL of the data and download them :**
 
 ``` r
-## Login to Earthdata servers with your EOSDIS credentials.
-# To create an account (free) go to : https://urs.earthdata.nasa.gov/.
-log <- mf_login(credentials = c("username", "password")) # set your own EOSDIS username and password
-
 ## Get the URLs of the data
 urls <- mf_get_url(
   collection = collection,
@@ -139,17 +150,15 @@ urls <- mf_get_url(
 res_dl <- mf_download_data(urls, parallel = TRUE)
 ```
 
-**3/ And finally, import the data in R as a `terra::SpatRaster` object
-using the function `mf_import_data()`** ( :warning: see
-[here](https://ptaconet.github.io/modisfast/articles/get_started.html#warning-import)
-why you should use this function, instead of the original
-`terra::rast()`, in the context of `modisfast`) :
+**4/ And finally, import the data in R as a `terra::SpatRaster` object
+using the function `mf_import_data()`**
 
 ``` r
 r <- mf_import_data(
   path = dirname(res_dl$destfile[1]),
   collection = collection,
-  proj_epsg = 4326
+  proj_epsg = 4326,
+  roi_mask = roi
 )
 
 terra::plot(r, col = rev(terrain.colors(20)))
@@ -157,25 +166,21 @@ terra::plot(r, col = rev(terrain.colors(20)))
 
 <figure>
 <img src=".Rplot_readme.png"
-alt="Time series of monthly 1-km MODIS NDVI over Madagascar for the year 2023, retrieved with modisfast" />
-<figcaption aria-hidden="true">Time series of monthly 1-km MODIS NDVI
-over Madagascar for the year 2023, retrieved with
-<code>modisfast</code></figcaption>
+alt="Time series of weekly 1-km VIIRS Land surface temperature over Madagascar for the first 3 months of the year 2023, retrieved with modisfast" />
+<figcaption aria-hidden="true">Time series of weekly 1-km VIIRS Land
+surface temperature over Madagascar for the first 3 months of the year
+2023, retrieved with <code>modisfast</code></figcaption>
 </figure>
 
   
 et voilà !
 
-Want more examples ? `modisfast` provides three long-form documentations
+Want more examples ? `modisfast` provides two long-form documentations
 and examples to learn more about the package :
 
 - a [“Get started”
   article](https://ptaconet.github.io/modisfast/articles/get_started.html)
   describing the core features of the package;
-- a [“Get data on several regions or periods of interest simultaneously”
-  article](https://ptaconet.github.io/modisfast/articles/modisfast2.html)
-  detailing advanced functionalities of `modisfast` (for multi-time
-  frame or multi-regions data access);
 - a [“Full use case”
   article](https://ptaconet.github.io/modisfast/articles/use_case.html)
   showcasing an example of use of the package in a scientific context
@@ -199,23 +204,20 @@ We thank in advance people that use `modisfast` for citing it in their work / pu
 
 ## Collections available in `modisfast`
 
-Currently `modisfast` supports download of 69 data collections,
+Currently `modisfast` supports download of 95 data collections,
 extracted from the following meta-collections :
 
 - [MODIS land
   products](https://www.earthdata.nasa.gov/data/instruments/modis) made
   available by the [NASA / USGS LP
-  DAAC](https://www.earthdata.nasa.gov/centers/lp-daac) ( :arrow_right:
-  [source OPeNDAP server](https://opendap.cr.usgs.gov/opendap/hyrax/)) ;
+  DAAC](https://www.earthdata.nasa.gov/centers/lp-daac) ;
 - [VIIRS land
   products](https://www.earthdata.nasa.gov/data/instruments/viirs) made
   available by the [NASA / USGS LP
-  DAAC](https://www.earthdata.nasa.gov/centers/lp-daac) ( :arrow_right:
-  [source OPeNDAP server](https://opendap.cr.usgs.gov/opendap/hyrax/))
+  DAAC](https://www.earthdata.nasa.gov/centers/lp-daac)
 - [Global Precipitation Measurement](https://gpm.nasa.gov/missions/GPM)
   (GPM) made available by the [NASA / JAXA GES
-  DISC](https://disc.gsfc.nasa.gov/) ( :arrow_right: [source OPeNDAP
-  server](https://gpm1.gesdisc.eosdis.nasa.gov/opendap/hyrax/GPM_L3/)).
+  DISC](https://disc.gsfc.nasa.gov/).
 
 Details of each product available for download are provided in the
 tables below or through the function `mf_list_collections()`.
@@ -278,7 +280,7 @@ Temporal extent
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MCD43A1.061" style="     ">MCD43A1.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MCD43A1.061">MCD43A1.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -318,85 +320,7 @@ Daily
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MCD43A2.061" style="     ">MCD43A2.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Albedo
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Terra and Aqua BRDF/Albedo Quality Daily L3 Global 500 m SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-500 m
-</td>
-
-<td style="text-align:left;">
-
-Daily
-</td>
-
-<td style="text-align:left;">
-
-2000-02-24 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MCD43A3.061" style="     ">MCD43A3.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Albedo
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Terra and Aqua Albedo Daily L3 Global 500 m SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-500 m
-</td>
-
-<td style="text-align:left;">
-
-Daily
-</td>
-
-<td style="text-align:left;">
-
-2000-02-24 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://doi.org/10.5067/VIIRS/VNP43MA1.001" style="     ">VNP43MA1.001</a>
+<a href="https://doi.org/10.5067/VIIRS/VJ143DNBA3.002">VJ143DNBA3.002</a>
 </td>
 
 <td style="text-align:left;">
@@ -411,7 +335,202 @@ Albedo
 
 <td style="text-align:left;">
 
-VIIRS/NPP BRDF/Albedo Model Parameters Daily L3 Global 1 km SIN
+VIIRS/JPSS1 DNB Albedo Daily L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2018-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ143MA3.002">VJ143MA3.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS1 Albedo Daily L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2018-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ243DNBA3.002">VJ243DNBA3.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 DNB Albedo Daily L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ243MA3.002">VJ243MA3.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 Albedo Daily L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP43DNBA3.002">VNP43DNBA3.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP DNB Albedo Daily L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2012-01-19 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP43MA3.002">VNP43MA3.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP Albedo Daily L3 Global 1km SIN Grid V002
 </td>
 
 <td style="text-align:left;">
@@ -435,7 +554,7 @@ Daily
 
 <td style="text-align:left;">
 
-<a href="https://doi.org/10.5067/VIIRS/VNP43MA2.001" style="     ">VNP43MA2.001</a>
+<a href="https://doi.org/10.5067/VIIRS/VJ143IA3.002">VJ143IA3.002</a>
 </td>
 
 <td style="text-align:left;">
@@ -450,85 +569,7 @@ Albedo
 
 <td style="text-align:left;">
 
-VIIRS/NPP BRDF/Albedo Quality Daily L3 Global 1 km SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-1000 m
-</td>
-
-<td style="text-align:left;">
-
-Daily
-</td>
-
-<td style="text-align:left;">
-
-2012-01-17 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://doi.org/10.5067/VIIRS/VNP43MA3.001" style="     ">VNP43MA3.001</a>
-</td>
-
-<td style="text-align:left;">
-
-VIIRS
-</td>
-
-<td style="text-align:left;">
-
-Albedo
-</td>
-
-<td style="text-align:left;">
-
-VIIRS/NPP Albedo Daily L3 Global 1 km SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-1000 m
-</td>
-
-<td style="text-align:left;">
-
-Daily
-</td>
-
-<td style="text-align:left;">
-
-2012-01-17 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://doi.org/10.5067/VIIRS/VNP43IA2.001" style="     ">VNP43IA2.001</a>
-</td>
-
-<td style="text-align:left;">
-
-VIIRS
-</td>
-
-<td style="text-align:left;">
-
-Albedo
-</td>
-
-<td style="text-align:left;">
-
-VIIRS/NPP BRDF/Albedo Quality Daily L3 Global 500 m SIN Grid
+VIIRS/JPSS1 Albedo Daily L3 Global 500m SIN Grid V002
 </td>
 
 <td style="text-align:left;">
@@ -543,7 +584,7 @@ Daily
 
 <td style="text-align:left;">
 
-2012-01-17 to present
+2018-01-01 to present
 </td>
 
 </tr>
@@ -552,7 +593,7 @@ Daily
 
 <td style="text-align:left;">
 
-<a href="https://doi.org/10.5067/VIIRS/VNP43IA3.001" style="     ">VNP43IA3.001</a>
+<a href="https://doi.org/10.5067/VIIRS/VJ243IA3.002">VJ243IA3.002</a>
 </td>
 
 <td style="text-align:left;">
@@ -567,7 +608,46 @@ Albedo
 
 <td style="text-align:left;">
 
-VIIRS/NPP Albedo Daily L3 Global 500 m SIN Grid
+VIIRS/JPSS2 Albedo Daily L3 Global 500m SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP43IA3.002">VNP43IA3.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP Albedo Daily L3 Global 500m SIN Grid V002
 </td>
 
 <td style="text-align:left;">
@@ -597,7 +677,7 @@ Daily
 
 <summary>
 
-<b> Burned areas </b> data collections
+<b> Albedo / BRDF </b> data collections
 </summary>
 
 <table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
@@ -651,22 +731,377 @@ Temporal extent
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MCD64A1.061" style="     ">MCD64A1.061</a>
+<a href="https://doi.org/10.5067/VIIRS/VJ143DNBA1.002">VJ143DNBA1.002</a>
 </td>
 
 <td style="text-align:left;">
 
-MODIS
+VIIRS
 </td>
 
 <td style="text-align:left;">
 
-Burned areas
+Albedo / BRDF
 </td>
 
 <td style="text-align:left;">
 
-MODIS/Terra+Aqua Burned Area Monthly L3 Global 500 m SIN Grid
+VIIRS/JPSS1 DNB BRDF/Albedo Model Parameters Daily L3 Global 1km SIN
+Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2018-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ143DNBA2.002">VJ143DNBA2.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo / BRDF
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS1 DNB BRDF/Albedo Quality Daily L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2018-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ143MA2.002">VJ143MA2.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo / BRDF
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS1 BRDF/Albedo Quality Daily L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2018-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ243DNBA1.002">VJ243DNBA1.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo / BRDF
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 DNB BRDF/Albedo Model Parameters Daily L3 Global 1km SIN
+Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ243DNBA2.002">VJ243DNBA2.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo / BRDF
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 DNB BRDF/Albedo Quality Daily L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ243MA2.002">VJ243MA2.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo / BRDF
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 BRDF/Albedo Quality Daily L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP43DNBA1.002">VNP43DNBA1.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo / BRDF
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP DNB BRDF/Albedo Model Parameters Daily L3 Global 1km SIN Grid
+V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2012-01-19 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP43DNBA2.002">VNP43DNBA2.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo / BRDF
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP DNB BRDF/Albedo Quality Daily L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2012-01-19 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP43MA2.002">VNP43MA2.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo / BRDF
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP BRDF/Albedo Quality Daily L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2012-01-17 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ143IA1.002">VJ143IA1.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo / BRDF
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS1 BRDF/Albedo Model Parameters Daily L3 Global 500m SIN Grid
+V002
 </td>
 
 <td style="text-align:left;">
@@ -676,12 +1111,209 @@ MODIS/Terra+Aqua Burned Area Monthly L3 Global 500 m SIN Grid
 
 <td style="text-align:left;">
 
-30 day
+Daily
 </td>
 
 <td style="text-align:left;">
 
-2000-11-01 to present
+2018-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ143IA2.002">VJ143IA2.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo / BRDF
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS1 BRDF/Albedo Quality Daily L3 Global 500m SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2018-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ243IA1.002">VJ243IA1.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo / BRDF
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 BRDF/Albedo Model Parameters Daily L3 Global 500m SIN Grid
+V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ243IA2.002">VJ243IA2.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo / BRDF
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 BRDF/Albedo Quality Daily L3 Global 500m SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP43IA1.002">VNP43IA1.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo / BRDF
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP BRDF/Albedo Model Parameters Daily L3 Global 500m SIN Grid
+V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2012-01-17 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP43IA2.002">VNP43IA2.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Albedo / BRDF
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP BRDF/Albedo Quality Daily L3 Global 500m SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2012-01-17 to present
 </td>
 
 </tr>
@@ -750,7 +1382,7 @@ Temporal extent
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MOD16A2.061" style="     ">MOD16A2.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MOD16A2.061">MOD16A2.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -789,7 +1421,7 @@ MODIS/Terra Net Evapotranspiration 8-Day L4 Global 500m SIN Grid v061
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MYD16A2.061" style="     ">MYD16A2.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MYD16A2.061">MYD16A2.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -828,7 +1460,7 @@ MODIS/Aqua Net Evapotranspiration 8-Day L4 Global 500m SIN Grid v061
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MOD16A2GF.061" style="     ">MOD16A2GF.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MOD16A2GF.061">MOD16A2GF.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -868,7 +1500,7 @@ Grid
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MOD16A3GF.061" style="     ">MOD16A3GF.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MOD16A3GF.061">MOD16A3GF.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -908,7 +1540,7 @@ Grid
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MYD16A2GF.061" style="     ">MYD16A2GF.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MYD16A2GF.061">MYD16A2GF.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -948,7 +1580,7 @@ Grid
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MYD16A3GF.061" style="     ">MYD16A3GF.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MYD16A3GF.061">MYD16A3GF.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -1048,7 +1680,7 @@ Temporal extent
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MCD12Q1.061" style="     ">MCD12Q1.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MCD12Q1.061">MCD12Q1.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -1079,6 +1711,105 @@ MODIS/Terra+Aqua Land Cover Type Yearly L3 Global 500 m SIN Grid
 <td style="text-align:left;">
 
 2001-01-01 to present
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</details>
+
+<details>
+
+<summary>
+
+<b> Land surface phenology </b> data collections
+</summary>
+
+<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+Collection
+</th>
+
+<th style="text-align:left;">
+
+Source
+</th>
+
+<th style="text-align:left;">
+
+Type
+</th>
+
+<th style="text-align:left;">
+
+Name
+</th>
+
+<th style="text-align:left;">
+
+Spatial resolution
+</th>
+
+<th style="text-align:left;">
+
+Temporal resolution
+</th>
+
+<th style="text-align:left;">
+
+Temporal extent
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP22Q2.002">VNP22Q2.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Land surface phenology
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP Land Surface Phenology Yearly L3 Global 500m SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+1 year
+</td>
+
+<td style="text-align:left;">
+
+2013-01-01 to present
 </td>
 
 </tr>
@@ -1147,7 +1878,7 @@ Temporal extent
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MOD11A1.061" style="     ">MOD11A1.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MOD11A1.061">MOD11A1.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -1187,7 +1918,7 @@ Daily
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MYD11A1.061" style="     ">MYD11A1.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MYD11A1.061">MYD11A1.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -1227,7 +1958,7 @@ Daily
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MOD11A2.061" style="     ">MOD11A2.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MOD11A2.061">MOD11A2.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -1267,7 +1998,7 @@ Grid v061
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MYD11A2.061" style="     ">MYD11A2.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MYD11A2.061">MYD11A2.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -1307,87 +2038,7 @@ Grid v061
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MOD11B2.061" style="     ">MOD11B2.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Land surface temperature
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 Global 6 km SIN
-Grid
-</td>
-
-<td style="text-align:left;">
-
-6000 m
-</td>
-
-<td style="text-align:left;">
-
-8 day
-</td>
-
-<td style="text-align:left;">
-
-2000-02-18 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MYD11B2.061" style="     ">MYD11B2.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Land surface temperature
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Aqua Land Surface Temperature/Emissivity 8-Day L3 Global 6 km SIN
-Grid
-</td>
-
-<td style="text-align:left;">
-
-6000 m
-</td>
-
-<td style="text-align:left;">
-
-8 day
-</td>
-
-<td style="text-align:left;">
-
-2002-07-04 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MOD11B3.061" style="     ">MOD11B3.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MOD11B3.061">MOD11B3.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -1427,12 +2078,12 @@ SIN Grid
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MYD11B3.061" style="     ">MYD11B3.061</a>
+<a href="https://doi.org/10.5067/VIIRS/VNP21A1D.002">VNP21A1D.002</a>
 </td>
 
 <td style="text-align:left;">
 
-MODIS
+VIIRS
 </td>
 
 <td style="text-align:left;">
@@ -1442,23 +2093,343 @@ Land surface temperature
 
 <td style="text-align:left;">
 
-MODIS/Aqua Land Surface Temperature/Emissivity Monthly L3 Global 6 km
-SIN Grid
+VIIRS/NPP Land Surface Temperature/Emissivity Daily L3 Global 1km SIN
+Grid Day V002
 </td>
 
 <td style="text-align:left;">
 
-6000 m
+1000 m
 </td>
 
 <td style="text-align:left;">
 
-30 day
+Daily
 </td>
 
 <td style="text-align:left;">
 
-2002-07-01 to present
+2012-01-17 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ121A1N.002">VJ121A1N.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Land surface temperature
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS1 Land Surface Temperature/Emissivity Daily L3 Global 1km SIN
+Grid Night V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2018-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ221A1N.002">VJ221A1N.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Land surface temperature
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 Land Surface Temperature/Emissivity Daily L3 Global 1km SIN
+Grid Night V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP21A1N.002">VNP21A1N.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Land surface temperature
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP Land Surface Temperature/Emissivity Daily L3 Global 1km SIN
+Grid Night V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2012-01-17 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ121A1D.002">VJ121A1D.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Land surface temperature
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS1 Land Surface Temperature/Emissivity Daily L3 Global 1km SIN
+Grid Day V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2018-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ121A2.002">VJ121A2.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Land surface temperature
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS1 Land Surface Temperature/Emissivity 8-Day L3 Global 1km SIN
+Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+8 day
+</td>
+
+<td style="text-align:left;">
+
+2018-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ221A1D.002">VJ221A1D.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Land surface temperature
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 Land Surface Temperature/Emissivity Daily L3 Global 1km SIN
+Grid Day V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ221A2.002">VJ221A2.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Land surface temperature
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 Land Surface Temperature/Emissivity 8-Day L3 Global 1km SIN
+Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+8 day
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP21A2.002">VNP21A2.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Land surface temperature
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP Land Surface Temperature/Emissivity 8-Day L3 Global 1km SIN
+Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+8 day
+</td>
+
+<td style="text-align:left;">
+
+2012-01-17 to present
 </td>
 
 </tr>
@@ -1527,7 +2498,7 @@ Temporal extent
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MOD44W.061" style="     ">MOD44W.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MOD44W.061">MOD44W.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -1573,7 +2544,7 @@ SIN Grid V061
 
 <summary>
 
-<b> Leaf area index </b> data collections
+<b> Leaf area index / FPAR </b> data collections
 </summary>
 
 <table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
@@ -1627,61 +2598,22 @@ Temporal extent
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MOD15A2H.061" style="     ">MOD15A2H.061</a>
+<a href="https://doi.org/10.5067/VIIRS/VJ115A2H.002">VJ115A2H.002</a>
 </td>
 
 <td style="text-align:left;">
 
-MODIS
+VIIRS
 </td>
 
 <td style="text-align:left;">
 
-Leaf area index
+Leaf area index / FPAR
 </td>
 
 <td style="text-align:left;">
 
-MODIS/Terra Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-500 m
-</td>
-
-<td style="text-align:left;">
-
-8 day
-</td>
-
-<td style="text-align:left;">
-
-2000-02-18 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MCD15A2H.061" style="     ">MCD15A2H.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Leaf area index
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Terra+Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+VIIRS/JPSS1 Leaf Area Index/FPAR 8-Day L4 Global 500m SIN Grid V002
 </td>
 
 <td style="text-align:left;">
@@ -1696,7 +2628,7 @@ MODIS/Terra+Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
 
 <td style="text-align:left;">
 
-2002-07-04 to present
+2018-01-01 to present
 </td>
 
 </tr>
@@ -1705,61 +2637,22 @@ MODIS/Terra+Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MCD15A3H.061" style="     ">MCD15A3H.061</a>
+<a href="https://doi.org/10.5067/VIIRS/VJ215A2H.002">VJ215A2H.002</a>
 </td>
 
 <td style="text-align:left;">
 
-MODIS
+VIIRS
 </td>
 
 <td style="text-align:left;">
 
-Leaf area index
+Leaf area index / FPAR
 </td>
 
 <td style="text-align:left;">
 
-MODIS/Terra+Aqua Leaf Area Index/FPAR 4-Day L4 Global 500 m SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-500 m
-</td>
-
-<td style="text-align:left;">
-
-4 day
-</td>
-
-<td style="text-align:left;">
-
-2002-07-04 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MYD15A2H.061" style="     ">MYD15A2H.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Leaf area index
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
+VIIRS/JPSS2 Leaf Area Index/FPAR 8-Day L4 Global 500m SIN Grid V002
 </td>
 
 <td style="text-align:left;">
@@ -1774,106 +2667,7 @@ MODIS/Aqua Leaf Area Index/FPAR 8-Day L4 Global 500 m SIN Grid
 
 <td style="text-align:left;">
 
-2002-07-04 to present
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
-
-</details>
-
-<details>
-
-<summary>
-
-<b> Ocean Reflectance </b> data collections
-</summary>
-
-<table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
-
-<thead>
-
-<tr>
-
-<th style="text-align:left;">
-
-Collection
-</th>
-
-<th style="text-align:left;">
-
-Source
-</th>
-
-<th style="text-align:left;">
-
-Type
-</th>
-
-<th style="text-align:left;">
-
-Name
-</th>
-
-<th style="text-align:left;">
-
-Spatial resolution
-</th>
-
-<th style="text-align:left;">
-
-Temporal resolution
-</th>
-
-<th style="text-align:left;">
-
-Temporal extent
-</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MODOCGA.061" style="     ">MODOCGA.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Ocean Reflectance
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Terra Ocean Reflectance Daily L2G-Lite Global 1 km SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-1000 m
-</td>
-
-<td style="text-align:left;">
-
-Daily
-</td>
-
-<td style="text-align:left;">
-
-2000-02-24 to present
+2023-02-10 to present
 </td>
 
 </tr>
@@ -1882,37 +2676,37 @@ Daily
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MYDOCGA.061" style="     ">MYDOCGA.061</a>
+<a href="https://doi.org/10.5067/VIIRS/VNP15A2H.002">VNP15A2H.002</a>
 </td>
 
 <td style="text-align:left;">
 
-MODIS
+VIIRS
 </td>
 
 <td style="text-align:left;">
 
-Ocean Reflectance
+Leaf area index / FPAR
 </td>
 
 <td style="text-align:left;">
 
-MODIS/Aqua Ocean Reflectance Daily L2G-Lite Global 1 km SIN Grid
+VIIRS/NPP Leaf Area Index/FPAR 8-Day L4 Global 500m SIN Grid V002
 </td>
 
 <td style="text-align:left;">
 
-1000 m
+500 m
 </td>
 
 <td style="text-align:left;">
 
-Daily
+8 day
 </td>
 
 <td style="text-align:left;">
 
-2002-07-04 to present
+2012-01-17 to present
 </td>
 
 </tr>
@@ -1981,7 +2775,7 @@ Temporal extent
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MOD17A2H.061" style="     ">MOD17A2H.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MOD17A2H.061">MOD17A2H.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -2020,7 +2814,7 @@ MODIS/Aqua Gross Primary Productivity 8-Day L4 Global 500 m SIN Grid
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MYD17A2H.061" style="     ">MYD17A2H.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MYD17A2H.061">MYD17A2H.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -2059,7 +2853,7 @@ MODIS/Terra Gross Primary Productivity 8-Day L4 Global 500 m SIN Grid
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MOD17A2HGF.061" style="     ">MOD17A2HGF.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MOD17A2HGF.061">MOD17A2HGF.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -2099,7 +2893,7 @@ SIN Grid
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MOD17A3HGF.061" style="     ">MOD17A3HGF.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MOD17A3HGF.061">MOD17A3HGF.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -2139,7 +2933,7 @@ Grid
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MYD17A2HGF.061" style="     ">MYD17A2HGF.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MYD17A2HGF.061">MYD17A2HGF.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -2179,7 +2973,7 @@ SIN Grid
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MYD17A3HGF.061" style="     ">MYD17A3HGF.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MYD17A3HGF.061">MYD17A3HGF.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -2279,7 +3073,7 @@ Temporal extent
 
 <td style="text-align:left;">
 
-<a href="https://doi.org/10.5067/GPM/IMERGDE/DAY/06" style="     ">GPM_3IMERGDE.06</a>
+<a href="https://doi.org/10.5067/GPM/IMERGDE/DAY/06">GPM_3IMERGDE.06</a>
 </td>
 
 <td style="text-align:left;">
@@ -2318,7 +3112,7 @@ Daily
 
 <td style="text-align:left;">
 
-<a href="https://doi.org/10.5067/GPM/IMERGDF/DAY/06" style="     ">GPM_3IMERGDF.06</a>
+<a href="https://doi.org/10.5067/GPM/IMERGDF/DAY/06">GPM_3IMERGDF.06</a>
 </td>
 
 <td style="text-align:left;">
@@ -2357,7 +3151,7 @@ Daily
 
 <td style="text-align:left;">
 
-<a href="https://doi.org/10.5067/GPM/IMERGDF/DAY/07" style="     ">GPM_3IMERGDF.07</a>
+<a href="https://doi.org/10.5067/GPM/IMERGDF/DAY/07">GPM_3IMERGDF.07</a>
 </td>
 
 <td style="text-align:left;">
@@ -2396,7 +3190,7 @@ Daily
 
 <td style="text-align:left;">
 
-<a href="https://doi.org/10.5067/GPM/IMERGDL/DAY/06" style="     ">GPM_3IMERGDL.06</a>
+<a href="https://doi.org/10.5067/GPM/IMERGDL/DAY/06">GPM_3IMERGDL.06</a>
 </td>
 
 <td style="text-align:left;">
@@ -2435,7 +3229,7 @@ Daily
 
 <td style="text-align:left;">
 
-<a href="https://doi.org/10.5067/GPM/IMERG/3B-HH/06" style="     ">GPM_3IMERGHH.06</a>
+<a href="https://doi.org/10.5067/GPM/IMERG/3B-HH/06">GPM_3IMERGHH.06</a>
 </td>
 
 <td style="text-align:left;">
@@ -2474,7 +3268,7 @@ GPM IMERG Final Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
 
 <td style="text-align:left;">
 
-<a href="https://doi.org/10.5067/GPM/IMERG/3B-HH/07" style="     ">GPM_3IMERGHH.07</a>
+<a href="https://doi.org/10.5067/GPM/IMERG/3B-HH/07">GPM_3IMERGHH.07</a>
 </td>
 
 <td style="text-align:left;">
@@ -2513,7 +3307,7 @@ GPM IMERG Final Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V07
 
 <td style="text-align:left;">
 
-<a href="https://doi.org/10.5067/GPM/IMERG/3B-HH-E/06" style="     ">GPM_3IMERGHHE.06</a>
+<a href="https://doi.org/10.5067/GPM/IMERG/3B-HH-E/06">GPM_3IMERGHHE.06</a>
 </td>
 
 <td style="text-align:left;">
@@ -2552,7 +3346,7 @@ GPM IMERG Early Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
 
 <td style="text-align:left;">
 
-<a href="https://doi.org/10.5067/GPM/IMERG/3B-HH-L/06" style="     ">GPM_3IMERGHHL.06</a>
+<a href="https://doi.org/10.5067/GPM/IMERG/3B-HH-L/06">GPM_3IMERGHHL.06</a>
 </td>
 
 <td style="text-align:left;">
@@ -2591,7 +3385,7 @@ GPM IMERG Late Precipitation L3 Half Hourly 0.1 degree x 0.1 degree V06
 
 <td style="text-align:left;">
 
-<a href="https://doi.org/10.5067/GPM/IMERG/3B-MONTH/06" style="     ">GPM_3IMERGM.06</a>
+<a href="https://doi.org/10.5067/GPM/IMERG/3B-MONTH/06">GPM_3IMERGM.06</a>
 </td>
 
 <td style="text-align:left;">
@@ -2630,7 +3424,7 @@ GPM IMERG Final Precipitation L3 1 month 0.1 degree x 0.1 degree V06
 
 <td style="text-align:left;">
 
-<a href="https://doi.org/10.5067/GPM/IMERG/3B-MONTH/07" style="     ">GPM_3IMERGM.07</a>
+<a href="https://doi.org/10.5067/GPM/IMERG/3B-MONTH/07">GPM_3IMERGM.07</a>
 </td>
 
 <td style="text-align:left;">
@@ -2729,280 +3523,7 @@ Temporal extent
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MOD09GA.061" style="     ">MOD09GA.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Surface reflectance
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Terra Surface Reflectance Daily L2G Global 1 km and 500 m SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-1000 m
-</td>
-
-<td style="text-align:left;">
-
-Daily
-</td>
-
-<td style="text-align:left;">
-
-2000-02-24 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MYD09GA.061" style="     ">MYD09GA.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Surface reflectance
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Aqua Surface Reflectance Daily L2G Global 1 km and 500 m SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-1000 m
-</td>
-
-<td style="text-align:left;">
-
-Daily
-</td>
-
-<td style="text-align:left;">
-
-2002-07-04 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MOD09GQ.061" style="     ">MOD09GQ.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Surface reflectance
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Terra Surface Reflectance Daily L2G Global 250 m SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-250 m
-</td>
-
-<td style="text-align:left;">
-
-Daily
-</td>
-
-<td style="text-align:left;">
-
-2000-02-24 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MOD09Q1.061" style="     ">MOD09Q1.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Surface reflectance
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Terra Surface Reflectance 8-Day L3 Global 250 m SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-250 m
-</td>
-
-<td style="text-align:left;">
-
-8 day
-</td>
-
-<td style="text-align:left;">
-
-2000-02-18 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MYD09GQ.061" style="     ">MYD09GQ.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Surface reflectance
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Aqua Surface Reflectance Daily L2G Global 250 m SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-250 m
-</td>
-
-<td style="text-align:left;">
-
-Daily
-</td>
-
-<td style="text-align:left;">
-
-2002-07-04 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MYD09Q1.061" style="     ">MYD09Q1.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Surface reflectance
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Aqua Surface Reflectance 8-Day L3 Global 250 m SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-250 m
-</td>
-
-<td style="text-align:left;">
-
-8 day
-</td>
-
-<td style="text-align:left;">
-
-2002-07-04 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MYD09A1.061" style="     ">MYD09A1.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Surface reflectance
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Aqua Surface Reflectance 8-Day L3 Global 500 m SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-500 m
-</td>
-
-<td style="text-align:left;">
-
-8 day
-</td>
-
-<td style="text-align:left;">
-
-2002-07-04 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MCD43A4.061" style="     ">MCD43A4.061</a>
+<a href="https://dx.doi.org/10.5067/MODIS/MCD43A4.061">MCD43A4.061</a>
 </td>
 
 <td style="text-align:left;">
@@ -3042,12 +3563,12 @@ Daily
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MOD09A1.061" style="     ">MOD09A1.061</a>
+<a href="https://doi.org/10.5067/VIIRS/VJ143DNBA4.002">VJ143DNBA4.002</a>
 </td>
 
 <td style="text-align:left;">
 
-MODIS
+VIIRS
 </td>
 
 <td style="text-align:left;">
@@ -3057,7 +3578,484 @@ Surface reflectance
 
 <td style="text-align:left;">
 
-MODIS/Terra Surface Reflectance 8-Day L3 Global 500 m SIN Grid
+VIIRS/JPSS1 DNB Nadir BRDF-Adjusted Reflectance Daily L3 Global 1km SIN
+Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2018-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ243DNBA4.002">VJ243DNBA4.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Surface reflectance
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 DNB Nadir BRDF-Adjusted Reflectance Daily L3 Global 1km SIN
+Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP43DNBA4.002">VNP43DNBA4.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Surface reflectance
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP DNB Nadir BRDF-Adjusted Reflectance Daily L3 Global 1km SIN
+Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2012-01-19 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ109A1.002">VJ109A1.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Surface reflectance
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS1 Surface Reflectance 8-Day L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+8 day
+</td>
+
+<td style="text-align:left;">
+
+2018-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ143MA4.002">VJ143MA4.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Surface reflectance
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS1 Nadir BRDF-Adjusted Reflectance Daily L3 Global 1km SIN Grid
+V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2018-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ209A1.002">VJ209A1.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Surface reflectance
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 Surface Reflectance 8-Day L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+8 day
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ243MA4.002">VJ243MA4.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Surface reflectance
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 Nadir BRDF-Adjusted Reflectance Daily L3 Global 1km SIN Grid
+V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP09A1.002">VNP09A1.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Surface reflectance
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP Surface Reflectance 8-Day L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+8 day
+</td>
+
+<td style="text-align:left;">
+
+2012-01-17 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP43MA4.002">VNP43MA4.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Surface reflectance
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP Nadir BRDF-Adjusted Reflectance Daily L3 Global 1km SIN Grid
+V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2012-01-17 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ143IA4.002">VJ143IA4.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Surface reflectance
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS1 Nadir BRDF-Adjusted Reflectance Daily L3 Global 500m SIN
+Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2018-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ243IA4.002">VJ243IA4.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Surface reflectance
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 Nadir BRDF-Adjusted Reflectance Daily L3 Global 500m SIN
+Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP43IA4.002">VNP43IA4.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Surface reflectance
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP Nadir BRDF-Adjusted Reflectance Daily L3 Global 500m SIN Grid
+V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2012-01-17 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ109H1.002">VJ109H1.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Surface reflectance
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS1 Surface Reflectance 8-Day L3 Global 500m SIN Grid V002
 </td>
 
 <td style="text-align:left;">
@@ -3072,7 +4070,7 @@ MODIS/Terra Surface Reflectance 8-Day L3 Global 500 m SIN Grid
 
 <td style="text-align:left;">
 
-2000-02-18 to present
+2018-01-01 to present
 </td>
 
 </tr>
@@ -3081,7 +4079,7 @@ MODIS/Terra Surface Reflectance 8-Day L3 Global 500 m SIN Grid
 
 <td style="text-align:left;">
 
-<a href="https://doi.org/10.5067/VIIRS/VNP43MA4.001" style="     ">VNP43MA4.001</a>
+<a href="https://doi.org/10.5067/VIIRS/VJ209H1.002">VJ209H1.002</a>
 </td>
 
 <td style="text-align:left;">
@@ -3096,46 +4094,7 @@ Surface reflectance
 
 <td style="text-align:left;">
 
-VIIRS/NPP Nadir BRDF-Adjusted Reflectance Daily L3 Global 1 km SIN
-</td>
-
-<td style="text-align:left;">
-
-1000 m
-</td>
-
-<td style="text-align:left;">
-
-Daily
-</td>
-
-<td style="text-align:left;">
-
-2012-01-17 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://doi.org/10.5067/VIIRS/VNP43IA4.001" style="     ">VNP43IA4.001</a>
-</td>
-
-<td style="text-align:left;">
-
-VIIRS
-</td>
-
-<td style="text-align:left;">
-
-Surface reflectance
-</td>
-
-<td style="text-align:left;">
-
-VIIRS/NPP Nadir BRDF-Adjusted Reflectance Daily L3 Global 500 m SIN Grid
+VIIRS/JPSS2 Surface Reflectance 8-Day L3 Global 500m SIN Grid V002
 </td>
 
 <td style="text-align:left;">
@@ -3145,7 +4104,46 @@ VIIRS/NPP Nadir BRDF-Adjusted Reflectance Daily L3 Global 500 m SIN Grid
 
 <td style="text-align:left;">
 
-Daily
+8 day
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP09H1.002">VNP09H1.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Surface reflectance
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP Surface Reflectance 8-Day L3 Global 500m SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+8 day
 </td>
 
 <td style="text-align:left;">
@@ -3165,7 +4163,7 @@ Daily
 
 <summary>
 
-<b> Thermal Bands </b> data collections
+<b> Thermal anomalies and fire </b> data collections
 </summary>
 
 <table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
@@ -3219,22 +4217,22 @@ Temporal extent
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MODTBGA.061" style="     ">MODTBGA.061</a>
+<a href="https://doi.org/10.5067/VIIRS/VJ114A1.002">VJ114A1.002</a>
 </td>
 
 <td style="text-align:left;">
 
-MODIS
+VIIRS
 </td>
 
 <td style="text-align:left;">
 
-Thermal Bands
+Thermal anomalies and fire
 </td>
 
 <td style="text-align:left;">
 
-MODIS/Terra Thermal Bands Daily L2G-Lite Global 1 km SIN Grid
+VIIRS/JPSS1 Thermal Anomalies and Fire Daily L3 Global 1km SIN Grid V002
 </td>
 
 <td style="text-align:left;">
@@ -3249,7 +4247,7 @@ Daily
 
 <td style="text-align:left;">
 
-2000-02-24 to present
+2018-01-01 to present
 </td>
 
 </tr>
@@ -3258,22 +4256,22 @@ Daily
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MYDTBGA.061" style="     ">MYDTBGA.061</a>
+<a href="https://doi.org/10.5067/VIIRS/VJ214A1.002">VJ214A1.002</a>
 </td>
 
 <td style="text-align:left;">
 
-MODIS
+VIIRS
 </td>
 
 <td style="text-align:left;">
 
-Thermal Bands
+Thermal anomalies and fire
 </td>
 
 <td style="text-align:left;">
 
-MODIS/Aqua Thermal Bands Daily L2G-Lite Global 1 km SIN Grid
+VIIRS/JPSS2 Thermal Anomalies and Fire Daily L3 Global 1km SIN Grid V002
 </td>
 
 <td style="text-align:left;">
@@ -3288,7 +4286,46 @@ Daily
 
 <td style="text-align:left;">
 
-2002-07-04 to present
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP14A1.002">VNP14A1.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Thermal anomalies and fire
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP Thermal Anomalies and Fire Daily L3 Global 1km SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+1000 m
+</td>
+
+<td style="text-align:left;">
+
+Daily
+</td>
+
+<td style="text-align:left;">
+
+2012-01-17 to present
 </td>
 
 </tr>
@@ -3303,7 +4340,7 @@ Daily
 
 <summary>
 
-<b> Vegetation indices </b> data collections
+<b> Vegetation productivity </b> data collections
 </summary>
 
 <table class="table table-hover table-condensed" style="color: black; margin-left: auto; margin-right: auto;">
@@ -3357,296 +4394,23 @@ Temporal extent
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MOD13A3.061" style="     ">MOD13A3.061</a>
+<a href="https://doi.org/10.5067/VIIRS/VJ117A2.002">VJ117A2.002</a>
 </td>
 
 <td style="text-align:left;">
 
-MODIS
+VIIRS
 </td>
 
 <td style="text-align:left;">
 
-Vegetation indices
+Vegetation productivity
 </td>
 
 <td style="text-align:left;">
 
-MODIS/Terra Vegetation Indices Monthly L3 Global 1 km SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-1000 m
-</td>
-
-<td style="text-align:left;">
-
-30 day
-</td>
-
-<td style="text-align:left;">
-
-2000-02-01 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MYD13A3.061" style="     ">MYD13A3.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Vegetation indices
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Aqua Vegetation Indices Monthly L3 Global 1 km SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-1000 m
-</td>
-
-<td style="text-align:left;">
-
-30 day
-</td>
-
-<td style="text-align:left;">
-
-2002-07-01 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MOD13A2.061" style="     ">MOD13A2.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Vegetation indices
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Terra Vegetation Indices 16-Day L3 Global 1 km SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-1000 m
-</td>
-
-<td style="text-align:left;">
-
-16 day
-</td>
-
-<td style="text-align:left;">
-
-2000-02-18 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MYD13A2.061" style="     ">MYD13A2.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Vegetation indices
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Aqua Vegetation Indices 16-Day L3 Global 1 km SIN Grid
-</td>
-
-<td style="text-align:left;">
-
-1000 m
-</td>
-
-<td style="text-align:left;">
-
-16 day
-</td>
-
-<td style="text-align:left;">
-
-2002-07-04 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MOD13Q1.061" style="     ">MOD13Q1.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Vegetation indices
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid v061
-</td>
-
-<td style="text-align:left;">
-
-250 m
-</td>
-
-<td style="text-align:left;">
-
-16 day
-</td>
-
-<td style="text-align:left;">
-
-2000-02-18 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MYD13Q1.061" style="     ">MYD13Q1.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Vegetation indices
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Aqua Vegetation Indices 16-Day L3 Global 250m SIN Grid v061
-</td>
-
-<td style="text-align:left;">
-
-250 m
-</td>
-
-<td style="text-align:left;">
-
-16 day
-</td>
-
-<td style="text-align:left;">
-
-2002-07-04 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MOD44B.061" style="     ">MOD44B.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Vegetation indices
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Terra Vegetation Continuous Fields Yearly L3 Global 250m SIN Grid
-V061
-</td>
-
-<td style="text-align:left;">
-
-250 m
-</td>
-
-<td style="text-align:left;">
-
-365 day
-</td>
-
-<td style="text-align:left;">
-
-2000-03-05 to present
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-<a href="https://dx.doi.org/10.5067/MODIS/MOD13A1.061" style="     ">MOD13A1.061</a>
-</td>
-
-<td style="text-align:left;">
-
-MODIS
-</td>
-
-<td style="text-align:left;">
-
-Vegetation indices
-</td>
-
-<td style="text-align:left;">
-
-MODIS/Terra Vegetation Indices 16-Day L3 Global 500 m SIN Grid
+VIIRS/JPSS1 Gross Primary Productivity and Net Photosynthesis 8-Day L4
+Global 500m SIN Grid V002
 </td>
 
 <td style="text-align:left;">
@@ -3656,12 +4420,12 @@ MODIS/Terra Vegetation Indices 16-Day L3 Global 500 m SIN Grid
 
 <td style="text-align:left;">
 
-16 day
+8 day
 </td>
 
 <td style="text-align:left;">
 
-2000-02-18 to present
+2025-01-01 to present
 </td>
 
 </tr>
@@ -3670,22 +4434,23 @@ MODIS/Terra Vegetation Indices 16-Day L3 Global 500 m SIN Grid
 
 <td style="text-align:left;">
 
-<a href="https://dx.doi.org/10.5067/MODIS/MYD13A1.061" style="     ">MYD13A1.061</a>
+<a href="https://doi.org/10.5067/VIIRS/VJ217A2.002">VJ217A2.002</a>
 </td>
 
 <td style="text-align:left;">
 
-MODIS
+VIIRS
 </td>
 
 <td style="text-align:left;">
 
-Vegetation indices
+Vegetation productivity
 </td>
 
 <td style="text-align:left;">
 
-MODIS/Aqua Vegetation Indices 16-Day L3 Global 500 m SIN Grid
+VIIRS/JPSS2 Gross Primary Productivity and Net Photosynthesis 8-Day L4
+Global 500m SIN Grid V002
 </td>
 
 <td style="text-align:left;">
@@ -3695,12 +4460,292 @@ MODIS/Aqua Vegetation Indices 16-Day L3 Global 500 m SIN Grid
 
 <td style="text-align:left;">
 
-16 day
+8 day
 </td>
 
 <td style="text-align:left;">
 
-2002-07-04 to present
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP17A2.002">VNP17A2.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Vegetation productivity
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP Gross Primary Productivity and Net Photosynthesis 8-Day L4
+Global 500m SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+8 day
+</td>
+
+<td style="text-align:left;">
+
+2025-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ117A2GF.002">VJ117A2GF.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Vegetation productivity
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS1 Gross Primary Productivity and Net Photosynthesis Gap-Filled
+8-Day L4 Global 500m SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+8 day
+</td>
+
+<td style="text-align:left;">
+
+2025-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ117A3GF.002">VJ117A3GF.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Vegetation productivity
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS1 Gross and Net Primary Production Gap-Filled Yearly L4 Global
+500m SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+1 year
+</td>
+
+<td style="text-align:left;">
+
+2025-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ217A2GF.002">VJ217A2GF.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Vegetation productivity
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 Gross Primary Productivity and Net Photosynthesis Gap-Filled
+8-Day L4 Global 500m SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+8 day
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VJ217A3GF.002">VJ217A3GF.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Vegetation productivity
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/JPSS2 Gross and Net Primary Production Gap-Filled Yearly L4 Global
+500m SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+1 year
+</td>
+
+<td style="text-align:left;">
+
+2023-02-10 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP17A2GF.002">VNP17A2GF.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Vegetation productivity
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP Gross Primary Productivity and Net Photosynthesis Gap-Filled
+8-Day L4 Global 500m SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+8 day
+</td>
+
+<td style="text-align:left;">
+
+2025-01-01 to present
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+<a href="https://doi.org/10.5067/VIIRS/VNP17A3GF.002">VNP17A3GF.002</a>
+</td>
+
+<td style="text-align:left;">
+
+VIIRS
+</td>
+
+<td style="text-align:left;">
+
+Vegetation productivity
+</td>
+
+<td style="text-align:left;">
+
+VIIRS/NPP Gross and Net Primary Production Gap-Filled Yearly L4 Global
+500m SIN Grid V002
+</td>
+
+<td style="text-align:left;">
+
+500 m
+</td>
+
+<td style="text-align:left;">
+
+1 year
+</td>
+
+<td style="text-align:left;">
+
+2025-01-01 to present
 </td>
 
 </tr>
@@ -3713,16 +4758,11 @@ MODIS/Aqua Vegetation Indices 16-Day L3 Global 500 m SIN Grid
 
 ## Manual testing of the functionality
 
-Since most `modisfast` functions depend on EarthData credentials,
-automated tests are disabled. However, after installation, users can
-manually test the package’s functionality by running these lines of code
-:
+Live data tests require an Earthdata token. Set it before testing the
+package:
 
 ``` r
-# replace "username" and "password" with your own EOSDIS (Earthdata) credentials 
-earthdata_un <- "username" 
-earthdata_pw <- "password"
-
+Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
 devtools::test("modisfast")
 ```
 
@@ -3746,22 +4786,6 @@ dimensional. Although powerful, OPeNDAP URLs are not trivial to build.
 `modisfast` facilitates this process by constructing the URL based on
 the spatial, temporal, and dimensional filters provided by the user in
 the function `mf_get_url()`.
-
-Let’s take an example to understand.
-
-The following URL :arrow_down:
-
-https<nolink>://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.061/h17v08.ncml.nc4?MODIS_Grid_8Day_1km_LST_eos_cf_projection,LST_Day_1km\[775:793\]\[55:140\]\[512:560\],LST_Night_1km\[775:793\]\[55:140\]\[512:560\],QC_Day\[775:793\]\[55:140\]\[512:560\],QC_Night\[775:793\]\[55:140\]\[512:560\],time\[775:793\],YDim\[55:140\],XDim\[512:560\]
-
-is a link to download the following subset of MOD11A2.061 data in netCDF
-:
-
-- bands LST_Day_1km, LST_Night_1km, QC_Day, QC_Night ;
-- each available date between the 2017-01-01 and the 2017-06-01 ;
-- within the following bounding box (lon/lat): -5.41 8.84, -5.82 9.54.
-
-The indices within the `[]` refer to values encoding for the spatial and
-temporal filters.
 
 These OPeNDAP URLs are not trivial to build. `modisfast` converts the
 spatial, temporal and dimensional filters (R objects) provided by the

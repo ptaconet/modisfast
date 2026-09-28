@@ -5,8 +5,8 @@
 #'
 #' The download can the parallelized.
 #'
-#' @inheritParams mf_get_url
-#' @inheritParams mf_login
+#' @param verbose Character string: `"quiet"`, `"inform"` (default), or
+#'   `"debug"`. Controls progress messages; `"debug"` also shows request details.
 #' @param df_to_dl data.frame. Urls and destination files of dataset to download. Typically output of \link{mf_get_url}. See Details for the structure
 #' @param path string. Target folder for the data to download. Default : temporary folder.
 #' @param parallel boolean. Parallelize the download ? Default to FALSE
@@ -37,15 +37,15 @@
 #' @examples
 #' \dontrun{
 #'
-#' ### Login to EOSDIS Earthdata with your username and password
-#' log <- mf_login(credentials = c("earthdata_un", "earthdata_pw"))
+#' ### Configure an Earthdata bearer token for LP DAAC Cloud
+#' Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
 #'
 #' ### Set-up parameters of interest
-#' coll <- "MOD11A1.061"
+#' coll <- "VJ121A2.002"
 #'
-#' bands <- c("LST_Day_1km", "LST_Night_1km")
+#' bands <- c("LST_Day_1KM", "LST_Night_1KM")
 #'
-#' time_range <- as.Date(c("2017-01-01", "2017-01-30"))
+#' time_range <- as.Date(c("2026-01-01", "2026-01-30"))
 #'
 #' roi <- sf::st_as_sf(
 #'   data.frame(
@@ -56,7 +56,7 @@
 #' )
 #'
 #' ### Get the URLs of the data
-#' (urls_mod11a1 <- mf_get_url(
+#' (urls_vj121a2 <- mf_get_url(
 #'   collection = coll,
 #'   variables = bands,
 #'   roi = roi,
@@ -64,7 +64,7 @@
 #' ))
 #'
 #' ### Download the data
-#' res_dl <- mf_download_data(urls_mod11a1)
+#' res_dl <- mf_download_data(urls_vj121a2)
 #'
 #' ### Import the data as terra::SpatRast
 #' modis_ts <- mf_import_data(dirname(res_dl$destfile[1]), collection = coll)
@@ -72,15 +72,11 @@
 #' ### Plot the data
 #' terra::plot(modis_ts)
 #' }
-mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel = FALSE, num_workers = parallel::detectCores() - 1, credentials = NULL, verbose = "inform", min_filesize = 5000) {
+mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel = FALSE, num_workers = parallel::detectCores() - 1, verbose = "inform", min_filesize = 5000) {
   fileSize <- destfile <- fileDl <- folders <- readme_files <- source <- maxFileSizeEstimated <- actualFileSize <- NULL
 
-  source <- "earthdata"
-
   # tests
-  if (!inherits(verbose, "character")) {
-    stop("verbose argument must be a character string ('quiet'', 'inform', or 'debug') \n")
-  }
+  .mf_check_verbose(verbose)
   if (!inherits(parallel, "logical")) {
     stop("parallel argument must be boolean\n")
   }
@@ -138,24 +134,23 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
         recursive = TRUE, showWarnings = FALSE # , mode = "0777"
       )
 
-    # download data
-    # for (i in 1:nrow(data_to_download)){
-    #    httr::GET(data_to_download$url[i],httr::authenticate(username,password),write_disk(data_to_download$destfile[i]))
-    # }
-    if (!is.null(source)) {
-      if (source == "earthdata") {
-        .testLogin(credentials)
-        username <- getOption("earthdata_user")
-        password <- getOption("earthdata_pass")
+    token <- Sys.getenv("EARTHDATA_TOKEN", unset = "")
+    if (!nzchar(token)) stop("Set EARTHDATA_TOKEN to an Earthdata bearer token.")
+    dl_func <- function(url, output) {
+      auth <- httr::add_headers(Authorization = paste("Bearer", token))
+      response <- httr::GET(url, auth,
+                            httr::write_disk(output), httr::progress(),
+                            httr::config(maxredirs = -1))
+      content_type <- httr::headers(response)[["content-type"]]
+      if (httr::http_error(response) ||
+          (!is.null(content_type) && grepl("text/html", content_type, fixed = TRUE))) {
+        unlink(output)
+        if (!httr::http_error(response)) {
+          stop("The server returned HTML instead of NetCDF. Check Earthdata authorization.")
+        }
+        httr::stop_for_status(response)
       }
-    } else {
-      username <- password <- "no_auth"
-    }
-
-    dl_func <- function(url, output, username, password) {
-      u <- httr::GET(url)
-      httr::GET(u$url, httr::authenticate(username, password), httr::write_disk(output), httr::progress(), config = list(maxredirs = -1))
-      # GET(u$url, httr::write_disk(output), httr::progress(), config(maxredirs=-1, netrc = TRUE, netrc_file = netrc), set_cookies("LC" = "cookies"))
+      invisible(response)
     }
 
     if (verbose %in% c("inform","debug")) {
@@ -167,7 +162,7 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
     if (parallel) {
       cl <- parallel::makeCluster(num_workers)
       parallel::clusterMap(cl, dl_func,
-        url = data_to_download$url, output = data_to_download$destfile, username = username, password = password,
+        url = data_to_download$url, output = data_to_download$destfile,
         .scheduling = "dynamic"
         )
       parallel::stopCluster(cl)
@@ -177,9 +172,9 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
           cat("[", i, " over ", nrow(data_to_download), "]\n")
         }
         if(verbose %in% c("quiet","inform")){
-          dl_func(url = data_to_download$url[i], output = data_to_download$destfile[i], username = username, password = password)
+          dl_func(url = data_to_download$url[i], output = data_to_download$destfile[i])
         } else if (verbose == "debug"){
-          httr::with_verbose(dl_func(url = data_to_download$url[i], output = data_to_download$destfile[i], username = username, password = password))
+          httr::with_verbose(dl_func(url = data_to_download$url[i], output = data_to_download$destfile[i]))
         }
       }
     }
@@ -197,7 +192,9 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
     if (verbose %in% c("inform","debug")) {
       cli::cli_alert_warning("Not all the datasets were downloaded. Downloading the remaining datasets one by one...\n")
     }
-    mf_download_data(df_to_dl = df_to_dl, path = path, parallel = FALSE, credentials = credentials) # ,source=source)
+    return(mf_download_data(df_to_dl = df_to_dl, path = path,
+                            parallel = FALSE, verbose = verbose,
+                            min_filesize = min_filesize))
   } else {
     # 1 : download ok
     # 2 : download error

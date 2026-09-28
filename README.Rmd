@@ -49,7 +49,8 @@ knitr::opts_chunk$set(
 
 ## News
 
-**2025-09-17 : IMPORTANT NOTIFICATION : Due to major recent migrations of NASA’s servers (details [here](https://www.earthdata.nasa.gov/data/alerts-outages/lp-daac-discontinue-data-pool-distribution-modis-datasets)), `modisfast` will be temporarily unavailable in the coming months. Work is in progress to connect `modisfast` to the new NASA OPeNDAP servers.**
+- `modisfast` now uses the new [NASA Earthdata Cloud OPeNDAP endpoint](https://opendap.earthdata.nasa.gov) for MODIS and VIIRS collections !
+- Authentication to access data is now dealt with an Earthdata token instead of username and password.
 
 ## Overview
 
@@ -80,9 +81,19 @@ devtools::install_github("ptaconet/modisfast")
 
 ## Get Started 
 
-Accessing and opening MODIS data with `modisfast` is a simple 3-steps workflow. This example shows how to download and import a one-year-long monthly time series of MODIS Normalized Difference Vegetation Index (NDVI) at 1 km spatial resolution over the whole country of Madagascar.
+Accessing and opening MODIS/VIIRS/GPM data with `modisfast` is a simple 3-steps workflow. This example shows how to download and import a 3-month weekly time series of VIIRS Land Surface Temperature (LST) at 1 km spatial resolution over the whole country of Madagascar.
 
-**1/ First, define the variables of interest (ROI, time frame, collection, and bands) :**
+**1/ Fist, set your Earthdata token** 
+
+This token is mandatory to be able to access the data: https://urs.earthdata.nasa.gov/ . 
+
+![Earthdata token generation](.token_earthdata_readme.png)
+
+```{r , eval = F, message=F}
+Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
+```
+
+**2/ Now, define the variables of interest (ROI, time frame, collection, and bands) :**
 
 ```{r , eval = F, message=F}
 # Load the packages
@@ -92,20 +103,16 @@ library(terra)
 
 # ROI and time range of interest
 roi <- st_as_sf(data.frame(id = "madagascar", geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"), wkt = "geom", crs = 4326) # a ROI of interest, format sf polygon
-time_range <- as.Date(c("2023-01-01", "2023-12-31")) # a time range of interest
+time_range <- as.Date(c("2023-01-01", "2023-04-01")) # a time range of interest
 
 # MODIS collections and variables (bands) of interest
-collection <- "MOD13A3.061" # run mf_list_collections() for an exhaustive list of collections available
-variables <- c("_1_km_monthly_NDVI") # run mf_list_variables("MOD13A3.061") for an exhaustive list of variables available for the collection "MOD13A3.061"
+collection <- "VNP21A2.002" # run mf_list_collections() for an exhaustive list of collections available
+variables <- c("LST_Day_1KM") # run mf_list_variables("MOD13A3.061") for an exhaustive list of variables available for the collection "MOD13A3.061"
 ```
 
-**2/ Then, get the URL of the data and download them :**
+**3/ Then, get the URL of the data and download them :**
 
 ```{r , eval = F, message=F}
-## Login to Earthdata servers with your EOSDIS credentials.
-# To create an account (free) go to : https://urs.earthdata.nasa.gov/.
-log <- mf_login(credentials = c("username", "password")) # set your own EOSDIS username and password
-
 ## Get the URLs of the data
 urls <- mf_get_url(
   collection = collection,
@@ -118,27 +125,27 @@ urls <- mf_get_url(
 res_dl <- mf_download_data(urls, parallel = TRUE)
 ```
 
-**3/ And finally, import the data in R as a `terra::SpatRaster` object using the function `mf_import_data()`** ( :warning: see [here](https://ptaconet.github.io/modisfast/articles/get_started.html#warning-import) why you should use this function, instead of the original `terra::rast()`, in the context of `modisfast`) :
+**4/ And finally, import the data in R as a `terra::SpatRaster` object using the function `mf_import_data()`**
 
 ```{r , eval = F, message=F}
 r <- mf_import_data(
   path = dirname(res_dl$destfile[1]),
   collection = collection,
-  proj_epsg = 4326
+  proj_epsg = 4326,
+  roi_mask = roi
 )
 
 terra::plot(r, col = rev(terrain.colors(20)))
 ```
 
-![Time series of monthly 1-km MODIS NDVI over Madagascar for the year 2023, retrieved with `modisfast`](.Rplot_readme.png)
+![Time series of weekly 1-km VIIRS Land surface temperature over Madagascar for the first 3 months of the year 2023, retrieved with `modisfast`](.Rplot_readme.png)
 
 \
 et voilà ! 
 
-Want more examples ? `modisfast` provides three long-form documentations and examples to learn more about the package :
+Want more examples ? `modisfast` provides two long-form documentations and examples to learn more about the package :
 
 - a ["Get started" article](https://ptaconet.github.io/modisfast/articles/get_started.html) describing the core features of the package;
-- a ["Get data on several regions or periods of interest simultaneously" article](https://ptaconet.github.io/modisfast/articles/modisfast2.html) detailing advanced functionalities of `modisfast` (for multi-time frame or multi-regions data access);
 - a ["Full use case" article](https://ptaconet.github.io/modisfast/articles/use_case.html) showcasing an example of use of the package in a scientific context (here: landscape epidemiology).
 
 
@@ -162,9 +169,9 @@ We thank in advance people that use `modisfast` for citing it in their work / pu
 
 Currently `modisfast` supports download of `r nrow(mf_list_collections())` data collections, extracted from the following meta-collections : 
 
-* [MODIS land products](https://www.earthdata.nasa.gov/data/instruments/modis) made available by the [NASA / USGS LP DAAC](https://www.earthdata.nasa.gov/centers/lp-daac) ( :arrow_right: [source OPeNDAP server](https://opendap.cr.usgs.gov/opendap/hyrax/)) ;
-* [VIIRS land products](https://www.earthdata.nasa.gov/data/instruments/viirs) made available by the [NASA / USGS LP DAAC](https://www.earthdata.nasa.gov/centers/lp-daac) ( :arrow_right: [source OPeNDAP server](https://opendap.cr.usgs.gov/opendap/hyrax/))
-* [Global Precipitation Measurement](https://gpm.nasa.gov/missions/GPM) (GPM) made available by the [NASA / JAXA GES DISC](https://disc.gsfc.nasa.gov/) ( :arrow_right: [source OPeNDAP server](https://gpm1.gesdisc.eosdis.nasa.gov/opendap/hyrax/GPM_L3/)).
+* [MODIS land products](https://www.earthdata.nasa.gov/data/instruments/modis) made available by the [NASA / USGS LP DAAC](https://www.earthdata.nasa.gov/centers/lp-daac) ;
+* [VIIRS land products](https://www.earthdata.nasa.gov/data/instruments/viirs) made available by the [NASA / USGS LP DAAC](https://www.earthdata.nasa.gov/centers/lp-daac)
+* [Global Precipitation Measurement](https://gpm.nasa.gov/missions/GPM) (GPM) made available by the [NASA / JAXA GES DISC](https://disc.gsfc.nasa.gov/).
 
 Details of each product available for download are provided in the tables below or through the function `mf_list_collections()`.
 
@@ -210,13 +217,10 @@ for(i in seq_along(cols_natures)){
 
 ## Manual testing of the functionality
 
-Since most `modisfast` functions depend on EarthData credentials, automated tests are disabled. However, after installation, users can manually test the package's functionality by running these lines of code :
+Live data tests require an Earthdata token. Set it before testing the package:
 
-```{r, eval = F, echo=T,message=F}
-# replace "username" and "password" with your own EOSDIS (Earthdata) credentials 
-earthdata_un <- "username" 
-earthdata_pw <- "password"
-
+```r
+Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
 devtools::test("modisfast")
 ```
 
@@ -225,20 +229,6 @@ devtools::test("modisfast")
 Technically, `modisfast` is a programmatic interface (R wrapper) to several NASA [OPeNDAP](https://www.opendap.org/) servers. OPeNDAP is the acronym for *Open-source Project for a Network Data Access Protocol* and designates both the software, the access protocol, and the corporation that develops them. The OPeNDAP is designed to simplify access to structured and high-volume data, such as satellite products, over the Web. It is a collaborative effort involving multiple institutions and companies, with open-source code, free software, and adherence to the [Open Geospatial Consortium](https://www.ogc.org/) (OGC) standards. It is widely used by NASA, which partly finances it. 
 
 A key feature of OPeNDAP is its capability to apply filters at the data download process, ensuring that only the necessary data is retrieved. These filters, specified within a URL, can be spatial, temporal, or dimensional. Although powerful, OPeNDAP URLs are not trivial to build. `modisfast` facilitates this process by constructing the URL based on the spatial, temporal, and dimensional filters provided by the user in the function `mf_get_url()`.
-
-Let's take an example to understand.
-
-The following URL :arrow_down:
-
-https<nolink>://opendap.cr.usgs.gov/opendap/hyrax/MOD11A2.061/h17v08.ncml.nc4?MODIS_Grid_8Day_1km_LST_eos_cf_projection,LST_Day_1km[775:793][55:140][512:560],LST_Night_1km[775:793][55:140][512:560],QC_Day[775:793][55:140][512:560],QC_Night[775:793][55:140][512:560],time[775:793],YDim[55:140],XDim[512:560]
-
-is a link to download the following subset of MOD11A2.061 data in netCDF :
-
-- bands LST_Day_1km, LST_Night_1km, QC_Day, QC_Night ;
-- each available date between the 2017-01-01 and the 2017-06-01 ; 
-- within the following bounding box (lon/lat): -5.41 8.84, -5.82 9.54. 
-
-The indices within the `[]` refer to values encoding for the spatial and temporal filters.
 
 These OPeNDAP URLs are not trivial to build. `modisfast` converts the spatial, temporal and dimensional filters (R objects) provided by the user through the function `mf_get_url()` into the appropriate OPeNDAP URL(s). Subsequently, the function `mf_download_data()` allows for downloading the data using the [`httr`](https://cran.r-project.org/package=httr) and `parallel` packages. 
 

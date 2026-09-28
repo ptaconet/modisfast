@@ -5,16 +5,14 @@
 #' @description Download and possibly import MODIS, VIIRS and GPM
 #' Earth Observation data quickly and efficiently.
 #' This function is a wrapper for
-#' \link{mf_login}, \link{mf_get_url}, \link{mf_download_data} and \link{mf_import_data}.
-#' Whenever possible, users should prefer executing the functions \link{mf_login},
+#' \link{mf_get_url}, \link{mf_download_data} and \link{mf_import_data}.
+#' Whenever possible, users should prefer executing the functions
 #' \link{mf_get_url}, \link{mf_download_data} and \link{mf_import_data} sequentially
 #' rather than using this high-level function
 #'
 #' @inheritParams mf_get_url
 #' @inheritParams mf_download_data
 #' @inheritParams mf_import_data
-#' @param earthdata_username EarthData username
-#' @param earthdata_password EarthData username
 #' @param import boolean. Import the data as a SpatRast object ? default TRUE. FALSE will download the data but not import them it in R.
 #' @param ... Further arguments to be passed to \link{mf_import_data}
 #'
@@ -22,17 +20,17 @@
 #' object ; else a data.frame providing details of the data downloaded
 #' (see output of \link{mf_download_data}).
 #'
-#' @seealso \link{mf_login}, \link{mf_get_url}, \link{mf_download_data}, \link{mf_import_data}
+#' @seealso \link{mf_get_url}, \link{mf_download_data}, \link{mf_import_data}
 #' @export
 #' @examples
 #' \dontrun{
 #'
 #' ### Set-up parameters of interest
-#' coll <- "MOD11A1.061"
+#' coll <- "VJ121A2.002"
 #'
-#' bands <- c("LST_Day_1km", "LST_Night_1km")
+#' bands <- c("LST_Day_1KM", "LST_Night_1KM")
 #'
-#' time_range <- as.Date(c("2017-01-01", "2017-01-30"))
+#' time_range <- as.Date(c("2026-01-01", "2026-01-30"))
 #'
 #' roi <- sf::st_as_sf(
 #'   data.frame(
@@ -43,13 +41,12 @@
 #' )
 #'
 #' ### Download and import the data
+#' Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
 #' modis_ts <- mf_modisfast(
 #'   collection = coll,
 #'   variables = bands,
 #'   roi = roi,
-#'   time_range = time_range,
-#'   earthdata_username = "earthdata_un",
-#'   earthdata_password = "earthdata_pw"
+#'   time_range = time_range
 #'  )
 #'
 #' ### Plot the data
@@ -60,13 +57,11 @@ mf_modisfast <- function(collection,
                       roi,
                       time_range,
                       path = tempfile("modisfast_"),
-                      earthdata_username,
-                      earthdata_password,
                       parallel = FALSE,
                       verbose = "inform",
                       import = TRUE,
                       ...) {
-  log <- mf_login(c(earthdata_username, earthdata_password), verbose = verbose)
+  .mf_check_verbose(verbose)
   urls <- mf_get_url(collection = collection,
                      variables = variables,
                      roi = roi,

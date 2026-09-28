@@ -1,181 +1,284 @@
-#' @name mf_get_url
-#' @aliases mf_get_url
-#' @title Build the URL(s) of the data to download
-#' @description Builds the OPeNDAP URL(s) of the spatiotemporal datacube to
-#' download, given a collection, variables, region and time range of interest.
+#' Find download URLs for MODIS, VIIRS and GPM data
 #'
-#' @param collection string. mandatory. Collection of interest (see details of \link{mf_get_url}).
-#' @param variables string vector. optional. Variables to retrieve for the collection of interest. If not specified (default) all available variables will be extracted (see details of \link{mf_get_url}).
-#' @param roi object of class \code{sf}. mandatory. Area of region of interest. Must be a Simple feature collection with geometry type POLYGON, composed of one or several rows (i.e. one or several ROIs), and with at least two columns: 'id' (an identifier for the roi) and 'geom' (the geometry).
-#' @param time_range date(s) / POSIXlt of interest . mandatory. Single date/datetime or time frame : vector with start and end dates/times (see details).
-#' @param output_format string. Output data format. optional. Available options are : "nc4" (default), "ascii", "json"
-#' @param single_netcdf boolean. optional. Get the URL either as a single file that encompasses the whole time frame (TRUE) or as multiple files (1 for each date) (FALSE). Default to TRUE. Currently enabled only for MODIS and VIIRS collections.
-#' @param opt_param list of optional arguments. optional. (see details).
-#' @param credentials vector string of length 2 with username and password. optional if the function \link{mf_login} was previously executed.
-#' @param verbose string. Verbose mode ("quiet", "inform", or "debug"). Default "inform".
+#' Find the files covering your area and dates, and create URLs to download
+#' only the selected bands and area. Use [mf_download_data()] to download them.
 #'
-#' @return a data.frame with one row for each dataset to download and 5 columns :
-#'  \describe{
-#'  \item{id_roi}{Identifier of the ROI}
-#'  \item{time_start}{Start Date/time for the dataset}
-#'  \item{collection}{Name of the collection}
-#'  \item{name}{Indicative name for the dataset}
-#'  \item{url}{https OPeNDAP URL of the dataset}
-#'  \item{maxFileSizeEstimated}{Maximum estimated data size for the dataset (in bites)}
-#'  }
+#' Set `EARTHDATA_TOKEN` to your Earthdata token before calling this function.
 #'
-#' @details
-#'
-#' Argument \code{collection} : Collections available can be retrieved with the function \link{mf_list_collections}
-#'
-#' Argument \code{variables} : For each collection, variables available can be retrieved with the function \link{mf_list_variables}
-#'
-#' Argument \code{time_range} : Can be provided either as i) a single date (e.g. \code{as.Date("2017-01-01"))} or ii) a time frame provided as two bounding dates (starting and ending time) ( e.g. \code{as.Date(c("2010-01-01","2010-01-30"))}) or iii) a POSIXlt single time (e.g. \code{as.POSIXlt("2010-01-01 18:00:00")}) or iv) a POSIXlt time range (e.g. \code{as.POSIXlt(c("2010-01-01 18:00:00","2010-01-02 09:00:00"))}) for the half-hourly collection (GPM_3IMERGHH.06). If POSIXlt, hours must be provided in GMT.
-#'
-#' Argument \code{single_netcdf} : for MODIS and VIIRS products from LP DAAC: download the data as a single file encompassing the whole time frame (TRUE) or as multiple files : one for each date, which is the behavious for the other collections - GPM and SMAP) (FALSE) ?
-#'
-#' Argument \code{opt_param} : list of parameters related to the queried OPeNDAP server and the roi. See \link{mf_get_opt_param} for additional details. This list can be retrieved outside the function with the function \link{mf_get_opt_param}. If not provided, it will be automatically calculated within the \link{mf_get_url} function. However, providing it fastens the processing time.
-#' It might be particularly useful to precompute it with \link{mf_get_opt_param} in case the function is used within a loop for a single ROI.
-#'
-#' Argument \code{credentials} : Login to the OPeNDAP servers is required to use the function. Login can be done either within the function or outside with the function \link{mf_login}
-#'
+#' @param collection Collection identifier, e.g. `"MOD11A1.061"`,
+#'   `"VNP43MA4.002"` or `"GPM_3IMERGDF.07"`.
+#' @param variables One or more band names to retrieve, as returned by
+#'   [mf_list_variables()].
+#' @param roi An `sf` polygon with an `id` column.
+#' @param time_range One date or two bounding dates.
+#' @param collection_id Optional Earthdata Cloud collection ID. Usually leave
+#'   this empty; the package finds it in its collection catalogue. Not used for GPM.
+#' @param verbose Character string: `"quiet"`, `"inform"` (default), or
+#'   `"debug"`. Controls progress messages; `"debug"` also shows request details.
+#' @return A data frame with the download URLs for [mf_download_data()].
 #' @export
-#'
-#' @importFrom stringr str_replace
-#' @importFrom stats ave
-#' @importFrom cli cli_alert_success
-#' @import dplyr
-#'
 #' @examples
 #' \dontrun{
-#'
-#' ### First login to EOSDIS Earthdata with username and password.
-#' # To create an account go to : https://urs.earthdata.nasa.gov/.
-#' username <- "earthdata_un"
-#' password <- "earthdata_pw"
-#' log <- mf_login(credentials = c(username, password))
-#'
-#' ### Get the URLs to download the following datasets :
-#' # MODIS Terra LST Daily (MOD11A1.061) (collection)
-#' # Day + Night bands (LST_Day_1km,LST_Night_1km) (variables)
-#' # over a 50km x 70km region of interest (roi)
-#' # for the time frame 2017-01-01 to 2017-01-30 (30 days) (time_range)
-#'
-#' roi <- sf::st_as_sf(
-#'   data.frame(
-#'     id = "roi_test",
-#'     geom = "POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"
-#'   ),
-#'   wkt = "geom", crs = 4326
-#' )
-#'
-#' time_range <- as.Date(c("2017-01-01", "2017-01-30"))
-#'
-#' (urls_mod11a1 <- mf_get_url(
-#'   collection = "MOD11A1.061",
-#'   variables = c("LST_Day_1km", "LST_Night_1km"),
-#'   roi = roi,
-#'   time_range = time_range
-#' ))
-#'
-#' ## Download the data :
-#'
-#' res_dl <- mf_download_data(urls_mod11a1)
-#'
-#' ## Import as terra::SpatRast
-#'
-#' modis_ts <- mf_import_data(dirname(res_dl$destfile[1]), collection = "MOD11A1.061")
-#'
-#' ## Plot the data
-#'
-#' terra::plot(modis_ts)
+#' Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
+#' roi <- sf::st_as_sf(data.frame(id = "test", geom =
+#'   "POLYGON ((3.8 43.5, 4 43.5, 4 43.7, 3.8 43.7, 3.8 43.5))"),
+#'   wkt = "geom", crs = 4326)
+#' time_range <- as.Date(c("2026-01-01", "2026-01-30"))
+#' urls_vj121a2 <- mf_get_url("VJ121A2.002",
+#'   c("LST_Day_1KM", "LST_Night_1KM"), roi, time_range)
+#' mf_download_data(urls_vj121a2)
 #' }
-mf_get_url <- function(collection,
-                       variables = NULL,
-                       roi,
-                       time_range,
-                       output_format = "nc4",
-                       single_netcdf = TRUE,
-                       opt_param = NULL,
-                       credentials = NULL,
-                       verbose = "inform") {
-  existing_variables <- odap_coll_info <- odap_timeDimName <- odap_lonDimName <- odap_latDimName <- . <- name <- destfile <- roi_id <- maxFileSizeEstimated <- NULL
-
-  ## tests :
-  # collection
-  # if(verbose){cat("Checking if specified collection exist and is implemented in the package...\n")}
-  .testIfCollExists(collection)
-  # roi
+mf_get_url <- function(collection, variables = NULL, roi, time_range,
+                       collection_id = NULL, verbose = "inform") {
+  .mf_check_verbose(verbose)
+  .mf_require_token("mf_get_url")
+  if (verbose != "quiet") cat("Building the URLs...\n")
+  if (!is.character(collection) || length(collection) != 1L ||
+      is.na(collection) || !nzchar(collection)) {
+    .mf_unknown_collection(collection)
+  }
+  if (missing(roi)) {
+    stop("roi must be a non-empty sf object containing polygon features ",
+         "and an id column.")
+  }
   .testRoi(roi)
-  # time_range_format
+  if (missing(time_range)) {
+    stop("time_range must be one Date or two ordered Dates; for example, ",
+         "as.Date(c('2026-01-01', '2026-01-30')).")
+  }
   .testTimeRange(time_range)
-  # time_range_available_dates
-  .testTimeRangeAvDates(time_range, collection)
-  # output_format
-  .testFormat(output_format)
-  # single_netcdf
-  if (!inherits(single_netcdf, "logical")) {
-    stop("single_netcdf argument must be boolean\n")
+  if (!is.character(variables) || !length(variables) || anyNA(variables) ||
+      any(!nzchar(variables))) {
+    stop("Provide at least one variable name. Run mf_list_variables(\"",
+         collection, "\") to get the list of available variables.")
   }
-  # verbose
-  if (!inherits(verbose, "character")) {
-    stop("verbose argument must be a character string ('quiet'', 'inform', or 'debug') \n")
+  if (is.null(.mf_cloud_collection_source(collection))) {
+    info <- .mf_collection_metadata(collection)
+    if (nrow(info) == 1L && info$source == "GPM") {
+      if (!is.null(collection_id)) {
+        stop("collection_id applies only to LP DAAC Cloud collections.")
+      }
+      return(.mf_get_url_gpm(collection, variables, roi, time_range, verbose))
+    }
+    .mf_unknown_collection(collection)
   }
-  # Internet connection
-  .testInternetConnection()
-  # credentials
-  .testLogin(credentials)
-
-  if (verbose %in% c("inform","debug")) {
-    cat("Building the URLs...\n")
+  dates <- as.Date(time_range)
+  if (length(dates) == 1L) dates <- rep(dates, 2L)
+  if (length(dates) != 2L || anyNA(dates) || dates[1] > dates[2]) {
+    stop("time_range must contain one date or two ordered dates.")
   }
+  collection_id <- .mf_cloud_collection_id(collection, collection_id)
 
-  if (is.null(opt_param)) {
-    opt_param <- mf_get_opt_param(collection, roi, verbose = verbose)
+  available <- mf_list_variables(collection, backend = "cloud",
+                                 time_range = dates, collection_id = collection_id,
+                                 verbose = "quiet")
+  .testIfVarExists(variables, available$name[
+    available$extractable_with_modisfast == "extractable"])
+
+  rows <- list()
+  for (i in seq_len(nrow(roi))) {
+    one <- roi[i, ]
+    tile_names <- .getMODIStileNames(one, "modis")$all_modis_tiles
+    if (!length(tile_names)) next
+    bbox <- sf::st_bbox(sf::st_transform(one, 4326))
+    bbox_string <- paste(bbox[c("xmin", "ymin", "xmax", "ymax")], collapse = ",")
+    page <- 1L
+    repeat {
+      response <- .mf_cloud_json("https://cmr.earthdata.nasa.gov/search/granules.json",
+        list(collection_concept_id = collection_id,
+             temporal = paste0(format(dates[1], "%Y-%m-%d"), "T00:00:00Z,",
+                               format(dates[2], "%Y-%m-%d"), "T23:59:59Z"),
+             bounding_box = bbox_string, page_size = 2000L, page_num = page))
+      entries <- response$feed$entry
+      if (!length(entries)) break
+      for (entry in entries) {
+        granule <- entry$producer_granule_id
+        tile <- regmatches(granule, regexpr("h[0-9]{2}v[0-9]{2}", granule))
+        if (!length(tile) || !tile %in% tile_names) next
+        # Share CMR link resolution with the cloud availability checker.
+        base <- .mf_cloud_granule_base(entry, collection_id)
+        if (is.null(base)) next
+        metadata <- .mf_cloud_dds(base)
+        granule_variables <- .mf_cloud_dds_variables(metadata)
+        .testIfVarExists(variables, granule_variables$name[
+          granule_variables$extractable_with_modisfast == "extractable"])
+        specs <- lapply(variables, .mf_cloud_variable, doc = metadata)
+        sizes <- vapply(specs, function(spec) spec$size, integer(2))
+        if (is.null(dim(sizes))) sizes <- matrix(sizes, nrow = 2L)
+        if (any(sizes[1, ] != sizes[1, 1]) || any(sizes[2, ] != sizes[2, 1])) {
+          stop("Selected variables have different grids; request them separately.")
+        }
+        indices <- .mf_cloud_indices(one, tile, sizes[1, 1], sizes[2, 1])
+        if (is.null(indices)) next
+        selections <- vapply(specs, function(spec) paste0(spec$path,
+          "[", indices[1], ":", indices[2], "]",
+          "[", indices[3], ":", indices[4], "]"), character(1))
+        day <- as.Date(sub("^.*\\.A([0-9]{7})\\..*$", "\\1", granule), format = "%Y%j")
+        if (is.na(day)) day <- as.Date(substr(entry$time_start, 1, 10))
+        rows[[length(rows) + 1L]] <- data.frame(
+          id_roi = as.character(one$id), time_start = day,
+          collection = collection,
+          name = paste0(basename(base), "_",
+                        paste(variables, collapse = "-"), ".nc4"),
+          url = paste0(base, ".nc4?",
+                       gsub("]", "%5D", gsub("[", "%5B",
+                         paste(selections, collapse = ","), fixed = TRUE),
+                         fixed = TRUE)),
+          grid_nrow = sizes[1, 1], grid_ncol = sizes[2, 1],
+          maxFileSizeEstimated = prod(c(indices[2] - indices[1] + 1L,
+                                        indices[4] - indices[3] + 1L)) *
+            length(variables) * 4, stringsAsFactors = FALSE)
+      }
+      if (length(entries) < 2000L) break
+      page <- page + 1L
+    }
   }
-
-  if (length(opt_param$roiSpatialIndexBound) == 0) {
-    stop("Your ROI does not cover a region where there is any data.
-         Please provide a correct ROI.")
+  if (!length(rows)) {
+    stop("No OPeNDAP granules intersect the requested dates and ROI in ", collection_id)
   }
+  out <- do.call(rbind, rows)
+  out[order(out$id_roi, out$time_start, out$name), , drop = FALSE]
+}
 
-  # test variables
-  # if(verbose){cat("Checking if specified variables exist for the collection specified...\n")}
-  available_variables <- opt_param$availableVariables$name[which(opt_param$availableVariables$extractable_with_modisfast == "extractable")]
-  if (is.null(variables)) {
-    variables <- available_variables
-  } else {
-    .testIfVarExists(variables, available_variables)
+.mf_cloud_json <- function(url, query) {
+  response <- httr::GET(url, query = query)
+  httr::stop_for_status(response)
+  jsonlite::fromJSON(httr::content(response, "text", encoding = "UTF-8"),
+                     simplifyVector = FALSE)
+}
+
+.mf_cloud_collection_id <- function(collection, collection_id = NULL,
+                                    catalog_path = system.file(
+                                      "extdata", "data_collections_cloud.csv",
+                                      package = "modisfast")) {
+  if (is.null(collection_id)) {
+    catalogue <- .mf_cloud_catalogue(catalog_path)
+    matches <- which(catalogue$collection == collection)
+    if (length(matches) != 1L) {
+      stop("Collection '", collection, "' is not in the bundled Cloud ",
+           "catalogue. Run mf_list_collections_cloud() to see available ",
+           "collections. Provide collection_id explicitly if known.")
+    }
+    collection_id <- catalogue$collection_id[matches]
   }
-
-  # build URLs
-  table_urls <- .buildUrls(collection,
-                           variables,
-                           roi,
-                           time_range,
-                           output_format,
-                           single_netcdf,
-                           opt_param,
-                           credentials,
-                           verbose)
-
-  table_urls <- table_urls %>%
-    dplyr::mutate(name = stringr::str_replace(name, ".*/", "")) %>%
-    dplyr::mutate(url = gsub("\\[", "%5B", url)) %>%
-    dplyr::mutate(url = gsub("\\]", "%5D", url)) %>%
-    dplyr::arrange(name) %>%
-    dplyr::mutate(name = paste0(name, ".", output_format)) %>%
-    dplyr::arrange(roi_id, date) %>%
-    dplyr::mutate(collection = collection) %>%
-    dplyr::select(roi_id, date, collection, name, url, maxFileSizeEstimated) %>%
-    dplyr::rename(time_start = date, id_roi = roi_id)
-
-  maxFileSizeEstimated <- dplyr::if_else(round(sum(table_urls$maxFileSizeEstimated)/1000000)>1,round(sum(table_urls$maxFileSizeEstimated)/1000000),1)
-
-  if (verbose %in% c("inform","debug")) {
-    cli::cli_alert_success("URL(s) built.\n")
-    cat("Estimated maximum size of data to be downloaded is",maxFileSizeEstimated,"Mb\n")
+  if (!is.character(collection_id) || length(collection_id) != 1L ||
+      is.na(collection_id) || !grepl("^C[0-9]+-LPCLOUD$", collection_id)) {
+    stop("collection_id must be an LPCLOUD CMR collection concept ID ",
+         "(C...-LPCLOUD). Check the Cloud catalogue or supply it explicitly.")
   }
+  collection_id
+}
 
-  return(table_urls)
+.mf_cloud_catalogue <- function(catalog_path = system.file(
+                                  "extdata", "data_collections_cloud.csv",
+                                  package = "modisfast")) {
+  if (!nzchar(catalog_path) || !file.exists(catalog_path)) {
+    stop("The bundled Cloud collection catalogue is missing. Reinstall modisfast.")
+  }
+  catalogue <- utils::read.csv(catalog_path, stringsAsFactors = FALSE)
+  if (!all(c("collection", "collection_id", "source") %in% names(catalogue))) {
+    stop("The Cloud collection catalogue lacks collection, collection_id or source.")
+  }
+  catalogue
+}
+
+.mf_cloud_collection_source <- function(collection,
+                                        catalog_path = system.file(
+                                          "extdata", "data_collections_cloud.csv",
+                                          package = "modisfast")) {
+  if (!is.character(collection) || length(collection) != 1L ||
+      is.na(collection)) return(NULL)
+  if (grepl("^GPM_", collection)) return(NULL)
+  if (nzchar(catalog_path) && file.exists(catalog_path)) {
+    catalogue <- .mf_cloud_catalogue(catalog_path)
+    matches <- which(catalogue$collection == collection &
+      grepl("^C[0-9]+-LPCLOUD$", catalogue$collection_id) &
+      catalogue$source %in% c("MODIS", "VIIRS"))
+    if (length(matches) == 1L) return(catalogue$source[matches])
+  }
+  # Still permit an explicit collection_id for products absent from the CSV.
+  metadata <- opendapMetadata_internal
+  row <- metadata[metadata$collection == collection, , drop = FALSE]
+  if (nrow(row) == 1L && grepl("LP DAAC", row$provider, fixed = TRUE) &&
+      row$source == "MODIS") return("MODIS")
+  # CMR checks the provider, existence and exact version before URL creation.
+  if (grepl("^V(NP|J[12])[A-Z0-9]+\\.002$", collection)) return("VIIRS")
+  NULL
+}
+
+.mf_cloud_base_url <- function(url) {
+  base <- sub("\\?.*$", "", url)
+  # CMR links may already point to metadata or to a data representation.
+  # Remove the entire response suffix, not only the final '.html' or '.nc4'.
+  base <- sub("\\.(dmr\\.html|dap\\.nc4|dmr|html|nc4)$", "", base,
+              ignore.case = TRUE)
+  sub("\\.(hdf|h5)$", "", base, ignore.case = TRUE)
+}
+
+.mf_cloud_dds <- function(base) {
+  token <- Sys.getenv("EARTHDATA_TOKEN", unset = "")
+  if (!nzchar(token)) {
+    stop("Set EARTHDATA_TOKEN to an Earthdata bearer token before querying Cloud OPeNDAP.")
+  }
+  response <- httr::GET(paste0(base, ".dds"),
+                        httr::add_headers(Authorization = paste("Bearer", token)))
+  if (httr::http_error(response)) {
+    body <- httr::content(response, "text", encoding = "UTF-8")
+    if (httr::status_code(response) == 404L &&
+        grepl("dmrpp_read_from_daac_bucket|\\.(hdf|h5)\\.dmrpp", body)) {
+      stop("Cloud OPeNDAP cannot access the DMR++ metadata for ", base,
+           ". The server reports a missing DMR++ object in LP DAAC S3. ",
+           "This granule cannot be subset through OPeNDAP until LP DAAC ",
+           "restores the metadata; use Earthdata Search or AppEEARS for ",
+           "this product, or report the granule to LP DAAC.")
+    }
+    if (httr::status_code(response) == 404L &&
+        grepl("does not identify a granule in CMR", body, fixed = TRUE)) {
+      stop("Cloud OPeNDAP cannot identify the granule in CMR for ", base,
+           ". Check that the CMR link points to this collection and granule.")
+    }
+    stop("Cloud OPeNDAP returned HTTP ", httr::status_code(response),
+         " for ", base, ".dds. Check this granule URL in a browser.")
+  }
+  content_type <- httr::headers(response)[["content-type"]]
+  if (!is.null(content_type) && grepl("text/html", content_type, fixed = TRUE)) {
+    stop("The DDS request returned HTML; check Earthdata authorization.")
+  }
+  httr::content(response, "text", encoding = "UTF-8")
+}
+
+.mf_cloud_variable <- function(variable, doc) {
+  lines <- strsplit(doc, "\n", fixed = TRUE)[[1]]
+  declaration <- lines[grepl(paste0("/", variable, "["), lines, fixed = TRUE)]
+  if (length(declaration) != 1L) {
+    stop("Expected exactly one DDS variable named ", variable)
+  }
+  path <- sub("\\[.*$", "", sub("^[[:space:]]*[^[:space:]]+[[:space:]]+",
+                               "", declaration))
+  dimensions <- regmatches(declaration,
+                            gregexpr("\\[[^]]+\\]", declaration))[[1]]
+  if (length(dimensions) != 2L) {
+    stop("Cloud subsetting currently requires a 2D variable: ", variable)
+  }
+  size <- as.integer(sub(".*=[[:space:]]*([0-9]+)\\]", "\\1", dimensions))
+  if (anyNA(size)) stop("Cannot determine the grid dimensions of ", variable)
+  list(path = path, size = size)
+}
+
+.mf_cloud_indices <- function(roi, tile, nrow, ncol) {
+  # Standard MODIS/VIIRS sinusoidal grid: 36 x 18 ten-degree tiles.
+  width <- 1111950.5196666666
+  h <- as.integer(substr(tile, 2, 3))
+  v <- as.integer(substr(tile, 5, 6))
+  left <- -18 * width + h * width
+  top <- 9 * width - v * width
+  box <- sf::st_bbox(sf::st_transform(roi,
+    "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs"))
+  x <- pmax(0L, pmin(ncol - 1L, c(floor((box$xmin - left) * ncol / width),
+                                      ceiling((box$xmax - left) * ncol / width) - 1L)))
+  y <- pmax(0L, pmin(nrow - 1L, c(floor((top - box$ymax) * nrow / width),
+                                      ceiling((top - box$ymin) * nrow / width) - 1L)))
+  if (box$xmax <= left || box$xmin >= left + width ||
+      box$ymin >= top || box$ymax <= top - width) return(NULL)
+  as.integer(c(y, x))
 }
