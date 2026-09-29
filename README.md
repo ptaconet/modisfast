@@ -51,8 +51,9 @@ downloads of
 [**MODIS**](https://www.earthdata.nasa.gov/data/instruments/modis) Land
 products,
 [**VIIRS**](https://www.earthdata.nasa.gov/data/instruments/viirs) Land
-products, and [**GPM**](https://gpm.nasa.gov/data) (Global Precipitation
-Measurement Mission) Earth Observation data.
+products, and
+[**GPM**](https://earth.gsfc.nasa.gov/hydro/missions/global-precipitation-measurement-gpm)
+(Global Precipitation Measurement Mission) Earth Observation data.
 
 `modisfast` uses the abilities offered by the
 [OPeNDAP](https://www.opendap.org/about/) framework (*Open-source
@@ -104,8 +105,12 @@ km spatial resolution over the whole country of Madagascar.
 
 **1/ Fist, set your Earthdata token**
 
-This token is mandatory to be able to access the data:
-<https://urs.earthdata.nasa.gov/> .
+``` r
+Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
+```
+
+This token is mandatory to be able to access the data. It can be
+retrieved here : <https://urs.earthdata.nasa.gov/> .
 
 <figure>
 <img src=".token_earthdata_readme.png"
@@ -113,12 +118,8 @@ alt="Earthdata token generation" />
 <figcaption aria-hidden="true">Earthdata token generation</figcaption>
 </figure>
 
-``` r
-Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
-```
-
-**2/ Now, define the variables of interest (ROI, time frame, collection,
-and bands) :**
+**2/ Define the variables of interest (ROI, time frame, collection, and
+bands) :**
 
 ``` r
 # Load the packages
@@ -128,11 +129,11 @@ library(terra)
 
 # ROI and time range of interest
 roi <- st_as_sf(data.frame(id = "madagascar", geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"), wkt = "geom", crs = 4326) # a ROI of interest, format sf polygon
-time_range <- as.Date(c("2023-01-01", "2023-04-01")) # a time range of interest
+time_range <- as.Date(c("2026-01-01", "2026-04-01")) # a time range of interest
 
 # MODIS collections and variables (bands) of interest
-collection <- "VNP21A2.002" # run mf_list_collections() for an exhaustive list of collections available
-variables <- c("LST_Day_1KM") # run mf_list_variables("MOD13A3.061") for an exhaustive list of variables available for the collection "MOD13A3.061"
+collection <- "VJ221A2.002" # run mf_list_collections() for an exhaustive list of collections available
+variables <- c("LST_Day_1KM") # run mf_list_variables("VJ221A2.002") for an exhaustive list of variables available for the collection "VJ221A2.002"
 ```
 
 **3/ Then, get the URL of the data and download them :**
@@ -215,9 +216,10 @@ extracted from the following meta-collections :
   products](https://www.earthdata.nasa.gov/data/instruments/viirs) made
   available by the [NASA / USGS LP
   DAAC](https://www.earthdata.nasa.gov/centers/lp-daac)
-- [Global Precipitation Measurement](https://gpm.nasa.gov/missions/GPM)
+- [Global Precipitation
+  Measurement](https://earth.gsfc.nasa.gov/hydro/missions/global-precipitation-measurement-gpm)
   (GPM) made available by the [NASA / JAXA GES
-  DISC](https://disc.gsfc.nasa.gov/).
+  DISC](https://www.earthdata.nasa.gov/centers/gesdisc-daac).
 
 Details of each product available for download are provided in the
 tables below or through the function `mf_list_collections()`.
@@ -4758,12 +4760,14 @@ VIIRS/NPP Gross and Net Primary Production Gap-Filled Yearly L4 Global
 
 ## Manual testing of the functionality
 
-Live data tests require an Earthdata token. Set it before testing the
-package:
+Since most `modisfast` functions depend on EarthData credentials/token,
+automated tests are disabled. However, after installation, users can
+manually test the package’s functionality by running these lines of code
+:
 
 ``` r
 Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
-devtools::test("modisfast")
+devtools::test("~path/to/modisfast")
 ```
 
 ## Foundational framework
@@ -4811,12 +4815,6 @@ chunks of MODIS or VIIRS data :
 | [`MODIS`](https://github.com/fdetsch/MODIS) | MODIS | :x: | :x: | :x: | :x: | NA | NA |
 
 \* at the downloading phase
-
-\*\* Take a look at the article [“Comparison of performance with other
-similar R
-packages”](https://ptaconet.github.io/modisfast/articles/perf_comp.html)
-to get an overview of how `modisfast` compares to these packages in
-terms of data access time.
 
 ## Citation
 

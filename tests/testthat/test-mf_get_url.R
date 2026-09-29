@@ -1,3 +1,39 @@
+test_that("function mf_get_url() sends back the expected output for a MODIS query", {
+
+  skip_on_cran()
+  skip_on_ci()
+  skip_if_token_not_provided()
+
+  urls_modis <- mf_get_url(collection = "VNP21A2.002",
+                           variables = c("LST_Day_1KM"),
+                           roi = roi,
+                           time_range = time_range
+  )
+
+  expect_is(urls_modis, "data.frame") # output is a data.frame
+  expect_named(urls_modis, c("id_roi","time_start","collection","name","url","grid_nrow","grid_ncol","maxFileSizeEstimated")) # column names are ok
+  expect_equal(ncol(urls_modis), 8) # there are 8 columns
+  expect_equal(nrow(urls_modis), 60)# there are 60 rows (corresponding to 5 tiles * 12 dates)
+  expect_match(urls_modis$url[1], "https://opendap.earthdata.nasa.gov/")  # urls starts with the right OPENDAP url
+
+  observed <- urls_modis[1:5, 1:5]
+  rownames(observed) <- NULL
+  expect_equal(observed, data.frame(id_roi = rep("madagascar",5),
+                                            time_start = rep(as.Date("2023-01-01"), 5),
+                                            collection = rep("VNP21A2.002", 5),
+                                            name = c("VNP21A2.A2023001.h21v10.002.2023146014559_LST_Day_1KM.nc4", "VNP21A2.A2023001.h21v11.002.2023146014601_LST_Day_1KM.nc4", "VNP21A2.A2023001.h22v10.002.2023146015101_LST_Day_1KM.nc4", "VNP21A2.A2023001.h22v11.002.2023146015101_LST_Day_1KM.nc4", "VNP21A2.A2023001.h23v10.002.2023146015102_LST_Day_1KM.nc4"),
+                                            url = c( "https://opendap.earthdata.nasa.gov/collections/C2545314562-LPCLOUD/granules/VNP21A2.A2023001.h21v10.002.2023146014559.nc4?/HDFEOS/GRIDS/VIIRS_Grid_8Day_1km_LST21/Data_Fields/LST_Day_1KM%5B164:1199%5D%5B917:1199%5D",
+                                                     "https://opendap.earthdata.nasa.gov/collections/C2545314562-LPCLOUD/granules/VNP21A2.A2023001.h21v11.002.2023146014601.nc4?/HDFEOS/GRIDS/VIIRS_Grid_8Day_1km_LST21/Data_Fields/LST_Day_1KM%5B0:740%5D%5B917:1199%5D",
+                                                     "https://opendap.earthdata.nasa.gov/collections/C2545314562-LPCLOUD/granules/VNP21A2.A2023001.h22v10.002.2023146015101.nc4?/HDFEOS/GRIDS/VIIRS_Grid_8Day_1km_LST21/Data_Fields/LST_Day_1KM%5B164:1199%5D%5B0:1199%5D",
+                                                     "https://opendap.earthdata.nasa.gov/collections/C2545314562-LPCLOUD/granules/VNP21A2.A2023001.h22v11.002.2023146015101.nc4?/HDFEOS/GRIDS/VIIRS_Grid_8Day_1km_LST21/Data_Fields/LST_Day_1KM%5B0:740%5D%5B0:1199%5D",
+                                                     "https://opendap.earthdata.nasa.gov/collections/C2545314562-LPCLOUD/granules/VNP21A2.A2023001.h23v10.002.2023146015102.nc4?/HDFEOS/GRIDS/VIIRS_Grid_8Day_1km_LST21/Data_Fields/LST_Day_1KM%5B164:1199%5D%5B0:30%5D")
+  )
+  )
+
+})
+
+
+
 test_that("function mf_get_url() sends back the expected output for a GPM query", {
 
   skip_on_cran()
@@ -11,8 +47,8 @@ test_that("function mf_get_url() sends back the expected output for a GPM query"
   )
 
   expect_is(urls_gpm, "data.frame") # output is a data.frame
-  expect_named(urls_gpm, c("id_roi","time_start","collection","name","url","maxFileSizeEstimated")) # column names are ok
-  expect_equal(ncol(urls_gpm), 6) # there are 5 columns
+  expect_named(urls_gpm, c("id_roi","time_start","collection","name","url","grid_nrow","grid_ncol","maxFileSizeEstimated")) # column names are ok
+  expect_equal(ncol(urls_gpm), 8) # there are 8 columns
   expect_equal(nrow(urls_gpm), 90) # there are 90 rows (corresponding to 90 dates)
   expect_match(urls_gpm$url[1], "https://gpm1.gesdisc.eosdis.nasa.gov")  # urls starts with the right OPENDAP url
 

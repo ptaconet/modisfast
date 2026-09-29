@@ -227,10 +227,10 @@ mf_get_url <- function(collection, variables = NULL, roi, time_range,
     if (httr::status_code(response) == 404L &&
         grepl("dmrpp_read_from_daac_bucket|\\.(hdf|h5)\\.dmrpp", body)) {
       stop("Cloud OPeNDAP cannot access the DMR++ metadata for ", base,
-           ". The server reports a missing DMR++ object in LP DAAC S3. ",
-           "This granule cannot be subset through OPeNDAP until LP DAAC ",
-           "restores the metadata; use Earthdata Search or AppEEARS for ",
-           "this product, or report the granule to LP DAAC.")
+           "The server reports missing DMR++ metadata for this granule. ",
+           "Other dates in the same collection may still work: ",
+           "try a different time range. To obtain this specific granule, ",
+           "try Earthdata Search or AppEEARS, or report the issue to LP DAAC.")
     }
     if (httr::status_code(response) == 404L &&
         grepl("does not identify a granule in CMR", body, fixed = TRUE)) {

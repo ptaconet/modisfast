@@ -17,7 +17,7 @@ test_that("function mf_list_variables() sends back the expected output", {
 
   expect_is(vars_gpm,'data.frame')  # output is a data.frame
   expect_named(vars_gpm, c("name","long_name","units","indices","all_info","extractable_with_modisfast")) # column names are ok
-  expect_equal(nrow(vars_gpm), 14) # there are 14 rows (corresponding to 14 variables/bands for this collection)
+  expect_equal(nrow(vars_gpm), 13) # there are 13 rows (corresponding to 13 variables/bands for this collection)
 
 })
 

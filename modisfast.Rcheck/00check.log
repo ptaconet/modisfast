@@ -1,0 +1,14 @@
+* using log directory ‘/home/ptaconet/modisfast/modisfast.Rcheck’
+* using R version 4.6.1 (2026-06-24)
+* using platform: x86_64-pc-linux-gnu
+* R was compiled by
+    x86_64-linux-gnu-gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+    GNU Fortran (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+* running under: Ubuntu 24.04.4 LTS
+* using session charset: UTF-8
+* current time: 2026-09-29 09:47:26 UTC
+* checking for file ‘modisfast/DESCRIPTION’ ... ERROR
+Champs requis mais manquants ou vides :
+  ‘Author’ ‘Maintainer’
+* DONE
+Status: 1 ERROR

@@ -42,7 +42,8 @@
     dplyr::mutate(name = paste0(name, ".nc4")) %>%
     dplyr::arrange(roi_id, date) %>%
     dplyr::mutate(collection = collection) %>%
-    dplyr::select(roi_id, date, collection, name, url, maxFileSizeEstimated) %>%
+    dplyr::mutate(grid_nrow = NA, grid_ncol = NA) %>%
+    dplyr::select(roi_id, date, collection, name, url, "grid_nrow", "grid_ncol", maxFileSizeEstimated) %>%
     dplyr::rename(time_start = date, id_roi = roi_id)
 
   maxFileSizeEstimated <- dplyr::if_else(round(sum(table_urls$maxFileSizeEstimated)/1000000)>1,round(sum(table_urls$maxFileSizeEstimated)/1000000),1)

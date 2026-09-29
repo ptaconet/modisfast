@@ -40,8 +40,7 @@ Suggests:
     mapview,
     rmarkdown,
     spelling,
-    testthat, 
-    appeears
+    testthat
 Encoding: UTF-8
 LazyData: true
 Language: en-US
