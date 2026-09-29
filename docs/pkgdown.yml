@@ -1,10 +1,6 @@
-pandoc: 3.1.1
-pkgdown: 2.0.9
+pandoc: '3.4'
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
-  get_started: get_started.html
-  modisfast2: modisfast2.html
-  perf_comp: perf_comp.html
-  use_case: use_case.html
-last_built: 2024-08-07T14:49Z
-
+  articles/get_started: get_started.html
+last_built: 2026-09-29T11:50Z

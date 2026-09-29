@@ -34,7 +34,7 @@ library(mapview)
 
 In this example we want to download, import and plot over the 3500 km^2^ wide region of interest (mapped below) :
 
-- a 1 year-long time series of monthly NDVI from [MODIS Terra Vegetation indices](https://dx.doi.org/10.5067/MODIS/MOD13A3.061) (spatial resolution : 1 km ; temporal resolution : 1 month),
+- a 1 year-long time series of weekly land surface temperature from [VIIRS](https://doi.org/10.5067/VIIRS/VJ221A2.002) (spatial resolution : 1 km ; temporal resolution : 8 day),
 - the same 1 year-long times series of monthly precipitations from [Global Precipitation Measurement (GPM)](https://doi.org/10.5067/GPM/IMERG/3B-MONTH/07) (spatial resolution : 1° ; temporal resolution : 1 month)
 
 ```{r, echo=F, fig.height=5, fig.width=3, eval=NOT_CRAN }
@@ -53,7 +53,7 @@ print(str(collections))
 
 So our collections of interest are : 
 
-- **MOD13A3.061** : MODIS/Terra Vegetation Indices Monthly L3 Global 1 km SIN Grid
+- **VJ221A2.002** : VIIRS/JPSS2 Land Surface Temperature/Emissivity 8-Day L3 Global 1km SIN Grid V002
 - **GPM_3IMERGM.07** : GPM IMERG Final Precipitation L3 1 month 0.1 degree x 0.1 degree V07
 
 ### Setup the region and time range of interest
@@ -63,7 +63,7 @@ First we prepare the script : define the ROI, the time frame, and the folder wer
 ```{r example_prepare, eval=NOT_CRAN}
 # Set ROI and time range of interest
 roi <- st_as_sf(data.frame(id="Korhogo", geom="POLYGON ((-5.82 9.54, -5.42 9.55, -5.41 8.84, -5.81 8.84, -5.82 9.54))"), wkt="geom", crs = 4326)
-time_range <- as.Date(c("2017-01-01","2017-12-31"))
+time_range <- as.Date(c("2024-01-01","2024-12-31"))
 ```
 
 ### Configure an Earthdata token
@@ -76,17 +76,17 @@ Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
 
 ### Get the URLs of the data to download {#get-url}
 
-With the function `mf_get_url()`, we get the https URLs for our collections of interest (*MOD11A1.061* and *GPM_3IMERGDF.07*) given our ROI and time frame. 
+With the function `mf_get_url()`, we get the https URLs for our collections of interest (*VJ221A2.002* and *GPM_3IMERGDF.07*) given our ROI and time frame. 
 
 :arrow_right: For each collection, we can select a subset only of variables (sometimes called "dimensions", or "bands") that are of interest for us, through the parameter `variables`. By default, this parameter is set to `NULL`, which means that all the available variables for the specified collection are included. To get the variables available for a given collection along with information for each of them (description, etc.), use the function `mf_list_variables()`.
 
 For more information on the variables in the context of OPeNDAP, see the [OPeNDAP Data model documentation](https://opendap.github.io/documentation/UserGuideComprehensive.html#OPeNDAP_Data_Model).
 
 ```{r mf_get_url, eval=NOT_CRAN}
-## Get the URLs of MODIS Vegetation indexes
-urls_mod11a1 <- mf_get_url(
-  collection = "MOD13A3.061",
-  variables = c("_1_km_monthly_NDVI","_1_km_monthly_EVI","_1_km_monthly_VI_Quality"),  # get the available variables with : mf_list_variables("MOD13A3.061"), or set to NULL (default) to download all the variables
+## Get the URLs of VIIRS LST datacubes
+urls_viirs <- mf_get_url(
+  collection = "VJ221A2.002",
+  variables = c("LST_Day_1KM","LST_Night_1KM"),  # get the available variables with : mf_list_variables("VJ221A2.002")
   roi = roi,
   time_range = time_range )
 
@@ -97,8 +97,8 @@ urls_gpm <- mf_get_url(
   roi = roi,
   time_range = time_range )
 
-nrow(urls_mod11a1)
-urls_mod11a1
+nrow(urls_viirs)
+head(urls_viirs,3)
 
 nrow(urls_gpm)
 head(urls_gpm,3)
@@ -109,17 +109,17 @@ head(urls_gpm,3)
 
 Now we download the data with the function `mf_download_data()`.
 
-The destination file for each dataset is specified in the column *destfile* of the dataframes *urls_mod11a1* and *urls_gpm*. A destination file is specified by default but it can of course be modified.
+The destination file for each dataset is specified in the column *destfile* of the dataframes *urls_viirs* and *urls_gpm*. A destination file is specified by default but it can of course be modified.
 
 Setting the argument `parallel` to `TRUE` will parallelize - therefore fasten - the download in case numerous datasets need to be downloaded.
 
 ```{r mf_download_data, eval=NOT_CRAN }
 # Hint : to fasten the download in case of multiple collections, bind them in a single data.frame (as shown below) before executing the function 'mf_download_data()' :
-df_to_dl <- rbind(urls_mod11a1, urls_gpm)
+df_to_dl <- rbind(urls_viirs, urls_gpm)
 
 # Then download the data (by default, in temporary directory, but the target folder can be set with the argument 'path'
 res_dl <- mf_download_data(df_to_dl = df_to_dl, 
-                           parallel = TRUE)
+                           parallel = FALSE)  # may set to TRUE to fasten the download
 
 print(str(res_dl))
 ```
@@ -132,28 +132,25 @@ Various packages and related classes can be used to read the data downloaded thr
 
 #### Important warning regarding the use of the data after download through `modisfast` {#warning-import}
 
-Care must be taken when importing data that was downloaded through the OPeNDAP data providers servers. Depending on the collection, some "issues" were raised. These issues are independent from `modisfast` : they result most of time of a kind of lack of full implementation of the OPeNDAP framework by the data providers. These issues are :
-
-- for MODIS and VIIRS collections : CRS has to be provided
-- for GPM collections : CRS has to be provided + data have to be flipped
+Care must be taken when importing data that was downloaded through the OPeNDAP data providers servers. Depending on the collection, some "issues" were raised. These issues are independent from `modisfast` : they result most of time of a kind of lack of full implementation of the OPeNDAP framework by the data providers.
 
 **End warning**
 
 These issues can easily be dealt at the import phase in R using the function `mf_import_data()`. This function enables to open the data in R as a `SpatRaster` object (from the package [`terra`](https://cran.r-project.org/package=terra)) :
 
 ```{r import_example, message=F, eval=NOT_CRAN}
-# import MOD11A1.061
+# import VJ221A2.002
 # argument 'path' is the folder where the data are stored (here, in a temporary directory)
-modis_ts <- mf_import_data(path = dirname(list.files(path = tempdir(), pattern = "MOD13A3.061", recursive = TRUE, full.names = TRUE)),
-                           collection = "MOD13A3.061",
+viirs_ts <- mf_import_data(path = dirname(list.files(path = tempdir(), pattern = "VJ221A2", recursive = TRUE, full.names = TRUE)[1]),
+                           collection = "VJ221A2.002",
                            proj_epsg = 4326)
 
 # import GPM
-gpm_ts <- mf_import_data(path = unique(dirname(list.files(path = tempdir(), pattern = "3IMERG", recursive = TRUE, full.names = TRUE))),
+gpm_ts <- mf_import_data(path = dirname(list.files(path = tempdir(), pattern = "3IMERG", recursive = TRUE, full.names = TRUE)[1]),
                          collection = "GPM_3IMERGM.07",
                          proj_epsg = 4326)
 
-modis_ts
+viirs_ts
 gpm_ts
 ```
 
@@ -161,11 +158,11 @@ gpm_ts
 
 Let's finally plot the data !
 
-(Note that only the first 12 dates are plotted here)
+(Note that only the first 12 to 16 dates are plotted here)
 
 ```{r plot , fig.fullwidth = TRUE, fig.height = 10, fig.width = 9,fig.align = 'center', eval=NOT_CRAN}
 # Land surface temperature
-terra::plot(modis_ts["_1_km_monthly_NDVI"])
+terra::plot(viirs_ts["LST_Day_1KM"])
 # Precipitation
 terra::plot(gpm_ts["precipitation"])
 ```

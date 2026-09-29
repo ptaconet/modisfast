@@ -2,7 +2,7 @@
 
 ## Breaking changes
 
-* `mf_get_url()` now uses NASA Earthdata Cloud for supported MODIS and VIIRS collections. GPM data continue to use the GES DISC OPeNDAP service.
+* `mf_get_url()` now uses NASA Earthdata Cloud for supported MODIS and VIIRS collections. GPM data continue to use the GES DISC OPeNDAP service (#21, #23, #24).
 * Authentication now uses an Earthdata bearer token set in `EARTHDATA_TOKEN`. Username and password authentication and `mf_login()` have been removed.
 * The `opt_param`, `single_netcdf`, and `output_format` arguments have been removed.
 

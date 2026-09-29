@@ -1,10 +1,10 @@
 ---
-title: "3. Full use case"
+title: "2. Full use case"
 author: "Paul Taconet"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{3. Full use case}
+  %\VignetteIndexEntry{2. Full use case}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 format:
@@ -112,8 +112,12 @@ We now download the data using `modisfast` :
 - "MOD11A2.061" = MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 Global 1 km SIN Grid v061
 - "GPM_3IMERGDF.07" = GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V07
 
+```{r earthdata_token, eval=FALSE}
+Sys.setenv(EARTHDATA_TOKEN = "your Earthdata bearer token")
+```
+
+
 ```{r eval=NOT_CRAN}
-stopifnot(nzchar(Sys.getenv("EARTHDATA_TOKEN")))
 
 urls_mod11a2 <- mf_get_url(
   collection = "MOD11A2.061",
@@ -129,8 +133,8 @@ urls_gpm <- mf_get_url(
   time_range = time_range )
 
 
-res_dl_modis <- mf_download_data(urls_mod11a2, path = "data_use_case", parallel = TRUE)
-res_dl_gpm <- mf_download_data(urls_gpm, path = "data_use_case", parallel = TRUE)
+res_dl_modis <- mf_download_data(urls_mod11a2, path = "data_use_case", parallel = FALSE)
+res_dl_gpm <- mf_download_data(urls_gpm, path = "data_use_case", parallel = FALSE)
 
 ```
 
@@ -138,7 +142,7 @@ And then we import it in R :
 
 ```{r eval=NOT_CRAN}
 # import MODIS
-modis_ts <- mf_import_data(path = dirname(res_dl_modis$destfile[1]), 
+modis_ts <- mf_import_data(path = dirname(res_dl_modis$destfile[1]),
                            collection = "MOD11A2.061")
 # import GPM
 gpm_ts <- mf_import_data(path = dirname(res_dl_gpm$destfile[1]), 
