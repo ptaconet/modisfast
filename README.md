@@ -38,6 +38,12 @@ packages</a><br> • <a href="#citation">Citation</a><br> •
 
 ## News
 
+2026-09-29 :
+
+**`modisfast` is back!**
+
+- After a year-long interruption caused by the migration of NASA’s data
+  servers, `modisfast` is back
 - `modisfast` now uses the new [NASA Earthdata Cloud OPeNDAP
   endpoint](https://opendap.earthdata.nasa.gov) for MODIS and VIIRS
   collections !

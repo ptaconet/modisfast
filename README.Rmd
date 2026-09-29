@@ -49,6 +49,11 @@ knitr::opts_chunk$set(
 
 ## News
 
+2026-09-29 :
+
+**`modisfast` is back!**
+
+- After a year-long interruption caused by the migration of NASA’s data servers, `modisfast` is back
 - `modisfast` now uses the new [NASA Earthdata Cloud OPeNDAP endpoint](https://opendap.earthdata.nasa.gov) for MODIS and VIIRS collections !
 - Authentication to access data is now dealt with an Earthdata token instead of username and password.
 
