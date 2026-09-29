@@ -128,7 +128,9 @@ urls <- mf_get_url(
 )
 
 ## Download the data. By default the data is downloaded in a temporary directory, but you can specify a folder
-res_dl <- mf_download_data(urls, parallel = TRUE)
+res_dl <- mf_download_data(urls, 
+                           parallel = TRUE, 
+                           num_workers = 3)
 ```
 
 **4/ And finally, import the data in R as a `terra::SpatRaster` object using the function `mf_import_data()`**
@@ -149,10 +151,7 @@ terra::plot(r, col = rev(terrain.colors(20)))
 \
 et voilà ! 
 
-Want more examples ? `modisfast` provides two long-form documentations and examples to learn more about the package :
-
-- a ["Get started" article](https://ptaconet.github.io/modisfast/articles/get_started.html) describing the core features of the package;
-- a ["Full use case" article](https://ptaconet.github.io/modisfast/articles/use_case.html) showcasing an example of use of the package in a scientific context (here: landscape epidemiology).
+Want more examples ? `modisfast` provides a [long-form documentations and examples to learn more about the package](https://ptaconet.github.io/modisfast/articles/get_started.html)(https://ptaconet.github.io/modisfast/articles/get_started.html)
 
 
 <!--

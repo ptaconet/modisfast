@@ -100,7 +100,10 @@
 <div class="section level2">
 <h2 id="news">News<a class="anchor" aria-label="anchor" href="#news"></a>
 </h2>
+<p>2026-09-29 :</p>
+<p><strong><code>modisfast</code> is back!</strong></p>
 <ul>
+<li>After a year-long interruption caused by the migration of NASA’s data servers, <code>modisfast</code> is back</li>
 <li>
 <code>modisfast</code> now uses the new <a href="https://opendap.earthdata.nasa.gov" class="external-link">NASA Earthdata Cloud OPeNDAP endpoint</a> for MODIS and VIIRS collections !</li>
 <li>Authentication to access data is now dealt with an Earthdata token instead of username and password.</li>
@@ -161,7 +164,9 @@ Earthdata token generation
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Download the data. By default the data is downloaded in a temporary directory, but you can specify a folder</span></span>
-<span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls</span>, </span>
+<span>                           parallel <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                           num_workers <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><strong>4/ And finally, import the data in R as a <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> object using the function <code><a href="reference/mf_import_data.html">mf_import_data()</a></code></strong></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span></span>
@@ -175,11 +180,7 @@ Earthdata token generation
 <figure><img src=".Rplot_readme.png" alt="Time series of weekly 1-km VIIRS Land surface temperature over Madagascar for the first 3 months of the year 2023, retrieved with modisfast"><figcaption aria-hidden="true">
 Time series of weekly 1-km VIIRS Land surface temperature over Madagascar for the first 3 months of the year 2023, retrieved with <code>modisfast</code>
 </figcaption></figure><p>et voilà !</p>
-<p>Want more examples ? <code>modisfast</code> provides two long-form documentations and examples to learn more about the package :</p>
-<ul>
-<li>a <a href="https://ptaconet.github.io/modisfast/articles/get_started.html" class="external-link">“Get started” article</a> describing the core features of the package;</li>
-<li>a <a href="https://ptaconet.github.io/modisfast/articles/use_case.html" class="external-link">“Full use case” article</a> showcasing an example of use of the package in a scientific context (here: landscape epidemiology).</li>
-</ul>
+<p>Want more examples ? <code>modisfast</code> provides a <a href="https://ptaconet.github.io/modisfast/articles/get_started.html" class="external-link">long-form documentations and examples to learn more about the package</a>(<a href="https://ptaconet.github.io/modisfast/articles/get_started.html" class="external-link uri">https://ptaconet.github.io/modisfast/articles/get_started.html</a>)</p>
 <!--
 ## Objectives
 modisfast provides an entry point to some specific OPeNDAP servers (e.g. MODIS, VNP, GPM or SMAP) via HTTPS. The development of the package was motivated by the following reasons :
@@ -189,7 +190,8 @@ Apart from these performance aspects, ethical considerations have driven the dev
 * **Facilitating the access to Earth science data for R users in places where internet connection is slow or expensive** : Earth science products are generally huge files that can be quite difficult to download in places with slow internet connection, even more if large time series are needed. By enabling to download strictly the data that is needed, the products become more accessible in those places;
 * **Caring about the environmental digital impact of our research work** : Downloading data has an impact on environment and to some extent contributes to climate change. By downloading only the data that is need (rather than e.g a whole MODIS tile, or a global SMAP or GPM dataset) we somehow promote digital sobriety.
 * **Supporting the open-source-software movement** : The OPeNDAP is developed and advanced openly and collaboratively, by the non-profit [OPeNDAP, Inc.](https://www.opendap.org/about/) This open, powerfull and standard data access protocol is more and more used, by major Earth science data providers (e.g. NASA or NOAA). Using OPeNDAP means supporting methods for data access protocols that are open, build collaboratively and shared.
---><!--
+-->
+<!--
 ## Citation
 We thank in advance people that use `modisfast` for citing it in their work / publication(s). For this, please use the citation provided at this link [zenodo link to add] or through `citation("modisfast")`.
 -->

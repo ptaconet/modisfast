@@ -119,7 +119,8 @@ df_to_dl <- rbind(urls_viirs, urls_gpm)
 
 # Then download the data (by default, in temporary directory, but the target folder can be set with the argument 'path'
 res_dl <- mf_download_data(df_to_dl = df_to_dl, 
-                           parallel = FALSE)  # may set to TRUE to fasten the download
+                           parallel = TRUE,  
+                           num_workers = 3)   # too many workers may crash the download
 
 print(str(res_dl))
 ```

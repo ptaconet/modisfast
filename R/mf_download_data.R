@@ -138,9 +138,17 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
     if (!nzchar(token)) stop("Set EARTHDATA_TOKEN to an Earthdata bearer token.")
     dl_func <- function(url, output) {
       auth <- httr::add_headers(Authorization = paste("Bearer", token))
-      response <- httr::GET(url, auth,
-                            httr::write_disk(output), httr::progress(),
-                            httr::config(maxredirs = -1))
+      response <- httr::RETRY(
+        "GET", url, auth,
+        httr::write_disk(output, overwrite = TRUE),
+        httr::progress(),
+        httr::config(maxredirs = -1),
+        times = 5,
+        pause_base = 2,
+        pause_cap = 30,
+        quiet = TRUE,
+        terminate_on = c(400, 401, 403, 404, 410, 422)
+      )
       content_type <- httr::headers(response)[["content-type"]]
       if (httr::http_error(response) ||
           (!is.null(content_type) && grepl("text/html", content_type, fixed = TRUE))) {
