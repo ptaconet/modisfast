@@ -111,7 +111,7 @@ collection <- "VJ221A2.002" # run mf_list_collections() for an exhaustive list o
 variables <- c("LST_Day_1KM") # run mf_list_variables("VJ221A2.002") for an exhaustive list of variables available for the collection "VJ221A2.002"
 
 
-## Get the URLs of the data with mf_get_url()
+## Get the URLs of the data with mf_get_url() 
 urls <- mf_get_url(
   collection = collection,
   variables = variables,

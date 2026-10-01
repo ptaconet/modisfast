@@ -32,7 +32,7 @@ mf_get_url <- function(collection, variables = NULL, roi, time_range,
                        collection_id = NULL, verbose = "inform") {
   .mf_check_verbose(verbose)
   .mf_require_token("mf_get_url")
-  if (verbose != "quiet") cat("Building the URLs...\n")
+  if (verbose != "quiet") cat("Building the URLs... This may take a few moments.\n")
   if (!is.character(collection) || length(collection) != 1L ||
       is.na(collection) || !nzchar(collection)) {
     .mf_unknown_collection(collection)

@@ -31,7 +31,7 @@ Imports:
     rvest,
     sf,
     stringr,
-    terra (>= 1.9-50),
+    terra,
     xml2,
     cli
 Suggests: 
