@@ -1,10 +1,29 @@
 # Import granule subsets whose NetCDF files do not contain spatial coordinates.
 # The download manifest keeps the original DAP2 constraint and full grid size.
 .mf_cloud_manifest <- function(path) {
-  manifest_path <- file.path(dirname(dirname(dirname(path))),
-                             "Summary_downloaded_data.csv")
+  path <- normalizePath(path, winslash = "/", mustWork = TRUE)
+
+  manifest_path <- file.path(
+    dirname(dirname(dirname(path))),
+    "Summary_downloaded_data.csv"
+  )
+
   if (!file.exists(manifest_path)) return(NULL)
-  utils::read.csv(manifest_path, stringsAsFactors = FALSE)
+
+  manifest <- utils::read.csv(
+    manifest_path,
+    stringsAsFactors = FALSE
+  )
+
+  if ("destfile" %in% names(manifest)) {
+    manifest$destfile <- normalizePath(
+      manifest$destfile,
+      winslash = "/",
+      mustWork = FALSE
+    )
+  }
+
+  manifest
 }
 
 .mf_is_cloud_download <- function(path) {
@@ -13,6 +32,7 @@
     return(FALSE)
   }
   files <- list.files(path, pattern = "\\.nc4$", full.names = TRUE)
+  files <- normalizePath(files, winslash = "/", mustWork = TRUE)
   any(manifest$destfile %in% files &
         grepl("^https://opendap\\.earthdata\\.nasa\\.gov/collections/",
               manifest$url))
@@ -94,6 +114,7 @@
     stop("Cloud MODIS import currently supports SpatRaster with vrt = FALSE.")
   }
   files <- list.files(path, pattern = "\\.nc4$", full.names = TRUE)
+  files <- normalizePath(files, winslash = "/", mustWork = TRUE)
   if (!length(files)) stop("No NetCDF-4 files found in ", path)
   manifest <- .mf_cloud_manifest(path)
   records <- manifest[match(files, manifest$destfile), , drop = FALSE]

@@ -85,6 +85,7 @@ mf_import_data <- function(path,
   if (!dir.exists(path)) {
     stop("Directory provided does not exist.")
   }
+  path <- normalizePath(path, winslash = "/", mustWork = TRUE)
 
   if (!(output_class %in% c("SpatRaster", "stars"))) {
     stop("paramater 'output_class' must be SpatRaster.")

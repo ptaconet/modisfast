@@ -61,7 +61,7 @@
         rasts <- terra::vrt(files)
       } else {
 
-        tab <- as.data.frame(table(substr(files, nchar(files) - 9, nchar(files) - 4)))
+        tab <- as.data.frame(table(substr(files, nchar(files) - 9, nchar(files) - 4)))  ## s'il y a plusieurs bandes
 
         if(nrow(tab)>=2 & tab$Freq[1]>1){
 
