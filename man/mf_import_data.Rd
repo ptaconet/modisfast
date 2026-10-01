@@ -16,7 +16,8 @@ mf_import_data(
 )
 }
 \arguments{
-\item{path}{character string. mandatory. The path to the local directory where the data are stored.}
+\item{path}{Download root folder supplied to [mf_download_data()],
+or a folder containing the NetCDF files for one ROI and collection.}
 
 \item{collection}{Collection identifier, e.g. `"MOD11A1.061"`,
 `"VNP43MA4.002"` or `"GPM_3IMERGDF.07"`.}

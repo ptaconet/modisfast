@@ -3,7 +3,8 @@
 #' @title Import datasets downloaded using \code{modisfast} as a \code{terra::SpatRaster} object
 #' @description Import datasets downloaded using \code{modisfast} as a \code{terra::SpatRaster} object
 #'
-#' @param path character string. mandatory. The path to the local directory where the data are stored.
+#' @param path Download root folder supplied to [mf_download_data()],
+#'   or a folder containing the NetCDF files for one ROI and collection.
 #' @param output_class character string. Output object class. Currently only "SpatRaster" implemented.
 #' @param proj_epsg numeric. EPSG of the desired projection for the output raster (default : source projection of the data).
 #' @param roi_mask \code{SpatRaster} or \code{SpatVector} or \code{sf}. Area beyond which data will be masked. Typically, the input ROI of \link{mf_get_url} (default : NULL (no mask))
@@ -85,7 +86,7 @@ mf_import_data <- function(path,
   if (!dir.exists(path)) {
     stop("Directory provided does not exist.")
   }
-  path <- normalizePath(path, winslash = "/", mustWork = TRUE)
+  path <- .mf_resolve_import_path(path, collection)
 
   if (!(output_class %in% c("SpatRaster", "stars"))) {
     stop("paramater 'output_class' must be SpatRaster.")

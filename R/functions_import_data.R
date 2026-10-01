@@ -1,3 +1,58 @@
+#' @name .mf_resolve_import_path
+#' @title resolve import path
+#' @noRd
+
+.mf_resolve_import_path <- function(path, collection) {
+  if (!dir.exists(path)) {
+    stop("Directory provided does not exist.", call. = FALSE)
+  }
+
+  path <- normalizePath(path, winslash = "/", mustWork = TRUE)
+
+  has_files <- function(folder) {
+    length(list.files(
+      folder,
+      pattern = "\\.nc4$",
+      ignore.case = TRUE
+    )) > 0L
+  }
+
+  # The user provided the folder containing the NetCDF files.
+  if (has_files(path)) return(path)
+
+  # Otherwise, look under the download root: data/ROI/collection.
+  data_path <- file.path(path, "data")
+  roi_paths <- if (dir.exists(data_path)) {
+    list.dirs(data_path, recursive = FALSE, full.names = TRUE)
+  } else {
+    character(0)
+  }
+
+  candidates <- file.path(roi_paths, collection)
+  candidates <- candidates[
+    vapply(candidates, has_files, logical(1))
+  ]
+
+  if (!length(candidates)) {
+    stop(
+      "No downloaded NetCDF files found for collection '",
+      collection, "' under: ", path,
+      call. = FALSE
+    )
+  }
+
+  if (length(candidates) > 1L) {
+    stop(
+      "Several ROI folders contain this collection. ",
+      "Set path to the folder you want to import:\n",
+      paste(candidates, collapse = "\n"),
+      call. = FALSE
+    )
+  }
+
+  normalizePath(candidates[1], winslash = "/", mustWork = TRUE)
+}
+
 #' @name .import_gpm
 #' @title Import data  source=="GPM"
 #' @noRd

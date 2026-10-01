@@ -168,12 +168,28 @@ mf_download_data <- function(df_to_dl, path = tempfile("modisfast_"), parallel =
       # cat("Downloading the data in",path,"...\n")
     }
     if (parallel) {
-      cl <- parallel::makeCluster(num_workers)
-      parallel::clusterMap(cl, dl_func,
-        url = data_to_download$url, output = data_to_download$destfile,
-        .scheduling = "dynamic"
+        cl <- parallel::makeCluster(num_workers)
+
+        tryCatch(
+          parallel::clusterMap(
+            cl,
+            dl_func,
+            url = data_to_download$url,
+            output = data_to_download$destfile,
+            .scheduling = "dynamic"
+          ),
+          error = function(e) {
+            stop(
+              "Parallel download failed: ", conditionMessage(e),
+              "\nTry again with parallel = FALSE.",
+              "\nUse the same path to keep files already downloaded.",
+              call. = FALSE
+            )
+          },
+          finally = {
+            parallel::stopCluster(cl)
+          }
         )
-      parallel::stopCluster(cl)
     } else {
       for (i in seq_len(nrow(data_to_download))) {
         if (verbose %in% c("inform","debug")) {
