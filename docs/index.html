@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">modisfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -132,30 +132,28 @@
 <div class="section level2">
 <h2 id="get-started">Get Started<a class="anchor" aria-label="anchor" href="#get-started"></a>
 </h2>
-<p>Accessing and opening MODIS/VIIRS/GPM data with <code>modisfast</code> is a simple 3-steps workflow. This example shows how to download and import a 3-month weekly time series of VIIRS Land Surface Temperature (LST) at 1 km spatial resolution over the whole country of Madagascar.</p>
-<p><strong>1/ Fist, set your Earthdata token</strong></p>
+<p>This example shows how to download and import a 3-month weekly time series of VIIRS Land Surface Temperature (LST) at 1 km spatial resolution over the whole country of Madagascar.</p>
+<p><strong>Fist, you need to retrieve your Earthdata token</strong>. This token is mandatory to access the data. You can get it here : <a href="https://urs.earthdata.nasa.gov/" class="external-link uri">https://urs.earthdata.nasa.gov/</a> .</p>
+<p><img src=".token_earthdata_readme.png" alt="Earthdata token generation"><strong>Next, run the following code</strong></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>EARTHDATA_TOKEN <span class="op">=</span> <span class="st">"your Earthdata bearer token"</span><span class="op">)</span></span></code></pre></div>
-<p>This token is mandatory to be able to access the data. It can be retrieved here : <a href="https://urs.earthdata.nasa.gov/" class="external-link uri">https://urs.earthdata.nasa.gov/</a> .</p>
-<figure><img src=".token_earthdata_readme.png" alt="Earthdata token generation"><figcaption aria-hidden="true">
-Earthdata token generation
-</figcaption></figure><p><strong>2/ Define the variables of interest (ROI, time frame, collection, and bands) :</strong></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Load the packages</span></span>
+<code class="sourceCode R"><span><span class="co"># set your EarthData token as an environment system :</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>EARTHDATA_TOKEN <span class="op">=</span> <span class="st">"your Earthdata bearer token"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Load the packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ptaconet/modisfast" class="external-link">modisfast</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># ROI and time range of interest</span></span>
+<span><span class="co"># Set ROI and time range of interest</span></span>
 <span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"madagascar"</span>, geom <span class="op">=</span> <span class="st">"POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"</span><span class="op">)</span>, wkt <span class="op">=</span> <span class="st">"geom"</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span> <span class="co"># a ROI of interest, format sf polygon</span></span>
-<span><span class="va">time_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2026-01-01"</span>, <span class="st">"2026-04-01"</span><span class="op">)</span><span class="op">)</span> <span class="co"># a time range of interest</span></span>
+<span><span class="va">time_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2026-01-01"</span>, <span class="st">"2026-04-01"</span><span class="op">)</span><span class="op">)</span> <span class="co"># a time range of interest (or single date)</span></span>
 <span></span>
-<span><span class="co"># MODIS collections and variables (bands) of interest</span></span>
+<span><span class="co"># Set MODIS collections and variables (bands) of interest</span></span>
 <span><span class="va">collection</span> <span class="op">&lt;-</span> <span class="st">"VJ221A2.002"</span> <span class="co"># run mf_list_collections() for an exhaustive list of collections available</span></span>
-<span><span class="va">variables</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LST_Day_1KM"</span><span class="op">)</span> <span class="co"># run mf_list_variables("VJ221A2.002") for an exhaustive list of variables available for the collection "VJ221A2.002"</span></span></code></pre></div>
-<p><strong>3/ Then, get the URL of the data and download them :</strong></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Get the URLs of the data</span></span>
+<span><span class="va">variables</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LST_Day_1KM"</span><span class="op">)</span> <span class="co"># run mf_list_variables("VJ221A2.002") for an exhaustive list of variables available for the collection "VJ221A2.002"</span></span>
+<span></span>
+<span></span>
+<span><span class="co">## Get the URLs of the data with mf_get_url()</span></span>
 <span><span class="va">urls</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span>
 <span>  collection <span class="op">=</span> <span class="va">collection</span>,</span>
 <span>  variables <span class="op">=</span> <span class="va">variables</span>,</span>
@@ -163,13 +161,14 @@ Earthdata token generation
 <span>  time_range <span class="op">=</span> <span class="va">time_range</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## Download the data. By default the data is downloaded in a temporary directory, but you can specify a folder</span></span>
+<span><span class="co">## Download the data with mf_download_data(). By default the data is downloaded in a temporary directory, but you can specify a folder</span></span>
 <span><span class="va">res_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mf_download_data.html">mf_download_data</a></span><span class="op">(</span><span class="va">urls</span>, </span>
 <span>                           parallel <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                           num_workers <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><strong>4/ And finally, import the data in R as a <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> object using the function <code><a href="reference/mf_import_data.html">mf_import_data()</a></code></strong></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span></span>
+<span>                           num_workers <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># And finally, import the data in R as a terra::SpatRaster object using the function mf_import_data()</span></span>
+<span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mf_import_data.html">mf_import_data</a></span><span class="op">(</span></span>
 <span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">res_dl</span><span class="op">$</span><span class="va">destfile</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>  collection <span class="op">=</span> <span class="va">collection</span>,</span>
 <span>  proj_epsg <span class="op">=</span> <span class="fl">4326</span>,</span>
@@ -2747,7 +2746,7 @@ VIIRS/NPP Gross and Net Primary Production Gap-Filled Yearly L4 Global 500m SIN 
 <h2 id="manual-testing-of-the-functionality">Manual testing of the functionality<a class="anchor" aria-label="anchor" href="#manual-testing-of-the-functionality"></a>
 </h2>
 <p>Since most <code>modisfast</code> functions depend on EarthData credentials/token, automated tests are disabled. However, after installation, users can manually test the package’s functionality by running these lines of code :</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>EARTHDATA_TOKEN <span class="op">=</span> <span class="st">"your Earthdata bearer token"</span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">test</a></span><span class="op">(</span><span class="st">"~path/to/modisfast"</span><span class="op">)</span></span></code></pre></div>
 </div>
