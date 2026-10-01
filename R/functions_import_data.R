@@ -55,7 +55,7 @@
   files <- list.files(dir_path, full.names = TRUE)
 
   if (output_class == "SpatRaster") {
-    if (length(files) > 1 & length(unique(substr(files, nchar(files) - 9, nchar(files) - 4))) > 1) { # if there are multiple files from differents tiles, we need to merge them
+    if (length(files) > 1 & length(unique(regmatches(basename(files), regexpr("h[0-9]{2}v[0-9]{2}", basename(files))))) > 1) { # if there are multiple files from differents tiles, we need to merge them
 
       if (vrt) {
         rasts <- terra::vrt(files)
