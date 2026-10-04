@@ -1,3 +1,13 @@
+# modisfast 2.0.1
+
+## Improvements and fixes
+
+* Added Earthdata token authentication to CMR requests to resolve HTTP 401 errors encountered in some environments.
+* Normalized file paths during cloud to fix path-matching issues, particularly on Windows.
+* `mf_import_data()` now accepts the download root folder and locates the files for the requested collection. A clearer error lists matching folders when several ROIs are available.
+* Improved URL-building progress messages.
+* Improved parallel download error messages to suggest retrying with parallel = FALSE, and ensured workers are stopped when a download fails.
+
 # modisfast 2.0.0
 
 ## Breaking changes
