@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">modisfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
       </span>
     </div>
 
@@ -132,7 +132,7 @@
 <div class="section level2">
 <h2 id="get-started">Get Started<a class="anchor" aria-label="anchor" href="#get-started"></a>
 </h2>
-<p>This example shows how to download and import a 3-month weekly time series of VIIRS Land Surface Temperature (LST) at 1 km spatial resolution over the whole country of Madagascar.</p>
+<p>This example shows how to download and import a 1-year long time series of MODIS Land Surface Temperature (LST) at 6 km spatial resolution / 1 month temporal resolution over the whole country of Madagascar (collection <a href="https://doi.org/10.5067/MODIS/MOD11B3.061" class="external-link">MOD11B3.061</a>).</p>
 <p><strong>Fist, you need to retrieve your Earthdata token</strong>. This token is mandatory to access the data. You can get it here : <a href="https://urs.earthdata.nasa.gov/" class="external-link uri">https://urs.earthdata.nasa.gov/</a> .</p>
 <p><img src=".token_earthdata_readme.png" alt="Earthdata token generation"><strong>Next, run the following code</strong></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -146,14 +146,13 @@
 <span></span>
 <span><span class="co"># Set ROI and time range of interest</span></span>
 <span><span class="va">roi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"madagascar"</span>, geom <span class="op">=</span> <span class="st">"POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"</span><span class="op">)</span>, wkt <span class="op">=</span> <span class="st">"geom"</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span> <span class="co"># a ROI of interest, format sf polygon</span></span>
-<span><span class="va">time_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2026-01-01"</span>, <span class="st">"2026-04-01"</span><span class="op">)</span><span class="op">)</span> <span class="co"># a time range of interest (or single date)</span></span>
+<span><span class="va">time_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2025-01-01"</span>, <span class="st">"2025-12-31"</span><span class="op">)</span><span class="op">)</span> <span class="co"># a time range of interest (or single date)</span></span>
 <span></span>
 <span><span class="co"># Set MODIS collections and variables (bands) of interest</span></span>
-<span><span class="va">collection</span> <span class="op">&lt;-</span> <span class="st">"VJ221A2.002"</span> <span class="co"># run mf_list_collections() for an exhaustive list of collections available</span></span>
-<span><span class="va">variables</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LST_Day_1KM"</span><span class="op">)</span> <span class="co"># run mf_list_variables("VJ221A2.002") for an exhaustive list of variables available for the collection "VJ221A2.002"</span></span>
+<span><span class="va">collection</span> <span class="op">&lt;-</span> <span class="st">"MOD11B3.061"</span> <span class="co"># run mf_list_collections() for an exhaustive list of collections available</span></span>
+<span><span class="va">variables</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LST_Day_6km"</span><span class="op">)</span> <span class="co"># run mf_list_variables("MOD11B3.061") for an exhaustive list of variables available for the collection MOD11B3.061</span></span>
 <span></span>
-<span></span>
-<span><span class="co">## Get the URLs of the data with mf_get_url()</span></span>
+<span><span class="co">## Get the URLs of the data with mf_get_url() </span></span>
 <span><span class="va">urls</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span>
 <span>  collection <span class="op">=</span> <span class="va">collection</span>,</span>
 <span>  variables <span class="op">=</span> <span class="va">variables</span>,</span>

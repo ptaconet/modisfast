@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modisfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
                         <h4 data-toc-skip class="author">Paul
 Taconet</h4>
             
-            <h4 data-toc-skip class="date">2026-10-01</h4>
+            <h4 data-toc-skip class="date">2026-10-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ptaconet/modisfast/blob/HEAD/vignettes/articles/get_started.Rmd" class="external-link"><code>vignettes/articles/get_started.Rmd</code></a></small>
       <div class="hidden name"><code>get_started.Rmd</code></div>
@@ -208,7 +208,7 @@ Data model documentation</a>.</p>
 <span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LST_Day_1KM"</span>,<span class="st">"LST_Night_1KM"</span><span class="op">)</span>,  <span class="co"># get the available variables with : mf_list_variables("VJ221A2.002")</span></span>
 <span>  roi <span class="op">=</span> <span class="va">roi</span>,</span>
 <span>  time_range <span class="op">=</span> <span class="va">time_range</span> <span class="op">)</span></span>
-<span><span class="co">#&gt; Building the URLs...</span></span>
+<span><span class="co">#&gt; Building the URLs... This may take a few moments.</span></span>
 <span></span>
 <span><span class="co">## Get the URLs of GPM daily</span></span>
 <span><span class="va">urls_gpm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mf_get_url.html">mf_get_url</a></span><span class="op">(</span></span>
@@ -216,7 +216,7 @@ Data model documentation</a>.</p>
 <span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"precipitation"</span><span class="op">)</span>,  <span class="co"># get the available variables with : mf_list_variables("GPM_3IMERGM.07")</span></span>
 <span>  roi <span class="op">=</span> <span class="va">roi</span>,</span>
 <span>  time_range <span class="op">=</span> <span class="va">time_range</span> <span class="op">)</span></span>
-<span><span class="co">#&gt; Building the URLs...</span></span>
+<span><span class="co">#&gt; Building the URLs... This may take a few moments.</span></span>
 <span><span class="co">#&gt; Estimated maximum size of data to be downloaded is 1 Mb</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">urls_viirs</span><span class="op">)</span></span>
@@ -280,7 +280,7 @@ need to be downloaded.</p>
 <span>                           parallel <span class="op">=</span> <span class="cn">TRUE</span>,  </span>
 <span>                           num_workers <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>   <span class="co"># too many workers may crash the download</span></span>
 <span><span class="co">#&gt; 58  datasets in total :  0  already downloaded and  58  datasets to download</span></span>
-<span><span class="co">#&gt; Downloading the data (destination folder: /tmp/Rtmp1l7Sl6/modisfast_3c3d1f3054fc ) ...</span></span>
+<span><span class="co">#&gt; Downloading the data (destination folder: /tmp/RtmpCKkpmn/modisfast_5bd82d02dd51 ) ...</span></span>
 <span><span class="co">#&gt; Estimated maximum size of data to be downloaded is ~ 2 Mb</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Actual size of downloaded data is 2 Mb</span></span>
@@ -295,7 +295,7 @@ need to be downloaded.</p>
 <span><span class="co">#&gt;  $ grid_nrow           : int  1200 1200 1200 1200 1200 1200 1200 1200 1200 1200 ...</span></span>
 <span><span class="co">#&gt;  $ grid_ncol           : int  1200 1200 1200 1200 1200 1200 1200 1200 1200 1200 ...</span></span>
 <span><span class="co">#&gt;  $ maxFileSizeEstimated: num  33408 33408 33408 33408 33408 ...</span></span>
-<span><span class="co">#&gt;  $ destfile            : chr  "/tmp/Rtmp1l7Sl6/modisfast_3c3d1f3054fc/data/Korhogo/VJ221A2.002/VJ221A2.A2024001.h17v08.002.2025285041924_LST_D"| __truncated__ "/tmp/Rtmp1l7Sl6/modisfast_3c3d1f3054fc/data/Korhogo/VJ221A2.002/VJ221A2.A2024009.h17v08.002.2025285060600_LST_D"| __truncated__ "/tmp/Rtmp1l7Sl6/modisfast_3c3d1f3054fc/data/Korhogo/VJ221A2.002/VJ221A2.A2024017.h17v08.002.2025296200949_LST_D"| __truncated__ "/tmp/Rtmp1l7Sl6/modisfast_3c3d1f3054fc/data/Korhogo/VJ221A2.002/VJ221A2.A2024025.h17v08.002.2025296214251_LST_D"| __truncated__ ...</span></span>
+<span><span class="co">#&gt;  $ destfile            : chr  "/tmp/RtmpCKkpmn/modisfast_5bd82d02dd51/data/Korhogo/VJ221A2.002/VJ221A2.A2024001.h17v08.002.2025285041924_LST_D"| __truncated__ "/tmp/RtmpCKkpmn/modisfast_5bd82d02dd51/data/Korhogo/VJ221A2.002/VJ221A2.A2024009.h17v08.002.2025285060600_LST_D"| __truncated__ "/tmp/RtmpCKkpmn/modisfast_5bd82d02dd51/data/Korhogo/VJ221A2.002/VJ221A2.A2024017.h17v08.002.2025296200949_LST_D"| __truncated__ "/tmp/RtmpCKkpmn/modisfast_5bd82d02dd51/data/Korhogo/VJ221A2.002/VJ221A2.A2024025.h17v08.002.2025296214251_LST_D"| __truncated__ ...</span></span>
 <span><span class="co">#&gt;  $ fileDl              : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...</span></span>
 <span><span class="co">#&gt;  $ fileSize            : num  45393 45456 45263 45286 45401 ...</span></span>
 <span><span class="co">#&gt;  $ dlStatus            : num  1 1 1 1 1 1 1 1 1 1 ...</span></span>

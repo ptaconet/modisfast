@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modisfast</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
       </span>
     </div>
 
@@ -57,6 +57,18 @@
       <small>Source: <a href="https://github.com/ptaconet/modisfast/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="2.0.1" id="modisfast-201">modisfast 2.0.1<a class="anchor" aria-label="anchor" href="#modisfast-201"></a></h2>
+<div class="section level3">
+<h3 id="improvements-and-fixes-2-0-1">Improvements and fixes<a class="anchor" aria-label="anchor" href="#improvements-and-fixes-2-0-1"></a></h3>
+<ul><li>Added Earthdata token authentication to CMR requests to resolve HTTP 401 errors encountered in some environments.</li>
+<li>Normalized file paths during cloud to fix path-matching issues, particularly on Windows.</li>
+<li>
+<code><a href="../reference/mf_import_data.html">mf_import_data()</a></code> now accepts the download root folder and locates the files for the requested collection. A clearer error lists matching folders when several ROIs are available.</li>
+<li>Improved URL-building progress messages.</li>
+<li>Improved parallel download error messages to suggest retrying with parallel = FALSE, and ensured workers are stopped when a download fails.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0.0" id="modisfast-200">modisfast 2.0.0<small>2026-09-30</small><a class="anchor" aria-label="anchor" href="#modisfast-200"></a></h2>
 <div class="section level3">

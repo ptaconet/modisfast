@@ -104,9 +104,10 @@ devtools::install_github("ptaconet/modisfast")
 
 ## Get Started
 
-This example shows how to download and import a 3-month weekly time
-series of VIIRS Land Surface Temperature (LST) at 1 km spatial
-resolution over the whole country of Madagascar.
+This example shows how to download and import a 1-year long time series
+of MODIS Land Surface Temperature (LST) at 6 km spatial resolution / 1
+month temporal resolution over the whole country of Madagascar
+(collection [MOD11B3.061](https://doi.org/10.5067/MODIS/MOD11B3.061)).
 
 **Fist, you need to retrieve your Earthdata token**. This token is
 mandatory to access the data. You can get it here :
@@ -126,12 +127,11 @@ library(terra)
 
 # Set ROI and time range of interest
 roi <- st_as_sf(data.frame(id = "madagascar", geom = "POLYGON((41.95 -11.37,51.26 -11.37,51.26 -26.17,41.95 -26.17,41.95 -11.37))"), wkt = "geom", crs = 4326) # a ROI of interest, format sf polygon
-time_range <- as.Date(c("2026-01-01", "2026-04-01")) # a time range of interest (or single date)
+time_range <- as.Date(c("2025-01-01", "2025-12-31")) # a time range of interest (or single date)
 
 # Set MODIS collections and variables (bands) of interest
-collection <- "VJ221A2.002" # run mf_list_collections() for an exhaustive list of collections available
-variables <- c("LST_Day_1KM") # run mf_list_variables("VJ221A2.002") for an exhaustive list of variables available for the collection "VJ221A2.002"
-
+collection <- "MOD11B3.061" # run mf_list_collections() for an exhaustive list of collections available
+variables <- c("LST_Day_6km") # run mf_list_variables("MOD11B3.061") for an exhaustive list of variables available for the collection MOD11B3.061
 
 ## Get the URLs of the data with mf_get_url() 
 urls <- mf_get_url(
