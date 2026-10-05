@@ -1,3 +1,5 @@
+# modisfast (development version)
+
 # modisfast 2.0.1
 
 ## Improvements and fixes
