@@ -9,7 +9,7 @@
 
 [![licence](https://img.shields.io/badge/Licence-GPL--3-blue.svg)](https://www.r-project.org/Licenses/GPL-3)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/modisfast)](https://cran.r-project.org/package=modisfast)
-[![Github_Status_Badge](https://img.shields.io/badge/Github-1.0.0-blue.svg)](https://github.com/ptaconet/modisfast)
+[![Github_Status_Badge](https://img.shields.io/badge/Github-2.0.1-blue.svg)](https://github.com/ptaconet/modisfast)
 [![R-CMD-check](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ptaconet/modisfast/actions/workflows/R-CMD-check.yaml)
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.07343/status.svg)](https://doi.org/10.21105/joss.07343)
 ![CRAN_downloads](https://cranlogs.r-pkg.org/badges/last-month/modisfast)
@@ -160,10 +160,10 @@ terra::plot(r, col = rev(terrain.colors(20)))
 
 <figure>
 <img src=".Rplot_readme.png"
-alt="Time series of weekly 1-km VIIRS Land surface temperature over Madagascar for the first 3 months of the year 2023, retrieved with modisfast" />
-<figcaption aria-hidden="true">Time series of weekly 1-km VIIRS Land
-surface temperature over Madagascar for the first 3 months of the year
-2023, retrieved with <code>modisfast</code></figcaption>
+alt="Time series of monthly 6-km MODIS Land surface temperature (MOD11B3.061) over Madagascar for the year 2025, retrieved with modisfast" />
+<figcaption aria-hidden="true">Time series of monthly 6-km MODIS Land
+surface temperature (MOD11B3.061) over Madagascar for the year 2025,
+retrieved with <code>modisfast</code></figcaption>
 </figure>
 
   
