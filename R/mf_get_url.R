@@ -69,6 +69,37 @@ mf_get_url <- function(collection, variables = NULL, roi, time_range,
   }
   collection_id <- .mf_cloud_collection_id(collection, collection_id)
 
+  progress_id <- NULL
+  progress_ok <- FALSE
+
+  if (verbose != "quiet") {
+    progress_id <- cli::cli_progress_bar(
+      name = "Building URLs",
+      total = NA,
+      format = paste0(
+        "{cli::pb_spin} Building URLs: ",
+        "{cli::pb_current} granules examined ",
+        "[{cli::pb_elapsed}]"
+      ),
+      format_done = paste0(
+        "URL construction complete: ",
+        "{cli::pb_current} granules examined ",
+        "[{cli::pb_elapsed}]"
+      ),
+      format_failed = "URL construction stopped [{cli::pb_elapsed}]",
+      clear = FALSE,
+      .auto_close = FALSE
+    )
+
+    on.exit(
+      cli::cli_progress_done(
+        id = progress_id,
+        result = if (progress_ok) "done" else "failed"
+      ),
+      add = TRUE
+    )
+  }
+
   available <- mf_list_variables(collection, backend = "cloud",
                                  time_range = dates, collection_id = collection_id,
                                  verbose = "quiet")
@@ -92,6 +123,9 @@ mf_get_url <- function(collection, variables = NULL, roi, time_range,
       entries <- response$feed$entry
       if (!length(entries)) break
       for (entry in entries) {
+        if (!is.null(progress_id)) {
+          cli::cli_progress_update(id = progress_id, inc = 1)
+        }
         granule <- entry$producer_granule_id
         tile <- regmatches(granule, regexpr("h[0-9]{2}v[0-9]{2}", granule))
         if (!length(tile) || !tile %in% tile_names) next
@@ -137,6 +171,7 @@ mf_get_url <- function(collection, variables = NULL, roi, time_range,
     stop("No OPeNDAP granules intersect the requested dates and ROI in ", collection_id)
   }
   out <- do.call(rbind, rows)
+  progress_ok <- TRUE
   out[order(out$id_roi, out$time_start, out$name), , drop = FALSE]
 }
 

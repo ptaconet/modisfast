@@ -241,7 +241,29 @@ See the file Summary_downloaded_data.csv for more information on the data downlo
   writeLines(sentence, file.path(path, "Readme.txt"))
   # write csv dataset
   data_dl$url <- utils::URLdecode(data_dl$url)
-  write.csv(data_dl, file.path(path, "Summary_downloaded_data.csv"), row.names = FALSE)
+
+
+  manifest_path <- file.path(path, "Summary_downloaded_data.csv")
+
+  manifest <- if (file.exists(manifest_path)) {
+    dplyr::bind_rows(
+      utils::read.csv(manifest_path, stringsAsFactors = FALSE),
+      data_dl
+    )
+  } else {
+    data_dl
+  }
+
+  manifest$destfile <- normalizePath(
+    manifest$destfile, winslash = "/", mustWork = FALSE
+  )
+
+  manifest <- manifest[
+    !duplicated(manifest$destfile, fromLast = TRUE),
+  ]
+
+  utils::write.csv(manifest, manifest_path, row.names = FALSE)
+
 
   return(data_dl)
 }

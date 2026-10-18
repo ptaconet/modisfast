@@ -1,5 +1,12 @@
 # modisfast (development version)
 
+# modisfast 2.0.2
+
+## Improvements and fixes
+
+* Added a granule counter for `mf_get_url()`
+* Fixed an issue where successive downloads to the same folder overwrote the download manifest, causing previously downloaded MODIS and VIIRS data to be incorrectly georeferenced on import.
+
 # modisfast 2.0.1
 
 ## Improvements and fixes
