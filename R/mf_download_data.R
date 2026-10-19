@@ -245,16 +245,22 @@ See the file Summary_downloaded_data.csv for more information on the data downlo
 
   manifest_path <- file.path(path, "Summary_downloaded_data.csv")
 
-  # Préparer une copie pour l'enregistrement CSV,
-  # sans modifier les classes de l'objet renvoyé par la fonction
+  # Copie destinée au CSV : l'objet data_dl renvoyé reste inchangé
   new_records <- data_dl
-  new_records$time_start <- as.character(new_records$time_start)
+
+  if ("time_start" %in% names(new_records)) {
+    new_records$time_start <- as.character(new_records$time_start)
+  }
 
   if (file.exists(manifest_path)) {
     old_records <- utils::read.csv(
       manifest_path,
       stringsAsFactors = FALSE
     )
+
+    if ("time_start" %in% names(old_records)) {
+      old_records$time_start <- as.character(old_records$time_start)
+    }
 
     manifest <- dplyr::bind_rows(old_records, new_records)
   } else {
